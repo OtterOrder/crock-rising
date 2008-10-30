@@ -7,24 +7,24 @@
 
 SVN (Subversion) est un système de gestion de versions. En gros, ça sert à mettre facilement le code en commun, et surtout à garder un historique de toutes les modifications. Allez faire un tour sur [http://fr.wikipedia.org/wiki/Subversion_(logiciel) la page SVN de Wikipedia] pour plus d'informations.
 
-=== TortoiseSVN ===
+== TortoiseSVN ==
 
-==== WTF? ====
+=== WTF? ===
 
 TortoiseSVN est un client SVN. Il permet d'envoyer et de récupérer des trucs stockés sur la base SVN.
 
-==== Installation ====
+=== Installation ===
 
 TODO
 
-==== Récupération de trucs ====
+=== Récupération de trucs ===
 
 TODO
 
-==== Envoyage de trucs ====
+=== Envoyage de trucs ===
 
 TODO
 
-==== Trucs & astuces ====
+=== Trucs & astuces ===
 
 TODO

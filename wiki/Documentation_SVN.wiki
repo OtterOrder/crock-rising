@@ -5,4 +5,6 @@
 
 == WTF? ==
 
-SVN (Subversion) est un système de gestion de versions. Allez faire un tour sur [http://fr.wikipedia.org/wiki/Subversion_(logiciel) Wikipedia] pour plus d'informations.
+SVN (Subversion) est un système de gestion de versions. Allez faire un tour sur [http://fr.wikipedia.org/wiki/Subversion_(logiciel) la page SVN de Wikipedia] pour plus d'informations.
+
+== Et après... ==

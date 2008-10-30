@@ -1,8 +1,6 @@
 #summary Tout ce qu'il faut savoir pour utiliser correctement SVN.
 #labels svn
 
-= Introduction =
-
-Tout ce qu'il faut savoir pour utiliser correctement SVN.
+= TODO =
 
 TODO

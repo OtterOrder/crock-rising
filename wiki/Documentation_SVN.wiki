@@ -13,4 +13,18 @@ SVN (Subversion) est un système de gestion de versions. En gros, ça sert à me
 
 TortoiseSVN est un client SVN. Il permet d'envoyer et de récupérer des trucs stockés sur la base SVN (qui est donc hébergée sur les serveurs de Google, donc accessible tout le temps et partout, wohoo).
 
-=== Comment installer Tortoise sur son paycay ===
+=== Installation ===
+
+TODO
+
+=== Récupération de trucs ===
+
+TODO
+
+=== Envoyage de trucs ===
+
+TODO
+
+=== Trucs & astuces ===
+
+TODO

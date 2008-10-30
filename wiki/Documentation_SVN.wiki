@@ -1,6 +1,6 @@
 #summary Tout ce qu'il faut savoir pour utiliser correctement SVN.
 #labels svn
 
-= TODO =
+= WTF =
 
-TODO
+SVN (Subversion) est un système de gestion de versions. Allez faire un tour sur [http://fr.wikipedia.org/wiki/Subversion_(logiciel) Wikipedia] pour plus d'informations.

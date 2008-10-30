@@ -5,7 +5,4 @@
 
 Tout ce qu'il faut savoir pour utiliser correctement SVN.
 
-
-= Details =
-
 TODO

@@ -36,7 +36,7 @@ Et paf, vous êtes connecté. Normalement un joli icône vert va apparaitre sur 
 
 === Récupération de trucs ===
 
-TODO
+Clic droit sur le dossier connecté à la base (ou un de ses sous dossiers/fichiers), puis *SVN Update*.
 
 === Envoyage de trucs ===
 

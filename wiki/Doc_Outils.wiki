@@ -23,15 +23,13 @@ TODO
 
 === Connexion à la base ===
 
-Commencer par créer un répertoire. Ce dossier sera une copie locale de la base. Pour connecter le répertoire à la base SVN, faites un clic droit sur votre dossier, puis *SVN Checkout...*. Dans la fenêtre qui s'ouvre :
+Créez un répertoire sur votre machine. Il sera votre copie locale de la base SVN. Clic droit sur ce répertoire > *SVN Checkout...*.
 
-*URL of repository :* elle est donnée dans l'onglet *Source* de Google Code. Attention à bien prendre l'URL pour les membres, qui est sécurisée (https). Laissez les autres champs à leur valeur par défaut. *OK*.
+Tortoise vous demande ensuite l'adresse de la base (*URL of repository*). Elle est donnée dans l'onglet *Source* du Google Code. Attention à bien prendre l'URL pour les membres, qui est sécurisée (https). Laissez les autres champs à leur valeur par défaut. *OK*.
 
-Dans la fenêtre d'identification :
+Vous devez ensuite vous identifier. Votre nom d'utilisateur (*Username*) est votre identifiant gmail (sans @gmail.com). Le mot de passe (*Password*) est donné sur la page _password_, dont le lien est présent dans l'onglet *Source* (sous l'URL). Si vous n'êtes pas sur votre PC perso, ne cochez pas la case *Save authentication*.
 
-*Username :* votre nom d'utilisateur (càd votre adresse gmail sans @gmail.com). *Password :* le mot de passe est sur la page _password_ dont le lien est donné sous l'URL de la base dans l'onglet *Source*. Si vous n'êtes pas sur votre PC perso, ne cochez pas la case *Save authentication*.
-
-Et paf, vous êtes connecté. Normalement un joli icône vert va apparaitre sur le dossier.
+Et paf, vous êtes connecté. Tortoise va récupérer le contenu de la base pour le mettre dans votre répertoire (ce qui peut prendre du temps), et normalement un joli icône vert va apparaitre sur le dossier.
 
 === Récupération de trucs ===
 

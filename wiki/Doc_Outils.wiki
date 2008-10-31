@@ -33,7 +33,7 @@ Et paf, vous êtes connecté. Tortoise va récupérer le contenu de la base pour
 
 === Récupération de trucs ===
 
-Clic droit sur le dossier connecté à la base (ou un de ses sous dossiers, ou un fichiers), puis *SVN Update*. Cette manip' est à faire régulièrement pour être sûr d'avoir les dernières versions des modules codés par les autres.
+Clic droit sur le dossier connecté à la base (ou un sous dossier, ou un fichier), puis *SVN Update*. Cette manip' est à faire régulièrement pour être sûr d'avoir les dernières versions des modules codés par les autres.
 
 === Envoyage de trucs ===
 

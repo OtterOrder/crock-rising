@@ -1,4 +1,5 @@
 #summary Guide pour la nomenclature du code.
+#labels nomenclature
 
 = Guide de style =
 

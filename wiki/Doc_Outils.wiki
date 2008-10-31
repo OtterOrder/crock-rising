@@ -25,18 +25,12 @@ TODO
 
 Pour se connecter à la base SVN, créez d'abords un répertoire (n'importe où sur votre machine). Ce répertoire sera l'image locale de la base. Faites clic droit sur votre dossier, puis *SVN Checkout...* Dans la fenêtre qui s'ouvre :
 
-*URL of repository:* Elle est donnée dans l'onglet *Source* de Google Code. Attention à bien prendre l'URL pour les membres, qui est sécurisée (https).
-
-Laissez les autres champs à leur valeur par défaut. *OK*.
+*URL of repository:* Elle est donnée dans l'onglet *Source* de Google Code. Attention à bien prendre l'URL pour les membres, qui est sécurisée (https). Laissez les autres champs à leur valeur par défaut. *OK*.
 
 Dans la fenêtre d'identification :
 
-*Username:* Votre nom d'utilisateur (càd votre adresse gmail sans @gmail.com).
-
-*Password:* Le mot de passe est sur la page _googlecode.com password_ dont le lien est
-donné sous l'URL de la base dans l'onglet *Source*.
-
-Si vous n'êtes pas sur votre PC perso, ne cochez pas la case *Save authentication*.
+*Username:* Votre nom d'utilisateur (càd votre adresse gmail sans @gmail.com). *Password:* Le mot de passe est sur la page _googlecode.com password_ dont le lien est
+donné sous l'URL de la base dans l'onglet *Source*. Si vous n'êtes pas sur votre PC perso, ne cochez pas la case *Save authentication*.
 
 Et paf, vous êtes connecté. Normalement un joli icône vert va apparaitre sur le dossier.
 

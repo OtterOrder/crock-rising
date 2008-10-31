@@ -1,0 +1,35 @@
+#summary Guide pour la nomenclature du code.
+
+= Guide de style =
+
+== Les variables ==
+
+Nomenclature : {{{[portée]_[type]MaVariable}}}.
+
+=== Portées ===
+
+|| g || variable globale ||
+|| m || membre de classe ||
+
+Les variables locales n'ont pas d'indicateur de portée.
+
+=== Types ===
+
+|| p || pointeur ||
+|| c || caractère (char) ||
+|| i || entier signé (int) ||
+|| u || entier non signé (unsigned int) ||
+|| f || flottant (float) ||
+|| s || chaîne de caractère (string) ||
+
+== Les fonctions et méthodes ==
+
+Nomenclature : {{{MaFonction}}}.
+
+== Les classes, structures et types ==
+
+Nomenclature : {{{MaClasse}}}, {{{MaStructure}}}, {{{MonType}}}.
+
+== Les commentaires ==
+
+Il en faut plein, des clairs et concis...

@@ -10,7 +10,7 @@ Nomenclature : {{{[portée][type]MaVariable}}}.
 === Portées ===
 
 || `g_` || variable globale ||
-|| `m`_ || membre de classe ||
+|| `m_` || membre de classe ||
 
 Les variables locales n'ont pas d'indicateur de portée.
 

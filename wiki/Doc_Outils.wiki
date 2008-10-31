@@ -21,6 +21,10 @@ TortoiseSVN est un client SVN. Il permet d'envoyer et de récupérer des trucs s
 
 TODO
 
+=== Connexion à la base ===
+
+TODO
+
 === Récupération de trucs ===
 
 TODO

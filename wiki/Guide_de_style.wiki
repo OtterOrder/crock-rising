@@ -12,7 +12,7 @@ Nomenclature : {{{[portée]_[type]MaVariable}}}.
 || g || variable globale ||
 || m || membre de classe ||
 
-Les variables locales n'ont pas d'indicateur de portée.
+Les variables locales n'ont pas d'indicateur de portée (du coup c'est pas la peine de mettre l'underscore).
 
 === Types ===
 

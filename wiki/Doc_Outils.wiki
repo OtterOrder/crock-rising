@@ -38,7 +38,7 @@ donné sous l'URL de la base dans l'onglet *Source*.
 
 Si vous n'êtes pas sur votre PC perso, ne cochez pas la case *Save authentication*.
 
-Et paf, vous êtes connecté.
+Et paf, vous êtes connecté. Normalement un joli icône vert va apparaitre sur le dossier.
 
 === Récupération de trucs ===
 

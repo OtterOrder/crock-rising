@@ -5,23 +5,23 @@
 
 == Les variables ==
 
-Nomenclature : {{{[portée]_[type]MaVariable}}}.
+Nomenclature : {{{[portée][type]MaVariable}}}.
 
 === Portées ===
 
-|| g || variable globale ||
-|| m || membre de classe ||
+|| `g_` || variable globale ||
+|| `m`_ || membre de classe ||
 
 Les variables locales n'ont pas d'indicateur de portée.
 
 === Types ===
 
-|| p || pointeur ||
-|| c || caractère (char) ||
-|| i || entier signé (int) ||
-|| u || entier non signé (unsigned int) ||
-|| f || flottant (float) ||
-|| s || chaîne de caractère (string) ||
+|| `p` || pointeur ||
+|| `c` || caractère (char) ||
+|| `i` || entier signé (int) ||
+|| `u` || entier non signé (unsigned int) ||
+|| `f` || flottant (float) ||
+|| `s` || chaîne de caractère (string) ||
 
 == Les fonctions et méthodes ==
 

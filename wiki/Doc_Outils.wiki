@@ -9,6 +9,8 @@
 
 SVN est un système de gestion de versions. En gros, ça sert à mettre facilement le code en commun, et surtout à garder un historique de toutes les modifications. Allez faire un tour sur [http://fr.wikipedia.org/wiki/Subversion_(logiciel) la page SVN de Wikipedia] pour plus d'informations.
 
+La base SVN est hébergée sur les serveurs de Google, donc elle est accessible partout, tout le temps (wohoo).
+
 == TortoiseSVN ==
 
 === WTF? ===

@@ -48,6 +48,8 @@ Lorsque que vous créez un nouveau fichier/dossier dans votre répertoire, il n'
 
 Jusqu'ici, le fichier n'a toujours pas été ajouté à la base, ce qui vous permet d'annuler si vous avez malencontreusement glissé sur votre souris. Il ne sera réellement ajouté qu'au prochain *SVN Commit...*.
 
+Vérifiez bien les trucs que vous rajoutez. Merci de ne pas ajouter, par exemple, vos fichiers de réglages perso de Visual Studio, ou autre connerie d'Intellisense. En principe, seuls les fichiers .h et .cpp sur lesquels vous bossez devraient êtres ajoutés.
+
 === Trucs & astuces ===
 
 TODO

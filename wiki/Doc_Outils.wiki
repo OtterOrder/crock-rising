@@ -31,13 +31,22 @@ Vous devez ensuite vous identifier. Votre nom d'utilisateur (*Username*) est vot
 
 Et paf, vous êtes connecté. Tortoise va récupérer le contenu de la base pour le mettre dans votre répertoire (ce qui peut prendre du temps), et normalement un joli icône vert va apparaitre sur le dossier.
 
-=== Récupération de trucs ===
+Note : il se peut que les icônes n'apparaissent qu'après un redémarrage.
+
+=== Récupération de trucs (SVN Update) ===
 
 Clic droit sur le dossier connecté à la base (ou un sous dossier, ou un fichier), puis *SVN Update*. Cette manip' est à faire régulièrement pour être sûr d'avoir les dernières versions des modules codés par les autres.
 
-=== Envoyage de trucs ===
+=== Envoyage de trucs (SVN Commit) ===
+==== Fichier déjà présent sur la base ====
 
-TODO
+Lorsque vous avez modifié un fichier, un icône rouge apparait dessus. Ceci veut dire que la version locale (votre version) du fichier en question est différente de la version présente sur la base. Pour archiver vos modifications, clic droit > *SVN Commit...*. Pensez à commenter vos archivages, ça permet de s'y retrouver plus facilement.
+
+==== Ajout d'un nouveau fichier ====
+
+Lorsque que vous créé un nouveau fichier/dossier dans votre répertoire, il n'est pas automatiquement ajouté à la base (heureusement). Un point d'interrogation (?) doit apparaitre sur son icône. Pour l'ajouter, clic droit > *TortoiseSVN* > *Add...*. L'icône point d'interrogation doit se changer en plus (+).
+
+Jusqu'ici, le fichier n'a toujours pas été ajouté à la base, ce qui vous permet d'annuler si vous avez malencontreusement glissé sur votre souris. Il ne sera réellement ajouté qu'au prochain *SVN Commit...*.
 
 === Trucs & astuces ===
 

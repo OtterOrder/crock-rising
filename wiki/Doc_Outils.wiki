@@ -44,7 +44,7 @@ Lorsque vous avez modifié un fichier, un icône rouge apparait dessus. Ceci veu
 
 ==== Ajout d'un nouveau fichier ====
 
-Lorsque que vous créé un nouveau fichier/dossier dans votre répertoire, il n'est pas automatiquement ajouté à la base (heureusement). Un point d'interrogation (?) doit apparaitre sur son icône. Pour l'ajouter, clic droit > *TortoiseSVN* > *Add...*. L'icône point d'interrogation doit se changer en plus (+).
+Lorsque que vous créez un nouveau fichier/dossier dans votre répertoire, il n'est pas automatiquement ajouté à la base (heureusement). Un point d'interrogation (?) doit apparaitre sur son icône. Pour l'ajouter, clic droit > *TortoiseSVN* > *Add...*. L'icône point d'interrogation doit se changer en plus (+).
 
 Jusqu'ici, le fichier n'a toujours pas été ajouté à la base, ce qui vous permet d'annuler si vous avez malencontreusement glissé sur votre souris. Il ne sera réellement ajouté qu'au prochain *SVN Commit...*.
 

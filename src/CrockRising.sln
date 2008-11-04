@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRenderer", "libRenderer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libResources", "libResources\libResources.vcproj", "{8E277367-E39D-45A3-A4E2-95372E1243F4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCore", "libCore\libCore.vcproj", "{829305BC-515F-4216-9CAF-5400783E03CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Debug|Win32.Build.0 = Debug|Win32
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Release|Win32.ActiveCfg = Release|Win32
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Release|Win32.Build.0 = Release|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.Build.0 = Debug|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.ActiveCfg = Release|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

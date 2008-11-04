@@ -1,8 +1,5 @@
-#include "Object.h"
+#include "Vector.h"
 
 //******************************************************************
 
-Object::Object( void )
-{
-	//TODO
-}
+//TODO

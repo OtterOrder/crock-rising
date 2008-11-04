@@ -1,8 +1,10 @@
-#include "Object.h"
+#include "Crc32.h"
 
 //******************************************************************
 
-Object::Object( void )
+crc32 GetCrc32( char *s )
 {
 	//TODO
+
+	return 0x0;
 }

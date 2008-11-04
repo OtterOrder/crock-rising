@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "System\System.vcproj", "{2591CA51-E364-4FF9-AB94-698229E53804}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Objects", "Objects\Objects.vcproj", "{A2954935-EA1D-4483-B9EE-54C8324F0221}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libObjects", "libObjects\libObjects.vcproj", "{A2954935-EA1D-4483-B9EE-54C8324F0221}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Renderer", "Renderer\Renderer.vcproj", "{D34C2E10-AB16-4E27-9DE7-5C5D71F46059}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRenderer", "libRenderer\libRenderer.vcproj", "{D34C2E10-AB16-4E27-9DE7-5C5D71F46059}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Resources", "Resources\Resources.vcproj", "{8E277367-E39D-45A3-A4E2-95372E1243F4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libResources", "libResources\libResources.vcproj", "{8E277367-E39D-45A3-A4E2-95372E1243F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

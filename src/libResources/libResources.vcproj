@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="Objects"
-	ProjectGUID="{A2954935-EA1D-4483-B9EE-54C8324F0221}"
-	RootNamespace="Objects"
+	Name="libResources"
+	ProjectGUID="{8E277367-E39D-45A3-A4E2-95372E1243F4}"
+	RootNamespace="libResources"
 	>
 	<Platforms>
 		<Platform
@@ -72,13 +72,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -114,17 +115,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -136,13 +130,8 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -150,87 +139,79 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Camera"
+			Name="Anim"
 			>
 			<File
-				RelativePath=".\Camera.cpp"
+				RelativePath=".\Anim.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Camera.h"
+				RelativePath=".\Anim.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CameraFPS.cpp"
+				RelativePath=".\AnimManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CameraFPS.h"
+				RelativePath=".\AnimManager.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Light"
+			Name="Texture"
 			>
 			<File
-				RelativePath=".\Light.cpp"
+				RelativePath=".\Texture.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Light.h"
+				RelativePath=".\Texture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextureManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TextureManager.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Particle"
-			>
-		</Filter>
-		<Filter
-			Name="SceneObject"
+			Name="Mesh"
 			>
 			<File
-				RelativePath=".\SceneObject.cpp"
+				RelativePath=".\Mesh.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SceneObject.h"
+				RelativePath=".\Mesh.h"
 				>
 			</File>
-			<Filter
-				Name="SceneObjectAnimated"
+			<File
+				RelativePath=".\MeshManager.cpp"
 				>
-				<File
-					RelativePath=".\Alien.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Alien.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Hero.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Hero.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SceneObjectAnimated.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SceneObjectAnimated.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath=".\MeshManager.h"
+				>
+			</File>
 		</Filter>
 		<File
-			RelativePath=".\Object.cpp"
+			RelativePath=".\Resource.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\Object.h"
+			RelativePath=".\Resource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ResourceManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ResourceManager.h"
 			>
 		</File>
 	</Files>

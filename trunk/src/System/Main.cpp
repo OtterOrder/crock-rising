@@ -3,10 +3,10 @@
 //******************************************************************
 
 int WINAPI WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR lpCmdLine,
-	int nCmdShow)
+	HINSTANCE	hInstance,
+	HINSTANCE	hPrevInstance,
+	LPSTR		lpCmdLine,
+	int			nCmdShow )
 {
 	//TODO
 

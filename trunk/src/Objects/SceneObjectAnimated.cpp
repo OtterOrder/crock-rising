@@ -1,0 +1,3 @@
+#include "SceneObjectAnimated.h"
+
+//TODO

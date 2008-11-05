@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "System\System.vcproj", "{2591CA51-E364-4FF9-AB94-698229E53804}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCore", "src\libCore\libCore.vcproj", "{829305BC-515F-4216-9CAF-5400783E03CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libObjects", "libObjects\libObjects.vcproj", "{A2954935-EA1D-4483-B9EE-54C8324F0221}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libObjects", "src\libObjects\libObjects.vcproj", "{A2954935-EA1D-4483-B9EE-54C8324F0221}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRenderer", "libRenderer\libRenderer.vcproj", "{D34C2E10-AB16-4E27-9DE7-5C5D71F46059}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRenderer", "src\libRenderer\libRenderer.vcproj", "{D34C2E10-AB16-4E27-9DE7-5C5D71F46059}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libResources", "libResources\libResources.vcproj", "{8E277367-E39D-45A3-A4E2-95372E1243F4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libResources", "src\libResources\libResources.vcproj", "{8E277367-E39D-45A3-A4E2-95372E1243F4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCore", "libCore\libCore.vcproj", "{829305BC-515F-4216-9CAF-5400783E03CB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "src\System\System.vcproj", "{2591CA51-E364-4FF9-AB94-698229E53804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2591CA51-E364-4FF9-AB94-698229E53804}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2591CA51-E364-4FF9-AB94-698229E53804}.Debug|Win32.Build.0 = Debug|Win32
-		{2591CA51-E364-4FF9-AB94-698229E53804}.Release|Win32.ActiveCfg = Release|Win32
-		{2591CA51-E364-4FF9-AB94-698229E53804}.Release|Win32.Build.0 = Release|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.Build.0 = Debug|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.ActiveCfg = Release|Win32
+		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.Build.0 = Release|Win32
 		{A2954935-EA1D-4483-B9EE-54C8324F0221}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A2954935-EA1D-4483-B9EE-54C8324F0221}.Debug|Win32.Build.0 = Debug|Win32
 		{A2954935-EA1D-4483-B9EE-54C8324F0221}.Release|Win32.ActiveCfg = Release|Win32
@@ -33,10 +33,10 @@ Global
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Debug|Win32.Build.0 = Debug|Win32
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Release|Win32.ActiveCfg = Release|Win32
 		{8E277367-E39D-45A3-A4E2-95372E1243F4}.Release|Win32.Build.0 = Release|Win32
-		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.ActiveCfg = Debug|Win32
-		{829305BC-515F-4216-9CAF-5400783E03CB}.Debug|Win32.Build.0 = Debug|Win32
-		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.ActiveCfg = Release|Win32
-		{829305BC-515F-4216-9CAF-5400783E03CB}.Release|Win32.Build.0 = Release|Win32
+		{2591CA51-E364-4FF9-AB94-698229E53804}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2591CA51-E364-4FF9-AB94-698229E53804}.Debug|Win32.Build.0 = Debug|Win32
+		{2591CA51-E364-4FF9-AB94-698229E53804}.Release|Win32.ActiveCfg = Release|Win32
+		{2591CA51-E364-4FF9-AB94-698229E53804}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

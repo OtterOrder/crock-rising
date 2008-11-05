@@ -141,6 +141,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Singleton"
+			>
+			<File
+				RelativePath=".\Singleton\Singleton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Singleton\Singleton.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

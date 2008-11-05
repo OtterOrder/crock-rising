@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\debug\&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -131,7 +131,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\release\&quot;"
 			/>
 		</Configuration>
 	</Configurations>

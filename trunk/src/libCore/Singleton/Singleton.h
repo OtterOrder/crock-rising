@@ -3,27 +3,34 @@
 
 //******************************************************************
 
-template<typename T> class Singleton
+template< typename T >
+class Singleton
 {
 	public:
 
 		// =========================================================
 		// Méthodes publiques
 		
-		Singleton*	GetInstance		( void );
+		static T*		GetInstance	( void );		// Donne l'instance du singleton
+		static void		Release		( void );		// Détruit l'instance
+
 
 	protected:
 
 		// =========================================================
-		// Données privées
+		// Méthodes protégées
 		
-		static Singleton	*m_Instance;
+		Singleton					( void ) {}		// Constructeur
+		~Singleton					( void ) {}		// Destructeur
+
+
+	private:
 
 		// =========================================================
-		// Méthodes privées
+		// Données privées
 		
-		Singleton					( void );				// Constructeur
-		~Singleton					( void );				// Destructeur
+		static T	*m_Instance;		// Instance du singleton
+
 };
 
 //******************************************************************

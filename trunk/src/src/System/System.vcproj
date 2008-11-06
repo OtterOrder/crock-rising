@@ -39,6 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -57,6 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -111,6 +113,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -127,6 +130,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

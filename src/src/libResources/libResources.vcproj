@@ -58,7 +58,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libCore.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\debug&quot;"
 			/>
 			<Tool

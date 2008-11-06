@@ -6,6 +6,16 @@
 #include	<libCore/Types/Crc32.h>
 
 //******************************************************************
+// Defines pour les ressources
+
+enum ResourceResult
+{
+	RES_SUCCEED,
+	RES_FAILED,
+
+};
+
+//******************************************************************
 
 class Resource
 {

@@ -8,20 +8,9 @@
 #include	<libCore/Types/Crc32.h>
 #include	<libCore/Singleton/Singleton.h>
 
+#include	"Resource.h"
+
 using namespace std;
-
-//******************************************************************
-
-enum ResourceResult
-{
-	RES_SUCCEED,
-	RES_FAILED,
-
-};
-
-//******************************************************************
-
-class Resource;
 
 //******************************************************************
 
@@ -29,6 +18,9 @@ class ResourceManager : public Singleton< ResourceManager >
 {
 	public:
 
+		// =========================================================
+		// Méthodes publiques
+		
 		virtual ResourceResult	Load	( crc32 resource );		// Charge la ressource
 		virtual	ResourceResult	Release	( crc32 resource );		// Supprime la ressource
 
@@ -36,6 +28,9 @@ class ResourceManager : public Singleton< ResourceManager >
 
 	protected:
 
+		// =========================================================
+		// Données protégées
+		
 		list< Resource* >		m_ResourcesList;		// Liste des ressources chargées
 
 };

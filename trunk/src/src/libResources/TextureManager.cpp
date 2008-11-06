@@ -1,19 +1,22 @@
 #include "TextureManager.h"
-
 #include "Texture.h"
 
 //******************************************************************
 
-ResourceResult TextureManager::Load( crc32 resource )
+TextureResult TextureManager::Clear( void )
 {
-	//TODO
-
-	return RES_FAILED;
+	Texture *pTexture = NULL;
+	
+	while( !m_TextureList.empty() )
+	{
+		pTexture = m_TextureList.front();
+		delete pTexture;
+		m_TextureList.pop_front();
+	}
+	return TEX_SUCCEED;
 }
 
-ResourceResult TextureManager::Release( crc32 resource )
+/*TextureResult TextureManager::Load(crc32 texture)
 {
-	//TODO
-
-	return RES_FAILED;
-}
+	return TEX_FAILED;
+}*/

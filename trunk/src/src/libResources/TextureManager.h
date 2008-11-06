@@ -4,15 +4,18 @@
 //******************************************************************
 
 #include	"ResourceManager.h"
+#include	"Texture.h"
 
 //******************************************************************
 
 class TextureManager : public ResourceManager
 {
-	public:
+	public:	
+		TextureResult			Clear( void );
+		//TextureResult			Load(crc32 texture);
 
-		ResourceResult	Load		( crc32 resource );		// Charge la ressource
-		ResourceResult	Release		( crc32 resource );		// Supprime la ressource
+	protected:
+		std::list< Texture* >		m_TextureList;		// Liste des ressources chargées
 
 };
 

@@ -10,13 +10,16 @@
 
 #include	"Resource.h"
 
-
 using namespace std;
 
 //******************************************************************
 
 class ResourceManager : public Singleton< ResourceManager >
 {
+	// Indispensable car Singleton doit pouvoir accéder aux
+	// constructeur/destructeur, qui sont en protected.
+	friend class Singleton< ResourceManager >;
+
 	public:
 
 		// =========================================================
@@ -27,12 +30,20 @@ class ResourceManager : public Singleton< ResourceManager >
 
 		ResourceResult			Clear	( void );				// Supprime toutes les ressources
 
+
 	protected:
 
 		// =========================================================
 		// Données protégées
 		
 		list< Resource* >		m_ResourcesList;		// Liste des ressources chargées
+
+
+		// =========================================================
+		// Méthodes protégées
+
+		ResourceManager					( void ){}
+		virtual ~ResourceManager		( void );
 
 };
 

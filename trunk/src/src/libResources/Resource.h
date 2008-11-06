@@ -3,9 +3,9 @@
 
 //******************************************************************
 
+#include	<d3dx9.h>
+
 #include	<libCore/Types/Crc32.h>
-#include	<d3d9.h>
-#include	<d3dx9tex.h>
 
 //******************************************************************
 // Defines pour les ressources
@@ -23,15 +23,16 @@ class Resource
 {
 	public:
 		
-		Resource			( void );			// Constructeur
-		virtual ~Resource	( void ){}			// Destructeur
+		Resource			( void );				// Constructeur
+		virtual ~Resource	( void ){}				// Destructeur
 
-		crc32	GetCrc32	( void ) const;		// Donne le CRC32 de la ressource
+		crc32	GetCrc32	( void ) const;			// Donne le CRC32 de la ressource
 
 
 	protected:
 		
-		crc32		m_Crc32;			// CRC32 de la ressource
+		crc32			m_Crc32;		// CRC32 de la ressource
+		unsigned int	m_Flags;		// Flags de la ressource
 };
 
 //******************************************************************

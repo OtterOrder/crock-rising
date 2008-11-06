@@ -4,7 +4,8 @@
 
 Resource::Resource( void )
 {
-	m_Crc32 = CRC32_NULL;
+	m_Crc32	= CRC32_NULL;
+	m_Flags	= 0;
 }
 
 

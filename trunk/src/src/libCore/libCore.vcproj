@@ -36,7 +36,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -49,7 +49,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -91,7 +91,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -104,7 +104,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -150,10 +150,6 @@
 		<Filter
 			Name="Singleton"
 			>
-			<File
-				RelativePath=".\Singleton\Singleton.cpp"
-				>
-			</File>
 			<File
 				RelativePath=".\Singleton\Singleton.h"
 				>

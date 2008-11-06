@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -119,8 +119,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libCore.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"

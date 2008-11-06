@@ -4,6 +4,12 @@
 
 //******************************************************************
 
+ResourceManager::~ResourceManager( void )
+{
+	Clear();
+}
+
+
 ResourceResult ResourceManager::Load( crc32 resource )
 {
 	return RES_FAILED;

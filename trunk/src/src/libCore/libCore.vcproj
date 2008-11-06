@@ -48,6 +48,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\debug&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -101,6 +102,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\release&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"

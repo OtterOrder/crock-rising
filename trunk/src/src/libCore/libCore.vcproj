@@ -159,6 +159,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Time"
+			>
+			<File
+				RelativePath=".\Time\Time.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Time\Time.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

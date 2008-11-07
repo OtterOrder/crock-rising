@@ -1,15 +1,13 @@
 #ifndef		_Object_H
 #define		_Object_H
 
-struct Vector3f{
-	float x, y, z;
-};
+#include "libCore/Types/Vector.h"
 
 class Object
 {
 	public:
 		// Constructeur
-		Object( void );	
+		Object( void );
 		Object( float initPosX, float initPosY, float initPosZ );
 		Object( Vector3f pos );
 
@@ -18,7 +16,7 @@ class Object
 
 	protected:
 		Vector3f m_Position;
-		
+		D3DXMATRIX m_TransformMatrix;
 };
 
 #endif		// _Object_H

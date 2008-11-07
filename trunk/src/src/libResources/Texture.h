@@ -7,31 +7,23 @@
 
 //******************************************************************
 
-enum TextureResult
-{
-	TEX_SUCCEED,
-	TEX_FAILED
-
-};
 
 //TODO
-class Texture
+class Texture: public Resource
 {
 	public:
 		
 		Texture(void);
+		Texture(TCHAR strTexName, LPDIRECT3DDEVICE9 pDevice);
 		~Texture();
 
-		TextureResult	Load		( crc32 resource, TCHAR strTexName );		// Charge la ressource
-		TextureResult	Release		( crc32 resource );		// Supprime la ressource
-
-		TextureResult  SetDevice	( LPDIRECT3DDEVICE9 pDevice ); //Modifie le device grace au renderer
-		crc32			GetCrc32	();							   //Récupère le CRC32
+		ResourceResult			SetDevice	( LPDIRECT3DDEVICE9 pDevice ); //Modifie le device grace au renderer
+		LPDIRECT3DTEXTURE9		GetTex		(){ return m_pTex; }
 
 	private:
 
-		LPDIRECT3DDEVICE9      m_pDevice;
-		crc32				   m_Crc32;
+		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
+		LPDIRECT3DTEXTURE9		m_pTex;			//Pointeur vers la texture
 };
 
 //******************************************************************

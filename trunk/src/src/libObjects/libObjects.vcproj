@@ -161,6 +161,14 @@
 				RelativePath=".\CameraFPS.h"
 				>
 			</File>
+			<File
+				RelativePath=".\CameraTPS.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CameraTPS.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Light"

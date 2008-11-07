@@ -3,7 +3,7 @@
 //******************************************************************
 
 Object::Object( void ){
-	m_Position.x = m_Position.y = m_Position.z = 0.0f;
+	m_Position = Vector3f( 0.0f, 0.0f, 0.0f );
 }
 
 Object::Object( float initPosX, float initPosY, float initPosZ ){

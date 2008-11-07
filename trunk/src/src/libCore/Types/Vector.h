@@ -1,13 +1,8 @@
 #ifndef		_Vector_H
 #define		_Vector_H
 
-//******************************************************************
+#include <d3dx9.h>
 
-//******************************************************************
+typedef D3DXVECTOR3 Vector3f;
 
-// Temporaire: en fait ça devrait être un vecteur,
-// mais j'ai pas encore le SDK DirectX
-typedef float Vec3f;
-
-//******************************************************************
 #endif		// _Vector_H

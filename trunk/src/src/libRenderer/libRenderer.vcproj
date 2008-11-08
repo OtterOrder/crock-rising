@@ -40,6 +40,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -103,6 +104,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -142,6 +144,54 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="D3DApp"
+			>
+			<File
+				RelativePath=".\d3dapp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dapp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\d3denumeration.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\d3denumeration.h"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dsettings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dsettings.h"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dutil.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dutil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dxutil.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dxutil.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Renderer.cpp"
 			>

@@ -1,4 +1,5 @@
 #include <windows.h>
+#include "System.h"
 
 //******************************************************************
 
@@ -8,7 +9,6 @@ int WINAPI WinMain(
 	LPSTR		lpCmdLine,
 	int			nCmdShow )
 {
-	//TODO
+	return System::GetInstance()->MainLoop();
 
-	return 0;
 }

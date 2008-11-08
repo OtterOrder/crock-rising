@@ -1,13 +1,38 @@
 #ifndef		_System_H
 #define		_System_H
 
+#include <windows.h>
+#include <libRenderer/Renderer.h>
+#include <d3d9.h>
+
 //******************************************************************
 
-class System
+class System : public Singleton< System >
 {
+	// Indispensable car Singleton doit pouvoir accéder aux
+	// constructeur/destructeur, qui sont en protected.
+	friend class Singleton< System >;
+
 	public:
 
-		//TODO
+		//----------------------------------------------------------
+        // Méthodes publiques
+        //----------------------------------------------------------
+
+		int MainLoop(); //Boucle principale
+
+
+
+	protected:
+
+		//----------------------------------------------------------
+        // Données membres
+        //----------------------------------------------------------
+
+		Renderer * m_Renderer; 
+
+		HINSTANCE m_Instance;  // Instance de l'application
+
 };
 
 //******************************************************************

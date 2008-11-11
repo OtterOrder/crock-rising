@@ -18,11 +18,14 @@ class Renderer : public Singleton< Renderer >, public CD3DApplication
         // Callback DirectX
         //----------------------------------------------------------
 
-		HRESULT OnCreateDevice()                           { return S_OK; }
-		HRESULT OnResetDevice()                            { return S_OK; }
-		HRESULT Render()                                   { return S_OK; }
-		HRESULT OnLostDevice()                             { return S_OK; }
-		HRESULT OnDestroyDevice()                          { return S_OK; }
+		HRESULT BeforeCreateDevice()                       { return S_OK; }
+		HRESULT OnCreateDevice();                           
+		HRESULT OnResetDevice();
+		HRESULT Render();                                   
+		HRESULT OnLostDevice();
+		HRESULT OnDestroyDevice();                          
+		HRESULT AfterDestroyDevice()                       { return S_OK; }
+
 
 };
 

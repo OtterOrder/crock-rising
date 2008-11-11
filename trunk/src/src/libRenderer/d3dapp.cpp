@@ -45,7 +45,7 @@ CD3DApplication::CD3DApplication()
     m_bActive           = false;
     m_bDeviceLost       = false;
     m_bMinimized        = false;
-    m_bMaximized        = false;
+    m_bMaximized        = true;
     m_bIgnoreSizeChange = false;
     m_bDeviceObjectsInited = false;
     m_bDeviceObjectsRestored = false;
@@ -226,7 +226,7 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, HICON hIcon )
     DXUtil_Timer( TIMER_START );
 
     // Initialize the app's custom scene stuff
-    if( FAILED( hr = OnCreateDevice() ) )
+    if( FAILED( hr = BeforeCreateDevice() ) )
     {
         SAFE_RELEASE( m_pD3D );
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
@@ -644,7 +644,7 @@ LRESULT CD3DApplication::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam,
         case WM_CLOSE:
             Cleanup3DEnvironment();
             SAFE_RELEASE( m_pD3D );
-            OnDestroyDevice();
+            AfterDestroyDevice();
 /*
             HMENU hMenu;
             hMenu = GetMenu(hWnd);
@@ -854,18 +854,18 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
         }
 
         // Initialize the app's device-dependent objects
-        hr = OnResetDevice();
+        hr = OnCreateDevice();
         if( FAILED(hr) )
         {
-            OnLostDevice();
+            OnDestroyDevice();
         }
         else
         {
             m_bDeviceObjectsInited = true;
-            hr = RestoreDeviceObjects();
+            hr = OnResetDevice();
             if( FAILED(hr) )
             {
-                InvalidateDeviceObjects();
+                OnLostDevice();
             }
             else
             {
@@ -956,7 +956,7 @@ HRESULT CD3DApplication::Reset3DEnvironment()
     if( m_bDeviceObjectsRestored )
     {
         m_bDeviceObjectsRestored = false;
-        InvalidateDeviceObjects();
+        OnLostDevice();
     }
     // Reset the device
     if( FAILED( hr = m_pd3dDevice->Reset( &m_d3dpp ) ) )
@@ -997,10 +997,10 @@ HRESULT CD3DApplication::Reset3DEnvironment()
     }
 
     // Initialize the app's device-dependent objects
-    hr = RestoreDeviceObjects();
+    hr = OnResetDevice();
     if( FAILED(hr) )
     {
-        InvalidateDeviceObjects();
+        OnLostDevice();
         return hr;
     }
     m_bDeviceObjectsRestored = true;
@@ -1428,12 +1428,12 @@ void CD3DApplication::Cleanup3DEnvironment()
         if( m_bDeviceObjectsRestored )
         {
             m_bDeviceObjectsRestored = false;
-            InvalidateDeviceObjects();
+            OnLostDevice();
         }
         if( m_bDeviceObjectsInited )
         {
             m_bDeviceObjectsInited = false;
-            OnLostDevice();
+            OnDestroyDevice();
         }
 
         if( m_pd3dDevice->Release() > 0 )

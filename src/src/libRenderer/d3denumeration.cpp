@@ -218,7 +218,7 @@ CD3DEnumeration::CD3DEnumeration()
     AppMinAlphaChannelBits = 0;
     AppMinDepthBits = 15;
     AppMinStencilBits = 0;
-    AppUsesDepthBuffer = false;
+    AppUsesDepthBuffer = true;
     AppUsesMixedVP = false;
     AppRequiresWindowed = false;
     AppRequiresFullscreen = false;

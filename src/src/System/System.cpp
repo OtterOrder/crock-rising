@@ -10,6 +10,8 @@ int System::MainLoop()
     msg.message = WM_NULL;
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
+	
+
 	//Création du device, initialisation D3D, création de la fenêtre
 	Renderer::GetInstance()->Create(m_Instance, NULL);
 
@@ -37,6 +39,8 @@ int System::MainLoop()
 			Renderer::GetInstance()->Run();
             
         }
+		
+
 
     } ; 
 

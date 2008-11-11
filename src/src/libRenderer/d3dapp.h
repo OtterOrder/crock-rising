@@ -124,14 +124,14 @@ protected:
 
     // Overridable functions for the 3D scene created by the app
     virtual HRESULT ConfirmDevice(D3DCAPS9*,DWORD,D3DFORMAT)   { return S_OK; }
+    virtual HRESULT BeforeCreateDevice()                       { return S_OK; }
     virtual HRESULT OnCreateDevice()                           { return S_OK; }
     virtual HRESULT OnResetDevice()                            { return S_OK; }
-    virtual HRESULT RestoreDeviceObjects()                     { return S_OK; }
     virtual HRESULT FrameMove()                                { return S_OK; }
     virtual HRESULT Render()                                   { return S_OK; }
-    virtual HRESULT InvalidateDeviceObjects()                  { return S_OK; }
     virtual HRESULT OnLostDevice()                             { return S_OK; }
     virtual HRESULT OnDestroyDevice()                          { return S_OK; }
+    virtual HRESULT AfterDestroyDevice()                       { return S_OK; }
 
 public:
     // Functions to create, run, pause, and clean up the application

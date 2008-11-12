@@ -6,6 +6,7 @@
 #include	<d3dx9.h>
 
 #include	<libCore/Types/Crc32.h>
+#include	<stdio.h>
 
 //******************************************************************
 // Defines pour les ressources

@@ -4,7 +4,7 @@
 
 //******************************************************************
 
-ResourceResult MeshManager::Load( crc32 resource )
+ResourceResult MeshManager::Load( crc32 resource, LPDIRECT3DDEVICE9 pDevice )
 {
 	//TODO
 

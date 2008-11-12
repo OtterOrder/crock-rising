@@ -15,8 +15,8 @@ Texture::Texture(crc32 resource, LPDIRECT3DDEVICE9 pDevice)
 	
 	SetDevice(pDevice);
 
-	char *strTexName = "..\\data\\textures\\";
-	//strcat(strTexName, resource);
+	char* strTexName;
+	sprintf (strTexName , "..\\data\\textures\\%u" , resource);
 
 	if( FAILED(D3DXCreateTextureFromFile(m_pDevice, (LPCSTR)strTexName, &m_pTex)) )
 		m_pTex = NULL;

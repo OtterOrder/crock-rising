@@ -10,15 +10,15 @@
 
 class TextureManager : public ResourceManager
 {
+		TextureManager(){}
+		~TextureManager(){}
+
 	public:	
 		
 		ResourceResult	Load		( crc32 resource, LPDIRECT3DDEVICE9 pDevice, TCHAR strTexName=NULL);		// Charge la ressource
 																						//le nom du fichier n'est qu'a spécifier qu'au
 																						//premier chargement, après on utilise le crc32
 		ResourceResult	Release		( crc32 resource );		// Supprime la ressource
-
-	protected:
-		std::list< Texture* >		m_TextureList;		// Liste des ressources chargées
 
 };
 

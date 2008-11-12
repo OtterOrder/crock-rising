@@ -7,14 +7,14 @@
 ResourceResult TextureManager::Load( crc32 resource, LPDIRECT3DDEVICE9 pDevice, TCHAR strTexName )
 {
 	bool bNeedLoad = true;				//Vrai si la texture n'est pas dans la liste, on doit donc la charger.
-	std::list<Texture*>::iterator Iterator;
-	Iterator = m_TextureList.begin();
+	std::vector<Resource*>::iterator Iterator;
+	Iterator = m_ResourcesList.begin();
 
 	//Vérifie si la texture n'est pas déja dans la liste
-	while(Iterator != m_TextureList.end() && bNeedLoad == true)
+	while(Iterator != m_ResourcesList.end() && bNeedLoad == true)
 	{
 		//Test du crc32 resource, mais je vois pas encore trop comment
-		if((*Iterator)->GetCrc32() == resource) bNeedLoad = false;
+		if(( (Texture*)(*Iterator) )->GetCrc32() == resource) bNeedLoad = false;
 		Iterator++;
 	}
 
@@ -25,7 +25,7 @@ ResourceResult TextureManager::Load( crc32 resource, LPDIRECT3DDEVICE9 pDevice, 
 		if(pTex->GetTex() == NULL)		//ERREUR AU CHARGEMENT
 			return RES_FAILED;
 
-		m_TextureList.push_back(pTex);
+		m_ResourcesList.push_back(pTex);
 	}
 
 	return RES_SUCCEED;

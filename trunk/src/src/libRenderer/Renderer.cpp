@@ -103,6 +103,7 @@ HRESULT Renderer::Render()
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &maMatriceDeVue);
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &maMatriceDeProjection);
 
+
 	m_pd3dDevice->BeginScene();
 
 		m_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(DEFAULT_VERTEX));

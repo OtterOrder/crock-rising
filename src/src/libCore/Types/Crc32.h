@@ -8,11 +8,11 @@
 //******************************************************************
 
 // Définition du type crc32
-typedef unsigned long int crc32;
+typedef unsigned long crc32;
 
 //******************************************************************
 
-crc32	GetCrc32	( char *s );			// Donne le crc32 de la chaîne
+crc32	GetCrc32	( const unsigned char *s );			// Donne le crc32 de la chaîne
 
 //******************************************************************
 #endif		// _Crc32_H

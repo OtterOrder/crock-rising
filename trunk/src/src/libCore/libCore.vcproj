@@ -37,6 +37,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -139,6 +140,18 @@
 			Name="Time"
 			>
 			<File
+				RelativePath=".\Time\Time.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Time\Time.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Types"
+			>
+			<File
 				RelativePath=".\Types\Crc32.cpp"
 				>
 			</File>
@@ -147,11 +160,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Time\Time.cpp"
+				RelativePath=".\Types\Vector.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Time\Time.h"
+				RelativePath=".\Types\Vector.h"
 				>
 			</File>
 			<Filter

@@ -19,7 +19,6 @@
 
 
 
-
 //-----------------------------------------------------------------------------
 // Global access to the app (needed for the global WndProc())
 //-----------------------------------------------------------------------------
@@ -58,6 +57,7 @@ CD3DApplication::CD3DApplication()
     m_fFPS              = 0.0f;
     m_strDeviceStats[0] = _T('\0');
     m_strFrameStats[0]  = _T('\0');
+	m_pStatsFont		= NULL;
 
     m_strWindowTitle    = _T("D3D9 Application");
     m_dwCreationWidth   = 800;
@@ -199,7 +199,7 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, HICON hIcon )
 #endif 
 
         // Create the render window
-        m_hWnd = CreateWindow( _T("Direct3DWindowClass"), m_strWindowTitle, WS_OVERLAPPEDWINDOW,
+        m_hWnd = CreateWindow( _T("Direct3DWindowClass"), m_strWindowTitle, m_dwWindowStyle,
                                CW_USEDEFAULT, CW_USEDEFAULT,
                                (rc.right-rc.left), (rc.bottom-rc.top), 0L,
                                NULL , 

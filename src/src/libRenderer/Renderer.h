@@ -18,7 +18,7 @@ class Renderer : public Singleton< Renderer >, public CD3DApplication
         // Callback DirectX
         //----------------------------------------------------------
 
-		HRESULT BeforeCreateDevice()                       { return S_OK; }
+		HRESULT BeforeCreateDevice();
 		HRESULT OnCreateDevice();                           
 		HRESULT OnResetDevice();
 		HRESULT Render();                                   

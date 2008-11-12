@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "d3dfont.h"
 
 
 ////////////////////////////////////////
@@ -21,10 +22,24 @@ LPDIRECT3DVERTEXBUFFER9 g_pVB=NULL;
 //FIN VARIABLES GLOBALES
 ///////////////////////////////////////////
 
+HRESULT Renderer::BeforeCreateDevice()
+{
+	m_pStatsFont = new CD3DFont( _T("Arial"), 12, D3DFONT_BOLD );
+    if( m_pStatsFont == NULL )
+        return E_FAIL;
+
+	return S_OK;
+
+
+}
+
 HRESULT Renderer::OnCreateDevice()
 {
 
-	
+	HRESULT hr;
+
+	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
+        return hr;
 
 
 	return S_OK;
@@ -34,6 +49,9 @@ HRESULT Renderer::OnCreateDevice()
 
 HRESULT Renderer::OnResetDevice()
 {
+
+	m_pStatsFont->RestoreDeviceObjects();
+
 	m_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
@@ -85,7 +103,7 @@ HRESULT Renderer::OnResetDevice()
 HRESULT Renderer::Render()
 {
 	
-    m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+    m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
 	D3DXMATRIX maMatriceDuMonde;
 	D3DXMatrixIdentity(&maMatriceDuMonde);
@@ -111,10 +129,12 @@ HRESULT Renderer::Render()
 		m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
 		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 6); 
-
+		
+		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
 
 	m_pd3dDevice->EndScene();
 
+	
 
 
 	return S_OK;
@@ -125,7 +145,7 @@ HRESULT Renderer::Render()
 HRESULT Renderer::OnLostDevice()
 {
 
-	
+	m_pStatsFont->InvalidateDeviceObjects();
 	g_pVB->Release();
 	return S_OK;
 
@@ -136,6 +156,7 @@ HRESULT Renderer::OnLostDevice()
 HRESULT Renderer::OnDestroyDevice()
 {
 
+	m_pStatsFont->DeleteDeviceObjects();
 	return S_OK;
 
 

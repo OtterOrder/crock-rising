@@ -9,6 +9,7 @@
 #include "D3DUtil.h"  // for the camera
 #include "D3DEnumeration.h"  
 #include "D3DSettings.h"  
+#include "d3dfont.h"
 
 //-----------------------------------------------------------------------------
 // Error codes
@@ -112,6 +113,7 @@ public:
     FLOAT             m_fFPS;              // Instanteous frame rate
     TCHAR             m_strDeviceStats[90];// String to hold D3D device stats
     TCHAR             m_strFrameStats[90]; // String to hold frame stats
+	CD3DFont*         m_pStatsFont;        // Font pour les framestats
 
 protected:
     // Overridable variables for the app

@@ -164,6 +164,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\d3dfont.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\d3dfont.h"
+				>
+			</File>
+			<File
 				RelativePath=".\d3dsettings.cpp"
 				>
 			</File>

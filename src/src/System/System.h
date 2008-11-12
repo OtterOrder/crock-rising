@@ -20,6 +20,7 @@ class System : public Singleton< System >
         //----------------------------------------------------------
 
 		int MainLoop(); //Boucle principale
+		LRESULT InputProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 
 
@@ -28,8 +29,6 @@ class System : public Singleton< System >
 		//----------------------------------------------------------
         // Données membres
         //----------------------------------------------------------
-
-		Renderer * m_Renderer; 
 
 		HINSTANCE m_Instance;  // Instance de l'application
 

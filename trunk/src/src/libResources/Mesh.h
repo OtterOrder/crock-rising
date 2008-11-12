@@ -14,17 +14,15 @@ class Mesh : public Resource
 	public:
 		
 		Mesh(void);
-		Mesh(TCHAR strTexName, LPDIRECT3DDEVICE9 pDevice);
+		Mesh(crc32 Resource, LPDIRECT3DDEVICE9 pDevice);
 		~Mesh();
-
-		ResourceResult			SetDevice	( LPDIRECT3DDEVICE9 pDevice ); //Modifie le device grace au renderer
-		LPDIRECT3DTEXTURE9		GetTex		(){ return m_pTex; }
 
 	private:
 
 		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
-		LPDIRECT3DTEXTURE9		m_pTex;			//Pointeur vers la texture
 
+		LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
+		LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
 };
 
 //******************************************************************

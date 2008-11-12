@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib Winmm.lib d3d9.lib"
+				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib Winmm.lib d3d9.lib tinyxmld.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -130,7 +130,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib Winmm.lib d3d9.lib"
+				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib Winmm.lib d3d9.lib tinyxml.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

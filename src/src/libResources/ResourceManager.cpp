@@ -28,8 +28,8 @@ ResourceResult ResourceManager::Clear( void )
 	
 	while( !m_ResourcesList.empty() )
 	{
-		pResource = m_ResourcesList.front();
-		m_ResourcesList.pop_front();
+		pResource = m_ResourcesList.back();
+		m_ResourcesList.pop_back();
 		delete pResource;
 	}
 	return RES_SUCCEED;

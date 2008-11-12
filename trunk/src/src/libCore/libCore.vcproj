@@ -128,26 +128,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Types"
-			>
-			<File
-				RelativePath=".\Types\Crc32.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Types\Crc32.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Types\Vector.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Types\Vector.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Singleton"
 			>
 			<File
@@ -159,6 +139,14 @@
 			Name="Time"
 			>
 			<File
+				RelativePath=".\Types\Crc32.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Types\Crc32.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Time\Time.cpp"
 				>
 			</File>
@@ -166,6 +154,18 @@
 				RelativePath=".\Time\Time.h"
 				>
 			</File>
+			<Filter
+				Name="CCRC32"
+				>
+				<File
+					RelativePath=".\Types\CCRC32\CCRC32.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Types\CCRC32\CCRC32.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

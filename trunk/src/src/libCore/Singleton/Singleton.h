@@ -14,7 +14,12 @@ class Singleton
 		// =========================================================
 		// Méthodes publiques
 		
-		static T* GetInstance( void )		// Donne l'instance du singleton
+		
+		/***********************************************************
+		 * Donne l'instance du singleton.
+		 * @return	pointeur sur l'instance
+		 **********************************************************/
+		static T* GetInstance( void )
 		{
 			if( m_Instance == NULL )
 				m_Instance = new T;
@@ -22,7 +27,10 @@ class Singleton
 			return m_Instance;
 		}
 		
-		static void Destroy( void )			// Détruit l'instance
+		/***********************************************************
+		 * Détruit l'instance.
+		 **********************************************************/
+		static void Destroy( void )
 		{
 			if( m_Instance != NULL )
 			{

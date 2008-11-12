@@ -12,7 +12,9 @@ class TextureManager : public ResourceManager
 {
 	public:	
 		
-		ResourceResult	Load		( crc32 resource, TCHAR strTexName, LPDIRECT3DDEVICE9 pDevice );		// Charge la ressource
+		ResourceResult	Load		( crc32 resource, LPDIRECT3DDEVICE9 pDevice, TCHAR strTexName=NULL);		// Charge la ressource
+																						//le nom du fichier n'est qu'a spécifier qu'au
+																						//premier chargement, après on utilise le crc32
 		ResourceResult	Release		( crc32 resource );		// Supprime la ressource
 
 	protected:

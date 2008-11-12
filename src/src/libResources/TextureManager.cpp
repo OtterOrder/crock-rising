@@ -4,7 +4,7 @@
 //******************************************************************
 
 
-ResourceResult TextureManager::Load( crc32 resource, TCHAR strTexName, LPDIRECT3DDEVICE9 pDevice )
+ResourceResult TextureManager::Load( crc32 resource, LPDIRECT3DDEVICE9 pDevice, TCHAR strTexName )
 {
 	bool bNeedLoad = true;				//Vrai si la texture n'est pas dans la liste, on doit donc la charger.
 	std::list<Texture*>::iterator Iterator;

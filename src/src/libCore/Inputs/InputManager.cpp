@@ -11,9 +11,10 @@
  * @param[in]	lParam	: infos supplémentaires sur le message
  * @return	un code résultat
  **********************************************************/
-LRESULT InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	//TODO
+	Renderer::GetInstance()->RenderEventsCallback(hWnd, uMsg, wParam, lParam);
 
 	return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }

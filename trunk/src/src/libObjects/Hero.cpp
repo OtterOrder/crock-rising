@@ -1,3 +1,6 @@
 #include "Hero.h"
 
-//TODO
+Hero::Hero( unsigned int hpHero )
+			:	health(hpHero)
+{
+}

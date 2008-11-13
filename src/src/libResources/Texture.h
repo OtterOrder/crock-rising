@@ -14,9 +14,9 @@ class Texture: public Resource
 	public:
 		
 		Texture(void);
-		Texture(crc32 resource, LPDIRECT3DDEVICE9 pDevice);
 		~Texture();
 
+		ResourceResult			Initialize	(crc32 resource);
 		ResourceResult			SetDevice	( LPDIRECT3DDEVICE9 pDevice ); //Modifie le device grace au renderer
 		LPDIRECT3DTEXTURE9		GetTex		(){ return m_pTex; }
 

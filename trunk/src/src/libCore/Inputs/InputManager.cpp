@@ -13,8 +13,9 @@
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	//TODO
 	Renderer::GetInstance()->RenderEventsCallback(hWnd, uMsg, wParam, lParam);
+	
+	//TODO
 
 	return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }

@@ -180,6 +180,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Inputs"
+			>
+			<File
+				RelativePath=".\Inputs\InputManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inputs\InputManager.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

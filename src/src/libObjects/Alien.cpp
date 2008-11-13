@@ -1,3 +1,7 @@
 #include "Alien.h"
 
-//TODO
+
+Alien::Alien( unsigned int hpAlien )
+		:	health(hpAlien)
+{
+}

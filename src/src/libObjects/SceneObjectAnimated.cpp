@@ -1,3 +1,6 @@
 #include "SceneObjectAnimated.h"
 
-//TODO
+
+SceneObjectAnimated::SceneObjectAnimated()
+{
+}

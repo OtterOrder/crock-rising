@@ -7,7 +7,18 @@
 
 //******************************************************************
 
-//TODO
+class Hero : public SceneObjectAnimated
+{
+public:
+	Hero( unsigned int hpHero );
+
+	// Gestion des HPs du héros
+	unsigned int	GetHealth()						{	return health;	}
+	void			SetHealth( unsigned int hp )	{	health = hp;	}
+	
+private:
+	unsigned int health;
+};
 
 //******************************************************************
 #endif		// _Hero_H

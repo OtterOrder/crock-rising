@@ -5,6 +5,7 @@
 
 #include	<windows.h>
 #include	<libCore/Singleton/Singleton.h>
+#include	<libRenderer/Renderer.h>
 
 //******************************************************************
 
@@ -19,7 +20,7 @@ class InputManager : public Singleton< InputManager >
 		// =========================================================
 		// Méthodes publiques
 
-		static LRESULT	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
+		static LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
 
 
 	private:

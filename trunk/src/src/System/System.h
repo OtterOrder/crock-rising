@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <libRenderer/Renderer.h>
+#include <libCore/Inputs/InputManager.h>
 #include <d3d9.h>
 
 //******************************************************************
@@ -19,8 +20,11 @@ class System : public Singleton< System >
         // Méthodes publiques
         //----------------------------------------------------------
 
+		HRESULT InitWindow(); //Initialisation fenêtre windows
+
+
 		int MainLoop(); //Boucle principale
-		LRESULT InputProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+
 
 
 
@@ -31,6 +35,7 @@ class System : public Singleton< System >
         //----------------------------------------------------------
 
 		HINSTANCE m_Instance;  // Instance de l'application
+		HICON	  m_hIcon;
 
 };
 

@@ -81,18 +81,6 @@ CD3DApplication::CD3DApplication()
 
 
 
-
-//-----------------------------------------------------------------------------
-// Name: WndProc()
-// Desc: Static msg handler which passes messages to the application class.
-//-----------------------------------------------------------------------------
-LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-    return g_pD3DApp->MsgProc( hWnd, uMsg, wParam, lParam );
-}
-
-
-
 //-----------------------------------------------------------------------------
 // Name: ConfirmDeviceHelper()
 // Desc: Static function used by D3DEnumeration
@@ -123,7 +111,7 @@ bool CD3DApplication::ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType
 // Name: Create()
 // Desc:
 //-----------------------------------------------------------------------------
-HRESULT CD3DApplication::Create( HINSTANCE hInstance, HICON hIcon )
+HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
 {
     HRESULT hr;
 
@@ -147,29 +135,6 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, HICON hIcon )
     // render into
     if( m_hWnd == NULL)
     {
-        //// Register the windows class
-        //WNDCLASS wndClass = { 0, WndProc, 0, 0, hInstance,
-        //                      LoadIcon( hInstance, MAKEINTRESOURCE(IDI_MAIN_ICON) ),
-        //                      LoadCursor( NULL, IDC_ARROW ),
-							 // // Will look better on a black background 
-        //                      (HBRUSH)GetStockObject(BLACK_BRUSH),
-        //                      NULL, _T("D3D Window") };
-        //RegisterClass( &wndClass );
-
-		
-
-		 // Register the windows class
-        WNDCLASS wndClass;
-        wndClass.style = CS_DBLCLKS;
-		wndClass.lpfnWndProc = WndProc;
-        wndClass.cbClsExtra = 0;
-        wndClass.cbWndExtra = 0;
-        wndClass.hInstance = hInstance;
-        wndClass.hIcon = hIcon;
-        wndClass.hCursor = LoadCursor( NULL, IDC_ARROW );
-        wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-        wndClass.lpszMenuName = NULL;
-        wndClass.lpszClassName = "Direct3DWindowClass";
 
         if( !RegisterClass( &wndClass ) )
         {
@@ -464,7 +429,7 @@ HRESULT CD3DApplication::ChooseInitialD3DSettings()
 // Name: MsgProc()
 // Desc: Message handling function.
 //-----------------------------------------------------------------------------
-LRESULT CD3DApplication::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam,
+LRESULT CD3DApplication::RenderEventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam )
 {
     switch( uMsg )
@@ -657,7 +622,9 @@ LRESULT CD3DApplication::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam,
             return 0;
     }
 
-    return DefWindowProc( hWnd, uMsg, wParam, lParam );
+	return S_OK;
+
+    //return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
 //-----------------------------------------------------------------------------

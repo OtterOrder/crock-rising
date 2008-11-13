@@ -1,6 +1,32 @@
 #include "System.h"
 
 
+//-----------------------------------------------------------------------------
+// Name: WndProc()
+// Desc: Static msg handler which passes messages to the application class.
+//-----------------------------------------------------------------------------
+
+
+HRESULT System::InitWindow()
+{
+
+	// Register the windows class
+	WNDCLASS wndClass;
+	wndClass.style = CS_DBLCLKS;
+	wndClass.lpfnWndProc = InputManager::EventsCallback;
+	wndClass.cbClsExtra = 0;
+	wndClass.cbWndExtra = 0;
+	wndClass.hInstance = m_Instance;
+	wndClass.hIcon = m_hIcon;
+	wndClass.hCursor = LoadCursor( NULL, IDC_ARROW );
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wndClass.lpszMenuName = NULL;
+	wndClass.lpszClassName = "Direct3DWindowClass";
+
+	return Renderer::GetInstance()->Create(m_Instance, wndClass);
+
+}
+
 
 int System::MainLoop()
 {
@@ -11,7 +37,9 @@ int System::MainLoop()
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
 	//Création du device, initialisation D3D, création de la fenêtre
-	Renderer::GetInstance()->Create(m_Instance, NULL);
+	if(FAILED(InitWindow()))
+		return 0;
+	
 
     while( WM_QUIT != msg.message  )
     {

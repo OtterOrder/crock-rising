@@ -8,9 +8,8 @@ ResourceResult TextureManager::Load( crc32 resource)
 {
 	bool bNeedLoad = true;				//Vrai si la texture n'est pas dans la liste, on doit donc la charger.
 
-
-	//Vérifie si la texture n'est pas déja dans la liste
 	int i = 0;
+	//Vérifie si la texture n'est pas déja dans la liste
 	while(i != m_ResourcesList.size() && bNeedLoad == true)
 	{
 		//Test du crc32 resource, mais je vois pas encore trop comment

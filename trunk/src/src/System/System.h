@@ -20,12 +20,11 @@ class System : public Singleton< System >
         // Méthodes publiques
         //----------------------------------------------------------
 
-		HRESULT InitWindow(); //Initialisation fenêtre windows
+		HRESULT					InitWindow		( void ); //Initialisation fenêtre windows
 
+		int						MainLoop		( void ); //Boucle principale
 
-		int MainLoop(); //Boucle principale
-
-
+		static LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam ); // Fonction de rappel des événements
 
 
 	protected:

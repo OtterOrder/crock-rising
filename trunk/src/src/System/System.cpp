@@ -13,7 +13,7 @@ HRESULT System::InitWindow()
 	// Register the windows class
 	WNDCLASS wndClass;
 	wndClass.style = CS_DBLCLKS;
-	wndClass.lpfnWndProc = InputManager::EventsCallback;
+	wndClass.lpfnWndProc = System::EventsCallback;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hInstance = m_Instance;
@@ -73,5 +73,31 @@ int System::MainLoop()
     return (INT)msg.wParam;
 
 
+}
+
+
+/***********************************************************
+ * Fonction de rappel des événements.
+ * Voir MSDN > WindowProc pour plus d'infos.
+ * @param[in]	hWnd	: handle de la fenêtre
+ * @param[in]	uMsg	: message
+ * @param[in]	wParam	: infos supplémentaires sur le message
+ * @param[in]	lParam	: infos supplémentaires sur le message
+ * @return	un code résultat
+ **********************************************************/
+LRESULT CALLBACK System::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+	// Pour la gestion des erreurs
+	LRESULT lResult;
+	
+	// Callback de inputs
+	lResult = InputManager::GetInstance()->EventsCallback( hWnd, uMsg, wParam, lParam );
+	
+	// Callback de événements de rendu
+	lResult = Renderer::GetInstance()->EventsCallback( hWnd, uMsg, wParam, lParam );
+
+	//TODO
+
+	return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 

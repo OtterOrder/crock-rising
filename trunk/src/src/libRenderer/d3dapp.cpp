@@ -429,7 +429,7 @@ HRESULT CD3DApplication::ChooseInitialD3DSettings()
 // Name: MsgProc()
 // Desc: Message handling function.
 //-----------------------------------------------------------------------------
-LRESULT CD3DApplication::RenderEventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
+LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam )
 {
     switch( uMsg )

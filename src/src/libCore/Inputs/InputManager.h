@@ -20,7 +20,7 @@ class InputManager : public Singleton< InputManager >
 		// =========================================================
 		// Méthodes publiques
 
-		static LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
+		LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
 
 
 	private:

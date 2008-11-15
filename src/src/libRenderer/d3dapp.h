@@ -139,7 +139,7 @@ public:
     // Functions to create, run, pause, and clean up the application
     virtual HRESULT Create( HINSTANCE hInstance, WNDCLASS wndClass );
     virtual void     Run();
-    virtual LRESULT RenderEventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual LRESULT EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual void    Pause( bool bPause );
     virtual         ~CD3DApplication()                         { }
 

@@ -3,9 +3,11 @@
 
 //******************************************************************
 
-#include	<windows.h>
 #include	<libCore/Singleton/Singleton.h>
-#include	<libRenderer/Renderer.h>
+#include	<libCore/Types/Vector.h>
+
+#include	<windows.h>
+#include	<list>
 
 //******************************************************************
 
@@ -20,11 +22,53 @@ class InputManager : public Singleton< InputManager >
 		// =========================================================
 		// Méthodes publiques
 
+		// Interface pour le clavier
+		// Note: pour vérifier une lettre, on envoie directement
+		// le caractère (par exemple 'A'). Pour les touches spéciales,
+		// on utilise les defines de WINAPI qui commencent par VK_
+		// (en général, sinon voir dans winuser.h).
+		
+		bool				IsKeyTriggered	( int key );		// Vérifie si la touche est appuyée
+		bool				IsKeyPressed	( int key );		// Vérifie si la touche est maintenue appuyée
+		bool				IsKeyReleased	( int key );		// Vérifie si la touche est relachée
+
+		// Interface pour la souris
+
+		Vector3f			GetMouseVector	( void );			// Donne le vecteur de la souris
+
+
 		LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
 
 
 	private:
 
+		// =========================================================
+		// Enum et stuctures privées
+
+		enum KeyState
+		{
+			KEY_TRIGGERED,
+			KEY_PRESSED,
+			KEY_RELEASED
+
+		};
+
+		struct Key
+		{
+			UINT_PTR	m_KeyCode;			// Code de la touche
+			KeyState	m_State;			// Etat de la touche
+
+		};
+
+
+		// =========================================================
+		// Données privées
+
+		std::list< Key >			m_Keys;
+
+		Vector3f					m_MouseVector;		// Vecteur de la souris
+
+		
 		// =========================================================
 		// Méthodes privées
 

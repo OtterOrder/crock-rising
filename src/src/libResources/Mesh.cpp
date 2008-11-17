@@ -64,6 +64,8 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 {
 	TiXmlNode* node;
 
+	char * SourceId;
+
 	if(rootNode) {
 		node =  rootNode->FirstChildElement( "library_geometries" );
 		if(node) {
@@ -73,7 +75,7 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 				if(node) {
 					node =  node->FirstChildElement( "source" );		// Recherche la première balise "source"
 					if(node) {
-						//node->ToElement()->Attribute("id");		// vérification de l'id
+						SourceId = (char*)node->ToElement()->Attribute("id");		// vérification de l'id
 						ExtractArrayDatas (node, m_Positions);
 					}
 					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"

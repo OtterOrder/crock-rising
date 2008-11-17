@@ -1,6 +1,8 @@
 #include <windows.h>
 #include "System.h"
 
+#include <libResources/Mesh.h>
+
 //******************************************************************
 
 int WINAPI WinMain(

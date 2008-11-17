@@ -2,6 +2,9 @@
 
 //******************************************************************
 
+/***********************************************************
+ * Constructeur.
+ **********************************************************/
 Mesh::Mesh()
 {
 	m_pDevice = NULL;
@@ -17,19 +20,26 @@ Mesh::Mesh()
 	m_pIB = NULL;
 }
 
+/***********************************************************
+ * Destructeur.
+ **********************************************************/
 Mesh::~Mesh()
 {
 }
 
 
-
+/***********************************************************
+ * Supprime la ressource.
+ * @param[in]	resource : crc32 de la ressource
+ * @return	le résultat du chargement
+ **********************************************************/
 ResourceResult Mesh::Load(crc32 resource)
 {			
 	m_pDevice = NULL;//Renderer::GetDevice();
 	//Renderer::GetInstance()->m_pd3dDevice;
 
 	char strMeshName[128];
-	sprintf(strMeshName, "..\\..\\data\\%u.DAE", resource);
+	sprintf(strMeshName, "..\\..\\data\\test\\%u.DAE", resource);
 
 	TiXmlDocument meshFile( strMeshName );
 	if (!meshFile.LoadFile ())
@@ -45,7 +55,11 @@ ResourceResult Mesh::Load(crc32 resource)
 }
 
 
-
+/***********************************************************
+ * Rempli les tableaux de données.
+ * @param[in]	rootNode : balise racine du fichier XML
+ * @return	le résultat du chargement
+ **********************************************************/
 ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 {
 	TiXmlNode* node;
@@ -60,12 +74,12 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 					node =  node->FirstChildElement( "source" );		// Recherche la première balise "source"
 					if(node) {
 						//node->ToElement()->Attribute("id");		// vérification de l'id
-						ExtractArrayDatas (node, m_Positions);
+						ExtractArrayDatas (node, m_Normals);
 					}
 					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
 					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
 					if(node) {
-						ExtractArrayDatas (node, m_Normals);
+						ExtractArrayDatas (node, m_TexCoords);
 					}
 				}
 			}
@@ -75,7 +89,12 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 	return RES_FAILED;
 }
 
-
+/***********************************************************
+ * Etrait les données lées à un tableau.
+ * @param[in]	sourceNode : balise source (source des données) du fichier XML
+ *				Array : tableau à remplir
+ * @return	le résultat du chargement
+ **********************************************************/
 ResourceResult	 Mesh::ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array)
 {
 	TiXmlNode* node = sourceNode;			// Enregistrement de la balise source
@@ -121,6 +140,14 @@ ResourceResult	 Mesh::ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array)
 	return RES_FAILED;
 }
 
+/***********************************************************
+ * Copie les données d'une chaîne caractères provenant du fichier XML dans un tableau
+ * @param[in]	text	: données sous forme de caractères
+ *				Array	: tableau à remplir
+ *				iCount	: nombre de cases du tableau
+ *				iStride	: nombre de données par case
+ * @return	le résultat du chargement
+ **********************************************************/
 ResourceResult	 Mesh::ConvertTextToArray	(char* text, float** Array, int iCount, int iStride)
 {
 	char* cData = new char[128];

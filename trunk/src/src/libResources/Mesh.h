@@ -11,18 +11,28 @@
 
 class Mesh : public Resource
 {
-	public:
-		
-		Mesh(void);
-		Mesh(crc32 Resource, LPDIRECT3DDEVICE9 pDevice);
-		~Mesh();
+public:
 
-	private:
+	Mesh(void);
+	~Mesh();
 
-		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
+	ResourceResult			Load		(crc32 resource);
 
-		LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
-		LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
+private:
+	int		m_iNbVertices;
+
+	float** m_Positions;
+	float** m_Normals;
+	float** m_TexCoords;
+
+	LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
+
+	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
+	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
+
+	ResourceResult	FillArrays	(TiXmlNode* rootNode);			// Remplit les tableaux de données
+	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array);		// Extrait les données d'une balise
+	ResourceResult	ConvertTextToArray	(char* text, float** Array, int iCount, int iStride);	// Rempli un tableau à l'aide d'un texte
 };
 
 //******************************************************************

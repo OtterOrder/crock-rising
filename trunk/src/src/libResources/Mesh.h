@@ -2,6 +2,8 @@
 #define		_Mesh_H
 
 //******************************************************************
+#include	<string>
+
 #include	"Resource.h"
 
 #include	<TinyXml/tinyxml.h>

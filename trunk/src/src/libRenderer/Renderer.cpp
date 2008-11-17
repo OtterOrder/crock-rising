@@ -105,22 +105,19 @@ HRESULT Renderer::Render()
 	
     m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
-	D3DXMATRIX maMatriceDuMonde;
-	D3DXMatrixIdentity(&maMatriceDuMonde);
-
-	D3DXMATRIX maMatriceDeVue;
-	D3DXVECTOR3 vEye(0.0f, 2.0f, -2.0f);
-	D3DXVECTOR3 vLookAt(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 vUp(0.0f, 1.0f, 0.0f);
-	D3DXMatrixLookAtLH(&maMatriceDeVue, &vEye, &vLookAt, &vUp);
-
-	D3DXMATRIX maMatriceDeProjection;
-	D3DXMatrixPerspectiveFovLH(&maMatriceDeProjection, D3DX_PI/4.0f, 800.0f/600.0f, 0.005f, 100.0f);
 	
-	m_pd3dDevice->SetTransform(D3DTS_WORLD, &maMatriceDuMonde);
-	m_pd3dDevice->SetTransform(D3DTS_VIEW, &maMatriceDeVue);
-	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &maMatriceDeProjection);
+	D3DXMATRIX matrixTemp;
+	D3DXMatrixIdentity(&matrixTemp);
+	m_pd3dDevice->SetTransform(D3DTS_WORLD, &matrixTemp);
 
+	m_Camera->SetPosition( Vector3f(0.0f, 2.0f, -2.0f) );
+	D3DXMatrixLookAtLH( &matrixTemp, &m_Camera->GetPosition(), 
+					    &m_Camera->GetTarget(), &m_Camera->GetUp() );
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, &matrixTemp);
+
+	D3DXMatrixPerspectiveFovLH(&matrixTemp, m_Camera->GetFOV(), m_Camera->GetRatio(), 
+											m_Camera->GetZNear(),m_Camera->GetZFar() );
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matrixTemp);
 
 	m_pd3dDevice->BeginScene();
 
@@ -160,4 +157,10 @@ HRESULT Renderer::OnDestroyDevice()
 	return S_OK;
 
 
+}
+
+void Renderer::SetCamera( Camera* cam )
+{
+	//Version de test
+	m_Camera = cam; //à verifier; à ne surtout pas détruire pour l'instant
 }

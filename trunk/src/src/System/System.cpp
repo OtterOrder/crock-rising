@@ -36,10 +36,12 @@ int System::MainLoop()
     msg.message = WM_NULL;
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
+	Camera cam( Vector3f(0.0f, 2.0f, -2.0f));
 	//Création du device, initialisation D3D, création de la fenêtre
 	if(FAILED(InitWindow()))
 		return 0;
 	
+	Renderer::GetInstance()->SetCamera( &cam );
 
     while( WM_QUIT != msg.message  )
     {

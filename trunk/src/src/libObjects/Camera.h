@@ -33,6 +33,13 @@ public:
 	void SetRatio( float ratio=DEFAULT_RATIO );
 	void SetFOV( int FovDeg=DEFAUT_FOV_DEG );
 
+	//Accesseurs
+	float GetFOV(){		return m_fov_rad; };
+	float GetZNear(){	return m_zNear; };
+	float GetZFar(){	return m_zFar; };
+	float GetRatio(){	return m_ratio; };
+	
+
 	//Fonctions membres
 	void SetDefaultProjection();		//Applique les paramètres par default pour les variables de projection
 

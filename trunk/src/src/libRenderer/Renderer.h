@@ -5,6 +5,7 @@
 
 #include "d3dapp.h"
 #include <libCore/Singleton/Singleton.h>
+#include <libObjects/Camera.h>
 
 class Renderer : public Singleton< Renderer >, public CD3DApplication 
 {
@@ -25,6 +26,11 @@ class Renderer : public Singleton< Renderer >, public CD3DApplication
 		HRESULT OnLostDevice();
 		HRESULT OnDestroyDevice();                          
 		HRESULT AfterDestroyDevice()                       { return S_OK; }
+
+		void SetCamera( Camera* cam );
+
+	private:
+		Camera* m_Camera; //Une Copie de la camera
 
 
 };

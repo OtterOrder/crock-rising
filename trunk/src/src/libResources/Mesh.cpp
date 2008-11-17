@@ -74,12 +74,13 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 					node =  node->FirstChildElement( "source" );		// Recherche la première balise "source"
 					if(node) {
 						//node->ToElement()->Attribute("id");		// vérification de l'id
-						ExtractArrayDatas (node, m_Normals);
+						ExtractArrayDatas (node, m_Positions);
 					}
 					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
-					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
+					//node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
 					if(node) {
-						ExtractArrayDatas (node, m_TexCoords);
+
+						ExtractArrayDatas (node, m_Normals);
 					}
 				}
 			}
@@ -95,7 +96,7 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
  *				Array : tableau à remplir
  * @return	le résultat du chargement
  **********************************************************/
-ResourceResult	 Mesh::ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array)
+ResourceResult	 Mesh::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array)
 {
 	TiXmlNode* node = sourceNode;			// Enregistrement de la balise source
 	TiXmlString sTemp;
@@ -150,8 +151,6 @@ ResourceResult	 Mesh::ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array)
  **********************************************************/
 ResourceResult	 Mesh::ConvertTextToArray	(char* text, float** Array, int iCount, int iStride)
 {
-	char* cData = new char[128];
-
 	int iStartData = 0;
 	int iDataSize = 0;
 
@@ -163,11 +162,19 @@ ResourceResult	 Mesh::ConvertTextToArray	(char* text, float** Array, int iCount,
 			while (text[iStartData+iDataSize] != ' ')
 				iDataSize ++;
 
-			memcpy((void*)cData, (void*)(text+iStartData), (iStartData+iDataSize)*sizeof(char));
+			
+			char* cData = new char[iDataSize];
 
-			cData[iDataSize] = '\0';
+			/*memcpy(cData, text+iStartData, iDataSize*sizeof(char));
+
+			cData[iDataSize] = '\0';*/
+			for (int k=0 ; k < iDataSize ; k++)
+				if(text[iStartData +k] == ',')	cData[k] = '.';
+				else							cData[k] = text[iStartData +k];
 
 			Array[i][j] = (float)atof(cData);
+
+			delete [] cData;
 
 			iStartData += iDataSize+1;
 		}

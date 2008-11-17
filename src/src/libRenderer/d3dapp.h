@@ -146,7 +146,7 @@ public:
     // Internal constructor
     CD3DApplication();
 
-	CD3DCamera  m_Camera;                // Camera used for 3D scene
+	//CD3DCamera  m_Camera;                // Camera used for 3D scene
 
 };
 

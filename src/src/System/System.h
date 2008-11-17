@@ -33,6 +33,8 @@ class System : public Singleton< System >
         // Données membres
         //----------------------------------------------------------
 
+		Camera * m_Camera;
+
 		HINSTANCE m_Instance;  // Instance de l'application
 		HICON	  m_hIcon;
 

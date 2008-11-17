@@ -2,7 +2,6 @@
 #define		_Mesh_H
 
 //******************************************************************
-
 #include	"Resource.h"
 
 #include	<TinyXml/tinyxml.h>
@@ -31,7 +30,7 @@ private:
 	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
 
 	ResourceResult	FillArrays	(TiXmlNode* rootNode);			// Remplit les tableaux de données
-	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** Array);		// Extrait les données d'une balise
+	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array);		// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray	(char* text, float** Array, int iCount, int iStride);	// Rempli un tableau à l'aide d'un texte
 };
 

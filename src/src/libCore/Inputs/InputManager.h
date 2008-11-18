@@ -34,6 +34,8 @@ public:
 	// Interface pour la souris
 	Vector3f			GetMouseVector	( void ) const;		// Donne le vecteur de la souris
 
+	bool				IsMouseMoving	( void ) const;
+
 
 	LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
 
@@ -66,6 +68,9 @@ protected:
 
 	Point3f						m_LastMousePosition;	// Dernière position de la souris
 	Vector3f					m_MouseVector;			// Vecteur de la souris
+
+	int							m_MouseX;
+	int							m_MouseY;
 
 	
 	// =========================================================

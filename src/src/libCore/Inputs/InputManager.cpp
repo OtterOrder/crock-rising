@@ -73,6 +73,17 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			//TODO
 			break;
 
+		// ..
+		case WM_LBUTTONDOWN:
+			//TODO
+			break;
+
+		// Mouvement de la souris
+		case WM_MOUSEMOVE:
+			//m_MouseX = GET_X_LPARAM( lParam );
+			//m_MouseY = GET_Y_LPARAM( lParam );
+			break;
+
 	}
 	return S_OK;
 }
@@ -83,6 +94,9 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
  **********************************************************/
 InputManager::InputManager( void )
 {
-	m_LastMousePosition	= g_NullVector3f;
-	m_MouseVector		= g_NullVector3f;
+	m_MouseX	= 0;
+	m_MouseY	= 0;
+	
+	//m_LastMousePosition	= g_NullVector3f;
+	//m_MouseVector		= g_NullVector3f;
 }

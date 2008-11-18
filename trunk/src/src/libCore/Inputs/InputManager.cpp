@@ -3,10 +3,10 @@
 //******************************************************************
 
 /***********************************************************
-* Vérifie si la touche est appuyée.
-* @param[in]	key	: touche à vérifier
-* @return	true si la touche est appuyée, false sinon
-**********************************************************/
+ * Vérifie si la touche est appuyée.
+ * @param[in]	key	: touche à vérifier
+ * @return	true si la touche est appuyée, false sinon
+ **********************************************************/
 bool InputManager::IsKeyTriggered( int key )
 {
 	//TODO
@@ -15,11 +15,11 @@ bool InputManager::IsKeyTriggered( int key )
 }
 
 /***********************************************************
-* Vérifie si la touche est maintenue appuyée.
-* @param[in]	key	: touche à vérifier
-* @return	true si la touche est maintenue appuyée,
-*			false sinon
-**********************************************************/
+ * Vérifie si la touche est maintenue appuyée.
+ * @param[in]	key	: touche à vérifier
+ * @return	true si la touche est maintenue appuyée,
+ *			false sinon
+ **********************************************************/
 bool InputManager::IsKeyPressed( int key )
 {
 	//TODO
@@ -28,10 +28,10 @@ bool InputManager::IsKeyPressed( int key )
 }
 
 /***********************************************************
-* Vérifie si la touche est relachée.
-* @param[in]	key	: touche à vérifier
-* @return	true si la touche est relachée, false sinon
-**********************************************************/
+ * Vérifie si la touche est relachée.
+ * @param[in]	key	: touche à vérifier
+ * @return	true si la touche est relachée, false sinon
+ **********************************************************/
 bool InputManager::IsKeyReleased( int key )
 {
 	//TODO
@@ -41,10 +41,10 @@ bool InputManager::IsKeyReleased( int key )
 
 
 /***********************************************************
-* Donne le vecteur de la souris.
-* @return	vecteur de la souris
-**********************************************************/
-Vector3f InputManager::GetMouseVector( void )
+ * Donne le vecteur de la souris.
+ * @return	vecteur de la souris
+ **********************************************************/
+Vector3f InputManager::GetMouseVector( void ) const
 {
 	return m_MouseVector;
 }
@@ -75,4 +75,14 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 	}
 	return S_OK;
+}
+
+
+/***********************************************************
+ * Constructeur.
+ **********************************************************/
+InputManager::InputManager( void )
+{
+	m_LastMousePosition	= g_NullVector3f;
+	m_MouseVector		= g_NullVector3f;
 }

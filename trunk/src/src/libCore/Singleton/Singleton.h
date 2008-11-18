@@ -9,52 +9,52 @@
 template< typename T >
 class Singleton
 {
-	public:
+public:
 
-		// =========================================================
-		// Méthodes publiques
-		
-		
-		/***********************************************************
-		 * Donne l'instance du singleton.
-		 * @return	pointeur sur l'instance
-		 **********************************************************/
-		static T* GetInstance( void )
+	// =========================================================
+	// Méthodes publiques
+	
+	
+	/***********************************************************
+	 * Donne l'instance du singleton.
+	 * @return	pointeur sur l'instance
+	 **********************************************************/
+	static T* GetInstance( void )
+	{
+		if( m_Instance == NULL )
+			m_Instance = new T;
+
+		return m_Instance;
+	}
+	
+	/***********************************************************
+	 * Détruit l'instance.
+	 **********************************************************/
+	static void Destroy( void )
+	{
+		if( m_Instance != NULL )
 		{
-			if( m_Instance == NULL )
-				m_Instance = new T;
-
-			return m_Instance;
+			delete m_Instance;
+			m_Instance = NULL;
 		}
-		
-		/***********************************************************
-		 * Détruit l'instance.
-		 **********************************************************/
-		static void Destroy( void )
-		{
-			if( m_Instance != NULL )
-			{
-				delete m_Instance;
-				m_Instance = NULL;
-			}
-		}
+	}
 
 
-	protected:
+protected:
 
-		// =========================================================
-		// Méthodes protégées
-		
-		Singleton		( void ){}			// Constructeur
-		~Singleton		( void ){}			// Destructeur
+	// =========================================================
+	// Méthodes protégées
+	
+	Singleton			( void ){}		// Constructeur
+	virtual ~Singleton	( void ){}		// Destructeur
 
 
-	private:
+private:
 
-		// =========================================================
-		// Données privées
+	// =========================================================
+	// Données privées
 
-		static T	*m_Instance;		// Instance du singleton
+	static T	*m_Instance;		// Instance du singleton
 
 };
 

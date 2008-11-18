@@ -64,7 +64,11 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 {
 	TiXmlNode* node;
 
-	char * SourceId;
+	//const char * SourceId;
+
+	string sPositionsId ("Position");
+	string sNormalsId	("Normal0");
+	string sTexCoordsId ("UV0");
 
 	if(rootNode) {
 		node =  rootNode->FirstChildElement( "library_geometries" );
@@ -74,15 +78,29 @@ ResourceResult	 Mesh::FillArrays	(TiXmlNode* rootNode)
 				node =  node->FirstChildElement( "mesh" );
 				if(node) {
 					node =  node->FirstChildElement( "source" );		// Recherche la première balise "source"
-					if(node) {
-						SourceId = (char*)node->ToElement()->Attribute("id");		// vérification de l'id
-						ExtractArrayDatas (node, m_Positions);
-					}
-					node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
-					//node = node->NextSibling( "source" );				// Recherche la prochaine balise "source"
-					if(node) {
 
-						ExtractArrayDatas (node, m_Normals);
+					while (node)
+					{
+						string sId (node->ToElement()->Attribute("id"));		// vérification de l'id
+						size_t SpliterPlace = sId.rfind("-")+1;
+
+						if (SpliterPlace != sId.npos)
+						{
+							if (sId.compare( SpliterPlace, sPositionsId.length(), sPositionsId) == 0)
+							{
+								ExtractArrayDatas (node, m_Positions);
+							}
+							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
+							{
+								ExtractArrayDatas (node, m_Normals);
+							}
+							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
+							{
+								ExtractArrayDatas (node, m_TexCoords);
+							}
+						}
+
+						node = node->NextSibling( "source" );
 					}
 				}
 			}

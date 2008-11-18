@@ -8,6 +8,7 @@
 
 #include	<TinyXml/tinyxml.h>
 
+using namespace std;
 //******************************************************************
 
 class Mesh : public Resource

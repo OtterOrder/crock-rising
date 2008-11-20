@@ -195,6 +195,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MeshLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshLoader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MeshManager.cpp"
 				>
 			</File>

@@ -33,6 +33,9 @@ struct FaceVertex
 
 class MeshLoader
 {
+	int			m_iNbVertices,
+				m_iNbFaces;
+
 	float		**m_Positions,
 				**m_Normals,
 				**m_TexCoords;
@@ -40,8 +43,6 @@ class MeshLoader
 	FaceVertex	*m_Faces;
 
 public:
-	int			m_iNbVertices,
-				m_iNbFaces;
 
 	MeshLoader(void);
 	~MeshLoader(void);

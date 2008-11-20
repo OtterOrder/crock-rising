@@ -4,6 +4,7 @@
 #include <d3dx9.h>
 
 //******************************************************************
+typedef D3DXVECTOR2 Vector2f;
 
 typedef D3DXVECTOR3 Vector3f, Point3f;
 

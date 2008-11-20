@@ -11,26 +11,37 @@ Texture::~Texture()
 {
 }
 
-ResourceResult Texture::Initialize(crc32 resource)
+ResourceResult Texture::Initialize( crc32			resource,
+									UINT			Width, 
+									UINT			Height,
+									UINT			MipLevels,
+									DWORD			Usage,
+									D3DFORMAT		Format, 
+									D3DPOOL			Pool,
+									DWORD			Filter,
+									DWORD			MipFilter, 
+									D3DCOLOR		ColorKey,
+									D3DXIMAGE_INFO	*pSrcInfo,
+									PALETTEENTRY		*pPalette )
 {			
 	m_pDevice = NULL;//Renderer::GetDevice();
 
 	char *strTexName ;
-	sprintf(strTexName, "..\\data\\textures\\%u", resource);
+	sprintf(strTexName, "..\\..\\data\\textures\\%u", resource);
 
 	if( FAILED(D3DXCreateTextureFromFileEx(m_pDevice,
-											(LPCSTR)strTexName, 
-											D3DX_DEFAULT, //Largeur
-											D3DX_DEFAULT, //Hauteur
-											D3DX_DEFAULT, //MipLevel, à voir si changement
-											0,			  //Usage (render target, 
-											D3DFMT_R8G8B8,//A?
-											D3DPOOL_DEFAULT,
-											D3DX_DEFAULT, //Filter
-											D3DX_DEFAULT, //MipFilter
-											0,			  //ColorKey
-											NULL,		  //pSrcInfo
-											NULL,		  //pPalette
+											strTexName,
+											Width,
+											Height,
+											MipLevels,
+											Usage,
+											Format,
+											Pool,
+											Filter,
+											MipFilter,
+											ColorKey,
+											pSrcInfo,
+											pPalette,
 											&m_pTex)) )   //Pointeur sur la tex
 		return RES_FAILED;
 

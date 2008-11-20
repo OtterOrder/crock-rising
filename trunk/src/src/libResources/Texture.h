@@ -13,29 +13,24 @@ class Texture: public Resource
 {
 	public:
 		
+		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
+		LPDIRECT3DTEXTURE9		m_pTex;			//Pointeur vers la texture
+
 		Texture(void);
 		~Texture();
 
-		ResourceResult			Initialize	(crc32			resource,
-											UINT			Width		= D3DX_DEFAULT, 
-											UINT			Height		= D3DX_DEFAULT,
-											UINT			MipLevels	= D3DX_DEFAULT,
-											DWORD			Usage		= 0,
-											D3DFORMAT		Format		= D3DFMT_R8G8B8, 
-											D3DPOOL			Pool		= D3DPOOL_DEFAULT,
-											DWORD			Filter		= D3DX_DEFAULT,
-											DWORD			MipFilter	= D3DX_DEFAULT, 
-											D3DCOLOR		ColorKey	= 0,
-											D3DXIMAGE_INFO	*pSrcInfo	= NULL,
-											PALETTEENTRY 	*pPalette	= NULL);
-
-		ResourceResult			SetDevice	( LPDIRECT3DDEVICE9 pDevice ); //Modifie le device grace au renderer
-		LPDIRECT3DTEXTURE9		GetTex		(){ return m_pTex; }
-
-	private:
-
-		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
-		LPDIRECT3DTEXTURE9		m_pTex;			//Pointeur vers la texture
+		ResourceResult			Initialize	( crc32			resource,
+											UINT			Width, 
+											UINT			Height,
+											UINT			MipLevels,
+											DWORD			Usage,
+											D3DFORMAT		Format, 
+											D3DPOOL			Pool,
+											DWORD			Filter,
+											DWORD			MipFilter, 
+											D3DCOLOR		ColorKey,
+											D3DXIMAGE_INFO	*pSrcInfo,
+											PALETTEENTRY	*pPalette );
 };
 
 //******************************************************************

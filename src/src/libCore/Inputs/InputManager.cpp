@@ -49,16 +49,6 @@ Point2f InputManager::GetMousePosition( void ) const
 	return m_MousePosition;
 }
 
-/***********************************************************
- * Donne le vecteur de la souris (depuis le dernier
- * tour moteur).
- * @return	vecteur de la souris
- **********************************************************/
-Vector2f InputManager::GetMouseVector( void ) const
-{
-	return m_MousePosition - m_MouseOldPosition;
-}
-
 
 /***********************************************************
  * Fonction de rappel des événements.
@@ -71,18 +61,10 @@ Vector2f InputManager::GetMouseVector( void ) const
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	POINTS mousePt;
-	
-	m_MouseOldPosition = m_MousePosition;
+	POINTS	mouseCoordinates;
 
 	switch( uMsg )
 	{
-		case WM_MOUSEMOVE:
-			mousePt				= MAKEPOINTS( lParam );
-			m_MousePosition.x	= mousePt.x;
-			m_MousePosition.y	= mousePt.y;
-			//break;
-		
 		// Touche du clavier enfoncée
 		case WM_KEYDOWN:
 			//TODO
@@ -93,6 +75,13 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			//TODO
 			break;
 
+		// Mouvement de la souris
+		case WM_MOUSEMOVE:
+			mouseCoordinates	= MAKEPOINTS( lParam );
+			m_MousePosition.x	= (float)mouseCoordinates.x;
+			m_MousePosition.y	= (float)mouseCoordinates.y;
+			break;
+			
 		// ..
 		case WM_LBUTTONDOWN:
 			//TODO
@@ -108,10 +97,7 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
  **********************************************************/
 InputManager::InputManager( void )
 {
-	m_MouseOldPosition	= Point2f( 0.f, 0.f );
 	m_MousePosition		= Point2f( 0.f, 0.f );
-
-	m_IsMouseMoving		= false;
 
 	//TODO
 }

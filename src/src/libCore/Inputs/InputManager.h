@@ -33,7 +33,6 @@ public:
 
 	// Interface pour la souris
 	Point2f				GetMousePosition( void ) const;		// Donne la position de la souris
-	Vector2f			GetMouseVector	( void ) const;		// Donne le vecteur de la souris
 
 	bool				IsMouseMoving	( void ) const;
 
@@ -65,10 +64,7 @@ protected:
 	// =========================================================
 	// Données protégées
 
-	Point2f				m_MouseOldPosition;		// Ancienne position de la souris
 	Point2f				m_MousePosition;		// Position de la souris
-
-	bool				m_IsMouseMoving;		// La souris bouge ?
 
 	
 	// =========================================================

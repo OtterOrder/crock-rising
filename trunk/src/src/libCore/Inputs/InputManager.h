@@ -22,22 +22,26 @@ public:
 	// =========================================================
 	// Méthodes publiques
 
-	// Interface pour le clavier
 	// Note: pour vérifier une lettre, on envoie directement
 	// le caractère (par exemple 'A'). Pour les touches spéciales,
 	// on utilise les defines de WINAPI qui commencent par VK_
 	// (en général, sinon voir dans winuser.h).
-	bool				IsKeyTriggered	( int key );		// Vérifie si la touche est appuyée
-	bool				IsKeyPressed	( int key );		// Vérifie si la touche est maintenue appuyée
-	bool				IsKeyReleased	( int key );		// Vérifie si la touche est relachée
+	
+	bool		IsKeyTriggered		( int key ) const;		// Vérifie si la touche est appuyée
+	bool		IsKeyPressed		( int key ) const;		// Vérifie si la touche est maintenue appuyée
+	bool		IsKeyReleased		( int key ) const;		// Vérifie si la touche est relachée
 
-	// Interface pour la souris
-	Point2f				GetMousePosition( void ) const;		// Donne la position de la souris
+	bool		IsMouseTriggered	( int button ) const;	//
+	bool		IsMousePressed		( int button ) const;	//
+	bool		IsMouseReleased		( int button ) const;	//
+	
+	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
+	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
 
-	bool				IsMouseMoving	( void ) const;
+	void		Update				( void );				// Update
 
-
-	LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );	// Fonction de rappel des événements
+	// Fonction de rappel des événements
+	LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 
 protected:
@@ -45,25 +49,27 @@ protected:
 	// =========================================================
 	// Enum et stuctures protégées
 
-	enum KeyState
+	enum ItemState
 	{
-		KEY_TRIGGERED,
-		KEY_PRESSED,
-		KEY_RELEASED
-
+		ITEM_TRIGGERED,
+		ITEM_PRESSED,
+		ITEM_RELEASED
 	};
 
-	struct Key
+	struct Item // Désigne une touche ou un bouton
 	{
-		UINT_PTR	m_KeyCode;			// Code de la touche
-		KeyState	m_State;			// Etat de la touche
-
+		int			m_Code;			// Code de l'item
+		ItemState	m_State;		// Etat de l'item
 	};
 
 
 	// =========================================================
 	// Données protégées
 
+	std::list< Item >	m_Keys;					// Liste des touches
+	std::list< Item >	m_MouseButtons;			// Liste des boutons de souris
+	
+	Point2f				m_MouseOldPosition;		// Ancienne position de la souris
 	Point2f				m_MousePosition;		// Position de la souris
 
 	

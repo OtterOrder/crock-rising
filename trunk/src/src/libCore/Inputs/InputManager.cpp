@@ -1,13 +1,24 @@
 #include "InputManager.h"
 
-//******************************************************************
+
+/***********************************************************
+ * Constructeur.
+ **********************************************************/
+InputManager::InputManager( void )
+{
+	m_MouseOldPosition	= Point2f( 0.f, 0.f );
+	m_MousePosition		= Point2f( 0.f, 0.f );
+
+	//TODO
+}
+
 
 /***********************************************************
  * Vérifie si la touche est appuyée.
  * @param[in]	key	: touche à vérifier
  * @return	true si la touche est appuyée, false sinon
  **********************************************************/
-bool InputManager::IsKeyTriggered( int key )
+bool InputManager::IsKeyTriggered( int key ) const
 {
 	//TODO
 	
@@ -20,7 +31,7 @@ bool InputManager::IsKeyTriggered( int key )
  * @return	true si la touche est maintenue appuyée,
  *			false sinon
  **********************************************************/
-bool InputManager::IsKeyPressed( int key )
+bool InputManager::IsKeyPressed( int key ) const
 {
 	//TODO
 	
@@ -32,13 +43,12 @@ bool InputManager::IsKeyPressed( int key )
  * @param[in]	key	: touche à vérifier
  * @return	true si la touche est relachée, false sinon
  **********************************************************/
-bool InputManager::IsKeyReleased( int key )
+bool InputManager::IsKeyReleased( int key ) const
 {
 	//TODO
 
 	return false;
 }
-
 
 /***********************************************************
  * Donne la position de la souris.
@@ -47,6 +57,27 @@ bool InputManager::IsKeyReleased( int key )
 Point2f InputManager::GetMousePosition( void ) const
 {
 	return m_MousePosition;
+}
+
+/***********************************************************
+ * Donne le vecteur décrit par la souris depuis le dernier
+ * tour moteur.
+ * @return	vecteur de la souris
+ **********************************************************/
+Vector2f InputManager::GetMouseVector( void ) const
+{
+	return m_MousePosition - m_MouseOldPosition;
+}
+
+
+/***********************************************************
+ * Update (méthode à appeler à chaque tour moteur).
+ **********************************************************/
+void InputManager::Update( void )
+{
+	m_MouseOldPosition = m_MousePosition;
+
+	//TODO
 }
 
 
@@ -89,15 +120,4 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 	}
 	return S_OK;
-}
-
-
-/***********************************************************
- * Constructeur.
- **********************************************************/
-InputManager::InputManager( void )
-{
-	m_MousePosition		= Point2f( 0.f, 0.f );
-
-	//TODO
 }

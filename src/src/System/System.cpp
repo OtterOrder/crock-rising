@@ -68,13 +68,6 @@ int System::MainLoop()
             
         }
 
-		
-		
-		Vector2f lol = InputManager::GetInstance()->GetMouseVector();
-		char pouf[ 128 ];
-		sprintf( pouf, "%f %f\n", lol.x, lol.y );
-		OutputDebugString( pouf );
-
 
     } ; 
 

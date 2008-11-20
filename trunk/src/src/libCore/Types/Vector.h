@@ -4,15 +4,13 @@
 #include <d3dx9.h>
 
 //******************************************************************
-typedef D3DXVECTOR2 Vector2f;
 
+// Vecteur 2f
+typedef D3DXVECTOR2 Vector2f, Point2f;
+
+// Vecteur 3f
 typedef D3DXVECTOR3 Vector3f, Point3f;
 
-//******************************************************************
-// Vecteurs utiles
-
-extern Vector3f g_NullVector3f;
 
 //******************************************************************
-
 #endif		// _Vector_H

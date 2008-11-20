@@ -41,12 +41,22 @@ bool InputManager::IsKeyReleased( int key )
 
 
 /***********************************************************
- * Donne le vecteur de la souris.
+ * Donne la position de la souris.
+ * @return	position de la souris
+ **********************************************************/
+Point2f InputManager::GetMousePosition( void ) const
+{
+	return m_MousePosition;
+}
+
+/***********************************************************
+ * Donne le vecteur de la souris (depuis le dernier
+ * tour moteur).
  * @return	vecteur de la souris
  **********************************************************/
-Vector3f InputManager::GetMouseVector( void ) const
+Vector2f InputManager::GetMouseVector( void ) const
 {
-	return m_MouseVector;
+	return m_MousePosition - m_MouseOldPosition;
 }
 
 
@@ -61,8 +71,18 @@ Vector3f InputManager::GetMouseVector( void ) const
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
+	POINTS mousePt;
+	
+	m_MouseOldPosition = m_MousePosition;
+
 	switch( uMsg )
 	{
+		case WM_MOUSEMOVE:
+			mousePt				= MAKEPOINTS( lParam );
+			m_MousePosition.x	= mousePt.x;
+			m_MousePosition.y	= mousePt.y;
+			//break;
+		
 		// Touche du clavier enfoncée
 		case WM_KEYDOWN:
 			//TODO
@@ -78,12 +98,6 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			//TODO
 			break;
 
-		// Mouvement de la souris
-		case WM_MOUSEMOVE:
-			//m_MouseX = GET_X_LPARAM( lParam );
-			//m_MouseY = GET_Y_LPARAM( lParam );
-			break;
-
 	}
 	return S_OK;
 }
@@ -94,9 +108,10 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
  **********************************************************/
 InputManager::InputManager( void )
 {
-	m_MouseX	= 0;
-	m_MouseY	= 0;
-	
-	//m_LastMousePosition	= g_NullVector3f;
-	//m_MouseVector		= g_NullVector3f;
+	m_MouseOldPosition	= Point2f( 0.f, 0.f );
+	m_MousePosition		= Point2f( 0.f, 0.f );
+
+	m_IsMouseMoving		= false;
+
+	//TODO
 }

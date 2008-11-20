@@ -6,7 +6,10 @@
 
 #include	"Resource.h"
 
-#include	<TinyXml/tinyxml.h>
+#include	<libRenderer/Renderer.h>
+#include	<libCore/Types/Vector.h>
+
+#include	"MeshLoader.h"
 
 using namespace std;
 //******************************************************************
@@ -22,19 +25,15 @@ public:
 
 private:
 	int		m_iNbVertices;
+	int		m_iNbIndex;
 
-	float** m_Positions;
-	float** m_Normals;
-	float** m_TexCoords;
+	Vertex		*m_VertexBuffer;					// Tableau de vertex
+	int			*m_IndexBuffer;					// Tableau d'indexation des faces
 
-	LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
+	LPDIRECT3DDEVICE9		m_pDevice;		// Device utilisé par le renderer
 
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
 	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
-
-	ResourceResult	FillArrays	(TiXmlNode* rootNode);			// Remplit les tableaux de données
-	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array);		// Extrait les données d'une balise
-	ResourceResult	ConvertTextToArray	(char* text, float** Array, int iCount, int iStride);	// Rempli un tableau à l'aide d'un texte
 };
 
 //******************************************************************

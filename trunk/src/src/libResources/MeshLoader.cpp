@@ -7,6 +7,10 @@
 **********************************************************/
 MeshLoader::MeshLoader()
 {
+
+	m_iNbVertices	= 0;
+	m_iNbFaces		= 0;
+
 	m_Positions	= NULL;
 	m_Normals	= NULL;
 	m_TexCoords	= NULL;

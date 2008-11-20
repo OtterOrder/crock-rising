@@ -32,7 +32,8 @@ public:
 	bool				IsKeyReleased	( int key );		// Vérifie si la touche est relachée
 
 	// Interface pour la souris
-	Vector3f			GetMouseVector	( void ) const;		// Donne le vecteur de la souris
+	Point2f				GetMousePosition( void ) const;		// Donne la position de la souris
+	Vector2f			GetMouseVector	( void ) const;		// Donne le vecteur de la souris
 
 	bool				IsMouseMoving	( void ) const;
 
@@ -43,7 +44,7 @@ public:
 protected:
 
 	// =========================================================
-	// Enum et stuctures privées
+	// Enum et stuctures protégées
 
 	enum KeyState
 	{
@@ -62,19 +63,16 @@ protected:
 
 
 	// =========================================================
-	// Données privées
+	// Données protégées
 
-	std::list< Key >			m_Keys;
+	Point2f				m_MouseOldPosition;		// Ancienne position de la souris
+	Point2f				m_MousePosition;		// Position de la souris
 
-	Point3f						m_LastMousePosition;	// Dernière position de la souris
-	Vector3f					m_MouseVector;			// Vecteur de la souris
-
-	int							m_MouseX;
-	int							m_MouseY;
+	bool				m_IsMouseMoving;		// La souris bouge ?
 
 	
 	// =========================================================
-	// Méthodes privées
+	// Méthodes protégées
 
 	InputManager					( void );			// Constructeur
 	virtual ~InputManager			( void ){}			// Destructeur

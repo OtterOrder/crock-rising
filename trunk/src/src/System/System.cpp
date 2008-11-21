@@ -68,12 +68,12 @@ int System::MainLoop()
             
         }
 
+		
 
-    } ; 
-
-    return (INT)msg.wParam;
-
-
+		// Update des inputs
+		InputManager::GetInstance()->Update();
+    }
+	return (INT)msg.wParam;
 }
 
 

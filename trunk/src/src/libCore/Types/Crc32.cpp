@@ -15,6 +15,6 @@ crc32 GetCrc32( const char *s )
 	CCRC32	crc32Computer;
 	crc32	crc32Result;
 	crc32Computer.Initialize();
-	crc32Computer.FullCRC( (unsigned char*)s, strlen( s ), &crc32Result );
+	crc32Computer.FullCRC( (unsigned char*)s, (unsigned int)strlen( s ), &crc32Result );
 	return crc32Result;
 }

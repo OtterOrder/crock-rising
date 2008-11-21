@@ -77,8 +77,16 @@ protected:
 	// =========================================================
 	// Méthodes protégées
 
-	InputManager					( void );			// Constructeur
-	virtual ~InputManager			( void ){}			// Destructeur
+	InputManager				( void );				// Constructeur
+	virtual ~InputManager		( void ){}				// Destructeur
+
+	bool		IsKeyStated		( int key, ItemState state ) const;
+	bool		IsMouseStated	( int button, ItemState state ) const;
+	
+	static bool	IsItemReleased	( const Item &item )
+	{
+		return item.m_State == ITEM_RELEASED;
+	}
 
 };
 

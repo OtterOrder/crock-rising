@@ -21,8 +21,19 @@ InputManager::InputManager( void )
  **********************************************************/
 bool InputManager::IsKeyTriggered( int key ) const
 {
-	//TODO
+	list< Item >::const_iterator it;
 	
+	it = m_Keys.begin();
+	while( it != m_Keys.end() )
+	{
+		if( it->m_Code == key )
+		{
+			if( it->m_State == ITEM_TRIGGERED )
+				return true;
+			break;
+		}
+		++it;
+	}
 	return false;
 }
 
@@ -76,16 +87,18 @@ Vector2f InputManager::GetMouseVector( void ) const
  **********************************************************/
 void InputManager::Update( void )
 {
-	//list< int > l; l.push_back(0);
-	//list< int >::iterator it = l.begin();
+	list< Item >::iterator it;
 
 	// Update de la liste des touches
-//	it = l.begin();
-	/*while( it != m_Keys.end() )
+	m_Keys.remove_if( InputManager::IsItemReleased );
+	
+	it = m_Keys.begin();
+	while( it != m_Keys.end() )
 	{
-		//TODO
-		it++;
-	}*/
+		if( it->m_State == ITEM_TRIGGERED )
+			it->m_State = ITEM_PRESSED;
+		++it;
+	}
 
 	m_MouseOldPosition = m_MousePosition;
 }
@@ -102,18 +115,36 @@ void InputManager::Update( void )
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
+	Item	item;
 	POINTS	mouseCoordinates;
+	list< Item >::iterator it;
 
 	switch( uMsg )
 	{
 		// Touche du clavier enfoncée
 		case WM_KEYDOWN:
-			//TODO
+			
+			if( !(lParam & (1<<30)) )
+			{
+				item.m_Code		= (int)wParam;
+				item.m_State	= ITEM_TRIGGERED;
+				m_Keys.push_front( item );
+			}
 			break;
 
 		// Touche du clavier relachée
 		case WM_KEYUP:
-			//TODO
+			
+			it = m_Keys.begin();
+			while( it != m_Keys.end() )
+			{
+				if( it->m_Code == (int)wParam )
+				{
+					it->m_State = ITEM_RELEASED;
+					break;
+				}
+				++it;
+			}
 			break;
 
 		// Mouvement de la souris
@@ -130,4 +161,27 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 	}
 	return S_OK;
+}
+
+
+/***********************************************************
+ * .
+ * @param[in]	key		:
+ * @param[in]	state	:
+ * @return	
+ **********************************************************/
+bool InputManager::IsKeyStated( int key, ItemState state ) const
+{
+	list< Item >::const_iterator it = m_Keys.begin();
+	while( it != m_Keys.end() )
+	{
+		if( it->m_Code == key )
+		{
+			if( it->m_State == state )
+				return true;
+			break;
+		}
+		++it;
+	}
+	return false;
 }

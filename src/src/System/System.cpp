@@ -36,7 +36,7 @@ int System::MainLoop()
     msg.message = WM_NULL;
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
-	Camera cam( Vector3f(0.0f, 2.0f, -170.0f));
+	Camera cam( Vector3f(0.0f, 50.0f, -170.0f), Vector3f(0.f, 1.f, 0.f), Vector3f(0.f, 50.f, 0.f));
 	//Création du device, initialisation D3D, création de la fenêtre
 	if(FAILED(InitWindow()))
 		return 0;

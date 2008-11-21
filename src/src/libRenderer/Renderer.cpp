@@ -98,11 +98,13 @@ HRESULT Renderer::OnResetDevice()
 
 	g_pVB->Unlock();
 
-	if (g_Mesh)
-		delete g_Mesh;
-
-	g_Mesh = new Mesh;
-	g_Mesh->Load(11);
+	if (!g_Mesh)
+	{
+		g_Mesh = new Mesh;
+		g_Mesh->Load(20);
+	}
+	else
+		g_Mesh->FillD3DBuffers ();
 
 	return S_OK;
 
@@ -167,14 +169,17 @@ HRESULT Renderer::Render()
 
 
 
-		m_pd3dDevice->SetStreamSource(0, g_Mesh->m_pVB, 0, sizeof(Vertex));
+		if (g_Mesh && g_Mesh->m_pVB)
+		{
+			m_pd3dDevice->SetStreamSource(0, g_Mesh->m_pVB, 0, sizeof(Vertex));
 
-		m_pd3dDevice->SetFVF(Mesh_FVF);
+			m_pd3dDevice->SetFVF(Mesh_FVF);
 
-		m_pd3dDevice->SetIndices ( g_Mesh->m_pIB );
+			m_pd3dDevice->SetIndices ( g_Mesh->m_pIB );
 
-		m_pd3dDevice->DrawIndexedPrimitive(	D3DPT_TRIANGLELIST, 0, 0,
-											g_Mesh->m_iNbVertices, 0, g_Mesh->m_iNbIndex/3);
+			m_pd3dDevice->DrawIndexedPrimitive(	D3DPT_TRIANGLELIST, 0, 0,
+												g_Mesh->m_iNbVertices, 0, g_Mesh->m_iNbIndex/3);
+		}
 
 	m_pd3dDevice->EndScene();
 
@@ -192,6 +197,9 @@ HRESULT Renderer::OnLostDevice()
 
 	m_pStatsFont->InvalidateDeviceObjects();
 	g_pVB->Release();
+
+	g_Mesh->ReleaseD3DBuffers ();
+
 	return S_OK;
 
 
@@ -202,6 +210,9 @@ HRESULT Renderer::OnDestroyDevice()
 {
 
 	m_pStatsFont->DeleteDeviceObjects();
+
+	delete g_Mesh;
+
 	return S_OK;
 
 

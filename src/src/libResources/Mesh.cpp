@@ -19,6 +19,13 @@ Mesh::Mesh()
  **********************************************************/
 Mesh::~Mesh()
 {
+	ReleaseD3DBuffers ();
+
+	if ( m_VertexBuffer )
+		delete [] m_VertexBuffer;
+
+	if ( m_IndexBuffer )
+		delete [] m_IndexBuffer;
 }
 
 
@@ -35,6 +42,19 @@ ResourceResult Mesh::Load(crc32 resource)
 	MeshLoader meshLoader;
 
 	if ( meshLoader.Load(sMeshPath, m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex) == RES_SUCCEED)
+	{
+		if ( FillD3DBuffers () == RES_SUCCEED)
+			return RES_SUCCEED;
+	}
+
+	return RES_FAILED;
+}
+
+ResourceResult	Mesh::FillD3DBuffers ()
+{
+	ReleaseD3DBuffers ();
+
+	if (m_VertexBuffer && m_IndexBuffer)
 	{
 		LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
@@ -77,6 +97,13 @@ ResourceResult Mesh::Load(crc32 resource)
 
 		return RES_SUCCEED;
 	}
-	else
-		return RES_FAILED;
+	return RES_FAILED;
+}
+
+void	Mesh::ReleaseD3DBuffers()
+{
+	if ( m_pVB )
+		m_pVB->Release(),	m_pVB = NULL;
+	if ( m_pIB )
+		m_pIB->Release(),	m_pIB = NULL;
 }

@@ -40,6 +40,10 @@ class MeshLoader
 				**m_Normals,
 				**m_TexCoords;
 
+	int			m_iNbPositions,
+				m_iNbNormals,
+				m_iNbTexCoords;
+
 	FaceVertex	*m_Faces;
 
 public:
@@ -50,7 +54,7 @@ public:
 	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex);
 
 	ResourceResult	FillArrays			(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);		// Remplit les tableaux de données
-	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array);								// Extrait les données d'une balise
+	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements);								// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray	(const char* ArrayText, float** &Array, int iCount, int iStride);		// Rempli un tableau à l'aide d'un texte
 
 	ResourceResult	FillVBArray			(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer);	// Remplit le tableau de vertex

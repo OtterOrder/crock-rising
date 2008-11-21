@@ -15,6 +15,11 @@ MeshLoader::MeshLoader()
 	m_Normals	= NULL;
 	m_TexCoords	= NULL;
 
+	m_iNbPositions	= 0;
+	m_iNbNormals	= 0;
+	m_iNbTexCoords	= 0;
+
+
 	m_Faces		= NULL;
 }
 
@@ -23,35 +28,31 @@ MeshLoader::MeshLoader()
 **********************************************************/
 MeshLoader::~MeshLoader()
 {
-	/*
+	//*
 	if (m_Positions)
 	{
-		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
-			delete  m_Positions[i];
-		delete  m_Positions;
+		for (int i = 0 ; i < m_iNbPositions ; i++)
+			delete m_Positions[i];
+		delete [] m_Positions;
 	}
 
 	if (m_Normals)
 	{
-		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
-			delete [] m_Normals[i];
+		for (int i = 0 ; i < m_iNbNormals ; i++)
+			delete m_Normals[i];
 		delete [] m_Normals;
 	}
 
 	if (m_TexCoords)
 	{
-		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
-			delete [] m_TexCoords[i];
+		for (int i = 0 ; i < m_iNbTexCoords ; i++)
+			delete m_TexCoords[i];
 		delete [] m_TexCoords;
 	}
-	*/
 
-	/*if (m_Faces)
-	{
-		for (int i = 0 ; i < m_iNbFaces ; i++)
-			delete [] m_Faces[i];
+	if (m_Faces)
 		delete [] m_Faces;
-	}*/
+	//*/
 }
 
 
@@ -121,15 +122,15 @@ ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuf
 						{
 							if (sId.compare( SpliterPlace, sPositionsId.length(), sPositionsId) == 0)
 							{
-								ExtractArrayDatas (node, m_Positions);
+								ExtractArrayDatas (node, m_Positions, m_iNbPositions);
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
-								ExtractArrayDatas (node, m_Normals);
+								ExtractArrayDatas (node, m_Normals, m_iNbNormals);
 							}
 							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
 							{
-								ExtractArrayDatas (node, m_TexCoords);
+								ExtractArrayDatas (node, m_TexCoords, m_iNbTexCoords);
 							}
 						}
 
@@ -155,7 +156,7 @@ ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuf
 *				Array : tableau à remplir
 * @return	le résultat du chargement
 **********************************************************/
-ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array)
+ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements)
 {
 	TiXmlNode* node = sourceNode;			// Enregistrement de la balise source
 
@@ -172,6 +173,8 @@ ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &A
 
 			node->ToElement()->Attribute("count", &iNbVertices);		// Stockage du nombre de vertices
 			if (m_iNbVertices < iNbVertices)	m_iNbVertices = iNbVertices;	// Enregistrement du plus grand nombre de vertices
+
+			iNbElements = iNbVertices;
 
 			node->ToElement()->Attribute("stride", &iStride);			// Stockage de la taille du tableau				
 
@@ -270,14 +273,28 @@ ResourceResult	 MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Ver
 
 void	 MeshLoader::FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
-	float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-	Vector3f VectPosition (Position[0], Position[2], Position[1] );
+	Vector3f VectPosition	(0.f, 0.f, 0.f);
+	Vector3f VectNormal		(0.f, 0.f, 0.f);
+	Vector2f VectTexCoord	(0.f, 0.f);
 
-	float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-	Vector3f VectNormal (Normal[0], Normal[2], Normal[1] );
 
-	float*  TexCoord = m_TexCoords[m_Faces[FaceIndex].m_TexCoord];
-	Vector2f VectTexCoord (TexCoord[0], TexCoord[1]);
+	if ( m_Positions )
+	{
+		float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
+		VectPosition = Vector3f(Position[0], Position[2], Position[1] );
+	}
+
+	if ( m_Normals )
+	{
+		float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
+		VectNormal = Vector3f (Normal[0], Normal[2], Normal[1] );
+	}
+
+	if ( m_TexCoords )
+	{
+		float*  TexCoord = m_TexCoords[m_Faces[FaceIndex].m_TexCoord];
+		VectTexCoord = Vector2f (TexCoord[0], TexCoord[1]);
+	}
 
 	VertexBuffer[VertexIndex].m_Position	= VectPosition;
 	VertexBuffer[VertexIndex].m_Normal		= VectNormal;
@@ -292,9 +309,9 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 		iNormalOffset   = -1,
 		iTexCoordOffset = -1;
 
-	int iPositionIndex = 0,
-		iNormalIndex   = 0,
-		iTexCoordIndex = 0;
+	int iPositionIndex = -1,
+		iNormalIndex   = -1,
+		iTexCoordIndex = -1;
 
 	int iStartData = 0,
 		iDataSize = 0;
@@ -317,7 +334,7 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 		node = node->NextSiblingElement("input");
 	}
 
-	if ( m_iNbFaces && iPositionOffset >= 0 && iNormalOffset >= 0 && iTexCoordOffset >= 0)
+	if ( m_iNbFaces )
 	{
 		m_Faces		   = new FaceVertex[m_iNbFaces*NbFaceVertices];
 
@@ -331,11 +348,11 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 		{
 			for (int j = 0 ; j < iNbSemantics ; j++)
 			{
-				if		( j == iPositionOffset)
+				if		( j == iPositionOffset	&& iPositionOffset >= 0)
 					iPositionIndex = atoi(&TrianglesText[i+j*2]);
-				else if ( j == iNormalOffset)
+				else if ( j == iNormalOffset	&& iNormalOffset >= 0)
 					iNormalIndex = atoi(&TrianglesText[i+j*2]);
-				else if ( j == iTexCoordOffset)
+				else if ( j == iTexCoordOffset	&& iTexCoordOffset >= 0)
 					iTexCoordIndex = atoi(&TrianglesText[i+j*2]);
 			}
 		}
@@ -353,11 +370,11 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 				for (int k=0 ; k < iDataSize ; k++)
 					cData[k] = TrianglesText[iStartData +k];
 
-				if		( j == iPositionOffset)
+				if		( j == iPositionOffset	&& iPositionOffset >= 0)
 					iPositionIndex = atoi(cData);
-				else if ( j == iNormalOffset)
+				else if ( j == iNormalOffset	&& iNormalOffset >= 0)
 					iNormalIndex = atoi(cData);
-				else if ( j == iTexCoordOffset)
+				else if ( j == iTexCoordOffset	&& iTexCoordOffset >= 0)
 					iTexCoordIndex = atoi(cData);
 
 				delete [] cData;

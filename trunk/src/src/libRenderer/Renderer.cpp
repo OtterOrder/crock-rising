@@ -58,23 +58,23 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
-	m_pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 	DEFAULT_VERTEX sommets[]=
 	{
-	{-1.0f, 0.0f, 1.0f, 0xffff0000}, 
-	{1.0f, 0.0f, 1.0f, 0xffff0000},
-	{-1.0f, 0.0f, 0.0f, 0xffff0000}, 
-	{1.0f, 0.0f, 0.0f, 0xffff0000}, 
-	{-1.0f, 0.0f, -1.0f, 0xffff0000}, 
-	{1.0f, 0.0f, -1.0f, 0xffff0000}, 
+	{-100.0f, 0.0f, 100.0f, 0xffff0000}, 
+	{100.0f, 0.0f, 100.0f, 0xffff0000},
+	{-100.0f, 0.0f, 0.0f, 0xffff0000}, 
+	{100.0f, 0.0f, 0.0f, 0xffff0000}, 
+	{-100.0f, 0.0f, -100.0f, 0xffff0000}, 
+	{100.0f, 0.0f, -100.0f, 0xffff0000}, 
 
-	{-1.0f, 0.0f, 1.0f, 0xffff0000},
-	{-1.0f, 0.0f, -1.0f, 0xffff0000}, 
-	{1.0f, 0.0f, 1.0f, 0xffff0000},
-	{1.0f, 0.0f, -1.0f, 0xffff0000}, 
-	{0.0f, 0.0f, 1.0f, 0xffff0000}, 
-	{0.0f, 0.0f, -1.0f, 0xffff0000} 
+	{-100.0f, 0.0f, 100.0f, 0xffff0000},
+	{-100.0f, 0.0f, -100.0f, 0xffff0000}, 
+	{100.0f, 0.0f, 100.0f, 0xffff0000},
+	{100.0f, 0.0f, -100.0f, 0xffff0000}, 
+	{0.0f, 0.0f, 100.0f, 0xffff0000}, 
+	{0.0f, 0.0f, -100.0f, 0xffff0000} 
 	
 	
 	};
@@ -159,14 +159,13 @@ HRESULT Renderer::Render()
 
 	m_pd3dDevice->BeginScene();
 
-		/*m_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(DEFAULT_VERTEX));
+		m_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(DEFAULT_VERTEX));
 
 		m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
-		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 6); */
+		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 6); 
 		
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
-
 
 
 		if (g_Mesh && g_Mesh->m_pVB)

@@ -7,8 +7,6 @@
  **********************************************************/
 Mesh::Mesh()
 {
-	m_pDevice = NULL;
-
 	m_iNbVertices = 0;
 	m_iNbIndex	  = 0;
 
@@ -30,10 +28,7 @@ Mesh::~Mesh()
  * @return	le résultat du chargement
  **********************************************************/
 ResourceResult Mesh::Load(crc32 resource)
-{			
-	//m_pDevice = NULL;//Renderer::GetDevice();
-	//Renderer::GetInstance()->m_pd3dDevice;
-
+{
 	char sMeshPath[128];
 	sprintf_s(sMeshPath, "..\\..\\data\\test\\%u.DAE", resource);
 
@@ -41,23 +36,44 @@ ResourceResult Mesh::Load(crc32 resource)
 
 	if ( meshLoader.Load(sMeshPath, m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex) == RES_SUCCEED)
 	{
-		m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
+		LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
-		DWORD VB_FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0;
+		UINT BufferSize = sizeof(Vertex)*m_iNbVertices;
 
-		m_pDevice->CreateVertexBuffer (	m_iNbVertices*sizeof(Vertex), 
-										NULL, VB_FVF, 
+		pDevice->CreateVertexBuffer (	BufferSize, 
+										NULL, 
+										Mesh_FVF, 
 										D3DPOOL_DEFAULT, 
 										&m_pVB, 
 										NULL);
 
 		void * pVertexBuffer;
-		if(FAILED(m_pVB->Lock(0, sizeof(m_VertexBuffer), (void **)&pVertexBuffer, 0)))
+
+		if(FAILED(m_pVB->Lock(0, BufferSize, (void **)&pVertexBuffer, 0)))
 			return RES_FAILED;
 
-		memcpy(pVertexBuffer, m_VertexBuffer, sizeof(m_VertexBuffer));
+		memcpy(pVertexBuffer, m_VertexBuffer, BufferSize);
 
 		m_pVB->Unlock();
+
+
+		
+		BufferSize = sizeof(int)*m_iNbIndex;
+
+		pDevice->CreateIndexBuffer (	BufferSize,
+										D3DUSAGE_WRITEONLY,
+										D3DFMT_INDEX32,
+										D3DPOOL_DEFAULT,
+										&m_pIB,
+										NULL);
+		void * pIndexBuffer;
+
+		if(FAILED(m_pIB->Lock(0, BufferSize, (void **)&pIndexBuffer, 0)))
+			return RES_FAILED;
+
+		memcpy(pIndexBuffer, m_IndexBuffer, BufferSize);
+
+		m_pIB->Unlock();
 
 		return RES_SUCCEED;
 	}

@@ -7,6 +7,9 @@
 #include <libCore/Singleton/Singleton.h>
 #include <libObjects/Camera.h>
 
+#include <libCore/Inputs/InputManager.h>
+#include <libResources/Mesh.h>
+
 class Renderer : public Singleton< Renderer >, public CD3DApplication 
 {
 	// Indispensable car Singleton doit pouvoir accéder aux

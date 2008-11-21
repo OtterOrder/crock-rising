@@ -14,6 +14,8 @@
 using namespace std;
 //******************************************************************
 
+#define		Mesh_FVF (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0)
+
 class Mesh : public Resource
 {
 public:
@@ -23,17 +25,16 @@ public:
 
 	ResourceResult			Load		(crc32 resource);
 
-private:
+	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
+	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
+
 	int		m_iNbVertices;
 	int		m_iNbIndex;
 
+private:
+
 	Vertex		*m_VertexBuffer;					// Tableau de vertex
 	int			*m_IndexBuffer;					// Tableau d'indexation des faces
-
-	LPDIRECT3DDEVICE9		m_pDevice;		// Device utilisé par le renderer
-
-	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
-	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
 };
 
 //******************************************************************

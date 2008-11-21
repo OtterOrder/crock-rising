@@ -23,6 +23,35 @@ MeshLoader::MeshLoader()
 **********************************************************/
 MeshLoader::~MeshLoader()
 {
+	/*
+	if (m_Positions)
+	{
+		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
+			delete  m_Positions[i];
+		delete  m_Positions;
+	}
+
+	if (m_Normals)
+	{
+		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
+			delete [] m_Normals[i];
+		delete [] m_Normals;
+	}
+
+	if (m_TexCoords)
+	{
+		for (int i = m_iNbVertices-1 ; i >= 0 ; i++)
+			delete [] m_TexCoords[i];
+		delete [] m_TexCoords;
+	}
+	*/
+
+	/*if (m_Faces)
+	{
+		for (int i = 0 ; i < m_iNbFaces ; i++)
+			delete [] m_Faces[i];
+		delete [] m_Faces;
+	}*/
 }
 
 
@@ -242,10 +271,10 @@ ResourceResult	 MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Ver
 void	 MeshLoader::FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
 	float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-	Vector3f VectPosition (Position[0], Position[1], Position[2] );
+	Vector3f VectPosition (Position[0], Position[2], Position[1] );
 
 	float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-	Vector3f VectNormal (Normal[0], Normal[1], Normal[2] );
+	Vector3f VectNormal (Normal[0], Normal[2], Normal[1] );
 
 	float*  TexCoord = m_TexCoords[m_Faces[FaceIndex].m_TexCoord];
 	Vector2f VectTexCoord (TexCoord[0], TexCoord[1]);

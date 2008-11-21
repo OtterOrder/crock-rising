@@ -28,13 +28,14 @@ ResourceResult Texture::Initialize( crc32			resource,
 									D3DXIMAGE_INFO	*pSrcInfo,
 									PALETTEENTRY		*pPalette )
 {			
-	m_pDevice = NULL;//TODO : Récupérer le device !!!!!!!!
 
-	char *strTexName ;
-	sprintf(strTexName, "..\\..\\data\\textures\\%u", resource);
+	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
-	if( FAILED(D3DXCreateTextureFromFileEx(m_pDevice,
-											strTexName,
+	char sMeshPath[128];
+	sprintf(sMeshPath, "..\\..\\data\\textures\\%u.dds", resource);
+
+	if( FAILED(D3DXCreateTextureFromFileEx(pDevice,
+											sMeshPath,
 											Width,
 											Height,
 											MipLevels,
@@ -47,6 +48,7 @@ ResourceResult Texture::Initialize( crc32			resource,
 											pSrcInfo,
 											pPalette,
 											&m_pTex)) )   //Pointeur sur la tex
+
 		return RES_FAILED;
 
 	return RES_SUCCEED;

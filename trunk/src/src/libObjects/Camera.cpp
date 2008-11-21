@@ -8,7 +8,7 @@ Camera::Camera()
 	SetDefaultProjection();
 }
 
-Camera::Camera( Vector3f pos, Vector3f up, Vector3f target )
+Camera::Camera( Vector3f pos, Vector3f target, Vector3f up )
 :Object( pos )
 {
 	SetUp( up );

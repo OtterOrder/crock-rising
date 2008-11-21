@@ -14,8 +14,8 @@ public:
 	//Constructeur
 	Camera( void );
 	Camera( Vector3f pos, 
-			Vector3f up=Vector3f( 0.0f, 1.0f, 0.0f ), 
-			Vector3f target=Vector3f( 0.0f, 0.0f, 1.0f ) );
+			Vector3f target=Vector3f( 0.0f, 0.0f, 1.0f ),
+			Vector3f up=Vector3f( 0.0f, 1.0f, 0.0f ) );
 
 	//Accesseurs
 	Vector3f GetUp();
@@ -50,7 +50,8 @@ private:
 
 	//Variables pour matrice de projection
 	float m_fov_rad, m_ratio, m_zNear, m_zFar;
-	
+
+protected :
 	D3DXMATRIX m_MatrixView;		//Matrice de visualisation
 	D3DXMATRIX m_MatrixProjection;	//Matrice de projection
 

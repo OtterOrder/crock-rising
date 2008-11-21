@@ -44,8 +44,8 @@ class MeshLoader
 
 public:
 
-	MeshLoader(void);
-	~MeshLoader(void);
+			MeshLoader(void);
+	virtual	~MeshLoader(void);
 
 	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex);
 

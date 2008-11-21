@@ -132,7 +132,7 @@ bool CCRC32::FileCRC(const char *sFileName, unsigned long *ulOutCRC, unsigned lo
 		return false; //Out of memory.
 	}
 
-	while((iBytesRead = fread(sBuf, sizeof(char), ulBufferSize, fSource)))
+	while((iBytesRead = (int)fread(sBuf, sizeof(char), ulBufferSize, fSource)))
 	{
 		this->PartialCRC(ulOutCRC, sBuf, iBytesRead);
 	}

@@ -17,6 +17,7 @@ class InputManager : public Singleton< InputManager >
 	// constructeur/destructeur, qui sont en protected.
 	friend class Singleton< InputManager >;
 
+
 public:
 
 	// =========================================================
@@ -55,7 +56,7 @@ protected:
 		ITEM_PRESSED,
 		ITEM_RELEASED
 	};
-
+	
 	struct Item // Désigne une touche ou un bouton
 	{
 		int			m_Code;			// Code de l'item

@@ -1,5 +1,6 @@
 #include "InputManager.h"
 
+using namespace std;
 
 /***********************************************************
  * Constructeur.
@@ -75,9 +76,18 @@ Vector2f InputManager::GetMouseVector( void ) const
  **********************************************************/
 void InputManager::Update( void )
 {
-	m_MouseOldPosition = m_MousePosition;
+	//list< int > l; l.push_back(0);
+	//list< int >::iterator it = l.begin();
 
-	//TODO
+	// Update de la liste des touches
+//	it = l.begin();
+	/*while( it != m_Keys.end() )
+	{
+		//TODO
+		it++;
+	}*/
+
+	m_MouseOldPosition = m_MousePosition;
 }
 
 

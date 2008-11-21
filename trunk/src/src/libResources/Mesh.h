@@ -21,7 +21,7 @@ class Mesh : public Resource
 public:
 
 	Mesh(void);
-	~Mesh();
+	virtual ~Mesh();
 
 	ResourceResult			Load		(crc32 resource);
 
@@ -31,6 +31,8 @@ public:
 	int		m_iNbVertices;
 	int		m_iNbIndex;
 
+	ResourceResult			FillD3DBuffers ();
+	void					ReleaseD3DBuffers();
 private:
 
 	Vertex		*m_VertexBuffer;					// Tableau de vertex

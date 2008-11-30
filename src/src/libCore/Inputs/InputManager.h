@@ -11,6 +11,17 @@
 
 //******************************************************************
 
+enum MouseButton
+{
+	MOUSE_LEFT,
+	MOUSE_RIGHT,
+	MOUSE_MIDDLE,
+	MOUSE_UP,
+	MOUSE_DOWN
+};
+
+//******************************************************************
+
 class InputManager : public Singleton< InputManager >
 {
 	// Indispensable car Singleton doit pouvoir accéder aux
@@ -49,7 +60,7 @@ protected:
 
 	// =========================================================
 	// Enum et stuctures protégées
-
+	
 	enum ItemState
 	{
 		ITEM_TRIGGERED,
@@ -77,13 +88,19 @@ protected:
 	// =========================================================
 	// Méthodes protégées
 
-	InputManager				( void );				// Constructeur
-	virtual ~InputManager		( void ){}				// Destructeur
+	InputManager					( void );								// Constructeur
+	virtual ~InputManager			( void ){}								// Destructeur
 
-	bool		IsKeyStated		( int key, ItemState state ) const;
-	bool		IsMouseStated	( int button, ItemState state ) const;
-	
-	static bool	IsItemReleased	( const Item &item )
+	void		UpdateItemsList		( std::list< Item > &itemsList );		// Update une liste l'items
+
+	bool		IsKeyStated			( int key, ItemState state ) const;		// Vérifie si la touche est dans l'état spécifié
+	bool		IsMouseStated		( int button, ItemState state ) const;	// Vérifie si le bouton de la souris est dans l'état spécifié
+
+	/***********************************************************
+	 * Vérifie si l'item est relaché. Utile pour l'update
+	 * des liste d'items.
+	 **********************************************************/
+	static bool	IsItemReleased		( const Item &item )
 	{
 		return item.m_State == ITEM_RELEASED;
 	}

@@ -9,8 +9,6 @@ InputManager::InputManager( void )
 {
 	m_MouseOldPosition	= Point2f( 0.f, 0.f );
 	m_MousePosition		= Point2f( 0.f, 0.f );
-
-	//TODO
 }
 
 
@@ -21,20 +19,7 @@ InputManager::InputManager( void )
  **********************************************************/
 bool InputManager::IsKeyTriggered( int key ) const
 {
-	list< Item >::const_iterator it;
-	
-	it = m_Keys.begin();
-	while( it != m_Keys.end() )
-	{
-		if( it->m_Code == key )
-		{
-			if( it->m_State == ITEM_TRIGGERED )
-				return true;
-			break;
-		}
-		++it;
-	}
-	return false;
+	return IsKeyStated( key, ITEM_TRIGGERED );
 }
 
 /***********************************************************
@@ -45,9 +30,7 @@ bool InputManager::IsKeyTriggered( int key ) const
  **********************************************************/
 bool InputManager::IsKeyPressed( int key ) const
 {
-	//TODO
-	
-	return false;
+	return IsKeyStated( key, ITEM_PRESSED );
 }
 
 /***********************************************************
@@ -57,9 +40,7 @@ bool InputManager::IsKeyPressed( int key ) const
  **********************************************************/
 bool InputManager::IsKeyReleased( int key ) const
 {
-	//TODO
-
-	return false;
+	return IsKeyStated( key, ITEM_RELEASED );
 }
 
 /***********************************************************
@@ -87,20 +68,33 @@ Vector2f InputManager::GetMouseVector( void ) const
  **********************************************************/
 void InputManager::Update( void )
 {
-	list< Item >::iterator it;
+	UpdateItemsList( m_Keys );
+	UpdateItemsList( m_MouseButtons );
 
-	// Update de la liste des touches
-	m_Keys.remove_if( InputManager::IsItemReleased );
+	m_MouseOldPosition = m_MousePosition;
+}
+
+/***********************************************************
+ * Update une liste l'items.
+ * @param[out]	itemsList	: liste d'items
+ **********************************************************/
+void InputManager::UpdateItemsList( list< Item > &itemsList )
+{
+	if( itemsList.empty() )
+		return;
 	
-	it = m_Keys.begin();
-	while( it != m_Keys.end() )
+	list< Item >::iterator it;
+	
+	// On supprime les items relachés
+	itemsList.remove_if( InputManager::IsItemReleased );
+	
+	it = itemsList.begin();
+	while( it != itemsList.end() )
 	{
 		if( it->m_State == ITEM_TRIGGERED )
 			it->m_State = ITEM_PRESSED;
 		++it;
 	}
-
-	m_MouseOldPosition = m_MousePosition;
 }
 
 
@@ -165,10 +159,11 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 
 /***********************************************************
- * .
- * @param[in]	key		:
- * @param[in]	state	:
- * @return	
+ * Vérifie si la touche est dans l'état spécifié.
+ * @param[in]	key		: touche
+ * @param[in]	state	: état
+ * @return	true si la touche est dans l'état spécifié,
+ *			false sinon
  **********************************************************/
 bool InputManager::IsKeyStated( int key, ItemState state ) const
 {
@@ -176,6 +171,29 @@ bool InputManager::IsKeyStated( int key, ItemState state ) const
 	while( it != m_Keys.end() )
 	{
 		if( it->m_Code == key )
+		{
+			if( it->m_State == state )
+				return true;
+			break;
+		}
+		++it;
+	}
+	return false;
+}
+
+/***********************************************************
+ * Vérifie si le bouton de la souris est dans l'état spécifié.
+ * @param[in]	button	: bouton de la souris
+ * @param[in]	state	: état
+ * @return	true si le bouton est dans l'état spécifié,
+ *			false sinon
+ **********************************************************/
+bool InputManager::IsMouseStated( int button, ItemState state ) const
+{
+	list< Item >::const_iterator it = m_MouseButtons.begin();
+	while( it != m_MouseButtons.end() )
+	{
+		if( it->m_Code == button )
 		{
 			if( it->m_State == state )
 				return true;

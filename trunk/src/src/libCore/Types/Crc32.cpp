@@ -10,7 +10,7 @@
  * @param[in]	s : chaîne de caractères
  * @return	crc32 de la chaîne
  **********************************************************/
-crc32 GetCrc32( const char *s )
+crc32 CRC32_GetCrc32( const char *s )
 {
 	CCRC32	crc32Computer;
 	crc32	crc32Result;

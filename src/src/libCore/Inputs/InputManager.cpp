@@ -19,7 +19,7 @@ InputManager::InputManager( void )
  **********************************************************/
 bool InputManager::IsKeyTriggered( int key ) const
 {
-	return IsKeyStated( key, ITEM_TRIGGERED );
+	return IsItemStated( key, ITEM_TRIGGERED, TYPE_KEY );
 }
 
 /***********************************************************
@@ -30,7 +30,7 @@ bool InputManager::IsKeyTriggered( int key ) const
  **********************************************************/
 bool InputManager::IsKeyPressed( int key ) const
 {
-	return IsKeyStated( key, ITEM_PRESSED );
+	return IsItemStated( key, ITEM_PRESSED, TYPE_KEY );
 }
 
 /***********************************************************
@@ -40,8 +40,41 @@ bool InputManager::IsKeyPressed( int key ) const
  **********************************************************/
 bool InputManager::IsKeyReleased( int key ) const
 {
-	return IsKeyStated( key, ITEM_RELEASED );
+	return IsItemStated( key, ITEM_RELEASED, TYPE_KEY );
 }
+
+
+/***********************************************************
+ * Vérifie si le bouton de la souris est appuyé.
+ * @param[in]	button	: bouton à vérifier
+ * @return	true si le bouton est appuyé, false sinon
+ **********************************************************/
+bool InputManager::IsMouseTriggered( int button ) const
+{
+	return IsItemStated( button, ITEM_TRIGGERED, TYPE_MOUSE );
+}
+
+/***********************************************************
+ * Vérifie si le bouton de la souris est maintenu appuyé.
+ * @param[in]	button	: bouton à vérifier
+ * @return	true si le bouton est maintenu appuyé,
+ *			false sinon
+ **********************************************************/
+bool InputManager::IsMousePressed( int button ) const
+{
+	return IsItemStated( button, ITEM_PRESSED, TYPE_MOUSE );
+}
+
+/***********************************************************
+ * Vérifie si le bouton de la souris est relaché.
+ * @param[in]	button	: bouton à vérifier
+ * @return	true si le bouton est relaché, false sinon
+ **********************************************************/
+bool InputManager::IsMouseReleased( int button ) const
+{
+	return IsItemStated( button, ITEM_RELEASED, TYPE_MOUSE );
+}
+
 
 /***********************************************************
  * Donne la position de la souris.
@@ -68,33 +101,10 @@ Vector2f InputManager::GetMouseVector( void ) const
  **********************************************************/
 void InputManager::Update( void )
 {
-	UpdateItemsList( m_Keys );
-	UpdateItemsList( m_MouseButtons );
+	UpdateList( m_Keys );
+	UpdateList( m_MouseButtons );
 
 	m_MouseOldPosition = m_MousePosition;
-}
-
-/***********************************************************
- * Update une liste l'items.
- * @param[out]	itemsList	: liste d'items
- **********************************************************/
-void InputManager::UpdateItemsList( list< Item > &itemsList )
-{
-	if( itemsList.empty() )
-		return;
-	
-	list< Item >::iterator it;
-	
-	// On supprime les items relachés
-	itemsList.remove_if( InputManager::IsItemReleased );
-	
-	it = itemsList.begin();
-	while( it != itemsList.end() )
-	{
-		if( it->m_State == ITEM_TRIGGERED )
-			it->m_State = ITEM_PRESSED;
-		++it;
-	}
 }
 
 
@@ -109,36 +119,46 @@ void InputManager::UpdateItemsList( list< Item > &itemsList )
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	Item	item;
 	POINTS	mouseCoordinates;
-	list< Item >::iterator it;
-
+	
 	switch( uMsg )
 	{
 		// Touche du clavier enfoncée
 		case WM_KEYDOWN:
-			
 			if( !(lParam & (1<<30)) )
-			{
-				item.m_Code		= (int)wParam;
-				item.m_State	= ITEM_TRIGGERED;
-				m_Keys.push_front( item );
-			}
+				TriggerItem( (int)wParam, TYPE_KEY );
 			break;
 
 		// Touche du clavier relachée
 		case WM_KEYUP:
-			
-			it = m_Keys.begin();
-			while( it != m_Keys.end() )
-			{
-				if( it->m_Code == (int)wParam )
-				{
-					it->m_State = ITEM_RELEASED;
-					break;
-				}
-				++it;
-			}
+			ReleaseItem( (int)wParam, TYPE_KEY );
+			break;
+
+		// Bouton gauche de la souris
+		case WM_LBUTTONDOWN:
+			if( !(lParam & (1<<30)) )
+				TriggerItem( MOUSE_LEFT, TYPE_MOUSE );
+			break;
+		case WM_LBUTTONUP:
+			ReleaseItem( MOUSE_LEFT, TYPE_MOUSE );
+			break;
+
+		// Bouton droit de la souris
+		case WM_RBUTTONDOWN:
+			if( !(lParam & (1<<30)) )
+				TriggerItem( MOUSE_RIGHT, TYPE_MOUSE );
+			break;
+		case WM_RBUTTONUP:
+			ReleaseItem( MOUSE_RIGHT, TYPE_MOUSE );
+			break;
+
+		// Bouton du millieu de la souris
+		case WM_MBUTTONDOWN:
+			if( !(lParam & (1<<30)) )
+				TriggerItem( MOUSE_MIDDLE, TYPE_MOUSE );
+			break;
+		case WM_MBUTTONUP:
+			ReleaseItem( MOUSE_MIDDLE, TYPE_MOUSE );
 			break;
 
 		// Mouvement de la souris
@@ -147,11 +167,6 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			m_MousePosition.x	= (float)mouseCoordinates.x;
 			m_MousePosition.y	= (float)mouseCoordinates.y;
 			break;
-			
-		// ..
-		case WM_LBUTTONDOWN:
-			//TODO
-			break;
 
 	}
 	return S_OK;
@@ -159,18 +174,61 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 
 /***********************************************************
- * Vérifie si la touche est dans l'état spécifié.
- * @param[in]	key		: touche
- * @param[in]	state	: état
- * @return	true si la touche est dans l'état spécifié,
+ * Appuie l'item.
+ * @param[in]	code	: code de l'item
+ * @param[in]	type	: type de l'item
+ **********************************************************/
+void InputManager::TriggerItem( int code, ItemType type )
+{
+	Item item;
+	item.m_Code		= code;
+	item.m_State	= ITEM_TRIGGERED;
+	GetList( type )->push_front( item );
+}
+
+/***********************************************************
+* Relache l'item.
+* @param[in]	code	: code de l'item
+* @param[in]	type	: type de l'item
+**********************************************************/
+void InputManager::ReleaseItem( int code, ItemType type )
+{
+	list< Item > *pl;
+	list< Item >::iterator it;
+
+	pl = GetList( type );
+	it = pl->begin();
+
+	while( it != pl->end() )
+	{
+		if( it->m_Code == code )
+		{
+			it->m_State = ITEM_RELEASED;
+			break;
+		}
+		++it;
+	}
+}
+
+/***********************************************************
+ * Vérifie si l'item est dans l'état spécifié.
+ * @param[in]	code	: code de l'item
+ * @param[in]	state	: état de l'item
+ * @param[in]	type	: type de l'item
+ * @return	true si l'item est dans l'état spécifié,
  *			false sinon
  **********************************************************/
-bool InputManager::IsKeyStated( int key, ItemState state ) const
+bool InputManager::IsItemStated( int code, ItemState state, ItemType type ) const
 {
-	list< Item >::const_iterator it = m_Keys.begin();
-	while( it != m_Keys.end() )
+	const list< Item > *pl;
+	list< Item >::const_iterator it;
+
+	pl = GetConstList( type );
+	it = pl->begin();
+
+	while( it != pl->end() )
 	{
-		if( it->m_Code == key )
+		if( it->m_Code == code )
 		{
 			if( it->m_State == state )
 				return true;
@@ -181,25 +239,56 @@ bool InputManager::IsKeyStated( int key, ItemState state ) const
 	return false;
 }
 
+
 /***********************************************************
- * Vérifie si le bouton de la souris est dans l'état spécifié.
- * @param[in]	button	: bouton de la souris
- * @param[in]	state	: état
- * @return	true si le bouton est dans l'état spécifié,
- *			false sinon
+ * Update une liste l'items.
+ * @param[out]	items	: liste d'items
  **********************************************************/
-bool InputManager::IsMouseStated( int button, ItemState state ) const
+void InputManager::UpdateList( list< Item > &items )
 {
-	list< Item >::const_iterator it = m_MouseButtons.begin();
-	while( it != m_MouseButtons.end() )
+	if( items.empty() )
+		return;
+
+	list< Item >::iterator it;
+
+	// On supprime les items relachés
+	items.remove_if( InputManager::IsItemReleased );
+
+	it = items.begin();
+	while( it != items.end() )
 	{
-		if( it->m_Code == button )
-		{
-			if( it->m_State == state )
-				return true;
-			break;
-		}
+		if( it->m_State == ITEM_TRIGGERED )
+			it->m_State = ITEM_PRESSED;
 		++it;
 	}
-	return false;
+}
+
+/***********************************************************
+ * Donne la liste d'items correspondante au type.
+ * @param[in]	type	: type des items
+ * @return	pointeur sur la bonne liste
+ **********************************************************/
+list< InputManager::Item >* InputManager::GetList( ItemType type )
+{
+	switch( type )
+	{
+		case TYPE_KEY:		return &m_Keys;
+		case TYPE_MOUSE:	return &m_MouseButtons;
+	}
+	return NULL;
+}
+
+/***********************************************************
+ * Donne la liste (constante) d'items correspondante au type.
+ * @param[in]	type	: type des items
+ * @return	pointeur sur la bonne liste
+ **********************************************************/
+const std::list< InputManager::Item >* InputManager::GetConstList( ItemType type ) const
+{
+	switch( type )
+	{
+		case TYPE_KEY:		return &m_Keys;
+		case TYPE_MOUSE:	return &m_MouseButtons;
+	}
+	return NULL;
 }

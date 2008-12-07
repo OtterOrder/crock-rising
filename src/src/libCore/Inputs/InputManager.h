@@ -16,8 +16,8 @@ enum MouseButton
 	MOUSE_LEFT,
 	MOUSE_RIGHT,
 	MOUSE_MIDDLE,
-	MOUSE_UP,
-	MOUSE_DOWN
+	//MOUSE_UP,
+	//MOUSE_DOWN
 };
 
 //******************************************************************
@@ -43,9 +43,9 @@ public:
 	bool		IsKeyPressed		( int key ) const;		// Vérifie si la touche est maintenue appuyée
 	bool		IsKeyReleased		( int key ) const;		// Vérifie si la touche est relachée
 
-	bool		IsMouseTriggered	( int button ) const;	//
-	bool		IsMousePressed		( int button ) const;	//
-	bool		IsMouseReleased		( int button ) const;	//
+	bool		IsMouseTriggered	( int button ) const;	// Vérifie si le bouton de la souris est appuyé
+	bool		IsMousePressed		( int button ) const;	// Vérifie si le bouton de la souris est maintenu appuyé
+	bool		IsMouseReleased		( int button ) const;	// Vérifie si le bouton de la souris est relaché
 	
 	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
 	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
@@ -60,6 +60,12 @@ protected:
 
 	// =========================================================
 	// Enum et stuctures protégées
+
+	enum ItemType
+	{
+		TYPE_KEY,
+		TYPE_MOUSE
+	};
 	
 	enum ItemState
 	{
@@ -91,16 +97,21 @@ protected:
 	InputManager					( void );								// Constructeur
 	virtual ~InputManager			( void ){}								// Destructeur
 
-	void		UpdateItemsList		( std::list< Item > &itemsList );		// Update une liste l'items
+	void		TriggerItem			( int code, ItemType type );			// Appuie l'item
+	void		ReleaseItem			( int code, ItemType type );			// Relache l'item
+	
+	bool		IsItemStated		( int code, ItemState state, ItemType type ) const;// Vérifie si l'item est dans l'état spécifié.
 
-	bool		IsKeyStated			( int key, ItemState state ) const;		// Vérifie si la touche est dans l'état spécifié
-	bool		IsMouseStated		( int button, ItemState state ) const;	// Vérifie si le bouton de la souris est dans l'état spécifié
+	void						UpdateList		( std::list< Item > &items );	// Update une liste l'items
+	std::list< Item >*			GetList			( ItemType type );				// Donne la liste d'items correspondante au type
+	const std::list< Item >*	GetConstList	( ItemType type ) const;		// Donne la liste d'items correspondante au type
 
+	
 	/***********************************************************
 	 * Vérifie si l'item est relaché. Utile pour l'update
 	 * des liste d'items.
 	 **********************************************************/
-	static bool	IsItemReleased		( const Item &item )
+	static bool	IsItemReleased( const Item &item )
 	{
 		return item.m_State == ITEM_RELEASED;
 	}

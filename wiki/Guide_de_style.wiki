@@ -3,6 +3,10 @@
 
 = Guide de style =
 
+== Langue ==
+
+Les variables, fonctions et tous les autres éléments du code doivent être nommés en anglais. Les commentaires sont en français.
+
 == Les variables ==
 
 Nomenclature : {{{[portée]_[type]MaVariable}}}.

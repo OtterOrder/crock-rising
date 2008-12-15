@@ -9,7 +9,7 @@ Les variables, fonctions et tous les autres éléments du code doivent être nom
 
 == Les variables ==
 
-Nomenclature : {{{[portée]_[type]MaVariable}}}.
+Nomenclature : {{{[portée]_[type]MyVariable}}}.
 
 === Portées ===
 
@@ -29,11 +29,11 @@ Les variables locales n'ont pas d'indicateur de portée (du coup c'est pas la pe
 
 == Les fonctions et méthodes ==
 
-Nomenclature : {{{MaFonction}}}.
+Nomenclature : {{{MyFunction}}}.
 
 == Les classes, structures et types ==
 
-Nomenclature : {{{MaClasse}}}, {{{MaStructure}}}, {{{MonType}}}.
+Nomenclature : {{{MyClass}}}, {{{MyStruct}}}, {{{MyType}}}.
 
 == Les commentaires ==
 

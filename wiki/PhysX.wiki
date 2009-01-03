@@ -1,0 +1,17 @@
+#summary Comment compiler le projet avec PhysX ?
+
+= Comment compiler le projet avec PhysX ? =
+
+== Ce qu'il faut installer ==
+
+Tout ce dont vous avez besoin est disponible sur [http://developer.nvidia.com/object/physx_downloads.htm cette page].
+
+Téléchargez :
+ * PhysX SDK x.x.x for Windows SDK
+ * PhysX System Software x.x.x
+
+Il faut absolument installer le PhysX System Software en premier (dixit NVIDIA).
+
+== Ce qu'il faut rajouter dans Visual Studio ==
+
+TODO

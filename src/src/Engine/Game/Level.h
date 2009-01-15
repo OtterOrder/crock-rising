@@ -28,6 +28,10 @@ public:
 	crc32			GetLevelID	( void ) const;				// Donne l'ID du niveau
 	//bool			IsKindOf	( crc32 levelID ) const;	// TODO ?
 
+	// Cette méthode permet de créer un objet du bon type en
+	// fonction du levelID, à définir dans le jeu..
+	static Level*	NewLevel	( crc32 levelID );
+
 
 protected:
 
@@ -37,18 +41,13 @@ protected:
 
 //******************************************************************
 
-// Cette fonction doit être définie dans le jeu, elle permet
-// de créer un objet du bon type en fonction du levelID.
-Level* LEVEL_NewLevel( crc32 levelID );
-
 /*
-Par exemple :
-Level* LEVEL_NewLevel( crc32 levelID )
+Exemple pour la méthode NewLevel :
 {
 	switch( levelID )
 	{
-		case LEVEL_rtfm:	return new LevelRtfm( levelID );
 		case LEVEL_lol:		return new LevelLol( levelID );
+		//..
 
 		default:			return new Level( levelID );
 	}

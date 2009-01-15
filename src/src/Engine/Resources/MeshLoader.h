@@ -3,6 +3,7 @@
 
 //******************************************************************
 #include	<string>
+#include	<vector>
 
 #include	<TinyXml/tinyxml.h>
 #include	"Core/Types/Vector.h"
@@ -44,18 +45,25 @@ class MeshLoader
 				m_iNbNormals,
 				m_iNbTexCoords;
 
+	float		m_OffsetPosition[3];
+	float		m_OffsetRotation[4];
+	float		m_OffsetScale[3];
+
 	FaceVertex	*m_Faces;
+	std::vector<D3DVERTEXELEMENT9>	 DxElements; // Vecteur d'éléments du vertex
 
 public:
 
 			MeshLoader(void);
 	virtual	~MeshLoader(void);
 
-	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex);
+	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
+										D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale);
 
 	ResourceResult	FillArrays			(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);		// Remplit les tableaux de données
 	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements);								// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray	(const char* ArrayText, float** &Array, int iCount, int iStride);		// Rempli un tableau à l'aide d'un texte
+	ResourceResult	ConvertTextToArray	(const char* ArrayText, float* Array, int iCount);
 
 	ResourceResult	FillVBArray			(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer);	// Remplit le tableau de vertex
 	void			FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer);

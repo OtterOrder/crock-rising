@@ -46,5 +46,5 @@ void Game::ChangeLevel( crc32 levelID )
 	// TODO: ici il faudra peut-être gérer un temps
 	// de déchargement/chargement..
 
-	m_CurrentLevel = LEVEL_NewLevel( levelID );
+	m_CurrentLevel = Level::NewLevel( levelID );
 }

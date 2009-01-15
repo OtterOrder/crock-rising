@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="System"
-	ProjectGUID="{2591CA51-E364-4FF9-AB94-698229E53804}"
-	RootNamespace="System"
+	Name="CrockRising"
+	ProjectGUID="{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}"
+	RootNamespace="CrockRising"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +19,6 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			UseOfATL="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +60,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib d3d9.lib Winmm.lib tinyxmld.lib"
+				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib Winmm.lib tinyxmld.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -96,7 +95,6 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			UseOfATL="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -117,8 +115,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)src&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -135,9 +131,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="libCore.lib libObjects.lib libRenderer.lib libResources.lib d3dx9.lib Winmm.lib d3d9.lib tinyxml.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -172,16 +165,16 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="Levels"
+			>
+			<File
+				RelativePath=".\Levels\NewLevel.cpp"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\System.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\System.h"
 			>
 		</File>
 	</Files>

@@ -3,6 +3,10 @@
 
 //******************************************************************
 
+#include	<stdlib.h>
+
+//******************************************************************
+
 // Note: pour les classes template, on doit obligatoirement tout
 // définir dans le .h (c'est crade, mais c'est imposé par le c++).
 

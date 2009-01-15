@@ -24,7 +24,7 @@ public:
 	void	Update			( void );			// Update du jeu
 	
 	void	ChangeLevel		( crc32 levelID );	// Change de niveau
-	crc32	GetCurrentLevel	( void );			// Donne l'ID du niveau courant
+	crc32	GetLevelID		( void );			// Donne l'ID du niveau courant
 
 
 protected:
@@ -38,8 +38,8 @@ protected:
 	// =========================================================
 	// Méthodes protégées
 
-	Game		( void );			// Constructeur
-	~Game		( void );			// Destructeur
+	Game			( void );		// Constructeur
+	virtual ~Game	( void );		// Destructeur
 
 };
 

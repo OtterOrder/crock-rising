@@ -2,7 +2,7 @@
 #define		_System_H
 
 #include	<windows.h>
-#include	<d3d9.h>
+//#include	<d3d9.h>
 
 #include	"Core/Singleton.h"
 
@@ -30,7 +30,7 @@ protected:
 	// Méthodes protégées
 	
 	System				( void );		// Constructeur
-	~System				( void );		// Destructeur
+	virtual ~System		( void );		// Destructeur
 	
 	HRESULT	InitWindow	( void );		// Initialisation fenêtre windows
 

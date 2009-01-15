@@ -1,6 +1,5 @@
 #include	"Game.h"
 
-#include	<stdlib.h>
 #include	"Level.h"
 
 //******************************************************************
@@ -43,17 +42,18 @@ void Game::ChangeLevel( crc32 levelID )
 	if( m_CurrentLevel )
 		delete m_CurrentLevel;
 
-	// TODO: ici il faudra peut-être gérer un temps
+	// Ici il faudra peut-être gérer un temps
 	// de déchargement/chargement..
 
 	m_CurrentLevel = Level::NewLevel( levelID );
+	m_CurrentLevel->Init();
 }
 
 /***********************************************************
  * Donne l'ID du niveau courant.
- * @return	l'ID du niveau courant, ou CRC32_NULL si aucun
+ * @return	l'ID du niveau, ou CRC32_NULL si aucun
  **********************************************************/
-crc32 Game::GetCurrentLevel( void )
+crc32 Game::GetLevelID( void )
 {
 	if( m_CurrentLevel )
 		return m_CurrentLevel->GetLevelID();

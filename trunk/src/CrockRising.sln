@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "src\Engine\Engine.vcproj", "{7861809D-D7A5-4DFA-A961-B2AB05059F05}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrockRising", "src\CrockRising\CrockRising.vcproj", "{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7861809D-D7A5-4DFA-A961-B2AB05059F05} = {7861809D-D7A5-4DFA-A961-B2AB05059F05}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "src\Engine\Engine.vcproj", "{7861809D-D7A5-4DFA-A961-B2AB05059F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,14 +14,14 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Debug|Win32.Build.0 = Debug|Win32
-		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Release|Win32.ActiveCfg = Release|Win32
-		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Release|Win32.Build.0 = Release|Win32
 		{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}.Debug|Win32.Build.0 = Debug|Win32
 		{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}.Release|Win32.ActiveCfg = Release|Win32
 		{0DE0A96D-2B45-4920-8A40-750F9F7A2E3B}.Release|Win32.Build.0 = Release|Win32
+		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Debug|Win32.Build.0 = Debug|Win32
+		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Release|Win32.ActiveCfg = Release|Win32
+		{7861809D-D7A5-4DFA-A961-B2AB05059F05}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

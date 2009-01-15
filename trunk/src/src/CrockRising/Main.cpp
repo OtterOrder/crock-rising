@@ -1,5 +1,12 @@
+
 #include	<windows.h>
+
 #include	"Core/System.h"
+#include	"Game/Game.h"
+
+//******************************************************************
+
+#define		LEVEL_start				0x9f79558f
 
 //******************************************************************
 
@@ -22,9 +29,17 @@ int WINAPI WinMain(
 	// Initialisation du System
 	System::GetInstance()->Initialize();
 
-	// Boucle principale..
+	// On indique le niveau de démarrage
+	Game::GetInstance()->ChangeLevel( LEVEL_start );
+
+	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();
-	
+
+	//..
+
+	// Destruction du System
+	System::GetInstance()->Destroy();
+
 	return EXIT_SUCCESS;
 }
 

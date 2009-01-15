@@ -31,6 +31,12 @@ public:
 	int		m_iNbVertices;
 	int		m_iNbIndex;
 
+	IDirect3DVertexDeclaration9*	m_decl;			// Vertex declaration de la ressource
+
+	D3DXVECTOR3					m_Position;			// Position de départ
+	D3DXVECTOR4					m_Rotation;			// Rotation de départ
+	D3DXVECTOR3					m_Scale;			// Scale de départ
+
 	ResourceResult			FillD3DBuffers ();
 	void					ReleaseD3DBuffers();
 private:

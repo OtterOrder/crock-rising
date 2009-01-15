@@ -26,6 +26,8 @@ Mesh::~Mesh()
 
 	if ( m_IndexBuffer )
 		delete [] m_IndexBuffer;
+
+	m_decl->Release();
 }
 
 
@@ -41,7 +43,7 @@ ResourceResult Mesh::Load(crc32 resource)
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(sMeshPath, m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex) == RES_SUCCEED)
+	if ( meshLoader.Load(sMeshPath, m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 			return RES_SUCCEED;

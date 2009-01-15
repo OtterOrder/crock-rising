@@ -1,10 +1,9 @@
 #include "MeshLoader.h"
+#include "../Renderer/Renderer.h"
 
-//******************************************************************
-
-/***********************************************************
-* Constructeur.
-**********************************************************/
+//===========================================================================//
+// Constructeur MeshLoader                                                   //
+//===========================================================================//
 MeshLoader::MeshLoader()
 {
 
@@ -19,16 +18,21 @@ MeshLoader::MeshLoader()
 	m_iNbNormals	= 0;
 	m_iNbTexCoords	= 0;
 
+	for(int i=0; i<3; i++)
+		m_OffsetPosition[i]=0;
+	for(int i=0; i<4; i++)
+		m_OffsetRotation[i]=0;
+	for(int i=0; i<3; i++)
+		m_OffsetScale[i]=1;
 
 	m_Faces		= NULL;
 }
 
-/***********************************************************
-* Destructeur.
-**********************************************************/
+//===========================================================================//
+// Destructeur MeshLoader                                                    //
+//===========================================================================//
 MeshLoader::~MeshLoader()
 {
-	//*
 	if (m_Positions)
 	{
 		for (int i = 0 ; i < m_iNbPositions ; i++)
@@ -52,18 +56,14 @@ MeshLoader::~MeshLoader()
 
 	if (m_Faces)
 		delete [] m_Faces;
-	//*/
 }
 
-
-/***********************************************************
-* Supprime la ressource.
-* @param[in]	resource : crc32 de la ressource
-* @return	le résultat du chargement
-**********************************************************/
-ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex)
+//===========================================================================//
+// Chargement de la ressource                                                //
+//===========================================================================//
+ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl,
+						 D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale)
 {
-
 	TiXmlDocument meshFile( sMeshPath );
 	if (!meshFile.LoadFile ())
 		return RES_FAILED;
@@ -71,26 +71,29 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, i
 	TiXmlNode* rootNode;
 
 	rootNode =  meshFile.FirstChild( "COLLADA" );  // Get Root Node
-
+    
 	FillArrays (rootNode, VertexBuffer, IndexBuffer);
 
+	Position=D3DXVECTOR3(m_OffsetPosition[0], m_OffsetPosition[2], m_OffsetPosition[1]); 
+	Rotation=D3DXVECTOR4(m_OffsetRotation[0], m_OffsetRotation[2], m_OffsetRotation[1], m_OffsetRotation[3]);
+	Scale=D3DXVECTOR3(m_OffsetScale[0], m_OffsetScale[2], m_OffsetScale[1]); 
+	
 	iNbVertices	= m_iNbVertices;
 	iNbIndex	= m_iNbFaces*NbFaceVertices;
+
+	Renderer::GetInstance()->m_pd3dDevice->CreateVertexDeclaration(&DxElements[0], &vertdecl);
 
 	return RES_SUCCEED;
 }
 
-
-/***********************************************************
-* Rempli les tableaux de données.
-* @param[in]	rootNode : balise racine du fichier XML
-* @return	le résultat du chargement
-**********************************************************/
-ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer)
+//===========================================================================//
+// Rempli les tableaux de données                                            //
+//===========================================================================//
+ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
 	TiXmlNode* node;
 	TiXmlNode* MeshNode;
-
+	
 	//const char * SourceId;
 
 	/*string sPositionsId ("Position");
@@ -101,18 +104,22 @@ ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuf
 	string sNormalsId	("normals");
 	string sTexCoordsId ("channel1");
 
+	std::vector<int> Offset(4, 0);
 
 
-	if(rootNode) {
+	if(rootNode) 
+	{
 		node =  rootNode->FirstChild( "library_geometries" );
-		if(node) {
+		if(node) 
+		{
 			node =  node->FirstChild( "geometry" );
-			if(node) {
+			if(node) 
+			{
 				node =  node->FirstChild( "mesh" );
 				MeshNode = node;
 				if(node) {
 					node =  node->FirstChild( "source" );		// Recherche la première balise "source"
-
+					
 					while (node)
 					{
 						string sId (node->ToElement()->Attribute("id"));		// vérification de l'id
@@ -120,21 +127,43 @@ ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuf
 
 						if (SpliterPlace != sId.npos)
 						{
+							D3DVERTEXELEMENT9 CurrentElement;
+
+							CurrentElement.Stream = 0;
+							CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
+							
 							if (sId.compare( SpliterPlace, sPositionsId.length(), sPositionsId) == 0)
 							{
 								ExtractArrayDatas (node, m_Positions, m_iNbPositions);
+								CurrentElement.Offset = 0;
+								CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
+								CurrentElement.Usage = D3DDECLUSAGE_POSITION;
+								CurrentElement.UsageIndex = 0;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
 								ExtractArrayDatas (node, m_Normals, m_iNbNormals);
+								CurrentElement.Offset = 12;
+								CurrentElement.Usage = D3DDECLUSAGE_NORMAL;
+								CurrentElement.UsageIndex = 0;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
 							}
 							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
 							{
 								ExtractArrayDatas (node, m_TexCoords, m_iNbTexCoords);
+								CurrentElement.Offset = 24;
+								CurrentElement.Usage = D3DDECLUSAGE_TEXCOORD;
+								CurrentElement.UsageIndex = 0;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT2;
 							}
+
+							DxElements.push_back(CurrentElement);
+							
 						}
 
 						node = node->NextSibling( "source" );
+						
 					}
 
 					node = MeshNode;
@@ -142,45 +171,86 @@ ResourceResult	 MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuf
 					node =  node->FirstChild( "triangles");
 					if (node)
 						FillVBArray (node, VertexBuffer, IndexBuffer);
+					
 				}
 			}
 		}
-	}
+		node =  rootNode->FirstChild()->NextSibling("library_visual_scenes");
+		if(node) 
+		{
+			node = node->FirstChild( "visual_scene" );
+			if(node)
+			{
+				node = node->FirstChild( "node" );
+				if(node)
+				{
+					const char* ArrayText;
+					node = node->FirstChild( "translate" );
+					if(node)
+					{
+						ArrayText=node->ToElement()->GetText();
+						ConvertTextToArray(ArrayText, m_OffsetPosition, 3);
 
-	return RES_FAILED;
+						node = node->NextSibling( "rotate" );
+						if(node)
+						{
+							ArrayText=node->ToElement()->GetText();
+							ConvertTextToArray(ArrayText, m_OffsetRotation, 4);
+
+							node = node->NextSibling( "scale" );
+							if(node)
+							{
+								ArrayText=node->ToElement()->GetText();
+								ConvertTextToArray(ArrayText, m_OffsetScale, 3);
+
+							}
+
+						}
+
+					}
+					
+					
+
+				}
+
+			}
+
+		}
+	}
+	D3DVERTEXELEMENT9 EndElement = D3DDECL_END();
+	DxElements.push_back(EndElement);
+
+	return RES_SUCCEED;
 }
 
-/***********************************************************
-* Etrait les données lées à un tableau.
-* @param[in]	sourceNode : balise source (source des données) du fichier XML
-*				Array : tableau à remplir
-* @return	le résultat du chargement
-**********************************************************/
-ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements)
+//===========================================================================//
+// Extrait les données liées à un tableau                                    //
+//===========================================================================//
+ResourceResult MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements)
 {
-	TiXmlNode* node = sourceNode;			// Enregistrement de la balise source
+	TiXmlNode* node = sourceNode; // Enregistrement de la balise source
 
 	const char* ArrayText;
 
 	int iNbVertices = 0;
 	int iStride = 0;
 
-
+	
 	node =  node->FirstChild( "technique_common" );
 	if(node) {
 		node =  node->FirstChild( "accessor" );
 		if(node) {
-
-			node->ToElement()->Attribute("count", &iNbVertices);		// Stockage du nombre de vertices
-			if (m_iNbVertices < iNbVertices)	m_iNbVertices = iNbVertices;	// Enregistrement du plus grand nombre de vertices
+			
+			node->ToElement()->Attribute("count", &iNbVertices); // Stockage du nombre de vertices
+			if (m_iNbVertices < iNbVertices)	m_iNbVertices = iNbVertices; // Enregistrement du plus grand nombre de vertices
 
 			iNbElements = iNbVertices;
 
-			node->ToElement()->Attribute("stride", &iStride);			// Stockage de la taille du tableau				
+			node->ToElement()->Attribute("stride", &iStride); // Stockage de la taille du tableau				
 
-			if (!Array && iNbVertices && iStride)			// Si le tableau n'a pas été alloué et que le nombre de vertices et la taille sont connus
+			if (!Array && iNbVertices && iStride) // Si le tableau n'a pas été alloué et que le nombre de vertices et la taille sont connus
 			{
-				Array = new float*[iNbVertices];				// Le tableau est alloué
+				Array = new float*[iNbVertices]; // Le tableau est alloué
 				for (int i=0 ; i<iNbVertices ; i++)
 					Array[i] = new float[iStride];
 			}
@@ -191,7 +261,7 @@ ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &A
 	node =  node->FirstChild( "float_array" );
 	if(node) {
 		ArrayText = node->ToElement()->GetText();
-
+		
 		ConvertTextToArray(ArrayText, Array, iNbVertices, iStride);
 
 		//delete text;
@@ -200,56 +270,129 @@ ResourceResult	 MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &A
 	return RES_FAILED;
 }
 
-/***********************************************************
-* Copie les données d'une chaîne caractères provenant du fichier XML dans un tableau
-* @param[in]	text	: données sous forme de caractères
-*				Array	: tableau à remplir
-*				iCount	: nombre de cases du tableau
-*				iStride	: nombre de données par case
-* @return	le résultat du chargement
-**********************************************************/
-ResourceResult	 MeshLoader::ConvertTextToArray	(const char* ArrayText, float** &Array, int iCount, int iStride)
+//===========================================================================//
+// Copie les données d'une chaîne caractères provenant du fichier XML dans   //
+// un tableau.																 //
+//===========================================================================//
+ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** &Array, int iCount, int iStride)
 {
-	int iStartData = 0;
-	int iDataSize = 0;
+	int id=0;
+	int dec=0;
+
+	float result=0;
+	float signe=1;
+	double mantisse=0.1;
 
 	for (int i = 0 ; i < iCount ; i++)
 	{
 		for (int j = 0 ; j < iStride ; j++)
 		{
-			iDataSize = 0;
-			while (ArrayText[iStartData+iDataSize] != ' ')
-				iDataSize ++;
 
-			char* cData = new char[iDataSize];
+			while(ArrayText[id+dec] != ' ' && ArrayText[id+dec] != '\0')
+			{			
+				if(ArrayText[id]!= '.')
+				{
+					if(ArrayText[id]== '-')
+						signe=-1;	
+					else
+						result=ArrayText[id]-'0'+result*10;	
+					id++;
+				}
+				else
+				{	
+					dec++;	
+					result=((ArrayText[id+dec]-'0')*mantisse)+result;
+					mantisse*=0.1;
 
-			for (int k=0 ; k < iDataSize ; k++)
-				if(ArrayText[iStartData +k] == ',')	cData[k] = '.';
-				else							cData[k] = ArrayText[iStartData +k];
-
-				Array[i][j] = (float)atof(cData);
-
-				delete [] cData;
-
-				iStartData += iDataSize+1;
-		}
+					if(ArrayText[id+dec+1] == ' ')
+						dec++;
+					
+				}
+			}
+			Array[i][j]=result*signe;
+			if(Array[i][j]==0 && j!=2)
+				int u=0;
+			id=id+dec+1;
+			dec=0, result=0, mantisse=0.1, signe=1;
+		}	
 	}
 
 	return RES_FAILED;
 }
 
-ResourceResult	 MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer)
+ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Array, int iCount)
 {
-	TiXmlNode* node = TrianglesNode;			// Enregistrement de la balise triangles
+	int id=0;
+	int dec=0;
+
+	float result=0;
+	float signe=1;
+	double mantisse=0.1;
+
+	for (int i = 0 ; i < iCount ; i++)
+	{
+		while(ArrayText[id+dec] != ' ' && ArrayText[id+dec] != '\0')
+		{			
+			if(ArrayText[id]!= '.')
+			{
+				if(ArrayText[id]== '-')
+					signe=-1;	
+				else
+					result=ArrayText[id]-'0'+result*10;	
+				id++;
+			}
+			else
+			{	
+				dec++;	
+				result=((ArrayText[id+dec]-'0')*mantisse)+result;
+				mantisse*=0.1;
+
+				if(ArrayText[id+dec+1] == ' ')
+					dec++;
+				
+			}
+		}
+		Array[i]=result*signe;
+		id=id+dec+1;
+		dec=0, result=0, mantisse=0.1, signe=1;
+	}
+	return RES_FAILED;
+}
+
+
+//===========================================================================//
+// Remplit vertex buffer et index buffer                                     //
+//===========================================================================//
+ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer)
+{
+	TiXmlNode* node = TrianglesNode; // Enregistrement de la balise triangles
 
 	node->ToElement()->Attribute("count", &m_iNbFaces);
 
 	FillFacesArray ( node );
 
-	VertexBuffer = new Vertex [m_iNbVertices];
+	
 	IndexBuffer  = new int [m_iNbFaces*NbFaceVertices];
 
 	int FaceIndex;
+	int nbvert=0;
+
+	for (int i = 0 ; i < m_iNbFaces*NbFaceVertices ; i ++)
+	{
+		FaceIndex = 0;
+		while (FaceIndex < i && m_Faces[FaceIndex] != m_Faces[i] )
+			FaceIndex ++;
+
+		if ( FaceIndex == i )
+		{
+			nbvert++;
+		}
+	}
+	m_iNbVertices=nbvert;
+
+	VertexBuffer = new Vertex [m_iNbVertices];
+
+	int vertexCount=0;
 
 	for (int i = 0 ; i < m_iNbFaces*NbFaceVertices ; i ++)
 	{
@@ -259,41 +402,44 @@ ResourceResult	 MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Ver
 
 		if ( FaceIndex < i )
 		{
-			IndexBuffer[i] = m_Faces[FaceIndex].m_Normal;
+			IndexBuffer[i] = IndexBuffer[FaceIndex];
 		}
 		else
 		{
-			IndexBuffer[i] = m_Faces[i].m_Normal;
-			FillVertex(m_Faces[i].m_Normal, i, VertexBuffer, IndexBuffer);
+			IndexBuffer[i] = vertexCount;
+			FillVertex(vertexCount, i, VertexBuffer, IndexBuffer);
+			vertexCount++;
 		}
 	}
-
 	return RES_SUCCEED;
 }
 
-void	 MeshLoader::FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer)
+//===========================================================================//
+// Remplit vertex buffer				                                     //
+//===========================================================================//
+void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
-	Vector3f VectPosition	(0.f, 0.f, 0.f);
-	Vector3f VectNormal		(0.f, 0.f, 0.f);
-	Vector2f VectTexCoord	(0.f, 0.f);
+	D3DXVECTOR3 VectPosition	(0.f, 0.f, 0.f);
+	D3DXVECTOR3 VectNormal		(0.f, 0.f, 0.f);
+	D3DXVECTOR2 VectTexCoord	(0.f, 0.f);
 
 
 	if ( m_Positions )
 	{
 		float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-		VectPosition = Vector3f(Position[0], Position[2], Position[1] );
+		VectPosition = D3DXVECTOR3 (Position[0], Position[2], Position[1] );
 	}
 
 	if ( m_Normals )
 	{
 		float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-		VectNormal = Vector3f (Normal[0], Normal[2], Normal[1] );
+		VectNormal = D3DXVECTOR3 (Normal[0], Normal[2], Normal[1] );
 	}
 
 	if ( m_TexCoords )
 	{
 		float*  TexCoord = m_TexCoords[m_Faces[FaceIndex].m_TexCoord];
-		VectTexCoord = Vector2f (TexCoord[0], TexCoord[1]);
+		VectTexCoord = D3DXVECTOR2 (TexCoord[0], TexCoord[1]);
 	}
 
 	VertexBuffer[VertexIndex].m_Position	= VectPosition;
@@ -301,7 +447,10 @@ void	 MeshLoader::FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&Vertex
 	VertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
 }
 
-ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
+//===========================================================================//
+// Remplit index buffer					                                     //
+//===========================================================================//
+ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 {
 	int iNbSemantics = 3;
 
@@ -362,10 +511,10 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 			for (int j = 0 ; j < iNbSemantics ; j++)
 			{
 				iDataSize = 0;
-				while (TrianglesText[iStartData+iDataSize] != ' ')
+				while (TrianglesText[iStartData+iDataSize] != ' ' && TrianglesText[iStartData+iDataSize] != '\0')
 					iDataSize ++;
 
-				char* cData = new char[iDataSize];
+				char cData[15]= {0};
 
 				for (int k=0 ; k < iDataSize ; k++)
 					cData[k] = TrianglesText[iStartData +k];
@@ -377,14 +526,13 @@ ResourceResult	 MeshLoader::FillFacesArray	(TiXmlNode* TrianglesNode)
 				else if ( j == iTexCoordOffset	&& iTexCoordOffset >= 0)
 					iTexCoordIndex = atoi(cData);
 
-				delete [] cData;
-
 				iStartData += iDataSize+1;
 			}
 
 			m_Faces [i].m_Position = iPositionIndex;
 			m_Faces [i].m_Normal   = iNormalIndex;
 			m_Faces [i].m_TexCoord = iTexCoordIndex;
+
 		}
 	}
 	else	return RES_FAILED;

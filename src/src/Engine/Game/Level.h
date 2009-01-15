@@ -20,15 +20,16 @@ class Level
 {
 public:
 
-	Level						( crc32 levelID );			// Constructeur
-	virtual ~Level				( void );					// Destructeur
+	Level						( crc32 levelID );		// Constructeur
+	virtual ~Level				( void );				// Destructeur
 
-	virtual void	Update		( void );					// Update du niveau
+	virtual void	Init		( void );				// Initialisation
+	virtual void	Update		( void );				// Update du niveau
 
-	crc32			GetLevelID	( void ) const;				// Donne l'ID du niveau
+	crc32			GetLevelID	( void ) const;			// Donne l'ID du niveau
 
-	// Cette méthode permet de créer un objet du bon type en
-	// fonction du levelID, à définir dans le jeu..
+	// Cette méthode permet de créer un objet du bon type
+	// en fonction du levelID, à définir dans le jeu..
 	static Level*	NewLevel	( crc32 levelID );
 
 

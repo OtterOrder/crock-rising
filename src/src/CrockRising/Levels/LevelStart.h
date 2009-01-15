@@ -3,7 +3,7 @@
 
 //******************************************************************
 
-#include	"Game/Level.h"
+#include	<Game/Level.h>
 
 //******************************************************************
 
@@ -18,6 +18,7 @@ public:
 	LevelStart					( crc32 levelID );			// Constructeur
 	virtual ~LevelStart			( void );					// Destructeur
 
+	virtual void	Init		( void );					// Initialisation
 	virtual void	Update		( void );					// Update du niveau
 
 

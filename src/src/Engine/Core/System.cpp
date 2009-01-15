@@ -25,16 +25,17 @@ System::~System( void )
  **********************************************************/
 int System::MainLoop( void )
 {
-	Game			*game;
 	Renderer		*renderer;
 	InputManager	*inputManager;
+	Game			*game;
 	bool			bGotMsg;
 	MSG				msg;
 
-	// On initialise les singletons
-	game			= Game::GetInstance();
+	// On initialise les singletons ici pour ne
+	// pas avoir à le faire dans la boucle
 	renderer		= Renderer::GetInstance();
 	inputManager	= InputManager::GetInstance();
+	game			= Game::GetInstance();
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
@@ -72,6 +73,12 @@ int System::MainLoop( void )
 			renderer->Run();
 		}
 	}
+
+	// Destruction des singletons
+	renderer->Destroy();
+	inputManager->Destroy();
+	game->Destroy();
+
 	return (int)msg.wParam;
 }
 

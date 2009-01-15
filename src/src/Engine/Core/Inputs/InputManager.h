@@ -3,11 +3,10 @@
 
 //******************************************************************
 
+#include	<list>
+
 #include	"Core/Singleton.h"
 #include	"Core/Types/Vector.h"
-
-#include	<windows.h>
-#include	<list>
 
 //******************************************************************
 

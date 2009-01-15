@@ -1,8 +1,6 @@
 
-#include	<windows.h>
-
-#include	"Core/System.h"
-#include	"Game/Game.h"
+#include	<Core/System.h>
+#include	<Game/Game.h>
 
 //******************************************************************
 

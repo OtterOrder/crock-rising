@@ -26,7 +26,6 @@ public:
 	virtual void	Update		( void );					// Update du niveau
 
 	crc32			GetLevelID	( void ) const;				// Donne l'ID du niveau
-	//bool			IsKindOf	( crc32 levelID ) const;	// TODO ?
 
 	// Cette méthode permet de créer un objet du bon type en
 	// fonction du levelID, à définir dans le jeu..

@@ -6,18 +6,11 @@
 
 //******************************************************************
 
-bool System::s_IsInitialized = false;
-
 /***********************************************************
  * Constructeur.
  **********************************************************/
 System::System( void )
 {
-	s_IsInitialized	= false;
-	
-	m_Game			= NULL;
-	m_Renderer		= NULL;
-	m_InputManager	= NULL;
 }
 
 /***********************************************************
@@ -25,32 +18,6 @@ System::System( void )
  **********************************************************/
 System::~System( void )
 {
-	if( s_IsInitialized )
-	{
-		// On détruit tous les singletons
-		m_Game->Destroy();
-		m_Renderer->Destroy();
-		m_InputManager->Destroy();
-	}
-}
-
-/***********************************************************
- * Initialise l'appli.
- **********************************************************/
-void System::Initialize	( void )
-{
-	// On récupère les instances de tous les singletons pour un
-	// traitement plus rapide dans la boucle principale. Par ailleurs,
-	// ça permet d'être sûr que tous les singletons ont une instance
-	// créée avant le lancement du jeu.
-	
-	m_Game			= Game::GetInstance();
-	m_Renderer		= Renderer::GetInstance();
-	m_InputManager	= InputManager::GetInstance();
-
-	//TODO
-
-	s_IsInitialized = true;
 }
 
 /***********************************************************
@@ -58,27 +25,29 @@ void System::Initialize	( void )
  **********************************************************/
 int System::MainLoop( void )
 {
-	if( !s_IsInitialized )
-	{
-		printf( "System non intialisé." );
-		return -1;
-	}
-	
-	bool	bGotMsg;
-	MSG		msg;
+	Game			*game;
+	Renderer		*renderer;
+	InputManager	*inputManager;
+	bool			bGotMsg;
+	MSG				msg;
+
+	// On initialise les singletons
+	game			= Game::GetInstance();
+	renderer		= Renderer::GetInstance();
+	inputManager	= InputManager::GetInstance();
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 	
-	Camera cam( Vector3f(0.0f, 50.0f, -170.0f), Vector3f(0.f, 1.f, 0.f), Vector3f(0.f, 50.f, 0.f));
-	
-	//Création du device, initialisation D3D, création de la fenêtre
-	if(FAILED(InitWindow()))
+	// Création du device, initialisation D3D, création de la fenêtre
+	if( FAILED( InitWindow() ) )
 		return 0;
 	
-	m_Renderer->SetCamera( &cam );
+	Camera cam( Vector3f(0.0f, 50.0f, -170.0f), Vector3f(0.f, 1.f, 0.f), Vector3f(0.f, 50.f, 0.f));
+	renderer->SetCamera( &cam );
 
-    while( WM_QUIT != msg.message )
+    // Boucle principale..
+	while( msg.message != WM_QUIT )
     {
 		// Use PeekMessage() if the app is active, so we can use idle time to
         // render the scene. Else, use GetMessage() to avoid eating CPU time.
@@ -86,7 +55,7 @@ int System::MainLoop( void )
 		bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
 		
 		// Update des inputs
-		m_InputManager->Update();
+		inputManager->Update();
 		
 		if( bGotMsg )
 		{
@@ -97,13 +66,13 @@ int System::MainLoop( void )
 		else
 		{
 			//Update de la scene
-			m_Game->Update();
+			game->Update();
 			
 			//Rendu de de la scene
-			m_Renderer->Run();
+			renderer->Run();
 		}
 	}
-	return (INT)msg.wParam;
+	return (int)msg.wParam;
 }
 
 
@@ -118,12 +87,6 @@ int System::MainLoop( void )
  **********************************************************/
 LRESULT CALLBACK System::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	if( !s_IsInitialized )
-	{
-		return DefWindowProc( hWnd, uMsg, wParam, lParam );
-	}
-	
-	// Pour la gestion des erreurs
 	LRESULT lResult;
 	
 	// On appelle les callbacks d'évenements de tous les modules

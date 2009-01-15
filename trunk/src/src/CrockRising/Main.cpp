@@ -25,17 +25,15 @@ int WINAPI WinMain(
 	int			nCmdShow )
 {
 	int loopResult;
-	
-	// Initialisation du System
-	System::GetInstance()->Initialize();
 
+	// Création du System (pas obligé à priori)
+	System::GetInstance();
+	
 	// On indique le niveau de démarrage
 	Game::GetInstance()->ChangeLevel( LEVEL_start );
 
 	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();
-
-	//..
 
 	// Destruction du System
 	System::GetInstance()->Destroy();

@@ -11,10 +11,13 @@
  **********************************************************/
 Level* Level::NewLevel( crc32 levelID )
 {
+	Level *pLevel;
+	
 	switch( levelID )
 	{
-		case LEVEL_start:	return new LevelStart( levelID );
+		case LEVEL_start:	pLevel = new LevelStart( levelID );		break;
 		
-		default:			return new Level( levelID );
+		default:			pLevel = new Level( LEVEL_level );
 	}
+	return pLevel;
 }

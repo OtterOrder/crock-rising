@@ -24,6 +24,7 @@ public:
 	void	Update			( void );			// Update du jeu
 	
 	void	ChangeLevel		( crc32 levelID );	// Change de niveau
+	crc32	GetCurrentLevel	( void );			// Donne l'ID du niveau courant
 
 
 protected:

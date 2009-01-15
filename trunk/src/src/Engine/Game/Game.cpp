@@ -48,3 +48,15 @@ void Game::ChangeLevel( crc32 levelID )
 
 	m_CurrentLevel = Level::NewLevel( levelID );
 }
+
+/***********************************************************
+ * Donne l'ID du niveau courant.
+ * @return	l'ID du niveau courant, ou CRC32_NULL si aucun
+ **********************************************************/
+crc32 Game::GetCurrentLevel( void )
+{
+	if( m_CurrentLevel )
+		return m_CurrentLevel->GetLevelID();
+	
+	return CRC32_NULL;
+}

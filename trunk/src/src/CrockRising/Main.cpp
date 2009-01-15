@@ -26,7 +26,7 @@ int WINAPI WinMain(
 {
 	int loopResult;
 
-	// Création du System (pas obligé à priori)
+	// Création du System
 	System::GetInstance();
 	
 	// On indique le niveau de démarrage

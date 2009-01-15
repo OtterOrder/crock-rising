@@ -1,5 +1,7 @@
 #include	"Game/Level.h"
 
+#include	"LevelStart.h"
+
 //******************************************************************
 
 /***********************************************************
@@ -11,8 +13,8 @@ Level* Level::NewLevel( crc32 levelID )
 {
 	switch( levelID )
 	{
-		//case LEVEL_lol:		return new LevelLol( levelID );
+		case LEVEL_start:	return new LevelStart( levelID );
 		
-		default:		return new Level( levelID );
+		default:			return new Level( levelID );
 	}
 }

@@ -9,6 +9,8 @@
 //******************************************************************
 
 class Game;
+class Renderer;
+class InputManager;
 
 class System : public Singleton< System >
 {
@@ -24,7 +26,7 @@ public:
 	void	Initialize	( void );	// Initialise l'appli
 	int		MainLoop	( void );	// Boucle principale de l'appli
 
-	static LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );// Fonction de rappel des événements
+	static LRESULT CALLBACK	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );// Fonction de rappel des événements
 
 
 protected:
@@ -32,16 +34,23 @@ protected:
 	// =========================================================
 	// Méthodes protégées
 	
-	HRESULT		InitWindow		( void ); //Initialisation fenêtre windows
+	System				( void );		// Constructeur
+	~System				( void );		// Destructeur
+	
+	HRESULT	InitWindow	( void );		// Initialisation fenêtre windows
 
 	
 	// =========================================================
 	// Données protégées
 	
-	HINSTANCE	m_Instance;		// Instance de l'application
-	HICON		m_Icon;
+	static bool		s_IsInitialized;	// Si le System est initialisé
 
-	Game*		m_Game;			// Le jeu
+	Game*			m_Game;				// Le jeu
+	Renderer*		m_Renderer;			// Moteur de rendu
+	InputManager*	m_InputManager;		// Gestionnaire d'inputs
+
+	HINSTANCE		m_Instance;			// Instance de l'application
+	HICON			m_Icon;
 
 };
 

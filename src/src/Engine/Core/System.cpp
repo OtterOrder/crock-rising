@@ -6,16 +6,51 @@
 
 //******************************************************************
 
+bool System::s_IsInitialized = false;
+
+/***********************************************************
+ * Constructeur.
+ **********************************************************/
+System::System( void )
+{
+	s_IsInitialized	= false;
+	
+	m_Game			= NULL;
+	m_Renderer		= NULL;
+	m_InputManager	= NULL;
+}
+
+/***********************************************************
+ * Destructeur.
+ **********************************************************/
+System::~System( void )
+{
+	if( s_IsInitialized )
+	{
+		// On détruit tous les singletons
+		m_Game->Destroy();
+		m_Renderer->Destroy();
+		m_InputManager->Destroy();
+	}
+}
+
 /***********************************************************
  * Initialise l'appli.
  **********************************************************/
 void System::Initialize	( void )
 {
-	// On récupère les instances de tous les singletons pour
-	// un traitement plus rapide dans la boucle principale
-	m_Game	= Game::GetInstance();
+	// On récupère les instances de tous les singletons pour un
+	// traitement plus rapide dans la boucle principale. Par ailleurs,
+	// ça permet d'être sûr que tous les singletons ont une instance
+	// créée avant le lancement du jeu.
+	
+	m_Game			= Game::GetInstance();
+	m_Renderer		= Renderer::GetInstance();
+	m_InputManager	= InputManager::GetInstance();
 
 	//TODO
+
+	s_IsInitialized = true;
 }
 
 /***********************************************************
@@ -23,6 +58,12 @@ void System::Initialize	( void )
  **********************************************************/
 int System::MainLoop( void )
 {
+	if( !s_IsInitialized )
+	{
+		printf( "System non intialisé." );
+		return -1;
+	}
+	
 	bool	bGotMsg;
 	MSG		msg;
 	
@@ -35,38 +76,33 @@ int System::MainLoop( void )
 	if(FAILED(InitWindow()))
 		return 0;
 	
-	Renderer::GetInstance()->SetCamera( &cam );
+	m_Renderer->SetCamera( &cam );
 
-    while( WM_QUIT != msg.message  )
+    while( WM_QUIT != msg.message )
     {
-        // Use PeekMessage() if the app is active, so we can use idle time to
+		// Use PeekMessage() if the app is active, so we can use idle time to
         // render the scene. Else, use GetMessage() to avoid eating CPU time.
-
-        bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
-
-
-        if( bGotMsg )
-        {
-            // Translate and dispatch the message
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
-
-        }
-        else
-        {
-			//Update de la scene
-
-
-			//Rendu de de la scene
-			Renderer::GetInstance()->Run();
-            
-        }
-
 		
-
+		bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
+		
 		// Update des inputs
-		InputManager::GetInstance()->Update();
-    }
+		m_InputManager->Update();
+		
+		if( bGotMsg )
+		{
+			// Translate and dispatch the message
+			TranslateMessage( &msg );
+			DispatchMessage( &msg );
+		}
+		else
+		{
+			//Update de la scene
+			m_Game->Update();
+			
+			//Rendu de de la scene
+			m_Renderer->Run();
+		}
+	}
 	return (INT)msg.wParam;
 }
 
@@ -82,6 +118,11 @@ int System::MainLoop( void )
  **********************************************************/
 LRESULT CALLBACK System::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
+	if( !s_IsInitialized )
+	{
+		return DefWindowProc( hWnd, uMsg, wParam, lParam );
+	}
+	
 	// Pour la gestion des erreurs
 	LRESULT lResult;
 	

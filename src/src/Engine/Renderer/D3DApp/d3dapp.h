@@ -1,19 +1,16 @@
-//-----------------------------------------------------------------------------
-// File: D3DApp.h
-//
-// Desc: Application class for the Direct3D samples framework library.
-//-----------------------------------------------------------------------------
-#ifndef D3DAPP_H
-#define D3DAPP_H
+#pragma once
 
-#include "D3DUtil.h"  // for the camera
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
+#include "D3DUtil.h"
 #include "D3DEnumeration.h"  
 #include "D3DSettings.h"  
 #include "d3dfont.h"
 
-//-----------------------------------------------------------------------------
-// Error codes
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Codes d'erreurs                                                           //
+//===========================================================================//
 enum APPMSGTYPE { MSG_NONE, MSGERR_APPMUSTEXIT, MSGWARN_SWITCHEDTOREF };
 
 #define D3DAPPERR_NODIRECT3D          0x82000001
@@ -30,30 +27,18 @@ enum APPMSGTYPE { MSG_NONE, MSGERR_APPMUSTEXIT, MSGWARN_SWITCHEDTOREF };
 #define D3DAPPERR_RESETFAILED         0x8200000c
 #define D3DAPPERR_NULLREFDEVICE       0x8200000d
 
-
-
-
-//-----------------------------------------------------------------------------
-// Name: class CD3DApplication
-// Desc: A base class for creating sample D3D9 applications. To create a simple
-//       Direct3D application, simply derive this class into a class (such as
-//       class CMyD3DApplication) and override the following functions, as 
-//       needed:
-//          OneTimeSceneInit()    - To initialize app data (alloc mem, etc.)
-//          InitDeviceObjects()   - To initialize the 3D scene objects
-//          FrameMove()           - To animate the scene
-//          Render()              - To render the scene
-//          DeleteDeviceObjects() - To cleanup the 3D scene objects
-//          FinalCleanup()        - To cleanup app data (for exitting the app)
-//          MsgProc()             - To handle Windows messages
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Classe bas-niveau D3D Application                                         //
+//===========================================================================//
 class CD3DApplication
 {
 protected:
     CD3DEnumeration   m_d3dEnumeration;
     CD3DSettings      m_d3dSettings;
 
-    // Internal variables for the state of the app
+	//===========================================================================//
+    // Variables internes pour les différents états								 //
+	//===========================================================================//
     bool              m_bWindowed;
     bool              m_bActive;
     bool              m_bDeviceLost;
@@ -63,96 +48,106 @@ protected:
     bool              m_bDeviceObjectsInited;
     bool              m_bDeviceObjectsRestored;
 
-    // Internal variables used for timing
+	//===========================================================================//
+    // Variables internes pour le timing									     //
+	//===========================================================================//
     bool              m_bFrameMoving;
     bool              m_bSingleStep;
 
-    // Internal error handling function
-    HRESULT DisplayErrorMsg( HRESULT hr, DWORD dwType );
-
-    // Internal functions to manage and render the 3D scene
-    static bool ConfirmDeviceHelper( D3DCAPS9* pCaps, 
-        VertexProcessingType vertexProcessingType, D3DFORMAT backBufferFormat );
-    void    BuildPresentParamsFromSettings();
-    bool    FindBestWindowedMode( bool bRequireHAL, bool bRequireREF );
-    bool    FindBestFullscreenMode( bool bRequireHAL, bool bRequireREF );
-    HRESULT ChooseInitialD3DSettings();
-    HRESULT Initialize3DEnvironment();
-    HRESULT HandlePossibleSizeChange();
-    HRESULT Reset3DEnvironment();
-    HRESULT ToggleFullscreen();
-    HRESULT ForceWindowed();
-    HRESULT UserSelectNewDevice();
-    void    Cleanup3DEnvironment();
-    HRESULT Render3DEnvironment();
-    virtual HRESULT AdjustWindowForChange();
-    virtual void UpdateStats();
+	//===========================================================================//
+    // Objets principaux pour créer et rendre la scène 3D                        //
+	//===========================================================================//
+    D3DPRESENT_PARAMETERS	m_d3dpp;			 // Paramètres pour la création/reset du device
+    HWND              		m_hWnd;              // Main app Windows
+    HWND              		m_hWndFocus;         // Focus Windows
+    HMENU             		m_hMenu;             // Menu Windows
+    LPDIRECT3D9       		m_pD3D;              // Object principal D3D
 
 protected:
-    // Main objects used for creating and rendering the 3D scene
-    D3DPRESENT_PARAMETERS m_d3dpp;         // Parameters for CreateDevice/Reset
-    HWND              m_hWnd;              // The main app window
-    HWND              m_hWndFocus;         // The D3D focus window (usually same as m_hWnd)
-    HMENU             m_hMenu;             // App menu bar (stored here when fullscreen)
-    LPDIRECT3D9       m_pD3D;              // The main D3D object
+    DWORD             		m_dwCreateFlags;     // Indique si software ou hardware vertex processing
+    DWORD             		m_dwWindowStyle;     // Sauvegarde du style de la fenêtre
+    RECT              		m_rcWindowBounds;    // Sauvegarde de la zone de la fenêtre
+    RECT              		m_rcWindowClient;    // Sauvegarde de la taille de la fenêtre
+
 public:
-    LPDIRECT3DDEVICE9 m_pd3dDevice;        // The D3D rendering device
-    D3DCAPS9          m_d3dCaps;           // Caps for the device
-    D3DSURFACE_DESC   m_d3dsdBackBuffer;   // Surface desc of the backbuffer
+    LPDIRECT3DDEVICE9 		m_pd3dDevice;        // Pointeur vers le device de rendu
+    D3DCAPS9          		m_d3dCaps;           // Capabilities du device
+    D3DSURFACE_DESC   		m_d3dsdBackBuffer;   // Description de la surface du backbuffer
+	CFirstPersonCamera 	    m_Camera;
+
+
+    //===========================================================================//
+    // Variables temporelles (public car utile partout)                          //
+	//===========================================================================//
+    FLOAT             m_fTime;             		// Le temps en seconde
+    FLOAT             m_fElapsedTime;      		// Temps écoulé depuis la frame précédente
+    FLOAT             m_fFPS;              		// Frame rate instantané
+    TCHAR             m_strDeviceStats[90];		// String pour stocker les stats du device
+    TCHAR             m_strFrameStats[90]; 		// String pour stocker les stats des frames
+	CD3DFont*         m_pStatsFont;        		// Font pour les framestats
 
 protected:
-    DWORD             m_dwCreateFlags;     // Indicate sw or hw vertex processing
-    DWORD             m_dwWindowStyle;     // Saved window style for mode switches
-    RECT              m_rcWindowBounds;    // Saved window bounds for mode switches
-    RECT              m_rcWindowClient;    // Saved client area size for mode switches
+    //===========================================================================//
+    // Variables propre à l'application                                          //
+	//===========================================================================//
+    TCHAR*            m_strWindowTitle;    			// Titre de l'application Windows
+    DWORD             m_dwCreationWidth;   			// Hauteur pour créer la fenêtre
+    DWORD             m_dwCreationHeight;  			// Largeur pour créer la fenêtre
+    bool              m_bShowCursorWhenFullscreen;  // Pour savoir si l'on montre le curseur en fullscreen
+    bool              m_bClipCursorWhenFullscreen;  // Pour savoir si l'on limite la position du curseur en fullscreen
+    bool              m_bStartFullscreen;			// Pour savoir si on commence l'application en fullscreen
 
-public: 
-    // Variables for timing ( made public, needed everywhere ) 
-    FLOAT             m_fTime;             // Current time in seconds
-    FLOAT             m_fElapsedTime;      // Time elapsed since last frame
-    FLOAT             m_fFPS;              // Instanteous frame rate
-    TCHAR             m_strDeviceStats[90];// String to hold D3D device stats
-    TCHAR             m_strFrameStats[90]; // String to hold frame stats
-	CD3DFont*         m_pStatsFont;        // Font pour les framestats
-
-protected:
-    // Overridable variables for the app
-    TCHAR*            m_strWindowTitle;    // Title for the app's window
-    DWORD             m_dwCreationWidth;   // Width used to create window
-    DWORD             m_dwCreationHeight;  // Height used to create window
-    bool              m_bShowCursorWhenFullscreen; // Whether to show cursor when fullscreen
-    bool              m_bClipCursorWhenFullscreen; // Whether to limit cursor pos when fullscreen
-    bool              m_bStartFullscreen;  // Whether to start up the app in fullscreen mode
-
-    // Overridable functions for the 3D scene created by the app
+	//===========================================================================//
+    // Callback à dériver                                                        //
+	//===========================================================================//
     virtual HRESULT ConfirmDevice(D3DCAPS9*,DWORD,D3DFORMAT)   { return S_OK; }
     virtual HRESULT BeforeCreateDevice()                       { return S_OK; }
     virtual HRESULT OnCreateDevice()                           { return S_OK; }
     virtual HRESULT OnResetDevice()                            { return S_OK; }
-    virtual HRESULT FrameMove()                                { return S_OK; }
+    virtual HRESULT FrameMove(float fElapsedTime)              { return S_OK; }
     virtual HRESULT Render()                                   { return S_OK; }
     virtual HRESULT OnLostDevice()                             { return S_OK; }
     virtual HRESULT OnDestroyDevice()                          { return S_OK; }
     virtual HRESULT AfterDestroyDevice()                       { return S_OK; }
 
+	//===========================================================================//
+    // Fonction de gestion d'erreur												 //
+	//===========================================================================//
+    HRESULT DisplayErrorMsg( HRESULT hr, DWORD dwType );
+
+	//===========================================================================//
+    // Fonctions internes pour gérer et rendre la scene 3D                       //
+	//===========================================================================//
+    static bool 	ConfirmDeviceHelper (D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType, D3DFORMAT backBufferFormat);
+    void    		BuildPresentParamsFromSettings ();
+    bool    		FindBestWindowedMode (bool bRequireHAL, bool bRequireREF);
+    bool    		FindBestFullscreenMode ( bool bRequireHAL, bool bRequireREF);
+    HRESULT 		ChooseInitialD3DSettings ();
+    HRESULT 		Initialize3DEnvironment ();
+    HRESULT 		HandlePossibleSizeChange ();
+    HRESULT 		Reset3DEnvironment ();
+    HRESULT 		ToggleFullscreen ();
+    HRESULT 		ForceWindowed ();
+    HRESULT 		UserSelectNewDevice ();
+    void    		Cleanup3DEnvironment ();
+    HRESULT 		Render3DEnvironment ();
+    virtual 		HRESULT AdjustWindowForChange ();
+    virtual void	UpdateStats ();
+
 public:
-    // Functions to create, run, pause, and clean up the application
-    virtual HRESULT Create( HINSTANCE hInstance, WNDCLASS wndClass );
-    virtual void     Run();
-    virtual LRESULT EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    virtual void    Pause( bool bPause );
-    virtual         ~CD3DApplication()                         { }
+	//===========================================================================//
+    // Fonctions pour créer, lancer, et mettre en pause l'application
+	//===========================================================================//
+    virtual HRESULT 	Create( HINSTANCE hInstance, WNDCLASS wndClass );
+    virtual void    	Run();
+	virtual void		Close();
+    virtual LRESULT 	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+    virtual void    	Pause( bool bPause );
+    virtual         	~CD3DApplication() { }
 
-    // Internal constructor
-    CD3DApplication();
-
-	//CD3DCamera  m_Camera;                // Camera used for 3D scene
+    CD3DApplication(); // Constructeur par défaut
 
 };
-
-
-
-#endif
 
 
 

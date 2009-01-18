@@ -1,27 +1,31 @@
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
 #include "Renderer.h"
-#include "D3DApp/d3dfont.h"
 
-
-////////////////////////////////////////
-//VARIABLES GLOBALES TEMPORAIRES (tests)
-////////////////////////////////////////
-
+//===========================================================================//
+// FVF par défaut                                                            //
+//===========================================================================//
 struct DEFAULT_VERTEX
 {
 	FLOAT x,y,z;
 	DWORD COLOR;
 };
-
 #define DEFAULT_FVF (D3DFVF_XYZ|D3DFVF_DIFFUSE)
 
+Renderer::Renderer()
+{
+	m_pGridVB=NULL;
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]=NULL;
+	}
+	
+}
 
-
-LPDIRECT3DVERTEXBUFFER9 g_pVB=NULL;
-
-////////////////////////////////////////////
-//FIN VARIABLES GLOBALES
-///////////////////////////////////////////
-
+//===========================================================================//
+// Callback appelé avant la création du device                                //
+//===========================================================================//
 HRESULT Renderer::BeforeCreateDevice()
 {
 	m_pStatsFont = new CD3DFont( _T("Arial"), 12, D3DFONT_BOLD );
@@ -30,195 +34,186 @@ HRESULT Renderer::BeforeCreateDevice()
 
 	return S_OK;
 
-
 }
 
+//===========================================================================//
+// Callback appelé juste après création du device                            //
+//===========================================================================//
 HRESULT Renderer::OnCreateDevice()
 {
-
 	HRESULT hr;
 
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
         return hr;
 
+	m_Camera.SetViewParams(&D3DXVECTOR3(0.f, 50.f, -100.f), &D3DXVECTOR3(0.f, 0.f, 0.f));
 
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]->InitObject();
+	}
+	
 	return S_OK;
-
 
 }
 
-Mesh* g_Mesh = NULL;
-
+//===========================================================================//
+// Callback appelé juste après le reset du device                            //
+//===========================================================================//
 HRESULT Renderer::OnResetDevice()
 {
-	
-
 	m_pStatsFont->RestoreDeviceObjects();
-
 	m_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
-	//m_pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
+	m_Camera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.0f, 4000.f);
 
 	DEFAULT_VERTEX sommets[]=
 	{
-	{-100.0f, 0.0f, 100.0f, 0xffff0000}, 
-	{100.0f, 0.0f, 100.0f, 0xffff0000},
-	{-100.0f, 0.0f, 0.0f, 0xffff0000}, 
-	{100.0f, 0.0f, 0.0f, 0xffff0000}, 
-	{-100.0f, 0.0f, -100.0f, 0xffff0000}, 
-	{100.0f, 0.0f, -100.0f, 0xffff0000}, 
+	{-20.f, 0.f, 20.f, 0x00000000}, 
+	{20.f, 0.f, 20.f, 0x00000000},
+	{-20.f, 0.f, 10.f, 0x00000000}, 
+	{20.f, 0.f, 10.f, 0x00000000}, 
+	{-20.f, 0.f, 0.f, 0x00000000}, 
+	{20.f, 0.f, 0.f, 0x00000000}, 
+	{-20.f, 0.f, -10.f, 0x00000000}, 
+	{20.f, 0.f, -10.f, 0x00000000}, 
+	{-20.f, 0.f, -20.f, 0x00000000}, 
+	{20.f, 0.f, -20.f, 0x00000000}, 
 
-	{-100.0f, 0.0f, 100.0f, 0xffff0000},
-	{-100.0f, 0.0f, -100.0f, 0xffff0000}, 
-	{100.0f, 0.0f, 100.0f, 0xffff0000},
-	{100.0f, 0.0f, -100.0f, 0xffff0000}, 
-	{0.0f, 0.0f, 100.0f, 0xffff0000}, 
-	{0.0f, 0.0f, -100.0f, 0xffff0000} 
-	
-	
+	{20.f, 0.f, -20.f, 0x00000000}, 
+	{20.f, 0.f, 20.f, 0x00000000},
+	{10.f, 0.f, -20.f, 0x00000000}, 
+	{10.f, 0.f, 20.f, 0x00000000}, 
+	{0.0f, 0.f, -20.f, 0x00000000}, 
+	{0.0f, 0.0f, 20.f, 0x00000000}, 
+	{-10.f, 0.f, -20.f, 0x00000000}, 
+	{-10.f, 0.f, 20.f, 0x00000000}, 
+	{-20.f, 0.f, -20.f, 0x00000000}, 
+	{-20.f, 0.f, 20.f, 0x00000000}, 
 	};
 
 	if(FAILED(m_pd3dDevice->CreateVertexBuffer(
-		12*sizeof(DEFAULT_VERTEX),
-		NULL,
+		20*sizeof(DEFAULT_VERTEX),
+		D3DUSAGE_WRITEONLY,
 		DEFAULT_FVF,
 		D3DPOOL_DEFAULT,
-		&g_pVB,
+		&m_pGridVB,
 		NULL))
 	)
 		return E_FAIL;
 
 	void * psommets;
 
-	if(FAILED(g_pVB->Lock(0, sizeof(sommets), (void **)&psommets, 0)))
+	if(FAILED(m_pGridVB->Lock(0, sizeof(sommets), (void **)&psommets, 0)))
 		return E_FAIL;
 
 	memcpy(psommets,sommets,sizeof(sommets));
 
-	g_pVB->Unlock();
+	m_pGridVB->Unlock();
 
-	if (!g_Mesh)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
-		g_Mesh = new Mesh;
-		g_Mesh->Load(20);
+		m_ListObj[i]->InitDeviceData();
 	}
-	else
-		g_Mesh->FillD3DBuffers ();
+	
+	return S_OK;
+}
 
+//===========================================================================//
+// Callback animation						                                 //
+//===========================================================================//
+HRESULT Renderer::FrameMove(float fElapsedTime)
+{
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]->FrameMove(fElapsedTime);
+	}
 	return S_OK;
 
 }
 
-Point2f g_MousePosition		(0.f, 0.f);
-Point2f g_OldMousePosition	(0.f, 0.f);
-
-float g_X_Angle = 0.f;
-float g_Y_Angle = 0.f;
-
+//===========================================================================//
+// Callback appelé à chaque frame pour le rendu                              //
+//===========================================================================//
 HRESULT Renderer::Render()
 {
-	g_MousePosition = InputManager::GetInstance()->GetMousePosition();
-	
     m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
-	
-	D3DXMATRIX matrixTemp;
-	D3DXMatrixIdentity(&matrixTemp);
-	m_pd3dDevice->SetTransform(D3DTS_WORLD, &matrixTemp);
+	D3DXMATRIX MatWorld;
+	D3DXMatrixIdentity(&MatWorld);
+	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, m_Camera.GetViewMatrix());
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION,  m_Camera.GetProjMatrix());
 
-	//m_Camera->SetPosition( Vector3f(0.0f, 2.0f, -10.0f) );
-	//*
-	Vector3f CamPosition = m_Camera->GetPosition ();
-	CamPosition.x += (g_MousePosition.x - g_OldMousePosition.x)/10.f;
-	CamPosition.y += (g_MousePosition.y - g_OldMousePosition.y)/10.f;
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]->SetTransform(&MatWorld, m_Camera.GetViewMatrix(), m_Camera.GetProjMatrix(), *m_Camera.GetEyePt());
+		m_ListObj[i]->Draw();
+	}
 
-	m_Camera->SetPosition (CamPosition);
-	//*/
-
-	/*g_X_Angle = (g_MousePosition.x - g_OldMousePosition.x)/100.f;
-	g_Y_Angle = (g_MousePosition.y - g_OldMousePosition.y)/100.f;
-
-
-	Vector3f CamPosition = m_Camera->GetPosition ();
-
-	CamPosition.x += sin (g_X_Angle);
-	CamPosition.z += cos (g_X_Angle);
-	CamPosition.y += sin (g_Y_Angle);
-
-
-	m_Camera->SetPosition (CamPosition);*/
-
-	D3DXMatrixLookAtLH( &matrixTemp, &m_Camera->GetPosition(), 
-					    &m_Camera->GetTarget(), &m_Camera->GetUp() );
-	m_pd3dDevice->SetTransform(D3DTS_VIEW, &matrixTemp);
-
-	D3DXMatrixPerspectiveFovLH(&matrixTemp, m_Camera->GetFOV(), m_Camera->GetRatio(), 
-											m_Camera->GetZNear(),m_Camera->GetZFar() );
-	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matrixTemp);
+	m_pd3dDevice->SetVertexShader(NULL);
+	m_pd3dDevice->SetPixelShader(NULL);
 
 	m_pd3dDevice->BeginScene();
 
-		m_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(DEFAULT_VERTEX));
-
 		m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
-		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 6); 
+		m_pd3dDevice->SetStreamSource(0, m_pGridVB, 0, sizeof(DEFAULT_VERTEX));
+
+		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 10);
 		
+		//Affichage information frames
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
-
-
-		if (g_Mesh && g_Mesh->m_pVB)
-		{
-			m_pd3dDevice->SetStreamSource(0, g_Mesh->m_pVB, 0, sizeof(Vertex));
-
-			m_pd3dDevice->SetFVF(Mesh_FVF);
-
-			m_pd3dDevice->SetIndices ( g_Mesh->m_pIB );
-
-			m_pd3dDevice->DrawIndexedPrimitive(	D3DPT_TRIANGLELIST, 0, 0,
-												g_Mesh->m_iNbVertices, 0, g_Mesh->m_iNbIndex/3);
-		}
-
+	
 	m_pd3dDevice->EndScene();
 
-	
-	g_OldMousePosition = g_MousePosition;
-
 
 	return S_OK;
-
-
 }
 
+//===========================================================================//
+// Callback appelé à chaque fois que l'on perd le device                     //
+//===========================================================================//
 HRESULT Renderer::OnLostDevice()
 {
-
 	m_pStatsFont->InvalidateDeviceObjects();
-	g_pVB->Release();
+	m_pGridVB->Release();
 
-	g_Mesh->ReleaseD3DBuffers ();
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]->DeleteDeviceData();
+	}
 
 	return S_OK;
-
-
 }
 
-
+//===========================================================================//
+// Callback appelé à chaque fois que l'on détruit le device                  //
+//===========================================================================//
 HRESULT Renderer::OnDestroyDevice()
 {
-
 	m_pStatsFont->DeleteDeviceObjects();
 
-	delete g_Mesh;
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		m_ListObj[i]->DeleteData();
+	}
+
 
 	return S_OK;
-
-
 }
 
-void Renderer::SetCamera( Camera* cam )
+//===========================================================================//
+// Callback appelé après avoir détruit le device                             //
+//===========================================================================//
+HRESULT Renderer::AfterDestroyDevice()
 {
-	//Version de test
-	m_Camera = cam; //à verifier; à ne surtout pas détruire pour l'instant
+	for(int i=0;i < (int)m_ListObj.size(); i++)
+	{
+		delete m_ListObj[i];
+	}
+
+	return S_OK;
 }

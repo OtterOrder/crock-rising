@@ -1,15 +1,12 @@
-#ifndef		_Resource_H
-#define		_Resource_H
+#pragma once
 
-//******************************************************************
-
-#include	<d3dx9.h>
-#include	<stdio.h>
-#include	"Core/Types/Crc32.h"
-#include	<stdio.h>
-
-//******************************************************************
-// Defines pour les ressources
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
+#include <d3dx9.h>
+#include <stdio.h>
+#include <string>
+#include "../Core/Types/Crc32.h"
 
 enum ResourceResult
 {
@@ -18,23 +15,50 @@ enum ResourceResult
 
 };
 
-//******************************************************************
-
+//===========================================================================//
+// Classe générique d'une resource						                     //
+//===========================================================================//
 class Resource
 {
-	public:
-		
-		Resource			( void );				// Constructeur
-		virtual ~Resource	( void ){}				// Destructeur
+public :
+    Resource();
+    virtual ~Resource() = 0;
 
-		crc32	GetCrc32	( void ) const;			// Donne le CRC32 de la ressource
+	//----------------------------------------------------------
+    // Fonction virtuelle de chargement
+    //----------------------------------------------------------
+	virtual HRESULT Load (const char * sPath)=0; 
 
+    //----------------------------------------------------------
+    // Renvoie le nom associé à la ressource
+    //----------------------------------------------------------
+    const crc32& GetCRC32() const;
 
-	protected:
-		
-		crc32			m_Crc32;		// CRC32 de la ressource
-		unsigned int	m_Flags;		// Flags de la ressource
+    //----------------------------------------------------------
+    // Ajoute une référence sur la ressource
+    //----------------------------------------------------------
+    void AddRef();
+
+    //----------------------------------------------------------
+    // Retire une référence sur la ressource
+    //----------------------------------------------------------
+    int Release();
+
+private :
+    //----------------------------------------------------------
+    // Amis
+    //----------------------------------------------------------
+    friend class ResourceManager;
+
+    //----------------------------------------------------------
+    // - Copie interdite -
+    //----------------------------------------------------------
+    Resource(Resource&);
+    void operator =(Resource&);
+
+    //----------------------------------------------------------
+    // Données membres
+    //----------------------------------------------------------
+    crc32		m_Crc32;		// CRC32 de la ressource
+    int         m_RefCount;     // Compteur de références
 };
-
-//******************************************************************
-#endif		// _Resource_H

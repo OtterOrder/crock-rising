@@ -385,14 +385,6 @@
 					RelativePath=".\Resources\Anim.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Resources\AnimManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Resources\AnimManager.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Mesh"
@@ -413,14 +405,6 @@
 					RelativePath=".\Resources\MeshLoader.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Resources\MeshManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Resources\MeshManager.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Texture"
@@ -433,12 +417,20 @@
 					RelativePath=".\Resources\Texture.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Shader"
+				>
 				<File
-					RelativePath=".\Resources\TextureManager.cpp"
+					RelativePath=".\Resources\default.fx"
 					>
 				</File>
 				<File
-					RelativePath=".\Resources\TextureManager.h"
+					RelativePath=".\Resources\Shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Resources\Shader.h"
 					>
 				</File>
 			</Filter>

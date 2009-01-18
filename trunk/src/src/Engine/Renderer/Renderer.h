@@ -1,42 +1,42 @@
-#ifndef		_Renderer_H
-#define		_Renderer_H
+#pragma once
 
-//******************************************************************
-
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
 #include "D3DApp/d3dapp.h"
-#include "Core/Singleton.h"
-#include "Objects/Camera.h"
+#include "../Core/Singleton.h"
+#include "../Objects/Object.h"
+#include "../Objects/Camera.h"
+#include <vector>
 
-#include "Core/Inputs/InputManager.h"
-#include "Resources/Mesh.h"
 
+//===========================================================================//
+// Classe de base pour créer une application DX                              //
+//===========================================================================//
 class Renderer : public Singleton< Renderer >, public CD3DApplication 
 {
-	// Indispensable car Singleton doit pouvoir accéder aux
-	// constructeur/destructeur, qui sont en protected.
 	friend class Singleton< Renderer >;
 
-	public:
+	Renderer();
+	virtual ~Renderer() {}
 
-		//----------------------------------------------------------
-        // Callback DirectX
-        //----------------------------------------------------------
+public:
+    //===========================================================================//
+	// Callback DirectX							                                 //
+	//===========================================================================//
+	HRESULT BeforeCreateDevice();
+	HRESULT OnCreateDevice();                           
+	HRESULT OnResetDevice();
+	HRESULT FrameMove(float fElapsedTime);
+	HRESULT Render();                                   
+	HRESULT OnLostDevice();
+	HRESULT OnDestroyDevice();                          
+	HRESULT AfterDestroyDevice();
 
-		HRESULT BeforeCreateDevice();
-		HRESULT OnCreateDevice();                           
-		HRESULT OnResetDevice();
-		HRESULT Render();                                   
-		HRESULT OnLostDevice();
-		HRESULT OnDestroyDevice();                          
-		HRESULT AfterDestroyDevice()                       { return S_OK; }
-
-		void SetCamera( Camera* cam );
-
-	private:
-		Camera* m_Camera; //Une Copie de la camera
-
-
+protected:
+	//===========================================================================//
+	// Données membres protégées				                                 //
+	//===========================================================================//
+	LPDIRECT3DVERTEXBUFFER9 m_pGridVB;
+	std:: vector <Object *> m_ListObj;
 };
-
-//******************************************************************
-#endif		// _Renderer_H

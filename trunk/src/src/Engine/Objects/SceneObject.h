@@ -1,45 +1,68 @@
-#ifndef		_SceneObject_H
-#define		_SceneObject_H
+#pragma once
 
-//******************************************************************
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
+#include "Core/Types/Crc32.h"
+#include "Object.h"
+#include "../Resources/ResourceManager.h"
+#include "../Resources/Texture.h"
+#include "../Resources/Shader.h"
+#include "../Resources/Mesh.h"
+#include <map>
 
-#include	"Core/Types/Crc32.h"
-#include	"Object.h"
-#include	<vector>
+enum types_tex
+{
+	MESHTEX,
+	NORMALMAP,
+	BUMPMAP,
+	DISPLACEMENTMAP
+};
 
-using namespace std;
-
-//******************************************************************
-
+//===========================================================================//
+// Classe pour un objet affichable dans la scène 3D                          //
+//===========================================================================//
 class SceneObject : public Object
 {
 public:
+	SceneObject(const crc32& mesh, const crc32& Tex, const D3DXVECTOR3& Position);
 	SceneObject();
-	SceneObject( crc32 Mesh, crc32 Texture, Vector3f Position, Vector3f Rotation, Vector3f Scale);
+	virtual ~SceneObject();
+
+	//===========================================================================//
+	// Gestion apparence des objets											     //
+	//===========================================================================//
+	void			SetTexture(const crc32& Tex, types_tex Type);	// Ajout d'une texture
+	void			SetShader(const crc32& Shad); 
 
 protected:
-	// Rotation d'un objet de scene
-	void			SetRotation( Vector3f rotation ){	m_Rotation = rotation;	}
-	Vector3f		GetRotation()					{	return m_Rotation;		}
 
-	// Changement d'echelle d'un objet de scene
-	void			SetScale( Vector3f scale )		{	m_Scale = scale;		}
-	Vector3f		GetScale()						{	return m_Scale;			}
-
-	// Gestion des textures des objets
-	unsigned int	GetNbTexture()					{	return unsigned int(m_Texture.size());	}
-	void			AddTexture( crc32 CrcTex );		// Ajout d'une texture au tableau
-	void			ReleaseTexture();				// Vide le tableau des textures
+	//===========================================================================//
+	// Utilisation de l'objet													 //
+	//===========================================================================//
+	void	InitObject();
+	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
+	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
+	void	SetTransform(const D3DXMATRIX* world);
+	void	InitDeviceData();
+	void	FrameMove(float fElapsedTime);
+	void	Draw();
+	void	DeleteDeviceData();
+	void	DeleteData();
 	
 private:
-	Vector3f m_Rotation;
-	Vector3f m_Scale;
 
-	unsigned int	m_uNbTexture;
-	vector<crc32>	m_Texture;
+	//===========================================================================//
+	// Types												                     //
+	//===========================================================================//
+	typedef std::map<types_tex, crc32> TTextureMap;
 
+	//===========================================================================//
+	// Données membres												             //
+	//===========================================================================//
 	crc32 m_Mesh;
+	crc32 m_Shader;
+	TTextureMap	m_MapTexture;
+	
 };
 
-//******************************************************************
-#endif		// _SceneObject_H

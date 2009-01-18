@@ -1,9 +1,8 @@
-//-----------------------------------------------------------------------------
-// File: D3DApp.cpp
-//
-// Desc: Application class for the Direct3D samples framework library.
-//-----------------------------------------------------------------------------
 #define STRICT
+
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -15,22 +14,16 @@
 #include "D3DEnumeration.h"
 #include "D3DSettings.h"
 #include "D3DApp.h"
-//#include "resource.h"
 
-
-
-//-----------------------------------------------------------------------------
-// Global access to the app (needed for the global WndProc())
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Accès global à l'application                                              //
+//===========================================================================//
 static CD3DApplication* g_pD3DApp = NULL;
 
 
-
-
-//-----------------------------------------------------------------------------
-// Name: CD3DApplication()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Constructeur par défaut                                                   //
+//===========================================================================//
 CD3DApplication::CD3DApplication()
 {
     g_pD3DApp           = this;
@@ -59,32 +52,25 @@ CD3DApplication::CD3DApplication()
     m_strFrameStats[0]  = _T('\0');
 	m_pStatsFont		= NULL;
 
-    m_strWindowTitle    = _T("D3D9 Application");
+    m_strWindowTitle    = _T("DIR Graphic Engine");
     m_dwCreationWidth   = 800;
     m_dwCreationHeight  = 600;
     m_bShowCursorWhenFullscreen = false;
     m_bStartFullscreen  = false;
 
-    Pause( true ); // Pause until we're ready to render
+    Pause( true ); // Pause jusqu'à ce que l'on soit prêt pour le rendu
 
-    // When m_bClipCursorWhenFullscreen is true, the cursor is limited to
-    // the device window when the app goes fullscreen.  This prevents users
-    // from accidentally clicking outside the app window on a multimon system.
-    // This flag is turned off by default for debug builds, since it makes 
-    // multimon debugging difficult.
 #if defined(_DEBUG) || defined(DEBUG)
     m_bClipCursorWhenFullscreen = false;
 #else
     m_bClipCursorWhenFullscreen = true;
 #endif
+
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Name: ConfirmDeviceHelper()
-// Desc: Static function used by D3DEnumeration
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Confirmation des paramètres de l'énumération                              //
+//===========================================================================//
 bool CD3DApplication::ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType, 
                          D3DFORMAT backBufferFormat )
 {
@@ -99,7 +85,7 @@ bool CD3DApplication::ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType
     else if (vertexProcessingType == PURE_HARDWARE_VP)
         dwBehavior = D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE;
     else
-        dwBehavior = 0; // TODO: throw exception
+        dwBehavior = 0; // TODO: exception
     
     return SUCCEEDED( g_pD3DApp->ConfirmDevice( pCaps, dwBehavior, backBufferFormat ) );
 }
@@ -107,22 +93,20 @@ bool CD3DApplication::ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Create()
-// Desc:
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Création de la fenêtre, création du device                                //
+//===========================================================================//
 HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
 {
     HRESULT hr;
 
-    // Create the Direct3D object
+    // Création de l'objet D3D
     m_pD3D = Direct3DCreate9( D3D_SDK_VERSION );
     if( m_pD3D == NULL )
         return DisplayErrorMsg( D3DAPPERR_NODIRECT3D, MSGERR_APPMUSTEXIT );
 
-    // Build a list of Direct3D adapters, modes and devices. The
-    // ConfirmDevice() callback is used to confirm that only devices that
-    // meet the app's requirements are considered.
+	//Création d'une liste d'adapters, modes, et devices. Le callback ComfirmDevice()
+	//est utilisé pour comfirmer les devices qui ont les prérequis
     m_d3dEnumeration.SetD3D( m_pD3D );
     m_d3dEnumeration.ConfirmDeviceCallback = ConfirmDeviceHelper;
     if( FAILED( hr = m_d3dEnumeration.Enumerate() ) )
@@ -131,27 +115,22 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
     }
 
-	// Unless a substitute hWnd has been specified, create a window to
-    // render into
+	// A part si un Hwnd de substitution à été crée, on crée la fenêtre
     if( m_hWnd == NULL)
     {
-
         if( !RegisterClass( &wndClass ) )
         {
             DWORD dwError = GetLastError();
             if( dwError != ERROR_CLASS_ALREADY_EXISTS )
                 return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
-
         }
-
-
 
         
 #ifdef _DEBUG 
-        // Set the window's initial style
+        // On met le style initial de fenêtre
 		m_dwWindowStyle = WS_OVERLAPPED| WS_CAPTION | WS_THICKFRAME|
                            WS_MINIMIZEBOX | WS_VISIBLE;
-        // Set the window's initial width
+        // Taille initiale
         RECT rc;
         SetRect( &rc, 0, 0, m_dwCreationWidth, m_dwCreationHeight );
         AdjustWindowRect( &rc, m_dwWindowStyle, TRUE );
@@ -163,20 +142,20 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
         SetRect( &rc, 0, 0, m_dwCreationWidth, m_dwCreationHeight );
 #endif 
 
-        // Create the render window
-        m_hWnd = CreateWindow( _T("Direct3DWindowClass"), m_strWindowTitle, WS_OVERLAPPEDWINDOW,
+        // Création de la fenêtre de rendu
+        m_hWnd = CreateWindow( _T(wndClass.lpszClassName), m_strWindowTitle, WS_OVERLAPPEDWINDOW,
                                CW_USEDEFAULT, CW_USEDEFAULT,
                                (rc.right-rc.left), (rc.bottom-rc.top), 0L,
                                NULL , 
                                hInstance, 0L ) ; 
     } ; 
 
-    // The focus window can be a specified to be a different window than the
-    // device window.  If not, use the device window as the focus window.
+    // La fenêtre de focus peut être spécifiée à une fenêtre différente que celle du device,
+	// sinon on utilise celle du device par défaut
     if( m_hWndFocus == NULL )
         m_hWndFocus = m_hWnd;
 
-    // Save window properties
+    // Sauvegarde des propriétés de la fenêtre
     m_dwWindowStyle = GetWindowLong( m_hWnd, GWL_STYLE );
     GetWindowRect( m_hWnd, &m_rcWindowBounds );
     GetClientRect( m_hWnd, &m_rcWindowClient );
@@ -187,39 +166,37 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
     }
 
-    // Initialize the application timer
+    // Initialisation du timer
     DXUtil_Timer( TIMER_START );
 
-    // Initialize the app's custom scene stuff
+    // Initialisation des données diverse de l'application
     if( FAILED( hr = BeforeCreateDevice() ) )
     {
         SAFE_RELEASE( m_pD3D );
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
     }
 
-    // Initialize the 3D environment for the app
+    // Initialisation de l'environnement 3D
     if( FAILED( hr = Initialize3DEnvironment() ) )
     {
         SAFE_RELEASE( m_pD3D );
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
     }
 
-    // The app is ready to go
+    // L'application est prête à être lancée
     Pause( false );
 
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: FindBestWindowedMode()
-// Desc: Sets up m_d3dSettings with best available windowed mode, subject to 
-//       the bRequireHAL and bRequireREF constraints.  Returns false if no such
-//       mode can be found.
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// On met m_d3dSettings au meilleur mode fenêtré possible, en fonction       //
+// des paramètres HAL et REF. Retourne faux si aucun mode ne peut être       //
+// trouvé.                                                                   //
+//===========================================================================//
 bool CD3DApplication::FindBestWindowedMode( bool bRequireHAL, bool bRequireREF )
 {
-    // Get display mode of primary adapter (which is assumed to be where the window 
-    // will appear)
+    // Obtention du mode d'affichage de l'adapter principal 
     D3DDISPLAYMODE primaryDesktopDisplayMode;
     m_pD3D->GetAdapterDisplayMode(0, &primaryDesktopDisplayMode);
 
@@ -245,9 +222,8 @@ bool CD3DApplication::FindBestWindowedMode( bool bRequireHAL, bool bRequireREF )
                     continue;
                 if (pDeviceCombo->AdapterFormat != primaryDesktopDisplayMode.Format)
                     continue;
-                // If we haven't found a compatible DeviceCombo yet, or if this set
-                // is better (because it's a HAL, and/or because formats match better),
-                // save it
+                // Si on a pas encore trouvé de DeviceCombo compatible, ou si celui est meilleur,
+                // on sauvegarde
                 if( pBestDeviceCombo == NULL || 
                     pBestDeviceCombo->DevType != D3DDEVTYPE_HAL && pDeviceCombo->DevType == D3DDEVTYPE_HAL ||
                     pDeviceCombo->DevType == D3DDEVTYPE_HAL && bAdapterMatchesBB )
@@ -257,10 +233,10 @@ bool CD3DApplication::FindBestWindowedMode( bool bRequireHAL, bool bRequireREF )
                     pBestDeviceCombo = pDeviceCombo;
                     if( pDeviceCombo->DevType == D3DDEVTYPE_HAL && bAdapterMatchesBB )
                     {
-                        // This windowed device combo looks great -- take it
+                        // Ce mode fenêtré à l'air pas mal : on le prend
                         goto EndWindowedDeviceComboSearch;
                     }
-                    // Otherwise keep looking for a better windowed device combo
+                    // Ou sinon on continue de chercher un autre mode
                 }
             }
         }
@@ -285,17 +261,14 @@ EndWindowedDeviceComboSearch:
     return true;
 }
 
-//-----------------------------------------------------------------------------
-// Name: FindBestFullscreenMode()
-// Desc: Sets up m_d3dSettings with best available fullscreen mode, subject to 
-//       the bRequireHAL and bRequireREF constraints.  Returns false if no such
-//       mode can be found.
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// On met m_d3dSettings au meilleur mode plein écran possible, en fonction   //
+// des paramètres HAL et REF. Retourne faux si aucun mode ne peut être       //
+// trouvé.                                                                   //
+//===========================================================================//
 bool CD3DApplication::FindBestFullscreenMode( bool bRequireHAL, bool bRequireREF )
 {
-    // For fullscreen, default to first HAL DeviceCombo that supports the current desktop 
-    // display mode, or any display mode if HAL is not compatible with the desktop mode, or 
-    // non-HAL if no HAL is available
+	// Pour le fullscreen, on prend par défaut le premier HAL DeviceCombo qui correspond au bureau
     D3DDISPLAYMODE adapterDesktopDisplayMode;
     D3DDISPLAYMODE bestAdapterDesktopDisplayMode;
     D3DDISPLAYMODE bestDisplayMode;
@@ -326,9 +299,6 @@ bool CD3DApplication::FindBestFullscreenMode( bool bRequireHAL, bool bRequireREF
                 bool bAdapterMatchesDesktop = (pDeviceCombo->AdapterFormat == adapterDesktopDisplayMode.Format);
                 if (pDeviceCombo->IsWindowed)
                     continue;
-                // If we haven't found a compatible set yet, or if this set
-                // is better (because it's a HAL, and/or because formats match better),
-                // save it
                 if (pBestDeviceCombo == NULL ||
                     pBestDeviceCombo->DevType != D3DDEVTYPE_HAL && pDeviceInfo->DevType == D3DDEVTYPE_HAL ||
                     pDeviceCombo->DevType == D3DDEVTYPE_HAL && pBestDeviceCombo->AdapterFormat != adapterDesktopDisplayMode.Format && bAdapterMatchesDesktop ||
@@ -340,10 +310,8 @@ bool CD3DApplication::FindBestFullscreenMode( bool bRequireHAL, bool bRequireREF
                     pBestDeviceCombo = pDeviceCombo;
                     if (pDeviceInfo->DevType == D3DDEVTYPE_HAL && bAdapterMatchesDesktop && bAdapterMatchesBB)
                     {
-                        // This fullscreen device combo looks great -- take it
                         goto EndFullscreenDeviceComboSearch;
                     }
-                    // Otherwise keep looking for a better fullscreen device combo
                 }
             }
         }
@@ -352,8 +320,7 @@ EndFullscreenDeviceComboSearch:
     if (pBestDeviceCombo == NULL)
         return false;
 
-    // Need to find a display mode on the best adapter that uses pBestDeviceCombo->AdapterFormat
-    // and is as close to bestAdapterDesktopDisplayMode's res as possible
+    // On a besoin de trouver un mode d'affichage sur le meilleur adapter qui utilise pBestDeviceCombo->AdapterFormat
     bestDisplayMode.Width = 0;
     bestDisplayMode.Height = 0;
     bestDisplayMode.Format = D3DFMT_UNKNOWN;
@@ -367,7 +334,7 @@ EndFullscreenDeviceComboSearch:
             pdm->Height == bestAdapterDesktopDisplayMode.Height && 
             pdm->RefreshRate == bestAdapterDesktopDisplayMode.RefreshRate )
         {
-            // found a perfect match, so stop
+            // On a trouvé la meilleure combinaison donc on arrête
             bestDisplayMode = *pdm;
             break;
         }
@@ -375,18 +342,15 @@ EndFullscreenDeviceComboSearch:
                  pdm->Height == bestAdapterDesktopDisplayMode.Height && 
                  pdm->RefreshRate > bestDisplayMode.RefreshRate )
         {
-            // refresh rate doesn't match, but width/height match, so keep this
-            // and keep looking
+            // Le rafraîchissement de correspond pas, mais la hauteur/largeur correspond
             bestDisplayMode = *pdm;
         }
         else if( pdm->Width == bestAdapterDesktopDisplayMode.Width )
         {
-            // width matches, so keep this and keep looking
             bestDisplayMode = *pdm;
         }
         else if( bestDisplayMode.Width == 0 )
         {
-            // we don't have anything better yet, so keep this and keep looking
             bestDisplayMode = *pdm;
         }
     }
@@ -405,10 +369,9 @@ EndFullscreenDeviceComboSearch:
     return true;
 }
 
-//-----------------------------------------------------------------------------
-// Name: ChooseInitialD3DSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// On choisit les paramètres initiaux								         //
+//===========================================================================//
 HRESULT CD3DApplication::ChooseInitialD3DSettings()
 {
     bool bFoundFullscreen = FindBestFullscreenMode( false, false );
@@ -425,17 +388,16 @@ HRESULT CD3DApplication::ChooseInitialD3DSettings()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: MsgProc()
-// Desc: Message handling function.
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Fonction d'écoute des évènements									         //
+//===========================================================================//
 LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam )
 {
     switch( uMsg )
     {
         case WM_PAINT:
-            // Handle paint messages when the app is paused
+            // Ecoute des message paint quand l'application est en pause
             if( m_pd3dDevice && !m_bActive && m_bWindowed &&
                 m_bDeviceObjectsInited && m_bDeviceObjectsRestored )
             {
@@ -450,12 +412,12 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             break;
 
         case WM_ENTERSIZEMOVE:
-            // Halt frame movement while the app is sizing or moving
-            Pause( true );
+            // On stoppe les frames quand l'application est en train d'être redimentionnée 
+			Pause( true );
             break;
 
         case WM_SIZE:
-            // Pick up possible changes to window style due to maximize, etc.
+            // Ecoute des changement possible, dus aux réductions et agrandissements
             if( m_bWindowed && m_hWnd != NULL )
                 m_dwWindowStyle = GetWindowLong( m_hWnd, GWL_STYLE );
 
@@ -463,14 +425,14 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             {
                 if( m_bClipCursorWhenFullscreen && !m_bWindowed )
                     ClipCursor( NULL );
-                Pause( true ); // Pause while we're minimized
+                Pause( true ); // Pause tant qu'on réduit
                 m_bMinimized = true;
                 m_bMaximized = false;
             }
             else if( SIZE_MAXIMIZED == wParam )
             {
                 if( m_bMinimized )
-                    Pause( false ); // Unpause since we're no longer minimized
+                    Pause( false ); // Fin de la pause lorsqu'on est plus réduit
                 m_bMinimized = false;
                 m_bMaximized = true;
                 HandlePossibleSizeChange();
@@ -484,16 +446,16 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                 }
                 else if( m_bMinimized)
                 {
-                    Pause( false ); // Unpause since we're no longer minimized
+                    Pause( false ); // Fin de la pause lorsqu'on est plus réduit
                     m_bMinimized = false;
                     HandlePossibleSizeChange();
                 }
                 else
                 {
-                    // If we're neither maximized nor minimized, the window size 
-                    // is changing by the user dragging the window edges.  In this 
-                    // case, we don't reset the device yet -- we wait until the 
-                    // user stops dragging, and a WM_EXITSIZEMOVE message comes.
+					// Si on est ni réduit ni agrandi, la taille de la fenêtre
+					// peut être changée par l'utilisateur. Dans ce cas,
+					// on ne reset pas encre le device, on attend que l'utilisateur
+					// arrête le redimensionnement (message WM_EXITSIZEMOVE)
                 }
             }
             break;
@@ -504,13 +466,13 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             break;
 
         case WM_SETCURSOR:
-            // Turn off Windows cursor in fullscreen mode
+            // On suprime le cureur en plein écran
             if( m_bActive && !m_bWindowed )
             {
                 SetCursor( NULL );
                 if( m_bShowCursorWhenFullscreen )
                     m_pd3dDevice->ShowCursor( true );
-                return true; // prevent Windows from setting cursor to window class cursor
+                return true;
             }
             break;
 
@@ -526,7 +488,7 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             break;
 
        case WM_ENTERMENULOOP:
-            // Pause the app when menus are displayed
+            // Pause  de l'application quand les menus sont utilisés
             Pause(true);
             break;
 
@@ -535,7 +497,6 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             break;
 
         case WM_NCHITTEST:
-            // Prevent the user from selecting the menu in fullscreen mode
             if( !m_bWindowed )
                 return HTCLIENT;
             break;
@@ -547,24 +508,18 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                     #define PBT_APMQUERYSUSPEND 0x0000
                 #endif
                 case PBT_APMQUERYSUSPEND:
-                    // At this point, the app should save any data for open
-                    // network connections, files, etc., and prepare to go into
-                    // a suspended mode.
                     return true;
 
                 #ifndef PBT_APMRESUMESUSPEND
                     #define PBT_APMRESUMESUSPEND 0x0007
                 #endif
                 case PBT_APMRESUMESUSPEND:
-                    // At this point, the app should recover any data, network
-                    // connections, files, etc., and resume running from when
-                    // the app was suspended.
                     return true;
             }
             break;
 
         case WM_SYSCOMMAND:
-            // Prevent moving/sizing and power loss in fullscreen mode
+			// Prévient d'un déplacement/redimentionnement et d'une perte de l'écran en fullscreen
             switch( wParam )
             {
                 case SC_MOVE:
@@ -578,59 +533,87 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
             }
             break;
 
-        case WM_COMMAND:
-/*
-            switch( LOWORD(wParam) )
+		 case WM_SYSKEYDOWN:
+
+            switch( wParam )
             {
-                case IDM_CHANGEDEVICE:
-                    // Prompt the user to select a new device or mode
-                    Pause(true);
-                    UserSelectNewDevice();
-                    Pause(false);
-                    return 0;
-
-                case IDM_TOGGLEFULLSCREEN:
-                    // Toggle the fullscreen/window mode
-                    Pause( true );
-                    if( FAILED( ToggleFullscreen() ) )
-                        DisplayErrorMsg( D3DAPPERR_RESETFAILED, MSGERR_APPMUSTEXIT );
-                    Pause( false );                        
-                    return 0;
-
-                case IDM_EXIT:
-                    // Recieved key/menu command to exit app
-                    SendMessage( hWnd, WM_CLOSE, 0, 0 );
-                    return 0;
-
+                case VK_RETURN:
+                {
+                    // On met en plein écran lorsqu'on appuie sur Alt+Enter
+                    DWORD dwMask = ( 1 << 29 );
+                    if( ( lParam & dwMask ) != 0 ) // Alt is down also
+                    {
+                        // On passe en fullscreen
+						Pause(true);
+                        ToggleFullscreen();
+						Pause(false);
+                        return 0;
+                    }
+                }
             }
-*/
             break;
 
-        case WM_CLOSE:
+		case WM_KEYDOWN:
+        {
+            switch( wParam )
+            {
+                case VK_ESCAPE:
+                {
+                    //SendMessage( hWnd, WM_CLOSE, 0, 0 );
+					Cleanup3DEnvironment();
+					SAFE_RELEASE( m_pD3D );
+					AfterDestroyDevice();
+					DestroyWindow( hWnd );
+					PostQuitMessage(0);
+					m_hWnd = NULL;
+                    break;
+                }
+                case VK_PAUSE:
+                {
+                    /*bool bTimePaused = DXUTIsTimePaused();
+                    bTimePaused = !bTimePaused;
+                    if( bTimePaused )
+                        DXUTPause( true, false );
+                    else
+                        DXUTPause( false, false );
+                    break;*/
+                }
+				case 'O':
+				{
+					if( m_bActive)
+                    {
+                        Pause(true);
+
+                        if( FAILED( UserSelectNewDevice() ) )
+                            return 0;
+
+                        Pause(false);
+                    }
+					break;
+				}
+            }
+            break;
+        }
+
+		case WM_CLOSE:
             Cleanup3DEnvironment();
             SAFE_RELEASE( m_pD3D );
             AfterDestroyDevice();
-/*
-            HMENU hMenu;
-            hMenu = GetMenu(hWnd);
-            if( hMenu != NULL )
-                DestroyMenu( hMenu );
-*/
-            DestroyWindow( hWnd );
+	        DestroyWindow( hWnd );
             PostQuitMessage(0);
             m_hWnd = NULL;
-            return 0;
+            break;
+
     }
 
-	return S_OK;
+	m_Camera.HandleMessages(hWnd, uMsg, wParam, lParam);
 
-    //return DefWindowProc( hWnd, uMsg, wParam, lParam );
+	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: HandlePossibleSizeChange()
-// Desc: Reset the device if the client area size has changed.
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Fonction d'écoute des changements de la taille de la fenêtre              //
+//===========================================================================//
 HRESULT CD3DApplication::HandlePossibleSizeChange()
 {
     HRESULT hr = S_OK;
@@ -640,7 +623,7 @@ HRESULT CD3DApplication::HandlePossibleSizeChange()
     if( m_bIgnoreSizeChange )
         return S_OK;
 
-    // Update window properties
+    // Mise à jour des propriétés de windows
     GetWindowRect( m_hWnd, &m_rcWindowBounds );
     GetClientRect( m_hWnd, &m_rcWindowClient );
 
@@ -649,8 +632,8 @@ HRESULT CD3DApplication::HandlePossibleSizeChange()
         rcClientOld.bottom - rcClientOld.top !=
         m_rcWindowClient.bottom - m_rcWindowClient.top)
     {
-        // A new window size will require a new backbuffer
-        // size, so the 3D structures must be changed accordingly.
+        // Un nouveau redimensionnement de la fenêtre demande une nouvelle taille de
+		// backbuffer donc la structure 3d doit être changée
         Pause( true );
 
         m_d3dpp.BackBufferWidth  = m_rcWindowClient.right - m_rcWindowClient.left;
@@ -658,7 +641,7 @@ HRESULT CD3DApplication::HandlePossibleSizeChange()
     
         if( m_pd3dDevice != NULL )
         {
-            // Reset the 3D environment
+            // Reset de l'environnement 3D
             if( FAILED( hr = Reset3DEnvironment() ) )
             {
                 if( hr != D3DERR_OUTOFVIDEOMEMORY )
@@ -671,10 +654,9 @@ HRESULT CD3DApplication::HandlePossibleSizeChange()
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Name: Initialize3DEnvironment()
-// Desc:
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Initialisation de l'environnement 3D								         //
+//===========================================================================//
 HRESULT CD3DApplication::Initialize3DEnvironment()
 {
     HRESULT hr;
@@ -684,15 +666,15 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
 
     m_bWindowed = m_d3dSettings.IsWindowed;
 
-    // Prepare window for possible windowed/fullscreen change
+    // Prépare windows pour un changement possible fenêtré/plein écran
     AdjustWindowForChange();
 
-    // Set up the presentation parameters
+    // Création des paramètres de présentation
     BuildPresentParamsFromSettings();
 
     if( pDeviceInfo->Caps.PrimitiveMiscCaps & D3DPMISCCAPS_NULLREFERENCE )
     {
-        // Warn user about null ref device that can't render anything
+        // Averti l'utilisateur d'une reference nulle
         DisplayErrorMsg( D3DAPPERR_NULLREFDEVICE, 0 );
     }
 
@@ -708,21 +690,15 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
     else
         behaviorFlags = 0; // TODO: throw exception
 
-    // Create the device
+    // Création du device the device
     hr = m_pD3D->CreateDevice( m_d3dSettings.AdapterOrdinal(), pDeviceInfo->DevType,
                                m_hWndFocus, behaviorFlags, &m_d3dpp,
                                &m_pd3dDevice );
 
     if( SUCCEEDED(hr) )
     {
-        // When moving from fullscreen to windowed mode, it is important to
-        // adjust the window size after recreating the device rather than
-        // beforehand to ensure that you get the window size you want.  For
-        // example, when switching from 640x480 fullscreen to windowed with
-        // a 1000x600 window on a 1024x768 desktop, it is impossible to set
-        // the window size to 1000x600 until after the display mode has
-        // changed to 1024x768, because windows cannot be larger than the
-        // desktop.
+        // Quand on passe de fullscreen à fenetré, c'est important d'ajuster
+		// la taille de la fenêtre avec de créer le device
         if( m_bWindowed )
         {
             SetWindowPos( m_hWnd, HWND_NOTOPMOST,
@@ -732,11 +708,11 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
                           SWP_SHOWWINDOW );
         }
 
-        // Store device Caps
+        // Stockage du device cap
         m_pd3dDevice->GetDeviceCaps( &m_d3dCaps );
         m_dwCreateFlags = behaviorFlags;
 
-        // Store device description
+        // Stockage des informations du device
         if( pDeviceInfo->DevType == D3DDEVTYPE_REF )
             lstrcpy( m_strDeviceStats, TEXT("REF") );
         else if( pDeviceInfo->DevType == D3DDEVTYPE_HAL )
@@ -773,9 +749,6 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
 
         if( pDeviceInfo->DevType == D3DDEVTYPE_HAL )
         {
-            // Be sure not to overflow m_strDeviceStats when appending the adapter 
-            // description, since it can be long.  Note that the adapter description
-            // is initially CHAR and must be converted to TCHAR.
             lstrcat( m_strDeviceStats, TEXT(": ") );
             const int cchDesc = sizeof(pAdapterInfo->AdapterIdentifier.Description);
             TCHAR szDescription[cchDesc];
@@ -786,13 +759,13 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
             _tcsncat( m_strDeviceStats, szDescription, maxAppend );
         }
 
-        // Store render target surface desc
+        // Stockage de la description de la surface du render targer 
         LPDIRECT3DSURFACE9 pBackBuffer = NULL;
         m_pd3dDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer );
         pBackBuffer->GetDesc( &m_d3dsdBackBuffer );
         pBackBuffer->Release();
 
-        // Set up the fullscreen cursor
+        // Création du curseur fullscreen
         if( m_bShowCursorWhenFullscreen && !m_bWindowed )
         {
             HCURSOR hCursor;
@@ -805,7 +778,7 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
             m_pd3dDevice->ShowCursor( true );
         }
 
-        // Confine cursor to fullscreen window
+        // On confine le curseur à la fenêtre plein écran
         if( m_bClipCursorWhenFullscreen )
         {
             if (!m_bWindowed )
@@ -820,7 +793,7 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
             }
         }
 
-        // Initialize the app's device-dependent objects
+        // Initialisation des objets dépendants du device
         hr = OnCreateDevice();
         if( FAILED(hr) )
         {
@@ -841,11 +814,11 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
             }
         }
 
-        // Cleanup before we try again
+        // Nettoyage avant de recommencer
         Cleanup3DEnvironment();
     }
 
-    // If that failed, fall back to the reference rasterizer
+    // Si ça a échoué, on passe au reference rasterizer
     if( hr != D3DAPPERR_MEDIANOTFOUND && 
         hr != HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) && 
         pDeviceInfo->DevType == D3DDEVTYPE_HAL )
@@ -854,14 +827,14 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
         {
             m_bWindowed = true;
             AdjustWindowForChange();
-            // Make sure main window isn't topmost, so error message is visible
+            // Pour être sûr que la fenêtre n'est pas topmost
             SetWindowPos( m_hWnd, HWND_NOTOPMOST,
                           m_rcWindowBounds.left, m_rcWindowBounds.top,
                           ( m_rcWindowBounds.right - m_rcWindowBounds.left ),
                           ( m_rcWindowBounds.bottom - m_rcWindowBounds.top ),
                           SWP_SHOWWINDOW );
 
-            // Let the user know we are switching from HAL to the reference rasterizer
+            // On dit à l'utilisateur qu'on est passé au reference rasterizer
             DisplayErrorMsg( hr, MSGWARN_SWITCHEDTOREF );
 
             hr = Initialize3DEnvironment();
@@ -870,10 +843,9 @@ HRESULT CD3DApplication::Initialize3DEnvironment()
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Name: BuildPresentParamsFromSettings()
-// Desc:
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Création des paramètres de présentation								         //
+//===========================================================================//
 void CD3DApplication::BuildPresentParamsFromSettings()
 {
     m_d3dpp.Windowed               = m_d3dSettings.IsWindowed;
@@ -911,31 +883,30 @@ void CD3DApplication::BuildPresentParamsFromSettings()
     }
 }
 
-//-----------------------------------------------------------------------------
-// Name: Reset3DEnvironment()
-// Desc:
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Reset de l'environnement 3D      								         //
+//===========================================================================//
 HRESULT CD3DApplication::Reset3DEnvironment()
 {
     HRESULT hr;
 
-    // Release all vidmem objects
+    // Supprime les objets de la mémoire
     if( m_bDeviceObjectsRestored )
     {
         m_bDeviceObjectsRestored = false;
         OnLostDevice();
     }
-    // Reset the device
+    // Reset du device
     if( FAILED( hr = m_pd3dDevice->Reset( &m_d3dpp ) ) )
         return hr;
 
-    // Store render target surface desc
+    // Stockage render target surface desc
     LPDIRECT3DSURFACE9 pBackBuffer;
     m_pd3dDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer );
     pBackBuffer->GetDesc( &m_d3dsdBackBuffer );
     pBackBuffer->Release();
 
-    // Set up the fullscreen cursor
+    // création du curseur plein écran
     if( m_bShowCursorWhenFullscreen && !m_bWindowed )
     {
         HCURSOR hCursor;
@@ -948,7 +919,7 @@ HRESULT CD3DApplication::Reset3DEnvironment()
         m_pd3dDevice->ShowCursor( true );
     }
 
-    // Confine cursor to fullscreen window
+    // On confine le curseur à la fenêtre plein écran
     if( m_bClipCursorWhenFullscreen )
     {
         if (!m_bWindowed )
@@ -963,7 +934,7 @@ HRESULT CD3DApplication::Reset3DEnvironment()
         }
     }
 
-    // Initialize the app's device-dependent objects
+    // Initialisation des objets dépendants du device
     hr = OnResetDevice();
     if( FAILED(hr) )
     {
@@ -972,7 +943,7 @@ HRESULT CD3DApplication::Reset3DEnvironment()
     }
     m_bDeviceObjectsRestored = true;
 
-    // If the app is paused, trigger the rendering of the current frame
+    // Si l'application est en pause, on stoppe le rendu
     if( false == m_bFrameMoving )
     {
         m_bSingleStep = true;
@@ -983,10 +954,9 @@ HRESULT CD3DApplication::Reset3DEnvironment()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: ToggleFullScreen()
-// Desc: Called when user toggles between fullscreen mode and windowed mode
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Fonction pour passer en plein écran 								         //
+//===========================================================================//
 HRESULT CD3DApplication::ToggleFullscreen()
 {
     HRESULT hr;
@@ -996,19 +966,19 @@ HRESULT CD3DApplication::ToggleFullscreen()
     Pause( true );
     m_bIgnoreSizeChange = true;
 
-    // Toggle the windowed state
+    // Etat fenêtré
     m_bWindowed = !m_bWindowed;
     m_d3dSettings.IsWindowed = m_bWindowed;
 
-    // Prepare window for windowed/fullscreen change
+    // On se prépare à un changement fenêtré/plein écran
     AdjustWindowForChange();
 
-    // If AdapterOrdinal and DevType are the same, we can just do a Reset().
-    // If they've changed, we need to do a complete device teardown/rebuild.
+    // Si l'AdapterOrdinal et le DevType sont les mêmes, on peut juste faire un reset
+    // Si ils ont changés, on a besoin de reconstruire complètement le device
     if (m_d3dSettings.AdapterOrdinal() == AdapterOrdinalOld &&
         m_d3dSettings.DevType() == DevTypeOld)
     {
-        // Reset the 3D device
+        // Reset du device 3D
         BuildPresentParamsFromSettings();
         hr = Reset3DEnvironment();
     }
@@ -1024,7 +994,7 @@ HRESULT CD3DApplication::ToggleFullscreen()
         m_bIgnoreSizeChange = false;
         if( !m_bWindowed )
         {
-            // Restore window type to windowed mode
+            // Restore le type de fenêtre au type fenêtré
             m_bWindowed = !m_bWindowed;
             m_d3dSettings.IsWindowed = m_bWindowed;
             AdjustWindowForChange();
@@ -1039,14 +1009,6 @@ HRESULT CD3DApplication::ToggleFullscreen()
 
     m_bIgnoreSizeChange = false;
 
-    // When moving from fullscreen to windowed mode, it is important to
-    // adjust the window size after resetting the device rather than
-    // beforehand to ensure that you get the window size you want.  For
-    // example, when switching from 640x480 fullscreen to windowed with
-    // a 1000x600 window on a 1024x768 desktop, it is impossible to set
-    // the window size to 1000x600 until after the display mode has
-    // changed to 1024x768, because windows cannot be larger than the
-    // desktop.
     if( m_bWindowed )
     {
         SetWindowPos( m_hWnd, HWND_NOTOPMOST,
@@ -1060,11 +1022,9 @@ HRESULT CD3DApplication::ToggleFullscreen()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: ForceWindowed()
-// Desc: Switch to a windowed mode, even if that means picking a new device
-//       and/or adapter
-//-----------------------------------------------------------------------------
+//===========================================================================//
+// Fonction pour passer au mode fenêtré								         //
+//===========================================================================//
 HRESULT CD3DApplication::ForceWindowed()
 {
     HRESULT hr;
@@ -1078,14 +1038,14 @@ HRESULT CD3DApplication::ForceWindowed()
     }
     m_bWindowed = true;
 
-    // Now destroy the current 3D device objects, then reinitialize
+    // On détruit les objets du device 3D et on réinitialise
 
     Pause( true );
 
-    // Release all scene objects that will be re-created for the new device
+    // On suppprime tous les objets de la scène qui seront recrées pour le nouveau device
     Cleanup3DEnvironment();
 
-    // Create the new device
+    // Création du nouveau device
     if( FAILED(hr = Initialize3DEnvironment() ) )
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
 
@@ -1093,18 +1053,14 @@ HRESULT CD3DApplication::ForceWindowed()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: AdjustWindowForChange()
-// Desc: Prepare the window for a possible change between windowed mode and
-//       fullscreen mode.  This function is virtual and thus can be overridden
-//       to provide different behavior, such as switching to an entirely
-//       different window for fullscreen mode (as in the MFC sample apps).
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Prépare la fenêtre pour un changement possible entre fenêtré et plein écran//
+//============================================================================//
 HRESULT CD3DApplication::AdjustWindowForChange()
 {
     if( m_bWindowed )
     {
-        // Set windowed-mode style
+        // On met style mode fenêtré
         SetWindowLong( m_hWnd, GWL_STYLE, m_dwWindowStyle );
         if( m_hMenu != NULL )
         {
@@ -1114,7 +1070,7 @@ HRESULT CD3DApplication::AdjustWindowForChange()
     }
     else
     {
-        // Set fullscreen-mode style
+        // On met le style mode plein écran
         SetWindowLong( m_hWnd, GWL_STYLE, WS_POPUP|WS_SYSMENU|WS_VISIBLE );
         if( m_hMenu == NULL )
         {
@@ -1125,11 +1081,9 @@ HRESULT CD3DApplication::AdjustWindowForChange()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: UserSelectNewDevice()
-// Desc: Displays a dialog so the user can select a new adapter, device, or
-//       display mode, and then recreates the 3D environment if needed
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Création d'un nouveau device par l'uitlisateur                             //
+//============================================================================//
 HRESULT CD3DApplication::UserSelectNewDevice()
 {
     HRESULT hr;
@@ -1147,22 +1101,22 @@ HRESULT CD3DApplication::UserSelectNewDevice()
     CD3DSettingsDialog settingsDialog( &m_d3dEnumeration, &m_d3dSettings);
     if( settingsDialog.ShowDialog( m_hWnd ) != IDOK )
         return S_OK;
+	
     settingsDialog.GetFinalSettings( &m_d3dSettings );
 
     m_bWindowed = m_d3dSettings.IsWindowed;
 
-    // Release all scene objects that will be re-created for the new device
+    // On suppprime tous les objets de la scène qui seront recrées pour le nouveau device
     Cleanup3DEnvironment();
 
-    // Inform the display class of the change. It will internally
-    // re-create valid surfaces, a d3ddevice, etc.
+    // On informe la classe d'affichage du changement. Cela créera de nouvelles surfaces, device etc...
     if( FAILED( hr = Initialize3DEnvironment() ) )
     {
         if( hr != D3DERR_OUTOFVIDEOMEMORY )
             hr = D3DAPPERR_RESETFAILED;
         if( !m_bWindowed )
         {
-            // Restore window type to windowed mode
+            // Restauration du type de fenêtre au mode fenêtré
             m_bWindowed = !m_bWindowed;
             m_d3dSettings.IsWindowed = m_bWindowed;
             AdjustWindowForChange();
@@ -1175,7 +1129,7 @@ HRESULT CD3DApplication::UserSelectNewDevice()
         return DisplayErrorMsg( hr, MSGERR_APPMUSTEXIT );
     }
 
-    // If the app is paused, trigger the rendering of the current frame
+    // Si l'application est en pause, on stoppe le rendu
     if( false == m_bFrameMoving )
     {
         m_bSingleStep = true;
@@ -1185,50 +1139,60 @@ HRESULT CD3DApplication::UserSelectNewDevice()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: Run()
-// Desc:
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Fonction qui lance le rendu                                                //
+//============================================================================//
 void CD3DApplication::Run()
 {
 
-            if( m_bDeviceLost )
-            {
-                // Yield some CPU time to other processes
-                Sleep ( 100 ); // 100 milliseconds
-            }
-            // Render a frame during idle time (no messages are waiting)
-            if( m_bActive )
-            {
-                if( FAILED( Render3DEnvironment() ) )
-                    SendMessage( m_hWnd, WM_CLOSE, 0, 0 );
-            }
+	if( m_bDeviceLost )
+	{
+		// On laisse du temps au CPU pour les autres processus
+		Sleep ( 100 ); // 100 millisecondes
+	}
+	// On lance le rendu des frames
+	if( m_bActive )
+	{
+		if( FAILED( Render3DEnvironment() ) )
+			SendMessage( m_hWnd, WM_CLOSE, 0, 0 );
+	}
         
  
 }
 
-//-----------------------------------------------------------------------------
-// Name: Render3DEnvironment()
-// Desc: Draws the scene.
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Fonction qui stoppe le moteur                                              //
+//============================================================================//
+void CD3DApplication::Close()
+{
+	Cleanup3DEnvironment();
+    SAFE_RELEASE( m_pD3D );
+    AfterDestroyDevice();
+    DestroyWindow( m_hWnd );
+    m_hWnd = NULL;
+
+}
+
+//============================================================================//
+// Fonction de rendu de l'environnement 3D                                    //
+//============================================================================//
 HRESULT CD3DApplication::Render3DEnvironment()
 {
     HRESULT hr;
 
     if( m_bDeviceLost )
     {
-        // Test the cooperative level to see if it's okay to render
+        // On teste le cooperative level pour voir si on peut faire le rendu
         if( FAILED( hr = m_pd3dDevice->TestCooperativeLevel() ) )
         {
-            // If the device was lost, do not render until we get it back
+            // Si le device est perdu, on ne fait pas le rendu tant qu'on l'a pas retrouvé
             if( D3DERR_DEVICELOST == hr )
                 return S_OK;
 
-            // Check if the device needs to be reset.
+            // On regarde si le device à besoin d'être reset
             if( D3DERR_DEVICENOTRESET == hr )
             {
-                // If we are windowed, read the desktop mode and use the same format for
-                // the back buffer
+                // Si on est fenêtré, on lit le format du bureau  et on utilise le même pour le back buffer
                 if( m_bWindowed )
                 {
                     D3DAdapterInfo* pAdapterInfo = m_d3dSettings.PAdapterInfo();
@@ -1244,36 +1208,37 @@ HRESULT CD3DApplication::Render3DEnvironment()
         m_bDeviceLost = false;
     }
 
-    // Get the app's time, in seconds. Skip rendering if no time elapsed
+    // Temps de l'application en secondes. On ne fait pas le rendu si auucn temps n'est écoulé
     FLOAT fAppTime        = DXUtil_Timer( TIMER_GETAPPTIME );
     FLOAT fElapsedAppTime = DXUtil_Timer( TIMER_GETELAPSEDTIME );
-	// Skip rendering if no time elapsed
-	// Commented out , was killing my pausing system 
+
+	// Conflit avec le système de pause
 	// 
     // if( ( 0.0f == fElapsedAppTime ) && m_bFrameMoving )
     //    return S_OK;
 
-    // FrameMove (animate) the scene
+    // FrameMove (animation) de la scene
     if( m_bFrameMoving || m_bSingleStep )
     {
-        // Store the time for the app
+        // On stocke le temps pour l'application
         m_fTime        = fAppTime;
         m_fElapsedTime = fElapsedAppTime;
 
-        // Frame move the scene
-        if( FAILED( hr = FrameMove() ) )
+        // On fait l'animation
+        if( FAILED( hr = FrameMove(m_fElapsedTime) ) )
             return hr;
+		m_Camera.FrameMove(m_fElapsedTime);
 
         m_bSingleStep = false;
     }
 
-    // Render the scene as normal
+    // Rendu de la scène
     if( FAILED( hr = Render() ) )
         return hr;
 
     UpdateStats();
 
-    // Show the frame on the primary surface.
+    // On présente la surface à l'écran
     hr = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
     if( D3DERR_DEVICELOST == hr )
         m_bDeviceLost = true;
@@ -1281,19 +1246,18 @@ HRESULT CD3DApplication::Render3DEnvironment()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: UpdateStats()
-// Desc: 
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Mise à jour statistiques                                                   //
+//============================================================================//
 void CD3DApplication::UpdateStats()
 {
-    // Keep track of the frame count
+    // On laisse une trace du nombre de frames
     static FLOAT fLastTime = 0.0f;
     static DWORD dwFrames  = 0;
     FLOAT fTime = DXUtil_Timer( TIMER_GETABSOLUTETIME );
     ++dwFrames;
 
-    // Update the scene stats once per second
+    // On met à jour le stats une fois par seconde
     if( fTime - fLastTime > 1.0f )
     {
         m_fFPS    = dwFrames / (fTime - fLastTime);
@@ -1323,7 +1287,7 @@ void CD3DApplication::UpdateStats()
         }
         else
         {
-            // No depth buffer
+            // Pas de z-buffer
             strDepthFmt[0] = TEXT('\0');
         }
 
@@ -1357,10 +1321,9 @@ void CD3DApplication::UpdateStats()
     }
 }
 
-//-----------------------------------------------------------------------------
-// Name: Pause()
-// Desc: Called in to toggle the pause state of the app.
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Fonction de pause de l'application                                         //
+//============================================================================//
 void CD3DApplication::Pause( bool bPause )
 {
     static DWORD dwAppPausedCount = 0;
@@ -1368,26 +1331,25 @@ void CD3DApplication::Pause( bool bPause )
     dwAppPausedCount += ( bPause ? +1 : -1 );
     m_bActive         = ( dwAppPausedCount ? false : true );
 
-    // Handle the first pause request (of many, nestable pause requests)
+    // Vérifie la première requête de pause
     if( bPause && ( 1 == dwAppPausedCount ) )
     {
-        // Stop the scene from animating
+        // On stope l'animation
         if( m_bFrameMoving )
             DXUtil_Timer( TIMER_STOP );
     }
 
     if( 0 == dwAppPausedCount )
     {
-        // Restart the timers
+        // On relance les timers
         if( m_bFrameMoving )
             DXUtil_Timer( TIMER_START );
     }
 }
 
-//-----------------------------------------------------------------------------
-// Name: Cleanup3DEnvironment()
-// Desc: Cleanup scene objects
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Nettoie les objets de l'environnement                                      //
+//============================================================================//
 void CD3DApplication::Cleanup3DEnvironment()
 {
     if( m_pd3dDevice != NULL )
@@ -1409,17 +1371,14 @@ void CD3DApplication::Cleanup3DEnvironment()
     }
 }
 
-//-----------------------------------------------------------------------------
-// Name: DisplayErrorMsg()
-// Desc: Displays error messages in a message box
-//-----------------------------------------------------------------------------
+//============================================================================//
+// Affiche un message d'erreur dans une message box                            //
+//============================================================================//
 HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
 {
     static bool s_bFatalErrorReported = false;
     TCHAR strMsg[512];
 
-    // If a fatal error message has already been reported, the app
-    // is already shutting down, so don't show more error messages.
     if( s_bFatalErrorReported )
         return hr;
 
@@ -1510,7 +1469,7 @@ HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
         _tcscat( strMsg, _T("\n\nThis game will now exit.") );
         MessageBox( NULL, strMsg, m_strWindowTitle, MB_ICONERROR|MB_OK );
 
-        // Close the window, which shuts down the app
+        // Ferme la fenêtre, qui arrêtera l'application
         if( m_hWnd )
             SendMessage( m_hWnd, WM_CLOSE, 0, 0 );
     }
@@ -1523,7 +1482,7 @@ HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
                              _T("\n\nContinue?") 
 							 );
         if ( IDYES != MessageBox( NULL, strMsg, m_strWindowTitle, MB_ICONWARNING|MB_YESNO ) ) 
-			// close 
+			// Fermeture 
 	        if( m_hWnd )
 		        SendMessage( m_hWnd, WM_CLOSE, 0, 0 );
     } ; 

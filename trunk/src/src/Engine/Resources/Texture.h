@@ -1,38 +1,25 @@
-#ifndef		_Texture_H
-#define		_Texture_H
+#pragma once
 
-//******************************************************************
-
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
 #include	"Resource.h"
-#include	"Renderer/Renderer.h"
 
-//******************************************************************
-
-
-//TODO
+//===========================================================================//
+// Classe texture                                                            //
+//===========================================================================//
 class Texture: public Resource
 {
 	public:
-		
-		LPDIRECT3DDEVICE9		m_pDevice;		//Device utilisé par le renderer
-		LPDIRECT3DTEXTURE9		m_pTex;			//Pointeur vers la texture
 
-		Texture(void);
+		Texture();
 		~Texture();
 
-		ResourceResult			Initialize	( crc32			resource,
-											UINT			Width, 
-											UINT			Height,
-											UINT			MipLevels,
-											DWORD			Usage,
-											D3DFORMAT		Format, 
-											D3DPOOL			Pool,
-											DWORD			Filter,
-											DWORD			MipFilter, 
-											D3DCOLOR		ColorKey,
-											D3DXIMAGE_INFO	*pSrcInfo,
-											PALETTEENTRY	*pPalette );
+		HRESULT			Load	(const char * sPath);
+
+				
+		LPDIRECT3DDEVICE9		m_pDevice;		// Device utilisé par le renderer
+		LPDIRECT3DTEXTURE9		m_pTex;			// Pointeur vers la texture
 };
 
-//******************************************************************
-#endif		// _Texture_H
+

@@ -1,26 +1,91 @@
 #include "SceneObject.h"
 
-// Constructeur
+//===========================================================================//
+// Constructeurs SceneObject		                                         //
+//===========================================================================//
 SceneObject::SceneObject()
 {
 }
 
-SceneObject::SceneObject( crc32 Mesh, crc32 Texture, Vector3f Position, Vector3f Rotation, Vector3f Scale)
-					:	m_Mesh(Mesh), m_Rotation(Rotation), m_Scale(Scale)
+SceneObject::SceneObject(const crc32& mesh, const crc32& Tex, const D3DXVECTOR3& Position)
 {
-	m_Position = Position;
-	m_Texture.push_back( Texture );
+	m_Mesh=mesh;
+	m_MapTexture[MESHTEX]=Tex;
 }
 
-// Ajout le crc d'une texture au tableau
-void SceneObject::AddTexture(crc32 CrcTex )
+//===========================================================================//
+// Ajoute une texture à la map		                                         //
+//===========================================================================//
+void SceneObject::SetTexture(const crc32& Tex, types_tex Type)
 {
-	m_Texture.push_back( CrcTex );
+	// On teste si la resource existe déjà
+	Texture * tex=ResourceManager::GetInstance()->Load<Texture>(Tex);
+	
+	m_MapTexture[Type]=Tex;
+
+	/*switch (Type)
+	{
+		case NORMALMAP :
+			   m_SceneShader->m_pEffect->SetTexture("g_NormalMap", m_MapTexture[NORMALMAP]->m_pTex);
+			   break;
+	}*/
 }
 
-
-// Vide le tableau des crc texture
-void SceneObject::ReleaseTexture()
+//===========================================================================//
+// Attribue un shader à l'objet 										     //
+//===========================================================================//
+void SceneObject::SetShader(const crc32& Shad)
 {
-	m_Texture.clear();
+	Shader * shader=ResourceManager::GetInstance()->Load<Shader>(Shad);
+}
+
+void SceneObject::InitObject()
+{
+
+}
+
+//===========================================================================//
+// Effectue une transformation				                                 //
+//===========================================================================//
+void SceneObject::SetTransform(const D3DXMATRIX *world)
+{
+
+}
+
+void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)
+{
+
+}
+
+void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
+{
+
+}
+
+//===========================================================================//
+// Gestion de l'objet						                                 //
+//===========================================================================//
+void SceneObject::InitDeviceData()
+{
+
+}
+
+void SceneObject::FrameMove(float fElapsedTime)
+{
+
+}
+
+void SceneObject::Draw()
+{
+
+}
+
+void SceneObject::DeleteDeviceData()
+{
+
+}
+
+void SceneObject::DeleteData()
+{
+
 }

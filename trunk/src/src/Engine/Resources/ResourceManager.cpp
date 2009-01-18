@@ -1,48 +1,67 @@
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
 #include "ResourceManager.h"
+#include <assert.h>
 
-#include "Resource.h"
+using namespace std;
 
-/***********************************************************
- * Destructeur.
- **********************************************************/
-ResourceManager::~ResourceManager( void )
+//===========================================================================//
+// Constructeur par défaut ResourceManager                                   //
+//===========================================================================//
+ResourceManager::ResourceManager()
 {
-	Clear();
+
 }
 
-/***********************************************************
- * Charge la ressource.
- * @param[in]	resource : crc32 de la ressource
- * @return	le résultat du chargement
- **********************************************************/
-ResourceResult ResourceManager::Load( crc32 resource )
+//===========================================================================//
+// Destructeur ResourceManager			                                     //
+//===========================================================================//
+ResourceManager::~ResourceManager()
 {
-	return RES_FAILED;
+    // S'il reste des ressources dans la liste, on le signale
+    if (!m_Resources.empty())
+    {
+
+        for (TResourcesMap::const_iterator i = m_Resources.begin(); i != m_Resources.end(); ++i)
+        {
+			// Signalement
+
+        }
+    }
 }
 
-/***********************************************************
- * Supprime la ressource.
- * @param[in]	resource : crc32 de la ressource
- * @return	le résultat de la suppression
- **********************************************************/
-ResourceResult ResourceManager::Release( crc32 resource )
+//===========================================================================//
+// Ajoute une resource					                                     //
+//===========================================================================//
+void ResourceManager::Add(const crc32& crc, Resource* Res)
 {
-	return RES_FAILED;
+    assert(Res != NULL);
+
+    // Si la ressource avait déjà été chargée, on le signale
+
+
+    // Ajout de la ressource à la liste
+    m_Resources[crc] = Res;
+    Res->m_Crc32 = crc;
 }
 
-/***********************************************************
- * Supprime toutes les ressources.
- * @return	le résultat de la suppression
- **********************************************************/
-ResourceResult ResourceManager::Clear( void )
+void ResourceManager::test()
 {
-	Resource *pResource = NULL;
-	
-	while( !m_ResourcesList.empty() )
-	{
-		pResource = m_ResourcesList.back();
-		m_ResourcesList.pop_back();
-		delete pResource;
-	}
-	return RES_SUCCEED;
+}
+
+//===========================================================================//
+// Retire une resource					                                     //
+//===========================================================================//
+void ResourceManager::Remove(const crc32& crc)
+{
+    // Recherche de la ressource dans la table
+    TResourcesMap::iterator It = m_Resources.find(crc);
+
+    // Si la ressource n'avait pas été chargée, on le signale
+    //if (It == m_Resources.end())
+        // Signalement
+
+    // Retrait de la ressource de la liste
+    m_Resources.erase(It);
 }

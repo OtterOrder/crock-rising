@@ -45,7 +45,7 @@ class ResourceManager : public Singleton<ResourceManager>
 		// Recherche de la ressource
 		TResourcesMap::const_iterator It = m_Resources.find(crc);
 
-		// Si on l'a trouvé on la renvoie, sinon on renvoie NULL
+		// Si on l'a trouvé on la renvoie, sinon on l'alloue
 		if (It != m_Resources.end())
 		{
 			It->second->AddRef();

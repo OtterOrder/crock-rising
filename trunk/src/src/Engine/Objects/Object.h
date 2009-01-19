@@ -19,7 +19,6 @@ public:
 	virtual ~Object() {}
 	Object( float initPosX, float initPosY, float initPosZ );
 	Object( D3DXVECTOR3 pos );
-	Vector3f GetPosition() {return m_Position;}
 
 	//===========================================================================//
 	// Fonction de transformation		    		                             //
@@ -41,5 +40,5 @@ public:
 protected:
 	D3DXMATRIX			m_WorldMatrix;
 	LPDIRECT3DDEVICE9	m_pDevice;
-	Vector3f			m_Position;
+
 };

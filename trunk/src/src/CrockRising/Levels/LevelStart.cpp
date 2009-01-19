@@ -27,7 +27,8 @@ LevelStart::~LevelStart( void )
 **********************************************************/
 void LevelStart::Init( void )
 {
-	//TODO
+	m_Camera = new Camera();
+	Renderer::GetInstance()->SetCamera( m_Camera );	
 }
 
 /***********************************************************
@@ -35,5 +36,21 @@ void LevelStart::Init( void )
  **********************************************************/
 void LevelStart::Update( void )
 {
-	//TODO
+	
+	//OffsetCurseur -> Camera
+	Point2f point = InputManager::GetInstance()->GetMouseOffset();
+	const int sensibilite = 15;
+	int offsetCursor;
+
+	if( point.x != 0 ) 
+	{
+		offsetCursor = (int)point.x%sensibilite; 
+		m_Camera->SetOrientationY( -offsetCursor );
+	}
+	if( point.y != 0 ) 
+	{
+		offsetCursor = (int)point.y%sensibilite; 
+		m_Camera->SetOrientationX( offsetCursor );
+	}
+	m_Camera->UpdateMatrixView();
 }

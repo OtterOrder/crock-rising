@@ -52,7 +52,7 @@ CD3DApplication::CD3DApplication()
     m_strFrameStats[0]  = _T('\0');
 	m_pStatsFont		= NULL;
 
-    m_strWindowTitle    = _T("DIR Graphic Engine");
+    m_strWindowTitle    = _T("Engine");
     m_dwCreationWidth   = 800;
     m_dwCreationHeight  = 600;
     m_bShowCursorWhenFullscreen = false;

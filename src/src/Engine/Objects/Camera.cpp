@@ -6,7 +6,7 @@ Camera::Camera()
 	m_angleX = m_angleY = 0;
 
 	SetUp( Vector3f( 0.0f, 1.0f, 0.0f ) );
-	SetTarget( Vector3f( m_Position.x, m_Position.y, m_Position.z+1 ) ); //cad regard vers le fond
+	//SetTarget( Vector3f( m_Position.x, m_Position.y, m_Position.z+1 ) ); //cad regard vers le fond
 
 	SetDefaultProjection();
 }
@@ -17,7 +17,7 @@ Camera::Camera( Vector3f pos, Vector3f target, Vector3f up )
 	m_angleX = m_angleY = 0;
 
 	SetUp( up );
-	SetTarget( target );
+	//SetTarget( target );
 
 	SetDefaultProjection();
 }
@@ -39,7 +39,7 @@ void Camera::SetTarget( Vector3f target ){
 }
 
 void Camera::SetTarget( Object* obj  ){
-	SetTarget( obj->GetPosition() );
+	//SetTarget( obj->GetPosition() );
 }
 
 D3DXMATRIX Camera::GetMatrixView()
@@ -73,4 +73,44 @@ void Camera::SetDefaultProjection()
 	SetZNearFar();
 	SetRatio();
 	SetFOV();
+}
+
+void  Camera::SetPosition( Vector3f pos )
+{
+	D3DXMatrixTranslation( &m_WorldMatrix, -pos.x, -pos.y, -pos.z );
+}
+
+void Camera::UpdateMatrixView()
+{
+	D3DXMATRIX position, rotY, rotX;
+	
+	D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	
+	D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	
+
+	Vector3f vPosition = GetPosition();
+
+	D3DXMatrixTranslation( &position, -vPosition.x, -vPosition.y, -vPosition.z );
+	
+	m_MatrixView =  rotY * rotX * position;
+}
+
+void Camera::SetOrientationY( int angleY )	//en degres
+{ 
+	m_angleY += angleY;
+
+	if( abs(m_angleY) > 359 )	//limitation de l'angleY
+		m_angleY = 0;
+}
+
+void Camera::SetOrientationX( int angleX )	//en degres
+{ 
+	m_angleX += angleX;
+
+	if( abs(m_angleX) > 359 )	//limitation de l'angleY
+		m_angleX = 0;
+}
+
+Vector3f Camera::GetPosition()
+{
+	return Vector3f( m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43 );
 }

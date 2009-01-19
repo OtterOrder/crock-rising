@@ -41,41 +41,20 @@ public:
 
 	int		GetOrientationYDeg(){ return m_angleY; }
 	float	GetOrientationYRad(){ return D3DXToRadian( m_angleY ); }
+
+	Vector3f GetPosition();
 	
 
 	//Fonctions membres
 	void SetDefaultProjection();		//Applique les paramètres par default pour les variables de projection
 
-
 	//Test
-	void SetOrientationY( int angleY )	//en degres
-	{ 
-		m_angleY += angleY;
+	void SetPosition( Vector3f pos );
+	void SetOrientationY( int angleY );
+	void SetOrientationX( int angleX );
 
-		if( abs(m_angleY) > 359 )	//limitation de l'angleY
-			m_angleY = 0;
-	}
-
-	void SetOrientationX( int angleX )	//en degres
-	{ 
-		m_angleX += angleX;
-
-		if( abs(m_angleX) > 359 )	//limitation de l'angleY
-			m_angleX = 0;
-	}
-
-	void UpdateMatrixView()
-	{
-		D3DXMATRIX position, rotY, rotX;
-		
-		D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	
-		D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	
-
-		D3DXMatrixTranslation( &position, -m_Position.x, -m_Position.y, -m_Position.z );
-		
-		m_MatrixView =  rotY * rotX * position;
-	}
-
+	void UpdateMatrixView();
+	
 
 private:
 	//Variables pour matrice de visualisation

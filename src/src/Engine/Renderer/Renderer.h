@@ -7,6 +7,7 @@
 #include "../Core/Singleton.h"
 #include "../Objects/Object.h"
 #include "../Objects/Camera.h"
+#include "Core/Inputs/InputManager.h"
 #include <vector>
 
 
@@ -39,8 +40,8 @@ protected:
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//
-	LPDIRECT3DVERTEXBUFFER9 m_pGridVB;
-	std:: vector <Object *> m_ListObj;
+	LPDIRECT3DVERTEXBUFFER9		m_pGridVB;
+	std:: vector <Object *>		m_ListObj;
 
 	Camera* m_Camera; //Une Copie de la camera
 };

@@ -33,10 +33,14 @@ public:
 	HRESULT OnDestroyDevice();                          
 	HRESULT AfterDestroyDevice();
 
+	void SetCamera( Camera* cam );
+
 protected:
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//
 	LPDIRECT3DVERTEXBUFFER9 m_pGridVB;
 	std:: vector <Object *> m_ListObj;
+
+	Camera* m_Camera; //Une Copie de la camera
 };

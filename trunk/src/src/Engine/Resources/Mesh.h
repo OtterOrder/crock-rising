@@ -39,6 +39,9 @@ public:
 
 	ResourceResult			FillD3DBuffers ();
 	void					ReleaseD3DBuffers();
+
+
+
 private:
 
 	Vertex		*m_VertexBuffer;					// Tableau de vertex

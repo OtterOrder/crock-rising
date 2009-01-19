@@ -7,6 +7,9 @@ using namespace std;
  **********************************************************/
 InputManager::InputManager( void )
 {
+	//ShowCursor( false );
+
+	m_MouseOffset		= Point2f( 0.f, 0.f );
 	m_MouseOldPosition	= Point2f( 0.f, 0.f );
 	m_MousePosition		= Point2f( 0.f, 0.f );
 }
@@ -166,6 +169,23 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			mouseCoordinates	= MAKEPOINTS( lParam );
 			m_MousePosition.x	= (float)mouseCoordinates.x;
 			m_MousePosition.y	= (float)mouseCoordinates.y;
+
+			RECT rect;
+			GetWindowRect( hWnd, &rect );
+			int posX = ( rect.left + rect.right )/ 2;
+			int posY = ( rect.top + rect.bottom )/ 2;
+
+			POINT pointMouse;
+			GetCursorPos( &pointMouse );
+
+			if( pointMouse.x!=posX || pointMouse.y != posY )
+			{
+				m_MouseOffset.x = pointMouse.x - posX;
+				m_MouseOffset.y = pointMouse.y - posY;
+
+				SetCursorPos( posX, posY );
+			}
+
 			break;
 
 	}
@@ -291,4 +311,16 @@ const std::list< InputManager::Item >* InputManager::GetConstList( ItemType type
 		case TYPE_MOUSE:	return &m_MouseButtons;
 	}
 	return NULL;
+}
+
+
+
+Point2f InputManager::GetMouseOffset( void )
+{
+	Point2f toReturn = m_MouseOffset;
+
+	m_MouseOffset.x = 0.f;
+	m_MouseOffset.y = 0.f;
+
+	return toReturn;
 }

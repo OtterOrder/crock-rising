@@ -28,6 +28,9 @@ Renderer::Renderer()
 //===========================================================================//
 HRESULT Renderer::BeforeCreateDevice()
 {
+	
+	freopen_s( &log, "stdout.txt", "w", stdout );
+
 	m_pStatsFont = new CD3DFont( _T("Arial"), 12, D3DFONT_BOLD );
     if( m_pStatsFont == NULL )
         return E_FAIL;
@@ -155,6 +158,69 @@ HRESULT Renderer::Render()
 
 	m_pd3dDevice->SetVertexShader(NULL);
 	m_pd3dDevice->SetPixelShader(NULL);
+	
+	
+	
+	
+	//Test
+	if( InputManager::GetInstance()->IsKeyPressed( 'Z' ) )
+	{
+		Vector3f pos = m_Camera->GetPosition();
+		Vector3f target	 = m_Camera->GetTarget();
+		Vector3f vectDir = target - pos;
+		
+		float valAbsVectDir = sqrt( vectDir.x*vectDir.x + vectDir.y*vectDir.y + vectDir.z*vectDir.z );
+		float angleY = m_Camera->GetOrientationYRad();
+		
+		float c = cos( angleY );
+		pos.z =  pos.z + fabs(c);		//fixme : test
+
+		if( valAbsVectDir > 170.0f )
+			m_Camera->SetPosition( pos );
+	}
+
+	if( InputManager::GetInstance()->IsKeyPressed( 'S' ) )
+	{
+		Vector3f pos = m_Camera->GetPosition();
+		Vector3f target	 = m_Camera->GetTarget();
+		Vector3f vectDir = target - pos;
+		
+		float valAbsVectDir = sqrt( vectDir.x*vectDir.x + vectDir.y*vectDir.y + vectDir.z*vectDir.z );
+		float angleY = m_Camera->GetOrientationYRad();
+		
+		float c = cos( angleY );
+		pos.z =  pos.z - fabs(c);		
+
+		if( valAbsVectDir < 500.0f )
+			m_Camera->SetPosition( pos );
+	}
+
+	//Init pos
+	if( InputManager::GetInstance()->IsKeyPressed( 'A' ) )
+	{
+		m_Camera->SetPosition( Vector3f( 0.0f, 50.0f, -170.0f )  );
+	}
+
+	//orientation
+	Point2f point = InputManager::GetInstance()->GetMouseOffset();
+	const int sensibilite = 15;
+	int offsetCursor;
+
+	if( point.x != 0 ) 
+	{
+		offsetCursor = (int)point.x%sensibilite; 
+		m_Camera->SetOrientationY( -offsetCursor );
+	}
+	if( point.y != 0 ) 
+	{
+		offsetCursor = (int)point.y%sensibilite; 
+		m_Camera->SetOrientationX( offsetCursor );
+	}
+
+	m_Camera->UpdateMatrixView();
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetMatrixView());
+
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetFillMatrixProjection() );
 
 	m_pd3dDevice->BeginScene();
 

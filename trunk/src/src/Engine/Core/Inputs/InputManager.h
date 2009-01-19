@@ -48,6 +48,7 @@ public:
 	
 	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
 	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
+	Point2f		GetMouseOffset( void );
 
 	void		Update				( void );				// Update
 
@@ -88,6 +89,8 @@ protected:
 	
 	Point2f				m_MouseOldPosition;		// Ancienne position de la souris
 	Point2f				m_MousePosition;		// Position de la souris
+
+	Point2f				m_MouseOffset;			//...
 
 	
 	// =========================================================

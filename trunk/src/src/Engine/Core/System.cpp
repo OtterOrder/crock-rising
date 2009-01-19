@@ -45,8 +45,8 @@ int System::MainLoop( void )
 	if( FAILED( InitWindow() ) )
 		return 0;
 	
-	//Camera cam( Vector3f(0.0f, 50.0f, -170.0f), Vector3f(0.f, 1.f, 0.f), Vector3f(0.f, 50.f, 0.f));
-	//renderer->SetCamera( &cam );
+	Camera cam( Vector3f(0.0f, 50.0f, -170.0f), Vector3f(0.f, 50.f, 0.f), Vector3f(0.f, 1.f, 0.f));
+	renderer->SetCamera( &cam );
 
     // Boucle principale..
 	while( msg.message != WM_QUIT )

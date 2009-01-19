@@ -22,7 +22,7 @@ public:
 	Vector3f GetTarget();
 
 	D3DXMATRIX GetMatrixView();
-	D3DXMATRIX GetMatrixProjection();
+	D3DXMATRIX GetFillMatrixProjection();
 
 	//Modificateurs
 	void SetUp( Vector3f up );
@@ -38,10 +38,44 @@ public:
 	float GetZNear(){	return m_zNear; };
 	float GetZFar(){	return m_zFar; };
 	float GetRatio(){	return m_ratio; };
+
+	int		GetOrientationYDeg(){ return m_angleY; }
+	float	GetOrientationYRad(){ return D3DXToRadian( m_angleY ); }
 	
 
 	//Fonctions membres
 	void SetDefaultProjection();		//Applique les paramètres par default pour les variables de projection
+
+
+	//Test
+	void SetOrientationY( int angleY )	//en degres
+	{ 
+		m_angleY += angleY;
+
+		if( abs(m_angleY) > 359 )	//limitation de l'angleY
+			m_angleY = 0;
+	}
+
+	void SetOrientationX( int angleX )	//en degres
+	{ 
+		m_angleX += angleX;
+
+		if( abs(m_angleX) > 359 )	//limitation de l'angleY
+			m_angleX = 0;
+	}
+
+	void UpdateMatrixView()
+	{
+		D3DXMATRIX position, rotY, rotX;
+		
+		D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	
+		D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	
+
+		D3DXMatrixTranslation( &position, -m_Position.x, -m_Position.y, -m_Position.z );
+		
+		m_MatrixView =  rotY * rotX * position;
+	}
+
 
 private:
 	//Variables pour matrice de visualisation
@@ -51,12 +85,16 @@ private:
 	//Variables pour matrice de projection
 	float m_fov_rad, m_ratio, m_zNear, m_zFar;
 
+	//orientation
+	int m_angleX, m_angleY; //en deg
+
 protected :
 	D3DXMATRIX m_MatrixView;		//Matrice de visualisation
 	D3DXMATRIX m_MatrixProjection;	//Matrice de projection
 
-private: //Outils
-	float deg2rad( int degres ){ return degres / 180.0f * D3DX_PI; };
+//private: //Outils
+//	float	deg2rad( int degres ){ return (float)degres / 180.0f * D3DX_PI; };
+//	int		rad2deg( float rad ){ return (int)(rad * 180.0f / D3DX_PI); };
 
 };
 

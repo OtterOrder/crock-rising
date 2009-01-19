@@ -279,9 +279,9 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** &Ar
 	int id=0;
 	int dec=0;
 
-	float result=0;
-	float signe=1;
-	double mantisse=0.1;
+	float result	= 0;
+	float signe		= 1;
+	float mantisse	= 0.1f;
 
 	for (int i = 0 ; i < iCount ; i++)
 	{
@@ -302,7 +302,7 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** &Ar
 				{	
 					dec++;	
 					result=((ArrayText[id+dec]-'0')*mantisse)+result;
-					mantisse*=0.1;
+					mantisse *= 0.1f;
 
 					if(ArrayText[id+dec+1] == ' ')
 						dec++;
@@ -313,7 +313,7 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** &Ar
 			if(Array[i][j]==0 && j!=2)
 				int u=0;
 			id=id+dec+1;
-			dec=0, result=0, mantisse=0.1, signe=1;
+			dec=0, result=0, mantisse=0.1f, signe=1;
 		}	
 	}
 
@@ -325,9 +325,9 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Arra
 	int id=0;
 	int dec=0;
 
-	float result=0;
-	float signe=1;
-	double mantisse=0.1;
+	float result	= 0;
+	float signe		= 1;
+	float mantisse	= 0.1f;
 
 	for (int i = 0 ; i < iCount ; i++)
 	{
@@ -345,7 +345,7 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Arra
 			{	
 				dec++;	
 				result=((ArrayText[id+dec]-'0')*mantisse)+result;
-				mantisse*=0.1;
+				mantisse *= 0.1f;
 
 				if(ArrayText[id+dec+1] == ' ')
 					dec++;
@@ -354,7 +354,7 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Arra
 		}
 		Array[i]=result*signe;
 		id=id+dec+1;
-		dec=0, result=0, mantisse=0.1, signe=1;
+		dec=0, result=0, mantisse=0.1f, signe=1;
 	}
 	return RES_FAILED;
 }

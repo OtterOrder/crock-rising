@@ -26,12 +26,12 @@ public:
 	// Callback DirectX							                                 //
 	//===========================================================================//
 	HRESULT BeforeCreateDevice();
-	HRESULT OnCreateDevice();                           
+	HRESULT OnCreateDevice();
 	HRESULT OnResetDevice();
 	HRESULT FrameMove(float fElapsedTime);
-	HRESULT Render();                                   
+	HRESULT Render();
 	HRESULT OnLostDevice();
-	HRESULT OnDestroyDevice();                          
+	HRESULT OnDestroyDevice();
 	HRESULT AfterDestroyDevice();
 
 	void SetCamera( Camera* cam );

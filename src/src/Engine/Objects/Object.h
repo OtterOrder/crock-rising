@@ -27,16 +27,6 @@ public:
 	virtual void SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos) {}
 	virtual void SetTransform(const D3DXMATRIX* world) {}
 
-	//===========================================================================//
-	// Fonction virtuelle d'affichage	    		                             //
-	//===========================================================================//
-	virtual void InitObject() {}
-	virtual void InitDeviceData() {}
-	virtual void Draw() {}
-	virtual void FrameMove(float fElapsedTime) {}
-	virtual void DeleteDeviceData() {}
-	virtual void DeleteData() {}
-
 protected:
 	D3DXMATRIX			m_WorldMatrix;
 	LPDIRECT3DDEVICE9	m_pDevice;

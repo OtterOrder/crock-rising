@@ -34,7 +34,7 @@ ResourceManager::~ResourceManager()
 //===========================================================================//
 // Ajoute une resource					                                     //
 //===========================================================================//
-void ResourceManager::Add(const crc32& crc, Resource* Res)
+void ResourceManager::Add(const std::string& resource, Resource* Res)
 {
     assert(Res != NULL);
 
@@ -42,8 +42,8 @@ void ResourceManager::Add(const crc32& crc, Resource* Res)
 
 
     // Ajout de la ressource à la liste
-    m_Resources[crc] = Res;
-    Res->m_Crc32 = crc;
+    m_Resources[resource] = Res;
+    Res->m_Name = resource;
 }
 
 void ResourceManager::test()
@@ -53,10 +53,10 @@ void ResourceManager::test()
 //===========================================================================//
 // Retire une resource					                                     //
 //===========================================================================//
-void ResourceManager::Remove(const crc32& crc)
+void ResourceManager::Remove(const std::string& resource)
 {
     // Recherche de la ressource dans la table
-    TResourcesMap::iterator It = m_Resources.find(crc);
+    TResourcesMap::iterator It = m_Resources.find(resource);
 
     // Si la ressource n'avait pas été chargée, on le signale
     //if (It == m_Resources.end())

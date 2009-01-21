@@ -27,12 +27,12 @@ public :
 	//----------------------------------------------------------
     // Fonction virtuelle de chargement
     //----------------------------------------------------------
-	virtual HRESULT Load (const char * sPath)=0; 
+	virtual ResourceResult Load (std::string resource); 
 
     //----------------------------------------------------------
     // Renvoie le nom associé à la ressource
     //----------------------------------------------------------
-    const crc32& GetCRC32() const;
+    const std::string& GetName() const;
 
     //----------------------------------------------------------
     // Ajoute une référence sur la ressource
@@ -59,6 +59,6 @@ private :
     //----------------------------------------------------------
     // Données membres
     //----------------------------------------------------------
-    crc32		m_Crc32;		// CRC32 de la ressource
-    int         m_RefCount;     // Compteur de références
+	std::string		m_Name;		// CRC32 de la ressource
+    int				m_RefCount;     // Compteur de références
 };

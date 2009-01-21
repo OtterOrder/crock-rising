@@ -19,13 +19,15 @@ Texture::~Texture()
 }
 
 
-HRESULT Texture::Load( const char* sPath)
-{			
+ResourceResult Texture::Load(std::string resource)
+{
+
+	std::string str="data\\texture\\%u.DAE"+resource;
 
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	if( FAILED(D3DXCreateTextureFromFileEx(pDevice,
-											sPath,
+											str.c_str(),
 											D3DX_DEFAULT,
 											D3DX_DEFAULT,
 											D3DX_DEFAULT,
@@ -39,7 +41,7 @@ HRESULT Texture::Load( const char* sPath)
 											NULL,
 											&m_pTex)) )   //Pointeur sur la tex
 
-		return S_FALSE;
+		return RES_FAILED;
 
-	return S_OK;
+	return RES_SUCCEED;
 }

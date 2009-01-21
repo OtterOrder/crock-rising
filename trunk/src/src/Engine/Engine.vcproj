@@ -422,7 +422,7 @@
 				Name="Shader"
 				>
 				<File
-					RelativePath=".\Resources\default.fx"
+					RelativePath="..\..\data\shader\default.fx"
 					>
 				</File>
 				<File

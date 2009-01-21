@@ -15,7 +15,7 @@ class Texture: public Resource
 		Texture();
 		~Texture();
 
-		HRESULT			Load	(const char * sPath);
+		ResourceResult			Load	(std::string resource);
 
 				
 		LPDIRECT3DDEVICE9		m_pDevice;		// Device utilisé par le renderer

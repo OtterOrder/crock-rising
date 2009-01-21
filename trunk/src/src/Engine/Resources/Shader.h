@@ -17,7 +17,7 @@ public :
 	Shader();
 	~Shader();
 
-    HRESULT Load (const char * sPath);	// Charge le shader à partir d'un fichier
+    ResourceResult Load (std::string resource);	// Charge le shader à partir d'un fichier
 
 	//===========================================================================//
 	// Changement des paramètres du shader                                       //

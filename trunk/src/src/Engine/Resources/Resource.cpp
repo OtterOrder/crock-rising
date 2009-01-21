@@ -18,16 +18,16 @@ Resource::Resource(): m_RefCount(0)
 //===========================================================================//
 Resource::~Resource()
 {
-	ResourceManager::GetInstance()->Remove(m_Crc32);
+	ResourceManager::GetInstance()->Remove(m_Name);
 }
 
 
 //===========================================================================//
 // Renvoie le nom associé à la resource                                      //
 //===========================================================================//
-const crc32& Resource::GetCRC32() const
+const std::string& Resource::GetName() const
 {
-    return m_Crc32;
+    return m_Name;
 }
 
 //===========================================================================//

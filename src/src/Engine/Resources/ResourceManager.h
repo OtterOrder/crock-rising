@@ -17,33 +17,13 @@ class ResourceManager : public Singleton<ResourceManager>
 	friend class Singleton< ResourceManager >;
 
 	public :
-    //===========================================================================//
-	// Récupère une resource								                     //
-	//===========================================================================//
-    template <class T> T* Get(const crc32& crc) const
-	{
-		 // Recherche de la ressource
-		TResourcesMap::const_iterator It = m_Resources.find(crc);
-
-		// Si on l'a trouvé on la renvoie, sinon on renvoie NULL
-		if (It != m_Resources.end())
-		{
-			It->second->AddRef();
-			return static_cast<T*>(It->second);
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-
 	//===========================================================================//
 	// Charge une resource								                     //
 	//===========================================================================//
-    template <class T> T* Load(const crc32& crc)
+    template <class T> T* Load(const std::string& resource)
 	{
 		// Recherche de la ressource
-		TResourcesMap::const_iterator It = m_Resources.find(crc);
+		TResourcesMap::const_iterator It = m_Resources.find(resource);
 
 		// Si on l'a trouvé on la renvoie, sinon on l'alloue
 		if (It != m_Resources.end())
@@ -55,7 +35,8 @@ class ResourceManager : public Singleton<ResourceManager>
 		{
 			T* Res=new T();
 			Resource * Ptr=dynamic_cast<Resource*>(Res);
-			Add(crc, Ptr);
+			Add(resource, Ptr);
+			Ptr->Load(resource);
 			return Res;
 		}
 	}
@@ -63,12 +44,12 @@ class ResourceManager : public Singleton<ResourceManager>
 	//===========================================================================//
 	// Ajoute une resource									                     //
 	//===========================================================================//
-    void Add(const crc32& crc, Resource* Res);
+    void Add(const std::string& resource, Resource* Res);
 
 	//===========================================================================//
 	// Retire une resource									                     //
 	//===========================================================================//
-    void Remove(const crc32& crc);
+    void Remove(const std::string& resource);
 
 private :
 	
@@ -80,7 +61,7 @@ private :
 	//===========================================================================//
 	// Types												                     //
 	//===========================================================================//
-	typedef std::map<crc32, Resource*> TResourcesMap;
+	typedef std::map<std::string, Resource*> TResourcesMap;
 
 	//===========================================================================//
 	// Données membres										                     //

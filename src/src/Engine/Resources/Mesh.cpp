@@ -36,14 +36,13 @@ Mesh::~Mesh()
  * @param[in]	resource : crc32 de la ressource
  * @return	le résultat du chargement
  **********************************************************/
-ResourceResult Mesh::Load(crc32 resource)
+ResourceResult Mesh::Load(std::string resource)
 {
-	char sMeshPath[128];
-	sprintf_s(sMeshPath, "..\\..\\data\\test\\%u.DAE", resource);
+	std::string str="data\\modele\\%u.DAE"+resource;
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(sMeshPath, m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale) == RES_SUCCEED)
+	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 			return RES_SUCCEED;

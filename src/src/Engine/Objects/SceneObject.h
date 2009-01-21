@@ -25,15 +25,15 @@ enum types_tex
 class SceneObject : public Object
 {
 public:
-	SceneObject(const crc32& mesh, const crc32& Tex, const D3DXVECTOR3& Position);
+	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position);
 	SceneObject();
 	virtual ~SceneObject();
 
 	//===========================================================================//
 	// Gestion apparence des objets											     //
 	//===========================================================================//
-	void			SetTexture(const crc32& Tex, types_tex Type);	// Ajout d'une texture
-	void			SetShader(const crc32& Shad); 
+	void	SetTexture(const std::string& Tex, types_tex Type);	// Ajout d'une texture
+	void	SetShader(const std::string& Shad); 
 
 protected:
 
@@ -55,14 +55,18 @@ private:
 	//===========================================================================//
 	// Types												                     //
 	//===========================================================================//
-	typedef std::map<types_tex, crc32> TTextureMap;
+	typedef std::map<types_tex, std::string> TTextureMap;
 
 	//===========================================================================//
 	// Données membres												             //
 	//===========================================================================//
-	crc32 m_Mesh;
-	crc32 m_Shader;
+	std::string		m_Mesh;
+	std::string		m_Shader;
 	TTextureMap	m_MapTexture;
+
+	Mesh * m_PtrMesh;
+	Texture * m_PtrTex;
+	Shader * m_PtrShader;
 	
 };
 

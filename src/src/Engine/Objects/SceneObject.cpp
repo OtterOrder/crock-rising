@@ -7,7 +7,7 @@ SceneObject::SceneObject()
 {
 }
 
-SceneObject::SceneObject(const crc32& mesh, const crc32& Tex, const D3DXVECTOR3& Position)
+SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position)
 {
 	m_Mesh=mesh;
 	m_MapTexture[MESHTEX]=Tex;
@@ -16,7 +16,7 @@ SceneObject::SceneObject(const crc32& mesh, const crc32& Tex, const D3DXVECTOR3&
 //===========================================================================//
 // Ajoute une texture à la map		                                         //
 //===========================================================================//
-void SceneObject::SetTexture(const crc32& Tex, types_tex Type)
+void SceneObject::SetTexture(const std::string& Tex, types_tex Type)
 {
 	// On teste si la resource existe déjà
 	Texture * tex=ResourceManager::GetInstance()->Load<Texture>(Tex);
@@ -34,14 +34,15 @@ void SceneObject::SetTexture(const crc32& Tex, types_tex Type)
 //===========================================================================//
 // Attribue un shader à l'objet 										     //
 //===========================================================================//
-void SceneObject::SetShader(const crc32& Shad)
+void SceneObject::SetShader(const std::string& Shad)
 {
 	Shader * shader=ResourceManager::GetInstance()->Load<Shader>(Shad);
 }
 
 void SceneObject::InitObject()
 {
-
+	m_PtrMesh=ResourceManager::GetInstance()->Load<Mesh>(m_Mesh);
+	m_PtrTex=ResourceManager::GetInstance()->Load<Texture>(m_MapTexture[MESHTEX]);
 }
 
 //===========================================================================//

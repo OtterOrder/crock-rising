@@ -55,18 +55,19 @@ private:
 	//===========================================================================//
 	// Types												                     //
 	//===========================================================================//
-	typedef std::map<types_tex, std::string> TTextureMap;
+	typedef std::map<types_tex, Texture*> TTextureMap;
 
 	//===========================================================================//
 	// Données membres												             //
 	//===========================================================================//
 	std::string		m_Mesh;
+	std::string		m_Tex;
 	std::string		m_Shader;
-	TTextureMap	m_MapTexture;
+	TTextureMap		m_MapTexture;
 
-	Mesh * m_PtrMesh;
-	Texture * m_PtrTex;
-	Shader * m_PtrShader;
+	Mesh*			m_PtrMesh;
+	Shader*			m_PtrShader;
+	D3DXVECTOR3		m_Offset;
 	
 };
 

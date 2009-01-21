@@ -4,6 +4,8 @@
 //******************************************************************
 
 #include	<Game/Level.h>
+#include	<Objects/Camera.h>
+#include	<Renderer/Renderer.h>
 
 //******************************************************************
 
@@ -11,7 +13,7 @@
 
 //******************************************************************
 
-class Camera;
+class Sprite;
 
 class LevelStart : public Level
 {
@@ -25,9 +27,9 @@ public:
 
 
 protected:
+	Camera* m_Camera;
 	
-	Camera	*m_Camera;
-
+	Sprite	*m_pSprite;
 };
 
 //******************************************************************

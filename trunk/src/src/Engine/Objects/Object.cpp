@@ -27,3 +27,24 @@ Object::Object( D3DXVECTOR3 pos )
 	m_WorldMatrix._42 = pos.y;
 	m_WorldMatrix._43 = pos.z;
 }
+
+Object::~Object( void )
+{
+	//TODO
+}
+
+/***********************************************************
+ * Ajoute une référence sur l'objet dans la liste.
+ **********************************************************/
+void Object::RegisterRef( void )
+{
+	RefList.push_front( this );
+}
+
+/***********************************************************
+ * Retire toutes les références sur l'objet de la liste.
+ **********************************************************/
+void Object::ReleaseRef( void )
+{
+	RefList.remove( this );
+}

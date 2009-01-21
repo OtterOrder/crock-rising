@@ -38,7 +38,7 @@ Mesh::~Mesh()
  **********************************************************/
 ResourceResult Mesh::Load(std::string resource)
 {
-	std::string str="data\\modele\\%u.DAE"+resource;
+	std::string str="data\\modele\\"+resource;
 
 	MeshLoader meshLoader;
 

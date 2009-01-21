@@ -22,12 +22,12 @@ public :
 	//===========================================================================//
 	// Changement des paramètres du shader                                       //
 	//===========================================================================//
-	void SetParameter(const std::string& Name, float Value) {}					// Change un paramètre du shader (float)
-	void SetParameter(const std::string& Name, const D3DXVECTOR2& Value) {}		// Change un paramètre du shader (vector 2)
-    void SetParameter(const std::string& Name, const D3DXVECTOR3& Value) {}		// Change un paramètre du shader (vector 3)
-    void SetParameter(const std::string& Name, const D3DXVECTOR4& Value) {}		// Change un paramètre du shader (vector 4)
-	void SetParameter(const std::string& Name, const D3DXMATRIX& Value) {}	    // Change un paramètre du shader (matrice)
-	void SetParameter(const std::string& Name, const D3DXCOLOR& Value) {}		// Change un paramètre du shader (couleur)
+	void SetParameter(const std::string& Name, float Value);					// Change un paramètre du shader (float)
+	void SetParameter(const std::string& Name, const D3DXVECTOR2& Value);		// Change un paramètre du shader (vector 2)
+    void SetParameter(const std::string& Name, const D3DXVECTOR3& Value);		// Change un paramètre du shader (vector 3)
+    void SetParameter(const std::string& Name, const D3DXVECTOR4& Value);		// Change un paramètre du shader (vector 4)
+	void SetParameter(const std::string& Name, const D3DXMATRIX& Value);	    // Change un paramètre du shader (matrice)
+	void SetParameter(const std::string& Name, const D3DXCOLOR& Value);			// Change un paramètre du shader (couleur)
 
-	ID3DXEffect*				m_pEffect;		// Effect de l'objet
+	ID3DXEffect* m_pEffect;		// Effect de l'objet
 };

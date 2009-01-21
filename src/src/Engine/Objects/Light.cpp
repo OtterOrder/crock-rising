@@ -3,40 +3,33 @@
 
 Light::Light() 
 {
-	
-	m_diffuse.r = 0.f ;
-	m_diffuse.g = 0.f ;
-	m_diffuse.b = 0.f ;
-	m_diffuse.alpha = 0.f ;
+	m_diffuse	= ColorValue();
+	m_specular	= ColorValue();
+	m_ambient	= ColorValue();
 
-	m_specular.r = 0.f ; 
-	m_specular.g = 0.f ; 
-	m_specular.b = 0.f ; 
-	m_specular.alpha = 0.f ; 
-
-	m_ambient.r = 0.f ; 
-	m_ambient.g = 0.f ; 
-	m_ambient.b = 0.f ; 
-	m_ambient.alpha = 0.f ; 
-
-	m_direction.x = 0.f ; 
-	m_direction.y = 0.f ; 
-	m_direction.z = 0.f ; 
-	
-	m_position.x = 0.f ; 
-	m_position.y = 0.f ; 
-	m_position.z = 0.f ; 
-
+	m_direction	= Vector3f(0.f, 0.f, 0.f);
+	m_position	= Vector3f(0.f, 0.f, 0.f); 
 }
 
 /* -------------------------------------------------------------------------------------------------- */
 
-Light::Light(Vector3f position, Vector3f direction, ColorValue diffuse, ColorValue specular, ColorValue ambient) 
+Light::Light(Vector3f position, Vector3f direction, ColorValue diffuse, ColorValue specular, ColorValue ambient, TypeLight type)
+:	m_position(position), m_direction(direction), m_diffuse(diffuse), m_specular(specular), m_ambient(ambient), m_typeLight(type)
 {
-	m_position = position ; 
-	m_direction = direction ;  
-	m_diffuse = diffuse ; 
-	m_specular = specular ; 
-	m_ambient = ambient ; 
-}
+	switch (type)
+	{
+	case LT_AMBIANT:
+		//shader = ResourceManager::GetInstance()->Load<Shader>("default.fx");
+		break;
+	case LT_DIRECTIONNEL:
+		//shader = ResourceManager::GetInstance()->Load<Shader>("directionnel.fx");
+		break;
+	case LT_POINTLIGHT:
+		//shader = ResourceManager::GetInstance()->Load<Shader>("pointlight.fx");
+		break;
+	case LT_SPOTLIGHT:
+		//shader = ResourceManager::GetInstance()->Load<Shader>("spotlight.fx");
+		break;
+	}
 
+}

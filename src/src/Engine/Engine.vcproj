@@ -278,6 +278,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Object2D"
+				>
+				<File
+					RelativePath=".\Objects\Object2D\Object2D.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Object2D.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Sprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Sprite.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Renderer"
@@ -290,14 +310,6 @@
 				RelativePath=".\Renderer\Renderer.h"
 				>
 			</File>
-			<Filter
-				Name="3D"
-				>
-			</Filter>
-			<Filter
-				Name="2D"
-				>
-			</Filter>
 			<Filter
 				Name="D3DApp"
 				>

@@ -10,7 +10,8 @@
 
 struct ColorValue 
 {
-	ColorValue( float _r=0.f, float _g=0.f, float _b=0.f, float _a=1.f )	{	r = _r; g = _g; b = _b; alpha = _a;		}
+	ColorValue	( float _r=0.f, float _g=0.f, float _b=0.f, float _a=1.f )	
+				{	r = _r; g = _g; b = _b; alpha = _a;	}
 
 	float r ;
 	float g ;
@@ -23,24 +24,30 @@ struct ColorValue
 class Light : public Object
 {
 public:
-	enum TypeLight	{	LT_AMBIANT, LT_DIRECTIONNEL, LT_POINTLIGHT, LT_SPOTLIGHT	};
 
 	Light();
-	Light(Vector3f position , Vector3f direction , ColorValue diffuse , ColorValue specular , ColorValue ambient, TypeLight type );
+	// Lumière type Point
+	Light( ColorValue ambient, ColorValue diffuse, ColorValue specular, Vector3f position, float attenu );
+	// Lumière type Spot
+	Light( ColorValue ambient, ColorValue diffuse, ColorValue specular, Vector3f position,  Vector3f direction, float attenu, float angle );
+	// Lumière type Directionnelle
+	Light( ColorValue diffuse, ColorValue specular, Vector3f direction );
 
-	void setDiffuse		(ColorValue diffuse)	{ m_diffuse = diffuse ; }
-	void setSpecular	(ColorValue specular)	{ m_specular = specular ; }
-	void setAmbient		(ColorValue ambient)	{ m_ambient = ambient ; }
-	void setPosition	(Vector3f position)		{ m_position = position ; }
+	void setDiffuse		(ColorValue diffuse)	{ m_diffuse = diffuse ;		}
+	void setSpecular	(ColorValue specular)	{ m_specular = specular ;	}
+	void setAmbient		(ColorValue ambient)	{ m_ambient = ambient ;		}
+	void setPosition	(Vector3f position)		{ m_position = position ;	}
 	void setDirection	(Vector3f direction)	{ m_direction = direction ; }
-	void setTypeLight	(TypeLight typeL)		{ m_typeLight = typeL;	}
+	void setAttenuation	(float atte)			{ m_attenuation = atte;		}
+	void setAngle		(float angle)			{ m_angle = angle ;			}
 
-	ColorValue getDiffuse  ()   { return m_diffuse ; }
-	ColorValue getSpecular ()   { return m_specular ; }
-	ColorValue getAmbient  ()   { return m_ambient ; }
-	Vector3f   getPosition ()   { return m_position ; }
-	Vector3f   getDirection()   { return m_direction ; }
-	TypeLight  getTypeLight()   { return m_typeLight ; }
+	ColorValue	getDiffuse  ()		{ return m_diffuse ; }
+	ColorValue	getSpecular ()		{ return m_specular ; }
+	ColorValue	getAmbient  ()		{ return m_ambient ; }
+	Vector3f	getPosition ()		{ return m_position ; }
+	Vector3f	getDirection()		{ return m_direction ; }
+	float		getAttenuation()	{ return m_attenuation ; }
+	float		getAngle()			{ return m_angle ;	}
 
 protected :
 	ColorValue m_diffuse ;
@@ -50,8 +57,8 @@ protected :
 	Vector3f m_position ;
 	Vector3f m_direction ;
 
-	TypeLight m_typeLight;
-	Shader* shader;
+	float m_attenuation;
+	float m_angle;
 };
 
 

@@ -1,6 +1,8 @@
 #include "Light.h"
 
-
+/**
+Light type Point
+*/
 Light::Light() 
 {
 	m_diffuse	= ColorValue();
@@ -13,23 +15,21 @@ Light::Light()
 
 /* -------------------------------------------------------------------------------------------------- */
 
-Light::Light(Vector3f position, Vector3f direction, ColorValue diffuse, ColorValue specular, ColorValue ambient, TypeLight type)
-:	m_position(position), m_direction(direction), m_diffuse(diffuse), m_specular(specular), m_ambient(ambient), m_typeLight(type)
+// Lumière type Point
+Light::Light( ColorValue ambient, ColorValue diffuse, ColorValue specular, Vector3f position, float attenu )
+:	m_ambient(ambient), m_diffuse(diffuse), m_specular(specular), m_position(position), m_attenuation(attenu)
 {
-	switch (type)
-	{
-	case LT_AMBIANT:
-		//shader = ResourceManager::GetInstance()->Load<Shader>("default.fx");
-		break;
-	case LT_DIRECTIONNEL:
-		//shader = ResourceManager::GetInstance()->Load<Shader>("directionnel.fx");
-		break;
-	case LT_POINTLIGHT:
-		//shader = ResourceManager::GetInstance()->Load<Shader>("pointlight.fx");
-		break;
-	case LT_SPOTLIGHT:
-		//shader = ResourceManager::GetInstance()->Load<Shader>("spotlight.fx");
-		break;
-	}
+}
+
+// Lumière type Spot
+Light::Light( ColorValue ambient, ColorValue diffuse, ColorValue specular, Vector3f position,  Vector3f direction, float attenu, float angle )
+:	m_ambient(ambient), m_diffuse(diffuse), m_specular(specular), m_position(position), m_direction(direction), m_attenuation(attenu), m_angle(angle)
+{
+}
+
+// Lumière type Directionnelle
+Light::Light( ColorValue diffuse, ColorValue specular, Vector3f direction )
+:	m_diffuse(diffuse), m_specular(specular), m_direction(direction)
+{
 
 }

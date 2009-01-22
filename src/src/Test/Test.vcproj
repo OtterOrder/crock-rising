@@ -185,6 +185,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Obj3d"
+			>
+			<File
+				RelativePath=".\Obj3d\GameCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Obj3d\GameCamera.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
 			>

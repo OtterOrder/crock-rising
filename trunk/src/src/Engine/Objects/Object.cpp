@@ -38,7 +38,7 @@ Object::~Object( void )
  **********************************************************/
 void Object::RegisterRef( void )
 {
-	RefList.push_front( this );
+	//RefList.push_front( this );
 }
 
 /***********************************************************
@@ -46,5 +46,5 @@ void Object::RegisterRef( void )
  **********************************************************/
 void Object::ReleaseRef( void )
 {
-	RefList.remove( this );
+	//RefList.remove( this );
 }

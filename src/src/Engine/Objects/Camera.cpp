@@ -1,20 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera()
-:Object()
-{
-	m_angleX = m_angleY = 0;
-
-	SetUp( Vector3f( 0.0f, 1.0f, 0.0f ) );
-	SetTarget( Vector3f() ); //cad regard vers le fond
-
-	SetDefaultProjection();
-}
-
 Camera::Camera( Vector3f pos, Vector3f target, Vector3f up )
 :Object( pos )
 { 
-	m_angleX = m_angleY = 0;
+	InitAngle();
 
 	SetUp( up );
 	SetTarget( target );
@@ -39,12 +28,11 @@ void Camera::SetTarget( Vector3f target ){
 }
 
 void Camera::SetTarget( Object* obj  ){
-	//SetTarget( obj->GetPosition() );
+	//SetTarget( obj->GetPosition() ); //bon à voir avec la classe Object
 }
 
 D3DXMATRIX Camera::GetMatrixView()
 {
-	//D3DXMatrixLookAtLH( &m_MatrixView, &GetPosition(), &GetTarget(), &GetUp() );
 	return m_MatrixView;
 }
 
@@ -76,8 +64,7 @@ void Camera::SetDefaultProjection()
 }
 
 void  Camera::SetPosition( Vector3f pos )
-{
-	//D3DXMatrixTranslation( &m_WorldMatrix, -pos.x, -pos.y, -pos.z );
+{ 
 	m_WorldMatrix._41 = pos.x;
 	m_WorldMatrix._42 = pos.y;
 	m_WorldMatrix._43 = pos.z;
@@ -87,16 +74,17 @@ void Camera::UpdateMatrixView()
 {
 	D3DXMATRIX position, target, rotY, rotX;
 	
-	D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	
-	D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	
+	D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	//selon axeY
+	D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	//selon axeX
 
 	Vector3f vPosition = GetPosition();
-	//Vector3f vTarget = GetTarget();
+	Vector3f vTarget = GetTarget();
 
 	D3DXMatrixTranslation( &position, -vPosition.x, -vPosition.y, -vPosition.z );
-	//D3DXMatrixTranslation( &target, -vTarget.x, -vTarget.y, -vTarget.z );
+	D3DXMatrixTranslation( &target, -vTarget.x, -vTarget.y, -vTarget.z );
 
-	m_MatrixView = rotY * rotX * position; //target * rotY * rotX * position
+	D3DXMatrixIdentity( &m_MatrixView );
+	m_MatrixView = target * rotY * rotX * position; 
 
 }
 
@@ -119,4 +107,9 @@ void Camera::SetOrientationX( int angleX )	//en degres
 Vector3f Camera::GetPosition()
 {
 	return Vector3f( m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43 );
+}
+
+void Camera::InitAngle()
+{ 
+	m_angleX = m_angleY = 0; 
 }

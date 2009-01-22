@@ -2,6 +2,7 @@
 
 #include	<Core/Inputs/InputManager.h>
 #include	<Objects/Object2D/Sprite.h>
+//#include	<XInput.h>
 
 //******************************************************************
 
@@ -30,7 +31,7 @@ LevelStart::~LevelStart( void )
 void LevelStart::Init( void )
 {
 	m_Camera = new Camera( Vector3f(0.0f, 10.0f, -100.0f) );
-	m_Camera->SetTarget( Vector3f(10.0f, 10.0f, 0.0f) );
+	m_Camera->SetTarget( Vector3f(10.0f, 0.0f, 10.0f ) );
 	Renderer::GetInstance()->SetCamera( m_Camera );
 
 	m_pSprite = new Sprite( 0 );
@@ -41,7 +42,13 @@ void LevelStart::Init( void )
  **********************************************************/
 void LevelStart::Update( void )
 {
-	
+
+	//Partie Manette Xbox360
+	/*XInputEnable( 1 );
+	XINPUT_STATE stateManette = {0};
+	XInputGetState( 1, &stateManette );*/
+
+
 	//OffsetCurseur -> Camera
 	Point2f point = InputManager::GetInstance()->GetMouseOffset();
 	const int sensibilite = 15;
@@ -59,7 +66,7 @@ void LevelStart::Update( void )
 		float c = cos( angleY );
 
 		//pos.x =  pos.x + s;
-		pos.z =  pos.z + c;		
+		pos.z =  pos.z + c/2;		
 
 		if( distance>60.0f )
 			m_Camera->SetPosition( pos );
@@ -77,7 +84,7 @@ void LevelStart::Update( void )
 		float c = cos( angleY );
 
 		//pos.x =  pos.x + s;
-		pos.z =  pos.z - c;		
+		pos.z =  pos.z - c/2;		
 
 		if( distance<300.0f )
 			m_Camera->SetPosition( pos );
@@ -85,6 +92,7 @@ void LevelStart::Update( void )
 
 	if( InputManager::GetInstance()->IsKeyPressed( 'A' ) )
 	{
+		m_Camera->InitAngle();
 		m_Camera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
 	}
 

@@ -12,10 +12,9 @@ class Camera : public Object
 {
 public:
 	//Constructeur
-	Camera( void );
-	Camera( Vector3f pos, 
-			Vector3f target=Vector3f( 0.0f, 0.0f, 1.0f ),
-			Vector3f up=Vector3f( 0.0f, 1.0f, 0.0f ) );
+	Camera( Vector3f pos = Vector3f(0.0f, 0.0f, 0.0f), 
+			Vector3f target = Vector3f( 0.0f, 0.0f, 1.0f ),
+			Vector3f up = Vector3f( 0.0f, 1.0f, 0.0f ) );
 
 	//Accesseurs
 	Vector3f GetUp();
@@ -33,28 +32,24 @@ public:
 	void SetRatio( float ratio=DEFAULT_RATIO );
 	void SetFOV( int FovDeg=DEFAUT_FOV_DEG );
 
+	void SetPosition( Vector3f pos );
+	void SetOrientationY( int angleY );
+	void SetOrientationX( int angleX );
+
 	//Accesseurs
 	float GetFOV(){		return m_fov_rad; };
 	float GetZNear(){	return m_zNear; };
 	float GetZFar(){	return m_zFar; };
 	float GetRatio(){	return m_ratio; };
 
-	int		GetOrientationYDeg(){ return m_angleY; }
-	float	GetOrientationYRad(){ return D3DXToRadian( m_angleY ); }
-
 	Vector3f GetPosition();
-	
+	float	GetOrientationYRad(){ return D3DXToRadian( m_angleY ); }
+	float	GetOrientationXRad(){ return D3DXToRadian( m_angleX ); }
 
 	//Fonctions membres
-	void SetDefaultProjection();		//Applique les paramètres par default pour les variables de projection
-
-	//Test
-	void SetPosition( Vector3f pos );
-	void SetOrientationY( int angleY );
-	void SetOrientationX( int angleX );
-
-	void UpdateMatrixView();
-	
+	void InitAngle();
+	void SetDefaultProjection();	// Applique les paramètres par defaut pour les variables de projection
+	void UpdateMatrixView();		// Mise à jour de la matrice View en fontion des paramètres		
 
 private:
 	//Variables pour matrice de visualisation
@@ -70,10 +65,6 @@ private:
 protected :
 	D3DXMATRIX m_MatrixView;		//Matrice de visualisation
 	D3DXMATRIX m_MatrixProjection;	//Matrice de projection
-
-//private: //Outils
-//	float	deg2rad( int degres ){ return (float)degres / 180.0f * D3DX_PI; };
-//	int		rad2deg( float rad ){ return (int)(rad * 180.0f / D3DX_PI); };
 
 };
 

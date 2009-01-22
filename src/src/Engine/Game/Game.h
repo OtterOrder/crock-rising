@@ -3,12 +3,16 @@
 
 //******************************************************************
 
+#include	<list>
+
 #include	"Core/Singleton.h"
 #include	"Core/Types/Crc32.h"
 
 //******************************************************************
 
 class Level;
+class Object;
+class Object2D;
 
 class Game : public Singleton< Game >
 {
@@ -32,7 +36,10 @@ protected:
 	// =========================================================
 	// Données protégées
 	
-	Level	*m_CurrentLevel;		// Niveau courant
+	Level					*m_CurrentLevel;		// Niveau courant
+
+	std::list< Object* >	*m_ObjList;				// Liste des objets 3d
+	std::list< Object2D* >	*m_Obj2DList;			// Liste des objets 2d
 
 
 	// =========================================================

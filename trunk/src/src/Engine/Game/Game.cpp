@@ -1,6 +1,10 @@
 #include	"Game.h"
 
 #include	"Level.h"
+#include	"Objects/Object.h"
+#include	"Objects/Object2D/Object2D.h"
+
+using namespace std;
 
 //******************************************************************
 
@@ -9,7 +13,9 @@
  **********************************************************/
 Game::Game( void )
 {
-	m_CurrentLevel = NULL;
+	m_CurrentLevel	= NULL;
+	m_ObjList		= &Object::RefList;
+	m_Obj2DList		= &Object2D::RefList;
 }
 
 /***********************************************************
@@ -26,6 +32,23 @@ Game::~Game( void )
  **********************************************************/
 void Game::Update( void )
 {
+	list< Object* >::iterator obj		= m_ObjList->begin();
+	list< Object2D* >::iterator obj2d	= m_Obj2DList->begin();
+	
+	// Update des objets 3d
+	while( obj != m_ObjList->end() )
+	{
+		(*obj)->Update();
+		++obj;
+	}
+
+	// Update des objets 2d
+	while( obj2d != m_Obj2DList->end() )
+	{
+		(*obj2d)->Update();
+		++obj2d;
+	}
+	
 	if( m_CurrentLevel )
 	{
 		// Update du level courant

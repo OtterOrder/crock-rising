@@ -1,23 +1,46 @@
 #include	"Object2D.h"
 
+using namespace std;
+
 //******************************************************************
 
 #define		OBJECT2D_DEFAULT_Z		0.f		// Profondeur par défaut
 
 //******************************************************************
 
+list< Object2D* > Object2D::RefList;
+
+//******************************************************************
+
+/***********************************************************
+ * Initialisation commune aux constructeurs.
+ **********************************************************/
+void Object2D::CommonInit()
+{
+	RefList.push_front( this ); // enregistrement dans la liste
+}
+
 /***********************************************************
  * Constructeur.
  **********************************************************/
-Object2D::Object2D( void )
+Object2D::Object2D()
 {
+	CommonInit();
 	m_Position.z = OBJECT2D_DEFAULT_Z;
 }
 
 /***********************************************************
  * Destructeur.
  **********************************************************/
-Object2D::~Object2D( void )
+Object2D::~Object2D()
+{
+	RefList.remove( this ); // suppression dans la liste
+}
+
+/***********************************************************
+ * Update, appelée à chaque tour moteur.
+ **********************************************************/
+void Object2D::Update()
 {
 }
 
@@ -46,7 +69,7 @@ void Object2D::SetPosition( const Point2f &position )
  * Donne la position.
  * @return	position du l'objet
  **********************************************************/
-Point2f Object2D::GetPosition( void ) const
+Point2f Object2D::GetPosition() const
 {
 	return Vector2f( m_Position.x, m_Position.y );
 }
@@ -64,7 +87,7 @@ void Object2D::SetDepth( float depth )
  * Donne la profondeur.
  * @return	profondeur = coordonnée z de l'objet
  **********************************************************/
-float Object2D::GetDepth( void )
+float Object2D::GetDepth()
 {
 	return m_Position.z;
 }
@@ -95,7 +118,7 @@ void Object2D::Set3DPosition( const Point3f &position )
  * Donne la position 3D.
  * @return	position 3D du l'objet
  **********************************************************/
-Point3f Object2D::Get3DPosition( void ) const
+Point3f Object2D::Get3DPosition() const
 {
 	return m_Position;
 }

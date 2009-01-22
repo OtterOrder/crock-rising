@@ -1,33 +1,33 @@
-#pragma once
+#ifndef		_Object_H
+#define		_Object_H
 
-//===========================================================================//
-// Include                                                                   //
-//===========================================================================//
+//******************************************************************
+
 #include	<list>
 #include	<d3dx9.h>
 
 #include	"../Core/Types/Vector.h"
 
-//===========================================================================//
-// Classe générique pour représenter un objet 3D                             //
-//===========================================================================//
+//******************************************************************
+
+// Classe générique pour représenter un objet 3D
 class Object
 {
 public:
 	
-	//static std::list< Object* > RefList; // Liste de références sur les objets
+	// Liste de références sur les objets
+	static std::list< Object* > RefList;
 	
-	//===========================================================================//
-	// Constructeur									                             //
-	//===========================================================================//
-	Object			( void );
-	Object			( float initPosX, float initPosY, float initPosZ );
-	Object			( D3DXVECTOR3 pos );
-	virtual ~Object	( void );
+	// Constructeurs
+	Object( void );
+	Object( float initPosX, float initPosY, float initPosZ );
+	Object( D3DXVECTOR3 pos );
+	virtual ~Object( void );
 
-	//===========================================================================//
-	// Fonction de transformation		    		                             //
-	//===========================================================================//
+	// Update
+	virtual void Update(); // Méthode appelée chaque tour moteur
+
+	// Fonctions de transformation
 	virtual void SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj) {}
 	virtual void SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos) {}
 	virtual void SetTransform(const D3DXMATRIX* world) {}
@@ -39,8 +39,9 @@ protected:
 
 private:
 
-	// Méthodes d'ajout/retrait de l'objet de la liste de références
-	void	RegisterRef	( void );
-	void	ReleaseRef	( void );
+	void CommonInit( void ); // Initialisation commune à tous les constructeurs
 
 };
+
+//******************************************************************
+#endif		//_Object_H

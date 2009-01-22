@@ -15,7 +15,7 @@ class Object
 {
 public:
 	
-	static std::list< Object* > RefList; // Liste de références sur les objets
+	//static std::list< Object* > RefList; // Liste de références sur les objets
 	
 	//===========================================================================//
 	// Constructeur									                             //

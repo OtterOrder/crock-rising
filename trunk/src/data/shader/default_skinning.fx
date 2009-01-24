@@ -45,10 +45,11 @@ sampler_state
 //===========================================================================//
 struct VS_OUTPUT
 {
-    float4 Position   : POSITION;   // vertex position 
+    float4 Position   : POSITION;   // vertex position
     float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
     float3 Normal	  : TEXCOORD1;
     float4 oPosition  : TEXCOORD2;
+    float4 Weights	  : TEXCOORD3;	// temp
 };
 
 //===========================================================================//
@@ -56,7 +57,8 @@ struct VS_OUTPUT
 //===========================================================================//
 VS_OUTPUT RenderSceneVS( float4 vPos : POSITION, 
                          float3 vNormal : NORMAL,
-                         float2 vTexCoord0 : TEXCOORD0)
+                         float2 vTexCoord0 : TEXCOORD0,
+                         float4 vWeights : BLENDWEIGHT)
 {
     VS_OUTPUT Output;
     
@@ -64,7 +66,9 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     Output.oPosition = Output.Position;
     Output.Normal = (mul( vNormal, g_mWorldView ));
     
-    Output.TextureUV = vTexCoord0; 
+    Output.TextureUV = vTexCoord0;
+    
+    Output.Weights = vWeights;
     
     return Output;    
 }
@@ -104,7 +108,10 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
     //Couleur finale (ambient+diffuse+specular)
     float4 FinalIllumination = SpecResult+g_MaterialDiffuseColor*float4(vLightDiffuse, 1.0f)+g_MaterialAmbientColor*g_LightAmbient;
     Output.RGBColor.xyz = tex2D(MeshTextureSampler, In.TextureUV.xy)* FinalIllumination; 
-    Output.RGBColor.a = 1.0f; 
+    Output.RGBColor.a = 1.0f;
+    
+    Output.RGBColor = In.Weights;
+    Output.RGBColor.a = 1.0f;
 
     return Output;
 }
@@ -137,7 +144,8 @@ PS_OUTPUT RenderScenePSNoTex( VS_OUTPUT In )
     Output.RGBColor.xyz = FinalIllumination; 
     Output.RGBColor.a = 1.0f;
     
-    Output.RGBColor = float4(1.f, 0.f, 0.f, 1.f);
+    Output.RGBColor = In.Weights;
+    Output.RGBColor.a = 1.0f;
 
     return Output;
 }

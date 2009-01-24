@@ -23,6 +23,12 @@ struct Vertex
 	Vector2f m_TexCoord;
 };
 
+struct SkinnedVertex : public Vertex
+{
+	Vector4f m_Bones;
+	Vector4f m_Weights;
+};
+
 struct FaceVertex
 {
 	int m_Position;
@@ -47,18 +53,19 @@ class MeshLoader
 		m_iNbFaces,
 		m_iNbSkinnedVertices;
 
-	float		**m_Positions,
-		**m_Normals,
-		**m_TexCoords;
+	float**		m_Positions,
+		 **		m_Normals,
+		 **		m_TexCoords;
 
 	int			m_iNbPositions,
-		m_iNbNormals,
-		m_iNbTexCoords;
+				m_iNbNormals,
+				m_iNbTexCoords;
 
 	float		m_OffsetPosition[3];
 	float		m_OffsetRotation[4];
 	float		m_OffsetScale[3];
 
+	bool		m_Skinned;
 	int			m_iNbWeights;
 	float**		m_Weights;
 

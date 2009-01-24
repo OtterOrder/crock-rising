@@ -12,6 +12,8 @@ class SceneObjectAnimated : public SceneObject
 public:
 	SceneObjectAnimated();
 
+	SceneObjectAnimated(const std::string& mesh, const std::string& anim, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader = "default_skinning.fx");
+
 private:
 	unsigned int m_uCurrentAnim;
 

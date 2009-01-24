@@ -18,6 +18,7 @@ MeshLoader::MeshLoader()
 	m_iNbNormals	= 0;
 	m_iNbTexCoords	= 0;
 
+	m_Skinned		= false;
 	m_iNbWeights	= 0;
 	m_Weights		= NULL;
 
@@ -119,6 +120,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 	string sWeightsId	("weights");
 	std::vector<int> Offset(4, 0);
 
+	int VertexDeclarationOffset = 0;
 
 	//----------------------------------- Skinning -----------------------------------//
 	if(rootNode) {
@@ -147,6 +149,8 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 					node =  node->FirstChild( "vertex_weights");
 					if (node)
 						FillSkinArray (node);
+
+					m_Skinned = true;
 				}
 			}
 		}
@@ -164,6 +168,8 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 				if(node) {
 					node =  node->FirstChild( "source" );		// Recherche la première balise "source"
 
+					D3DVERTEXELEMENT9 CurrentElement;
+
 					while (node)
 					{
 						string sId (node->ToElement()->Attribute("id"));		// vérification de l'id
@@ -171,41 +177,67 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 
 						if (SpliterPlace != sId.npos)
 						{
-							D3DVERTEXELEMENT9 CurrentElement;
-
 							CurrentElement.Stream = 0;
 							CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
 
 							if (sId.compare( SpliterPlace, sPositionsId.length(), sPositionsId) == 0)
 							{
 								ExtractArrayDatas (node, m_Positions, m_iNbPositions, m_iNbVertices);
-								CurrentElement.Offset = 0;
+								CurrentElement.Offset = VertexDeclarationOffset;
 								CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
 								CurrentElement.Usage = D3DDECLUSAGE_POSITION;
 								CurrentElement.UsageIndex = 0;
 								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+
+								VertexDeclarationOffset += 3*4;
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
 								ExtractArrayDatas (node, m_Normals, m_iNbNormals, m_iNbVertices);
-								CurrentElement.Offset = 12;
+								CurrentElement.Offset = VertexDeclarationOffset;
 								CurrentElement.Usage = D3DDECLUSAGE_NORMAL;
 								CurrentElement.UsageIndex = 0;
 								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+
+								VertexDeclarationOffset += 3*4;
 							}
 							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
 							{
 								ExtractArrayDatas (node, m_TexCoords, m_iNbTexCoords, m_iNbVertices);
-								CurrentElement.Offset = 24;
+								CurrentElement.Offset = VertexDeclarationOffset;
 								CurrentElement.Usage = D3DDECLUSAGE_TEXCOORD;
 								CurrentElement.UsageIndex = 0;
 								CurrentElement.Type = D3DDECLTYPE_FLOAT2;
+
+								VertexDeclarationOffset += 2*4;
 							}
 
 							DxElements.push_back(CurrentElement);
 						}
 
 						node = node->NextSibling( "source" );
+					}
+
+					if (m_Skinned)
+					{
+						CurrentElement.Offset = VertexDeclarationOffset;
+						CurrentElement.Usage = D3DDECLUSAGE_BLENDINDICES;
+						CurrentElement.UsageIndex = 0;
+						CurrentElement.Type = D3DDECLTYPE_FLOAT4;
+
+						VertexDeclarationOffset += 4*4;
+
+						DxElements.push_back(CurrentElement);
+
+
+						CurrentElement.Offset = VertexDeclarationOffset;
+						CurrentElement.Usage = D3DDECLUSAGE_BLENDWEIGHT;
+						CurrentElement.UsageIndex = 0;
+						CurrentElement.Type = D3DDECLTYPE_FLOAT4;
+
+						VertexDeclarationOffset += 4*4;
+
+						DxElements.push_back(CurrentElement);
 					}
 
 					node = MeshNode;
@@ -427,7 +459,10 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Vert
 	}
 	m_iNbVertices=nbvert;
 
-	VertexBuffer = new Vertex [m_iNbVertices];
+	if (!m_Skinned)
+		VertexBuffer = new Vertex [m_iNbVertices];
+	else
+		VertexBuffer = new SkinnedVertex [m_iNbVertices];
 
 	int vertexCount=0;
 
@@ -563,6 +598,19 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuff
 	VertexBuffer[VertexIndex].m_Position	= VectPosition;
 	VertexBuffer[VertexIndex].m_Normal		= VectNormal;
 	VertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
+
+	if (m_Skinned)
+	{
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[0];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[1];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[2];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[3];
+
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[0];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[1];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[2];
+		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[3];
+	}
 }
 
 //===========================================================================//

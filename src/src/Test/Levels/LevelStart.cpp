@@ -38,11 +38,11 @@ void LevelStart::Init( void )
 
 	m_pSprite = new Sprite( 0 );
 
-	m_pSObject = NULL;
-	m_pSObject = new SceneObject("Skinned_Box.DAE","",D3DXVECTOR3(0.f,0.f,0.f));
-	m_pSObject->InitObject();
+	m_pSObjectAnimated = NULL;
+	m_pSObjectAnimated = new SceneObjectAnimated("Skinned_Box.DAE","","",D3DXVECTOR3(0.f,0.f,0.f));
+	m_pSObjectAnimated->InitObject();
 
-	Renderer::GetInstance()->m_ListObj.push_back(m_pSObject);
+	Renderer::GetInstance()->m_ListObj.push_back(m_pSObjectAnimated);
 }
 
 /***********************************************************

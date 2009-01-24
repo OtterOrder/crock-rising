@@ -7,7 +7,7 @@
 #include	<Objects/Camera.h>
 #include	<Renderer/Renderer.h>
 
-#include	<Objects/SceneObject.h>
+#include	<Objects/SceneObjectAnimated.h>
 
 //******************************************************************
 
@@ -33,7 +33,7 @@ protected:
 	
 	Sprite	*m_pSprite;
 
-	SceneObject*	m_pSObject;
+	SceneObjectAnimated*	m_pSObjectAnimated;
 };
 
 //******************************************************************

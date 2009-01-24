@@ -9,12 +9,14 @@ SceneObject::SceneObject()
 {
 }
 
-SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position)
+SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader)
 {
 	m_Mesh=mesh;
 	m_Tex=Tex;
 	m_Offset=Position;
 	D3DXMatrixIdentity(&m_WorldMatrix);
+
+	m_Shader = shader;
 }
 
 //===========================================================================//
@@ -45,7 +47,7 @@ void SceneObject::InitObject()
 {
 	m_PtrMesh=ResourceManager::GetInstance()->Load<Mesh>(m_Mesh);
 	m_MapTexture[MESHTEX]=ResourceManager::GetInstance()->Load<Texture>(m_Tex);
-	m_PtrShader=ResourceManager::GetInstance()->Load<Shader>("default.fx");
+	m_PtrShader=ResourceManager::GetInstance()->Load<Shader>(m_Shader.c_str());
 
 	m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[MESHTEX]->m_pTex);
 

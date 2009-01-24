@@ -24,7 +24,7 @@ enum types_tex
 class SceneObject : public Object
 {
 public:
-	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position);
+	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader = "default.fx");
 	SceneObject();
 	virtual ~SceneObject() {}
 

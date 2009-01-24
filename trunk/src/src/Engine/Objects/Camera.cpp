@@ -31,12 +31,12 @@ void Camera::SetTarget( Object* obj  ){
 	//SetTarget( obj->GetPosition() ); //bon à voir avec la classe Object
 }
 
-D3DXMATRIX Camera::GetMatrixView()
+D3DXMATRIX Camera::GetViewMatrix()
 {
 	return m_MatrixView;
 }
 
-D3DXMATRIX Camera::GetFillMatrixProjection()
+D3DXMATRIX Camera::GetProjMatrix()
 {
 	D3DXMatrixPerspectiveFovLH( &m_MatrixProjection, m_fov_rad, m_ratio, m_zNear, m_zFar );
 	return m_MatrixProjection;

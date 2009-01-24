@@ -1,6 +1,8 @@
 #include "Mesh.h"
 #include "Renderer/Renderer.h"
 
+#include	"Renderer/Renderer.h"
+
 //******************************************************************
 
 /***********************************************************
@@ -39,7 +41,7 @@ Mesh::~Mesh()
  **********************************************************/
 ResourceResult Mesh::Load(std::string resource)
 {
-	std::string str="..\\..\\data\\modele\\"+resource;
+	std::string str="..\\..\\data\\models\\"+resource;
 
 	MeshLoader meshLoader;
 

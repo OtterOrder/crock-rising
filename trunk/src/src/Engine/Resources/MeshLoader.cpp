@@ -18,6 +18,9 @@ MeshLoader::MeshLoader()
 	m_iNbNormals	= 0;
 	m_iNbTexCoords	= 0;
 
+	m_iNbWeights	= 0;
+	m_Weights		= NULL;
+
 	for(int i=0; i<3; i++)
 		m_OffsetPosition[i]=0;
 	for(int i=0; i<4; i++)
@@ -26,6 +29,8 @@ MeshLoader::MeshLoader()
 		m_OffsetScale[i]=1;
 
 	m_Faces		= NULL;
+
+	m_SkinnedVertices	= NULL;
 }
 
 //===========================================================================//
@@ -54,30 +59,42 @@ MeshLoader::~MeshLoader()
 		delete [] m_TexCoords;
 	}
 
+	if (m_Weights)
+		delete [] m_Weights;
+
+
 	if (m_Faces)
 		delete [] m_Faces;
+
+	if (m_SkinnedVertices)
+		delete [] m_SkinnedVertices;
 }
 
 //===========================================================================//
 // Chargement de la ressource                                                //
 //===========================================================================//
 ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl,
-						 D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale)
+								Vector3f &Position, Vector4f &Rotation, Vector3f &Scale)
 {
 	TiXmlDocument meshFile( sMeshPath );
 	if (!meshFile.LoadFile ())
+	{
+		std::string errorMsg = "Erreur de chargement du fichier ";
+		errorMsg += sMeshPath;
+		MessageBox(NULL, errorMsg.c_str(), "Chargement de Mesh", MB_ICONERROR);
 		return RES_FAILED;
+	}
 
 	TiXmlNode* rootNode;
 
 	rootNode =  meshFile.FirstChild( "COLLADA" );  // Get Root Node
-    
+
 	FillArrays (rootNode, VertexBuffer, IndexBuffer);
 
-	Position=D3DXVECTOR3(m_OffsetPosition[0], m_OffsetPosition[2], m_OffsetPosition[1]); 
-	Rotation=D3DXVECTOR4(m_OffsetRotation[0], m_OffsetRotation[2], m_OffsetRotation[1], m_OffsetRotation[3]);
-	Scale=D3DXVECTOR3(m_OffsetScale[0], m_OffsetScale[2], m_OffsetScale[1]); 
-	
+	Position =	Vector3f(m_OffsetPosition[0],	m_OffsetPosition[2],	m_OffsetPosition[1]); 
+	Rotation =	Vector4f(m_OffsetRotation[0],	m_OffsetRotation[2],	m_OffsetRotation[1], m_OffsetRotation[3]);
+	Scale	 =	Vector3f(m_OffsetScale[0],		m_OffsetScale[2],		m_OffsetScale[1]); 
+
 	iNbVertices	= m_iNbVertices;
 	iNbIndex	= m_iNbFaces*NbFaceVertices;
 
@@ -93,22 +110,49 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 {
 	TiXmlNode* node;
 	TiXmlNode* MeshNode;
-	
-	//const char * SourceId;
-
-	/*string sPositionsId ("Position");
-	string sNormalsId	("Normal0");
-	string sTexCoordsId ("UV0");*/
+	TiXmlNode* SkinNode;
 
 	string sPositionsId ("positions");
 	string sNormalsId	("normals");
 	string sTexCoordsId ("channel1");
 
+	string sWeightsId	("weights");
 	std::vector<int> Offset(4, 0);
 
 
-	if(rootNode) 
-	{
+	//----------------------------------- Skinning -----------------------------------//
+	if(rootNode) {
+		node =  rootNode->FirstChild( "library_controllers" );
+		if(node) {
+			node =  node->FirstChild( "controller" );
+			if(node) {
+				node =  node->FirstChild( "skin" );
+				SkinNode = node;
+				if(node) {
+					node =  node->FirstChild( "source" );		// Recherche la première balise "source"
+					while (node)
+					{
+						string sId (node->ToElement()->Attribute("id"));		// vérification de l'id
+						size_t SpliterPlace = sId.rfind("-")+1;
+
+						if (SpliterPlace != sId.npos)
+							if (sId.compare( SpliterPlace, sWeightsId.length(), sWeightsId) == 0)
+								ExtractArrayDatas (node, m_Weights, m_iNbWeights, m_iNbWeights);
+
+						node = node->NextSibling( "source" );
+					}
+
+					node = SkinNode;
+
+					node =  node->FirstChild( "vertex_weights");
+					if (node)
+						FillSkinArray (node);
+				}
+			}
+		}
+		//--------------------------------------------------------------------------------//
+
+		//----------------------------------- Géometrie ----------------------------------//
 		node =  rootNode->FirstChild( "library_geometries" );
 		if(node) 
 		{
@@ -119,7 +163,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 				MeshNode = node;
 				if(node) {
 					node =  node->FirstChild( "source" );		// Recherche la première balise "source"
-					
+
 					while (node)
 					{
 						string sId (node->ToElement()->Attribute("id"));		// vérification de l'id
@@ -131,10 +175,10 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 
 							CurrentElement.Stream = 0;
 							CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
-							
+
 							if (sId.compare( SpliterPlace, sPositionsId.length(), sPositionsId) == 0)
 							{
-								ExtractArrayDatas (node, m_Positions, m_iNbPositions);
+								ExtractArrayDatas (node, m_Positions, m_iNbPositions, m_iNbVertices);
 								CurrentElement.Offset = 0;
 								CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
 								CurrentElement.Usage = D3DDECLUSAGE_POSITION;
@@ -143,7 +187,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
-								ExtractArrayDatas (node, m_Normals, m_iNbNormals);
+								ExtractArrayDatas (node, m_Normals, m_iNbNormals, m_iNbVertices);
 								CurrentElement.Offset = 12;
 								CurrentElement.Usage = D3DDECLUSAGE_NORMAL;
 								CurrentElement.UsageIndex = 0;
@@ -151,7 +195,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 							}
 							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
 							{
-								ExtractArrayDatas (node, m_TexCoords, m_iNbTexCoords);
+								ExtractArrayDatas (node, m_TexCoords, m_iNbTexCoords, m_iNbVertices);
 								CurrentElement.Offset = 24;
 								CurrentElement.Usage = D3DDECLUSAGE_TEXCOORD;
 								CurrentElement.UsageIndex = 0;
@@ -159,11 +203,9 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 							}
 
 							DxElements.push_back(CurrentElement);
-							
 						}
 
 						node = node->NextSibling( "source" );
-						
 					}
 
 					node = MeshNode;
@@ -171,10 +213,13 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 					node =  node->FirstChild( "triangles");
 					if (node)
 						FillVBArray (node, VertexBuffer, IndexBuffer);
-					
+
 				}
 			}
 		}
+		//--------------------------------------------------------------------------------//
+
+		//-------------------------------- Transformation --------------------------------//
 		node =  rootNode->FirstChild()->NextSibling("library_visual_scenes");
 		if(node) 
 		{
@@ -202,21 +247,15 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 							{
 								ArrayText=node->ToElement()->GetText();
 								ConvertTextToArray(ArrayText, m_OffsetScale, 3);
-
 							}
-
 						}
-
 					}
-					
-					
-
 				}
-
 			}
-
 		}
 	}
+	//--------------------------------------------------------------------------------//
+
 	D3DVERTEXELEMENT9 EndElement = D3DDECL_END();
 	DxElements.push_back(EndElement);
 
@@ -226,32 +265,32 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 //===========================================================================//
 // Extrait les données liées à un tableau                                    //
 //===========================================================================//
-ResourceResult MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements)
+ResourceResult MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements)
 {
-	TiXmlNode* node = sourceNode; // Enregistrement de la balise source
+	TiXmlNode* node = sourceNode;			// Enregistrement de la balise source
 
 	const char* ArrayText;
 
-	int iNbVertices = 0;
+	int iXMLNbElements = 0;
 	int iStride = 0;
 
-	
+
 	node =  node->FirstChild( "technique_common" );
 	if(node) {
 		node =  node->FirstChild( "accessor" );
 		if(node) {
-			
-			node->ToElement()->Attribute("count", &iNbVertices); // Stockage du nombre de vertices
-			if (m_iNbVertices < iNbVertices)	m_iNbVertices = iNbVertices; // Enregistrement du plus grand nombre de vertices
 
-			iNbElements = iNbVertices;
+			node->ToElement()->Attribute("count", &iXMLNbElements);		// Stockage du nombre de vertices
+			if (iNbMaxElements < iXMLNbElements)	iNbMaxElements = iXMLNbElements;	// Enregistrement du plus grand nombre de vertices
 
-			node->ToElement()->Attribute("stride", &iStride); // Stockage de la taille du tableau				
+			iNbElements = iXMLNbElements;
 
-			if (!Array && iNbVertices && iStride) // Si le tableau n'a pas été alloué et que le nombre de vertices et la taille sont connus
+			node->ToElement()->Attribute("stride", &iStride);			// Stockage de la taille du tableau				
+
+			if (!Array && iXMLNbElements && iStride)			// Si le tableau n'a pas été alloué et que le nombre de vertices et la taille sont connus
 			{
-				Array = new float*[iNbVertices]; // Le tableau est alloué
-				for (int i=0 ; i<iNbVertices ; i++)
+				Array = new float*[iXMLNbElements];				// Le tableau est alloué
+				for (int i=0 ; i<iXMLNbElements ; i++)
 					Array[i] = new float[iStride];
 			}
 		}
@@ -261,8 +300,8 @@ ResourceResult MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Ar
 	node =  node->FirstChild( "float_array" );
 	if(node) {
 		ArrayText = node->ToElement()->GetText();
-		
-		ConvertTextToArray(ArrayText, Array, iNbVertices, iStride);
+
+		ConvertTextToArray(ArrayText, Array, iXMLNbElements, iStride);
 
 		//delete text;
 	}
@@ -274,53 +313,21 @@ ResourceResult MeshLoader::ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Ar
 // Copie les données d'une chaîne caractères provenant du fichier XML dans   //
 // un tableau.																 //
 //===========================================================================//
-ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** &Array, int iCount, int iStride)
+ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float** Array, int iCount, int iStride)
 {
-	int id=0;
-	int dec=0;
-
-	float result	= 0;
-	float signe		= 1;
-	float mantisse	= 0.1f;
+	float* tmpArray = new float[iCount*iStride];
+	ConvertTextToArray(ArrayText, tmpArray, iCount*iStride);
 
 	for (int i = 0 ; i < iCount ; i++)
-	{
 		for (int j = 0 ; j < iStride ; j++)
-		{
+			Array[i][j] = tmpArray[i*iStride + j];
 
-			while(ArrayText[id+dec] != ' ' && ArrayText[id+dec] != '\0')
-			{			
-				if(ArrayText[id]!= '.')
-				{
-					if(ArrayText[id]== '-')
-						signe=-1;	
-					else
-						result=ArrayText[id]-'0'+result*10;	
-					id++;
-				}
-				else
-				{	
-					dec++;	
-					result=((ArrayText[id+dec]-'0')*mantisse)+result;
-					mantisse *= 0.1f;
+	delete [] tmpArray;
 
-					if(ArrayText[id+dec+1] == ' ')
-						dec++;
-					
-				}
-			}
-			Array[i][j]=result*signe;
-			if(Array[i][j]==0 && j!=2)
-				int u=0;
-			id=id+dec+1;
-			dec=0, result=0, mantisse=0.1f, signe=1;
-		}	
-	}
-
-	return RES_FAILED;
+	return RES_SUCCEED;
 }
 
-ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Array, int iCount)
+ResourceResult	 MeshLoader::ConvertTextToArray (const char* ArrayText, float*  Array, int iCount)
 {
 	int id=0;
 	int dec=0;
@@ -349,14 +356,44 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Arra
 
 				if(ArrayText[id+dec+1] == ' ')
 					dec++;
-				
+
 			}
 		}
 		Array[i]=result*signe;
 		id=id+dec+1;
 		dec=0, result=0, mantisse=0.1f, signe=1;
 	}
-	return RES_FAILED;
+
+	return RES_SUCCEED;
+}
+
+ResourceResult	 MeshLoader::ConvertTextToArray (const char* ArrayText, int*  Array, int iCount)
+{
+	int id=0;
+	int dec=0;
+
+	int result	= 0;
+	int signe		= 1;
+
+	for (int i = 0 ; i < iCount ; i++)
+	{
+		while(ArrayText[id+dec] != ' ' && ArrayText[id+dec] != '\0')
+		{			
+			if(ArrayText[id]!= '.')
+			{
+				if(ArrayText[id]== '-')
+					signe=-1;	
+				else
+					result=ArrayText[id]-'0'+result*10;
+				id++;
+			}
+		}
+		Array[i]=result*signe;
+		id=id+dec+1;
+		dec=0, result=0, signe=1;
+	}
+
+	return RES_SUCCEED;
 }
 
 
@@ -365,13 +402,13 @@ ResourceResult MeshLoader::ConvertTextToArray(const char* ArrayText, float* Arra
 //===========================================================================//
 ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
-	TiXmlNode* node = TrianglesNode; // Enregistrement de la balise triangles
+	TiXmlNode* node = TrianglesNode;			// Enregistrement de la balise triangles
 
 	node->ToElement()->Attribute("count", &m_iNbFaces);
 
 	FillFacesArray ( node );
 
-	
+
 	IndexBuffer  = new int [m_iNbFaces*NbFaceVertices];
 
 	int FaceIndex;
@@ -411,6 +448,87 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Vert
 			vertexCount++;
 		}
 	}
+
+	return RES_SUCCEED;
+}
+
+/****************************************************************************************************************************/
+ResourceResult	MeshLoader::FillSkinArray (TiXmlNode* VertexWeightsNode)
+{
+	TiXmlNode* node = VertexWeightsNode;			// Enregistrement de la balise vertex_weights
+
+	node->ToElement()->Attribute("count", &m_iNbSkinnedVertices);
+
+	int iNbSemantics	= 2;
+
+	int iJointOffset	= -1,
+		iWeightOffset   = -1;
+
+	int iJointIndex		= -1,
+		iWeightIndex	= -1;
+
+	TiXmlString sSemantic;
+
+	node = node->FirstChild("input");
+	while (node)
+	{
+		sSemantic = node->ToElement()->Attribute("semantic");
+
+		if		( strcmp(sSemantic.c_str() , "JOINT") == 0 )
+			node->ToElement()->Attribute("offset", &iJointOffset);
+		else if ( strcmp(sSemantic.c_str() , "WEIGHT") == 0 )
+			node->ToElement()->Attribute("offset", &iWeightOffset);
+
+		node = node->NextSiblingElement("input");
+	}
+
+	if ( m_iNbSkinnedVertices )
+	{
+		m_SkinnedVertices	= new VertexSkinning[m_iNbSkinnedVertices];
+
+		node = VertexWeightsNode;
+		node = node->FirstChild("vcount");
+
+
+		const char* NbWeightsText		= node->ToElement()->GetText();
+		int* NbWeightsArray = new int [m_iNbSkinnedVertices];
+		ConvertTextToArray(NbWeightsText, NbWeightsArray, m_iNbSkinnedVertices);
+
+		int NbWeightsUsed = 0;
+		for (int i=0 ; i<m_iNbSkinnedVertices ; i++)
+			NbWeightsUsed += NbWeightsArray[i];
+
+		node = node->NextSiblingElement("v");
+		const char* JointsWeightsText	= node->ToElement()->GetText();
+		int* JointsWeightsArray = new int [NbWeightsUsed];
+		ConvertTextToArray(JointsWeightsText, JointsWeightsArray, NbWeightsUsed);
+
+		int iCurrentSkinnedVertex = 0;
+		int iJointsWeightsPos = 0;
+
+		for (int i = 0 ; i <  m_iNbSkinnedVertices ; i++)
+		{
+			iJointsWeightsPos = 0;
+			memset(m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint, 0, sizeof(m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint));
+			memset(m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight, 0, sizeof(m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight));
+			for (int j = 0 ; j < NbWeightsArray[i]; j++)
+			{
+				if (j < NbWeightsMax)
+				{
+					m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint[j]		= JointsWeightsArray[iJointsWeightsPos];
+					m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight[j]	= m_Weights[JointsWeightsArray[iJointsWeightsPos+1]][0];
+				}
+
+				iJointsWeightsPos +=2;
+			}
+			iCurrentSkinnedVertex ++;
+		}
+
+		delete [] NbWeightsArray;
+		delete [] JointsWeightsArray;
+	}
+	else	return RES_FAILED;
+
 	return RES_SUCCEED;
 }
 
@@ -419,27 +537,27 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Vert
 //===========================================================================//
 void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer)
 {
-	D3DXVECTOR3 VectPosition	(0.f, 0.f, 0.f);
-	D3DXVECTOR3 VectNormal		(0.f, 0.f, 0.f);
-	D3DXVECTOR2 VectTexCoord	(0.f, 0.f);
+	Vector3f VectPosition	(0.f, 0.f, 0.f);
+	Vector3f VectNormal		(0.f, 0.f, 0.f);
+	Vector2f VectTexCoord	(0.f, 0.f);
 
 
 	if ( m_Positions )
 	{
 		float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-		VectPosition = D3DXVECTOR3 (Position[0], Position[2], Position[1] );
+		VectPosition = Vector3f(Position[0], Position[2], Position[1] );
 	}
 
 	if ( m_Normals )
 	{
 		float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-		VectNormal = D3DXVECTOR3 (Normal[0], Normal[2], Normal[1] );
+		VectNormal = Vector3f (Normal[0], Normal[2], Normal[1] );
 	}
 
 	if ( m_TexCoords )
 	{
 		float*  TexCoord = m_TexCoords[m_Faces[FaceIndex].m_TexCoord];
-		VectTexCoord = D3DXVECTOR2 (TexCoord[0], TexCoord[1]);
+		VectTexCoord = Vector2f (TexCoord[0], TexCoord[1]);
 	}
 
 	VertexBuffer[VertexIndex].m_Position	= VectPosition;
@@ -462,8 +580,8 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 		iNormalIndex   = -1,
 		iTexCoordIndex = -1;
 
-	int iStartData = 0,
-		iDataSize = 0;
+	int iStartData	= 0,
+		iDataSize	= 0;
 
 	TiXmlNode* node = TrianglesNode;
 	TiXmlString sSemantic;

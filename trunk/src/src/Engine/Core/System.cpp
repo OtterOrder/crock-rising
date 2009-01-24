@@ -12,6 +12,9 @@
  **********************************************************/
 System::System( void )
 {
+	// Création du device, initialisation D3D, création de la fenêtre
+	if( FAILED( InitWindow() ) )
+		MessageBox(NULL, "Initialisation de la fenetre impossible", "Erreur System", MB_ICONERROR);
 }
 
 /***********************************************************
@@ -40,10 +43,10 @@ int System::MainLoop( void )
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
-	
+	/*
 	// Création du device, initialisation D3D, création de la fenêtre
 	if( FAILED( InitWindow() ) )
-		return 0;
+		return 0;*/
 	
 
     // Boucle principale..

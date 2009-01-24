@@ -24,4 +24,13 @@ bool VEC_AreAlmostEqual( const Vector3f &v1, const Vector3f &v2 );
 
 
 //******************************************************************
+// Vecteur 4f
+
+typedef D3DXVECTOR4 Vector4f, Point4f;
+
+bool VEC_AreAlmostEqual( const Vector4f &v1, const Vector4f &v2 );
+
+
+//******************************************************************
+
 #endif		// _Vector_H

@@ -20,8 +20,8 @@ public:
 	Vector3f GetUp();
 	Vector3f GetTarget();
 
-	D3DXMATRIX GetMatrixView();
-	D3DXMATRIX GetFillMatrixProjection();
+	D3DXMATRIX GetViewMatrix();
+	D3DXMATRIX GetProjMatrix();
 
 	//Modificateurs
 	void SetUp( Vector3f up );

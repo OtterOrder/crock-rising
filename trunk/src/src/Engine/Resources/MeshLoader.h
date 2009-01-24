@@ -13,7 +13,8 @@
 using namespace std;
 //******************************************************************
 
-#define NbFaceVertices 3
+#define NbFaceVertices	3
+#define NbWeightsMax	4
 
 struct Vertex
 {
@@ -32,42 +33,61 @@ struct FaceVertex
 	bool operator != (const FaceVertex &faceVertex)	{ return ! (*this == faceVertex); }
 };
 
+struct VertexSkinning
+{
+	int		m_Joint[NbWeightsMax];
+	float	m_Weight[NbWeightsMax];
+};
+
+//------------------------------------------------------------------
+
 class MeshLoader
 {
 	int			m_iNbVertices,
-				m_iNbFaces;
+		m_iNbFaces,
+		m_iNbSkinnedVertices;
 
 	float		**m_Positions,
-				**m_Normals,
-				**m_TexCoords;
+		**m_Normals,
+		**m_TexCoords;
 
 	int			m_iNbPositions,
-				m_iNbNormals,
-				m_iNbTexCoords;
+		m_iNbNormals,
+		m_iNbTexCoords;
 
 	float		m_OffsetPosition[3];
 	float		m_OffsetRotation[4];
 	float		m_OffsetScale[3];
 
+	int			m_iNbWeights;
+	float**		m_Weights;
+
 	FaceVertex	*m_Faces;
 	std::vector<D3DVERTEXELEMENT9>	 DxElements; // Vecteur d'éléments du vertex
 
+	VertexSkinning*	m_SkinnedVertices;
+
+
 public:
 
-			MeshLoader(void);
+	MeshLoader(void);
 	virtual	~MeshLoader(void);
 
 	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
-										D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale);
+		D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale);
 
-	ResourceResult	FillArrays			(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);		// Remplit les tableaux de données
-	ResourceResult	ExtractArrayDatas	(TiXmlNode* sourceNode, float** &Array, int &iNbElements);								// Extrait les données d'une balise
-	ResourceResult	ConvertTextToArray	(const char* ArrayText, float** &Array, int iCount, int iStride);		// Rempli un tableau à l'aide d'un texte
-	ResourceResult	ConvertTextToArray	(const char* ArrayText, float* Array, int iCount);
+	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
+	ResourceResult	ExtractArrayDatas			(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements);	// Extrait les données d'une balise
+	ResourceResult	ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte
+	ResourceResult	ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);								// Remplit un tableau de float à l'aide d'un texte
+	ResourceResult	ConvertTextToArray			(const char* ArrayText, int*    Array, int iCount);								// Remplit un tableau de int à l'aide d'un texte
 
-	ResourceResult	FillVBArray			(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer);	// Remplit le tableau de vertex
-	void			FillVertex			(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer);
-	ResourceResult	FillFacesArray		(TiXmlNode* TrianglesNode);												// Remplit le tableau de faces
+	ResourceResult	FillVBArray					(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer);			// Remplit le tableau de vertex
+	void			FillVertex					(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer);
+
+	ResourceResult	FillSkinArray				(TiXmlNode* VertexWeightsNode);													// Remplit le tableau de skinning
+
+	ResourceResult	FillFacesArray				(TiXmlNode* TrianglesNode);														// Remplit le tableau de faces
 };
 
 #endif	// _Mesh_Loader_H

@@ -22,7 +22,7 @@ Texture::~Texture()
 ResourceResult Texture::Load(std::string resource)
 {
 
-	std::string str="data\\texture\\"+resource;
+	std::string str="..\\..\\data\\texture\\"+resource;
 
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 

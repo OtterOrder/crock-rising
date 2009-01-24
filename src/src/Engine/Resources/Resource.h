@@ -27,7 +27,7 @@ public :
 	//----------------------------------------------------------
     // Fonction virtuelle de chargement
     //----------------------------------------------------------
-	virtual ResourceResult Load (std::string resource); 
+	virtual ResourceResult Load (std::string resource) {return RES_FAILED;}
 
     //----------------------------------------------------------
     // Renvoie le nom associé à la ressource
@@ -37,7 +37,7 @@ public :
     //----------------------------------------------------------
     // Ajoute une référence sur la ressource
     //----------------------------------------------------------
-    void AddRef();
+    virtual void AddRef();
 
     //----------------------------------------------------------
     // Retire une référence sur la ressource

@@ -2,16 +2,13 @@
 #define		_Mesh_H
 
 //******************************************************************
-#include	<string>
+
 
 #include	"Resource.h"
-
-#include	"Renderer/Renderer.h"
 #include	"Core/Types/Vector.h"
-
 #include	"MeshLoader.h"
+#include	<string>
 
-using namespace std;
 //******************************************************************
 
 #define		Mesh_FVF (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX0)

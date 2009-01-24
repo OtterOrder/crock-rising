@@ -37,6 +37,7 @@ class ResourceManager : public Singleton<ResourceManager>
 			Resource * Ptr=dynamic_cast<Resource*>(Res);
 			Add(resource, Ptr);
 			Ptr->Load(resource);
+			Ptr->AddRef();
 			return Res;
 		}
 	}

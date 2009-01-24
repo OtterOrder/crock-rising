@@ -16,11 +16,10 @@ struct DEFAULT_VERTEX
 Renderer::Renderer()
 {
 	m_pGridVB=NULL;
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]=NULL;
-	}*/
-	
+	}
 }
 
 //===========================================================================//
@@ -46,10 +45,10 @@ HRESULT Renderer::OnCreateDevice()
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
         return hr;
 
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]->InitObject();
-	}*/
+	}
 	
 	return S_OK;
 
@@ -120,10 +119,10 @@ HRESULT Renderer::OnResetDevice()
 
 	m_pGridVB->Unlock();
 
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]->InitDeviceData();
-	}*/
+	}
 	
 	return S_OK;
 }
@@ -133,10 +132,10 @@ HRESULT Renderer::OnResetDevice()
 //===========================================================================//
 HRESULT Renderer::FrameMove(float fElapsedTime)
 {
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]->FrameMove(fElapsedTime);
-	}*/
+	}
 	return S_OK;
 
 }
@@ -155,11 +154,11 @@ HRESULT Renderer::Render()
 	D3DXMatrixIdentity(&MatWorld);
 	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
-		m_ListObj[i]->SetTransform(&MatWorld, m_Camera.GetViewMatrix(), m_Camera.GetProjMatrix(), *m_Camera.GetEyePt());
+		m_ListObj[i]->SetTransform(&MatWorld, &m_Camera->GetMatrixView(), &m_Camera->GetFillMatrixProjection());
 		m_ListObj[i]->Draw();
-	}*/
+	}
 	
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetMatrixView());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetFillMatrixProjection() );
@@ -189,10 +188,10 @@ HRESULT Renderer::OnLostDevice()
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
 
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]->DeleteDeviceData();
-	}*/
+	}
 
 	return S_OK;
 }
@@ -204,10 +203,10 @@ HRESULT Renderer::OnDestroyDevice()
 {
 	m_pStatsFont->DeleteDeviceObjects();
 
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		m_ListObj[i]->DeleteData();
-	}*/
+	}
 	return S_OK;
 }
 
@@ -216,10 +215,10 @@ HRESULT Renderer::OnDestroyDevice()
 //===========================================================================//
 HRESULT Renderer::AfterDestroyDevice()
 {
-	/*for(int i=0;i < (int)m_ListObj.size(); i++)
+	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
 		delete m_ListObj[i];
-	}*/
+	}
 	return S_OK;
 }
 

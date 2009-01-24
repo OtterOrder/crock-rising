@@ -5,7 +5,6 @@
 //===========================================================================//
 #include "Core/Types/Crc32.h"
 #include "Object.h"
-#include "../Resources/ResourceManager.h"
 #include "../Resources/Texture.h"
 #include "../Resources/Shader.h"
 #include "../Resources/Mesh.h"
@@ -27,7 +26,7 @@ class SceneObject : public Object
 public:
 	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position);
 	SceneObject();
-	virtual ~SceneObject();
+	virtual ~SceneObject() {}
 
 	//===========================================================================//
 	// Gestion apparence des objets											     //
@@ -35,7 +34,7 @@ public:
 	void	SetTexture(const std::string& Tex, types_tex Type);	// Ajout d'une texture
 	void	SetShader(const std::string& Shad); 
 
-protected:
+public:
 
 	//===========================================================================//
 	// Utilisation de l'objet													 //
@@ -65,9 +64,11 @@ private:
 	std::string		m_Shader;
 	TTextureMap		m_MapTexture;
 
-	Mesh*			m_PtrMesh;
+	
 	Shader*			m_PtrShader;
 	D3DXVECTOR3		m_Offset;
+
+	Mesh*			m_PtrMesh;
 	
 };
 

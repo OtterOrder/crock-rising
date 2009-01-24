@@ -1,4 +1,6 @@
 #include "SceneObject.h"
+#include "../Resources/ResourceManager.h"
+#include	"Renderer/Renderer.h"
 
 //===========================================================================//
 // Constructeurs SceneObject		                                         //
@@ -89,6 +91,20 @@ void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, 
 
 void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
 {
+	D3DXMATRIX MatWorldView;
+	D3DXMATRIX mWorldViewProjection;
+	D3DXMatrixIdentity(&MatWorldView);
+	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, world);
+	D3DXMatrixMultiply(&MatWorldView, &m_WorldMatrix, view);
+	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
+
+	m_PtrShader->m_pEffect->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
+	m_PtrShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
+	m_PtrShader->m_pEffect->SetMatrix( "g_mView", view);
+	D3DXMATRIXA16 mWorldView = (*m_WorldMatrix) * (*view);
+	m_PtrShader->m_pEffect->SetMatrix( "g_mWorldView", &MatWorldView);
+
+	m_PtrShader->m_pEffect->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
 
 }
 
@@ -114,7 +130,7 @@ void SceneObject::Draw()
 
 	m_pDevice->SetVertexDeclaration(m_PtrMesh->m_decl);
 
-	m_PtrShader->m_pEffect->SetTechnique( "RenderScene" );
+	m_PtrShader->m_pEffect->SetTechnique( "RenderSceneNoTex" );
 
 	m_PtrShader->m_pEffect->Begin(0, 0);
 
@@ -143,16 +159,16 @@ void SceneObject::DeleteDeviceData()
 {
 	m_PtrMesh->ReleaseD3DBuffers();
 	m_PtrShader->m_pEffect->OnLostDevice();
-
-	for(TTextureMap::const_iterator it=m_MapTexture.begin() ; it!=m_MapTexture.end() ; ++it)
-	{
-			it->second->Release();
-	}
-
 }
 
 void SceneObject::DeleteData()
 {
 	m_PtrMesh->Release();
+
+	/*for(TTextureMap::const_iterator it=m_MapTexture.begin() ; it!=m_MapTexture.end() ; ++it)
+	{
+			it->second->Release();
+	}*/
+	m_PtrShader->Release();
 
 }

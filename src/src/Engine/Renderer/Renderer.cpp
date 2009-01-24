@@ -156,12 +156,12 @@ HRESULT Renderer::Render()
 
 	for(int i=0;i < (int)m_ListObj.size(); i++)
 	{
-		m_ListObj[i]->SetTransform(&MatWorld, &m_Camera->GetMatrixView(), &m_Camera->GetFillMatrixProjection());
+		m_ListObj[i]->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
 		m_ListObj[i]->Draw();
 	}
 	
-	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetMatrixView());
-	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetFillMatrixProjection() );
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
 
 	m_pd3dDevice->BeginScene();
 

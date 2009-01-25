@@ -201,7 +201,6 @@ HRESULT Renderer::OnLostDevice()
 	{
 		(*scobj)->DeleteDeviceData();
 		++scobj;
-		m_ListObj[i] = NULL;
 	}
 	return S_OK;
 }

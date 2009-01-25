@@ -9,7 +9,7 @@ using namespace std;
 
 //******************************************************************
 
-list< Object* > SceneObject::RefList;
+list< SceneObject* > SceneObject::RefList;
 
 //******************************************************************
 

@@ -21,7 +21,7 @@ class SceneObject : public Object
 public:
 
 	// Liste de références sur les objets de scène
-	static std::list< Object* > RefList;
+	static std::list< SceneObject* > RefList;
 
 	// Constructeurs & destructeur
 	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader = "default.fx");

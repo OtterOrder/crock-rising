@@ -42,7 +42,8 @@ void LevelStart::Init( void )
 	m_pSObjectAnimated = new SceneObjectAnimated("Skinned_Box.DAE","","",D3DXVECTOR3(0.f,0.f,0.f));
 	m_pSObjectAnimated->InitObject();
 
-	Renderer::GetInstance()->m_ListObj.push_back(m_pSObjectAnimated);
+	// C'est fait dans le constructeur !
+	//Renderer::GetInstance()->m_ListObj.push_back(m_pSObjectAnimated);
 }
 
 /***********************************************************

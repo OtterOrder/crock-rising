@@ -1,6 +1,31 @@
 #ifndef		_InputManager_H
 #define		_InputManager_H
 
+
+
+
+//Define pour utilisé plus de chose (WM_MOUSEWHEEL entre autre) et en jarté d'autre
+
+#ifndef VC_EXTRALEAN
+#define VC_EXTRALEAN		// Exclure les en-têtes Windows rarement utilisés
+#endif
+
+// Modifiez les définitions suivantes si vous devez cibler une plate-forme avant celles spécifiées ci-dessous.
+// Reportez-vous à MSDN pour obtenir les dernières informations sur les valeurs correspondantes pour les différentes plates-formes.
+#ifndef WINVER				// Autorise l'utilisation des fonctionnalités spécifiques à Windows XP ou version ultérieure.
+#define WINVER 0x0501		// Attribuez la valeur appropriée à cet élément pour cibler d'autres versions de Windows.
+#endif
+
+#ifndef _WIN32_WINNT		// Autorise l'utilisation des fonctionnalités spécifiques à Windows XP ou version ultérieure.                   
+#define _WIN32_WINNT 0x0501	// Attribuez la valeur appropriée à cet élément pour cibler d'autres versions de Windows.
+#endif						
+
+#ifndef _WIN32_WINDOWS		// Autorise l'utilisation des fonctionnalités spécifiques à Windows 98 ou version ultérieure.
+#define _WIN32_WINDOWS 0x0410 // Attribuez la valeur appropriée à cet élément pour cibler Windows Me ou version ultérieure.
+#endif
+
+
+
 //******************************************************************
 
 #include	<list>
@@ -49,8 +74,10 @@ public:
 	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
 	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
 	Point2f		GetMouseOffset( void );
+	int			GetMouseWheelDelta( void );
 
 	void		Update				( void );				// Update
+	void		InitMouseWheelDelta( void );
 
 	// Fonction de rappel des événements
 	LRESULT CALLBACK	EventsCallback	( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
@@ -91,6 +118,7 @@ protected:
 	Point2f				m_MousePosition;		// Position de la souris
 
 	Point2f				m_MouseOffset;			//...
+	int                 m_nMouseWheelDelta;
 
 	
 	// =========================================================

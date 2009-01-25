@@ -98,7 +98,7 @@ void SceneObject::InitObject()
 //===========================================================================//
 void SceneObject::SetTransform(const D3DXMATRIX *world)
 {
-
+	m_WorldMatrix *= *world; //tranformation s'accumule
 }
 
 void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)

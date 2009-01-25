@@ -46,6 +46,18 @@ public:
 	float	GetOrientationYRad(){ return D3DXToRadian( m_angleY ); }
 	float	GetOrientationXRad(){ return D3DXToRadian( m_angleX ); }
 
+	float GetDistanceWithTarget()
+	{
+		Vector3f vectDir = m_Target - GetPosition();
+		float distance = D3DXVec3Length( (D3DXVECTOR3*)&vectDir );
+		return distance;
+	}
+
+	void SetDistanceWithTarget( float distance )
+	{
+
+	}
+
 	//Fonctions membres
 	void InitAngle();
 	void SetDefaultProjection();	// Applique les paramètres par defaut pour les variables de projection

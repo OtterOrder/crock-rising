@@ -28,7 +28,8 @@ void Camera::SetTarget( Vector3f target ){
 }
 
 void Camera::SetTarget( Object* obj  ){
-	//SetTarget( obj->GetPosition() ); //bon à voir avec la classe Object
+	D3DXMATRIX* transObj = obj->GetTransform();
+	SetTarget( Vector3f( transObj->_41, transObj->_42, transObj->_43 ) );
 }
 
 D3DXMATRIX Camera::GetViewMatrix()
@@ -100,8 +101,11 @@ void Camera::SetOrientationX( int angleX )	//en degres
 { 
 	m_angleX += angleX;
 
-	if( abs(m_angleX) > 359 )	//limitation de l'angleY
+	if( m_angleX > 0 )			//limitation de l'angleY
 		m_angleX = 0;
+	else
+		if( m_angleX < -60 )
+			m_angleX = -60;
 }
 
 Vector3f Camera::GetPosition()

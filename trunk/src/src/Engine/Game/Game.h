@@ -34,6 +34,12 @@ public:
 protected:
 
 	// =========================================================
+	// Types protégés
+
+	typedef std::list< Object* >::iterator		ObjIt;		// Itérateur d'objet
+	typedef std::list< Object2D* >::iterator	Obj2DIt;	// Itérateur d'objet 2D
+
+	// =========================================================
 	// Données protégées
 	
 	Level					*m_CurrentLevel;		// Niveau courant

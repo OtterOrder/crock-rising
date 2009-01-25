@@ -12,7 +12,7 @@
 LevelStart::LevelStart( crc32 levelID )
 : Level( levelID )
 {
-	//TODO
+	//CBaseCamera
 }
 
 /***********************************************************
@@ -32,9 +32,9 @@ LevelStart::~LevelStart( void )
 **********************************************************/
 void LevelStart::Init( void )
 {
-	m_Camera = new Camera( Vector3f(0.0f, 10.0f, -100.0f) );
-	m_Camera->SetTarget( Vector3f(10.0f, 10.0f, 0.0f) );
-	Renderer::GetInstance()->SetCamera( m_Camera );
+	m_pCamera = new Camera( Vector3f(0.0f, 10.0f, -200.0f) );
+	//m_pCamera->SetTarget( Vector3f(10.0f, 10.0f, 0.0f) );
+	Renderer::GetInstance()->SetCamera( m_pCamera );
 
 	m_pSprite = new Sprite( 0 );
 
@@ -53,62 +53,120 @@ void LevelStart::Update( void )
 {
 	
 	//OffsetCurseur -> Camera
-	Point2f point = InputManager::GetInstance()->GetMouseOffset();
+	InputManager* pInputManager = InputManager::GetInstance();
+	Point2f point = pInputManager->GetMouseOffset();
 	const int sensibilite = 15;
 	int offsetCursor;
 
-	if( InputManager::GetInstance()->IsKeyPressed( 'Z' ) )
+	//Mouvement de la moulette :D
+	if( pInputManager->GetMouseWheelDelta() > 0 )
 	{
-		Vector3f pos = m_Camera->GetPosition();
-		Vector3f target	 = m_Camera->GetTarget();
-		Vector3f vectDir = target - pos;
-		float distance = sqrt( vectDir.x*vectDir.x + vectDir.y*vectDir.y + vectDir.z*vectDir.z );
-		float angleY = m_Camera->GetOrientationYRad();
-		
-		//float s = sin( angleY );
-		float c = cos( angleY );
+		pInputManager->InitMouseWheelDelta(); //raz
 
-		//pos.x =  pos.x + s;
-		pos.z =  pos.z + c;		
+		float sensibilite=25.0f;
+		float limZ = 60.f;
 
-		if( distance>60.0f )
-			m_Camera->SetPosition( pos );
+		Vector3f pos = m_pCamera->GetPosition();
+		pos.z =  pos.z + sensibilite;		
+
+		float distance = m_pCamera->GetDistanceWithTarget();
+		if( distance>limZ )
+			m_pCamera->SetPosition( pos );
 	}
 
-	if( InputManager::GetInstance()->IsKeyPressed( 'S' ) )
+	if( pInputManager->GetMouseWheelDelta() < 0  )
 	{
-		Vector3f pos = m_Camera->GetPosition();
-		Vector3f target	 = m_Camera->GetTarget();
-		Vector3f vectDir = target - pos;
-		float distance = sqrt( vectDir.x*vectDir.x + vectDir.y*vectDir.y + vectDir.z*vectDir.z );
-		float angleY = m_Camera->GetOrientationYRad();
-		
-		//float s = sin( angleY );
-		float c = cos( angleY );
+		pInputManager->InitMouseWheelDelta(); //raz
 
-		//pos.x =  pos.x + s;
-		pos.z =  pos.z - c;		
+		float sensibilite=25.0f;
+		float limZ = 300.f;
 
-		if( distance<300.0f )
-			m_Camera->SetPosition( pos );
+		Vector3f pos = m_pCamera->GetPosition();
+		pos.z =  pos.z - sensibilite;		
+
+		float distance = m_pCamera->GetDistanceWithTarget();
+		if( distance<limZ )
+			m_pCamera->SetPosition( pos );
 	}
 
-	if( InputManager::GetInstance()->IsKeyPressed( 'A' ) )
+	//Init pos
+	if( pInputManager->IsKeyPressed( 'A' ) )
 	{
-		m_Camera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
+		m_pCamera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
 	}
 
+	//mouvement de l'objet
+	if( pInputManager->IsKeyPressed( 'Z' ) )
+	{
+		D3DXMATRIX trans;
+		float angleY = m_pCamera->GetOrientationYRad();
 
+		float xStep, zStep, sensibilite=0.1f ;
+
+		xStep = -sin( angleY )*sensibilite;
+	 	zStep = cos( angleY )*sensibilite;
+
+		D3DXMatrixTranslation( &trans, xStep, 0.f, zStep );
+
+		m_pSObjectAnimated->SetTransform( &trans );
+	}
+	if( pInputManager->IsKeyPressed( 'S' ) )
+	{
+		D3DXMATRIX trans;
+		float angleY = m_pCamera->GetOrientationYRad();
+
+		float xStep, zStep, sensibilite=0.1f ;
+
+		xStep = sin( angleY )*sensibilite;
+	 	zStep = -cos( angleY )*sensibilite;
+
+		D3DXMatrixTranslation( &trans, xStep, 0.f, zStep );
+
+		m_pSObjectAnimated->SetTransform( &trans );
+
+	}
+
+	if( pInputManager->IsKeyPressed( 'Q' ) )
+	{
+		D3DXMATRIX trans;
+		float angleY = m_pCamera->GetOrientationYRad();
+
+		float xStep, zStep, sensibilite=0.1f ;
+
+		xStep = -cos( angleY )*sensibilite;
+	 	zStep = -sin( angleY )*sensibilite;
+
+		D3DXMatrixTranslation( &trans, xStep, 0.f, zStep );
+
+		m_pSObjectAnimated->SetTransform( &trans );
+	}
+	if( pInputManager->IsKeyPressed( 'D' ) )
+	{
+		D3DXMATRIX trans;
+		float angleY = m_pCamera->GetOrientationYRad();
+
+		float xStep, zStep, sensibilite=0.1f ;
+
+		xStep = cos( angleY )*sensibilite;
+	 	zStep = sin( angleY )*sensibilite;
+
+		D3DXMatrixTranslation( &trans, xStep, 0.f, zStep );
+
+		m_pSObjectAnimated->SetTransform( &trans );
+	}
+
+	//mouvement de la souris -> mouvement camera
 	if( point.x != 0 ) 
 	{
 		offsetCursor = (int)point.x%sensibilite; 
-		m_Camera->SetOrientationY( -offsetCursor );
+		m_pCamera->SetOrientationY( -offsetCursor );
 	}
 	if( point.y != 0 ) 
 	{
 		offsetCursor = (int)point.y%sensibilite; 
-		m_Camera->SetOrientationX( offsetCursor );
+		m_pCamera->SetOrientationX( offsetCursor );
 	}
 
-	m_Camera->UpdateMatrixView();
+	m_pCamera->SetTarget( m_pSObjectAnimated );
+	m_pCamera->UpdateMatrixView();
 }

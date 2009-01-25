@@ -7,7 +7,8 @@ using namespace std;
  **********************************************************/
 InputManager::InputManager( void )
 {
-	//ShowCursor( false );
+	ShowCursor( false );
+	InitMouseWheelDelta();
 
 	m_MouseOffset		= Point2f( 0.f, 0.f );
 	m_MouseOldPosition	= Point2f( 0.f, 0.f );
@@ -166,6 +167,7 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 		// Mouvement de la souris
 		case WM_MOUSEMOVE:
+		{
 			mouseCoordinates	= MAKEPOINTS( lParam );
 			m_MousePosition.x	= (float)mouseCoordinates.x;
 			m_MousePosition.y	= (float)mouseCoordinates.y;
@@ -185,8 +187,23 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 
 				SetCursorPos( posX, posY );
 			}
-
 			break;
+		}
+
+		case WM_MOUSEWHEEL: 
+		{
+            // Mise à jour variables d'état
+			int acc=(short)HIWORD(wParam);
+			if(acc<1200.0f)
+			{
+				int sensibilite = 120;
+				m_nMouseWheelDelta = (short)HIWORD(wParam) / sensibilite;
+
+			}
+
+            break;
+		}
+
 
 	}
 	return S_OK;
@@ -323,4 +340,14 @@ Point2f InputManager::GetMouseOffset( void )
 	m_MouseOffset.y = 0.f;
 
 	return toReturn;
+}
+
+int InputManager::GetMouseWheelDelta()
+{ 
+	return m_nMouseWheelDelta; 
+}
+
+void InputManager::InitMouseWheelDelta()
+{ 
+	m_nMouseWheelDelta = 0; 
 }

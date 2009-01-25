@@ -32,6 +32,8 @@ public:
 	virtual void SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos) {}
 	virtual void SetTransform(const D3DXMATRIX* world) {}
 
+	D3DXMATRIX* GetTransform() { return &m_WorldMatrix; } //pour recupérer sa position
+
 protected:
 
 	D3DXMATRIX			m_WorldMatrix;

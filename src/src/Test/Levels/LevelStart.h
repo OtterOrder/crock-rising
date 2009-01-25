@@ -29,7 +29,7 @@ public:
 
 
 protected:
-	Camera* m_Camera;
+	Camera* m_pCamera;
 	
 	Sprite	*m_pSprite;
 

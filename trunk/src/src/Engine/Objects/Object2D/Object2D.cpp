@@ -17,7 +17,7 @@ list< Object2D* > Object2D::RefList;
  **********************************************************/
 void Object2D::CommonInit()
 {
-	RefList.push_front( this ); // enregistrement dans la liste
+	Object2D::RefList.push_front( this ); // enregistrement dans la liste
 }
 
 /***********************************************************
@@ -34,7 +34,7 @@ Object2D::Object2D()
  **********************************************************/
 Object2D::~Object2D()
 {
-	RefList.remove( this ); // suppression dans la liste
+	Object2D::RefList.remove( this ); // suppression dans la liste
 }
 
 /***********************************************************

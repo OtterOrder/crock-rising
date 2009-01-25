@@ -1,16 +1,38 @@
-#include "SceneObject.h"
-#include "../Resources/ResourceManager.h"
+#include	"SceneObject.h"
+
 #include	"Renderer/Renderer.h"
+#include	"Resources/ResourceManager.h"
+#include	"Resources/Shader.h"
+#include	"Resources/Mesh.h"
+
+using namespace std;
+
+//******************************************************************
+
+list< Object* > SceneObject::RefList;
+
+//******************************************************************
 
 //===========================================================================//
-// Constructeurs SceneObject		                                         //
+// Initialisation commune à tous les constructeurs.                          //
+//===========================================================================//
+void SceneObject::CommonInit( void )
+{
+	SceneObject::RefList.push_front( this ); // enregistrement dans la liste
+}
+
+//===========================================================================//
+// Constructeurs & destructeur de SceneObject		                         //
 //===========================================================================//
 SceneObject::SceneObject()
 {
+	CommonInit();
 }
 
 SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader)
 {
+	CommonInit();
+	
 	m_Mesh=mesh;
 	m_Tex=Tex;
 	m_Offset=Position;
@@ -19,10 +41,15 @@ SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const 
 	m_Shader = shader;
 }
 
+SceneObject::~SceneObject()
+{
+	SceneObject::RefList.remove( this ); // suppression dans la liste
+}
+
 //===========================================================================//
 // Ajoute une texture à la map		                                         //
 //===========================================================================//
-void SceneObject::SetTexture(const std::string& Tex, types_tex Type)
+void SceneObject::SetTexture(const std::string& Tex, TextureType Type)
 {
 	// On teste si la resource existe déjà
 	m_MapTexture[Type]=ResourceManager::GetInstance()->Load<Texture>(Tex);
@@ -46,10 +73,10 @@ void SceneObject::SetShader(const std::string& Shad)
 void SceneObject::InitObject()
 {
 	m_PtrMesh=ResourceManager::GetInstance()->Load<Mesh>(m_Mesh);
-	m_MapTexture[MESHTEX]=ResourceManager::GetInstance()->Load<Texture>(m_Tex);
+	m_MapTexture[TEX_MESH]=ResourceManager::GetInstance()->Load<Texture>(m_Tex);
 	m_PtrShader=ResourceManager::GetInstance()->Load<Shader>(m_Shader.c_str());
 
-	m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[MESHTEX]->m_pTex);
+	m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[TEX_MESH]->m_pTex);
 
 	// Matrice World par défaut de l'objet
 	D3DXMATRIX WorldMatrix;

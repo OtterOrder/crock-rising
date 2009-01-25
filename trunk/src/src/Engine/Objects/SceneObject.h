@@ -3,20 +3,15 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#include "Core/Types/Crc32.h"
-#include "Object.h"
-#include "../Resources/Texture.h"
-#include "../Resources/Shader.h"
-#include "../Resources/Mesh.h"
-#include <map>
+#include	<map>
+#include	"Object.h"
+#include	"Resources/Texture.h"
 
-enum types_tex
-{
-	MESHTEX,
-	NORMALMAP,
-	BUMPMAP,
-	DISPLACEMENTMAP
-};
+//===========================================================================//
+
+class Texture;
+class Shader;
+class Mesh;
 
 //===========================================================================//
 // Classe pour un objet affichable dans la scène 3D                          //
@@ -24,14 +19,19 @@ enum types_tex
 class SceneObject : public Object
 {
 public:
+
+	// Liste de références sur les objets de scène
+	static std::list< Object* > RefList;
+
+	// Constructeurs & destructeur
 	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader = "default.fx");
 	SceneObject();
-	virtual ~SceneObject() {}
+	virtual ~SceneObject();
 
 	//===========================================================================//
 	// Gestion apparence des objets											     //
 	//===========================================================================//
-	void	SetTexture(const std::string& Tex, types_tex Type);	// Ajout d'une texture
+	void	SetTexture(const std::string& Tex, TextureType Type);	// Ajout d'une texture
 	void	SetShader(const std::string& Shad); 
 
 public:
@@ -54,7 +54,7 @@ private:
 	//===========================================================================//
 	// Types												                     //
 	//===========================================================================//
-	typedef std::map<types_tex, Texture*> TTextureMap;
+	typedef std::map<TextureType, Texture*> TTextureMap;
 
 	//===========================================================================//
 	// Données membres												             //
@@ -69,6 +69,12 @@ private:
 	D3DXVECTOR3		m_Offset;
 
 	Mesh*			m_PtrMesh;
+
+	//===========================================================================//
+	// Méthodes privées												             //
+	//===========================================================================//
+	
+	void CommonInit( void ); // Initialisation commune à tous les constructeurs
 	
 };
 

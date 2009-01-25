@@ -15,11 +15,10 @@ struct DEFAULT_VERTEX
 
 Renderer::Renderer()
 {
-	m_pGridVB=NULL;
-	for(int i=0;i < (int)m_ListObj.size(); i++)
-	{
-		m_ListObj[i]=NULL;
-	}
+	m_pGridVB = NULL;
+
+	// On récupère la liste des objets de scène
+	m_ScObjList = &SceneObject::RefList;
 }
 
 //===========================================================================//
@@ -40,14 +39,17 @@ HRESULT Renderer::BeforeCreateDevice()
 //===========================================================================//
 HRESULT Renderer::OnCreateDevice()
 {
-	HRESULT hr;
+	ScObjIt	scobj;
+	HRESULT	hr;
 
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
         return hr;
 
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->InitObject();
+		(*scobj)->InitObject();
+		++scobj;
 	}
 	
 	return S_OK;
@@ -119,9 +121,11 @@ HRESULT Renderer::OnResetDevice()
 
 	m_pGridVB->Unlock();
 
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	ScObjIt scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->InitDeviceData();
+		(*scobj)->InitDeviceData();
+		++scobj;
 	}
 	
 	return S_OK;
@@ -132,9 +136,11 @@ HRESULT Renderer::OnResetDevice()
 //===========================================================================//
 HRESULT Renderer::FrameMove(float fElapsedTime)
 {
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	ScObjIt scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->FrameMove(fElapsedTime);
+		(*scobj)->FrameMove(fElapsedTime);
+		++scobj;
 	}
 	return S_OK;
 
@@ -154,10 +160,12 @@ HRESULT Renderer::Render()
 	D3DXMatrixIdentity(&MatWorld);
 	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	ScObjIt scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
-		m_ListObj[i]->Draw();
+		(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		(*scobj)->Draw();
+		++scobj;
 	}
 	
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
@@ -188,11 +196,12 @@ HRESULT Renderer::OnLostDevice()
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
 
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	ScObjIt scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->DeleteDeviceData();
+		(*scobj)->DeleteDeviceData();
+		++scobj;
 	}
-
 	return S_OK;
 }
 
@@ -201,11 +210,15 @@ HRESULT Renderer::OnLostDevice()
 //===========================================================================//
 HRESULT Renderer::OnDestroyDevice()
 {
+	ScObjIt scobj;
+	
 	m_pStatsFont->DeleteDeviceObjects();
-
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	
+	scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		m_ListObj[i]->DeleteData();
+		(*scobj)->DeleteData();
+		++scobj;
 	}
 	return S_OK;
 }
@@ -215,9 +228,13 @@ HRESULT Renderer::OnDestroyDevice()
 //===========================================================================//
 HRESULT Renderer::AfterDestroyDevice()
 {
-	for(int i=0;i < (int)m_ListObj.size(); i++)
+	ScObjIt scobj = m_ScObjList->begin();
+	while( scobj != m_ScObjList->end() )
 	{
-		delete m_ListObj[i];
+		// 9a c'est super foireux, normalement on doit
+		// faire ça dans le destructeur du Level !
+		//delete (*scobj);
+		++scobj;
 	}
 	return S_OK;
 }

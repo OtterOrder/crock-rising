@@ -37,12 +37,19 @@ public:
 
 	void SetCamera( Camera* cam );
 
-//protected:
+protected:
+
+	//===========================================================================//
+	// Types protégées				                                             //
+	//===========================================================================//
+	
+	typedef std::list< SceneObject* >::iterator ScObjIt;
+	
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//
 	LPDIRECT3DVERTEXBUFFER9				m_pGridVB;
-	std:: vector <SceneObject *>		m_ListObj;
+	std::list< SceneObject* >			*m_ScObjList;	// Liste des objets de scène
 
 	Camera* m_Camera; //Une Copie de la camera
 };

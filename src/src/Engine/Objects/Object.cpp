@@ -14,7 +14,7 @@ list< Object* > Object::RefList;
 void Object::CommonInit( void )
 {
 	D3DXMatrixIdentity( &m_WorldMatrix );
-	RefList.push_front( this ); // enregistrement dans la liste
+	Object::RefList.push_front( this ); // enregistrement dans la liste
 }
 
 Object::Object( void )
@@ -42,7 +42,7 @@ Object::Object( D3DXVECTOR3 pos )
 
 Object::~Object( void )
 {
-	RefList.remove( this ); // suppression dans la liste
+	Object::RefList.remove( this ); // suppression dans la liste
 }
 
 /***********************************************************

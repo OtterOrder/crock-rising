@@ -57,9 +57,6 @@ int System::MainLoop( void )
 		
 		bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
 		
-		// Update des inputs
-		inputManager->Update();
-		
 		if( bGotMsg )
 		{
 			// Translate and dispatch the message
@@ -73,6 +70,9 @@ int System::MainLoop( void )
 			
 			//Rendu de de la scene
 			renderer->Run();
+
+			// Update des inputs
+			inputManager->Update();
 		}
 	}
 

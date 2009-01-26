@@ -31,7 +31,7 @@ public:
 protected:
 	Camera* m_pCamera;
 	
-	Sprite	*m_pSprite;
+	//Sprite	*m_pSprite;
 
 	SceneObjectAnimated*	m_pSObjectAnimated;
 };

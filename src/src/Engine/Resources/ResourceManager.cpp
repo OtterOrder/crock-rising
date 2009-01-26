@@ -53,15 +53,18 @@ void ResourceManager::test()
 //===========================================================================//
 // Retire une resource					                                     //
 //===========================================================================//
-void ResourceManager::Remove(const std::string& resource)
+/*void ResourceManager::Remove(const std::string& resource)
 {
     // Recherche de la ressource dans la table
     TResourcesMap::iterator It = m_Resources.find(resource);
 
     // Si la ressource n'avait pas été chargée, on le signale
-    //if (It == m_Resources.end())
+    if (It != m_Resources.end())
+	{
+
+	}
         // Signalement
 
     // Retrait de la ressource de la liste
     m_Resources.erase(It);
-}
+}*/

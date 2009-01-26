@@ -50,7 +50,19 @@ class ResourceManager : public Singleton<ResourceManager>
 	//===========================================================================//
 	// Retire une resource									                     //
 	//===========================================================================//
-    void Remove(const std::string& resource);
+    template <class T> void Remove(const std::string& resource)
+	{
+		// Recherche de la ressource dans la table
+		TResourcesMap::iterator It = m_Resources.find(resource);
+
+		// Si la ressource a été chargée
+		if (It != m_Resources.end())
+		{
+			It->second->Release();
+			// Retrait de la ressource de la liste
+			m_Resources.erase(It);
+		}
+	}
 
 private :
 	

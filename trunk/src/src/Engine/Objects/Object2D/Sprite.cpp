@@ -1,5 +1,6 @@
 #include	"Sprite.h"
 
+#include	<assert.h>
 #include	<d3dx9.h>
 
 #include	"Core/System.h"
@@ -13,40 +14,76 @@
  * Constructeur.
  * @param[in]	spriteID : ID du sprite
  **********************************************************/
-Sprite::Sprite( crc32 spriteID )
+/*Sprite::Sprite( crc32 spriteID )
 : Object2D()
 {
 	//TODO
+}*/
 
-	m_TextureID = spriteID; // temporaire
+/***********************************************************
+ * Constructeur.
+ * @param[in]	path : chemin vers l'image (texture)
+ **********************************************************/
+Sprite::Sprite( const char *path )
+: Object2D()
+{
+	m_TextureName	= path;
+	m_IsDxReady		= false;
 
-	D3DXCreateSprite(
-		Renderer::GetInstance()->m_pd3dDevice,
-		&m_pSprite
-	);
+	InitDxData();
 }
 
 /***********************************************************
  * Destructeur.
  **********************************************************/
-Sprite::~Sprite( void )
+Sprite::~Sprite()
 {
+	ClearDxData();
 }
 
 /***********************************************************
  * Affiche l'objet.
  **********************************************************/
-void Sprite::Draw( void ) const
+void Sprite::Draw() const
 {
-	m_pSprite->Begin( 0 );
-
-	/*m_pSprite->Draw(
-		ResourceManager::GetInstance()->Load<Texture>( m_TextureID )->m_pTex,
+	if( !m_IsDxReady )
+		return;
+	
+	m_pDxSprite->Begin( 0 );
+	m_pDxSprite->Draw(
+		m_pDxTexture,
 		NULL,
 		NULL,
-		&m_Position,
-		m_Color
-	);*/
+		NULL,
+		D3DCOLOR_RGBA( 255, 255, 255, 255 )
+	);
+	m_pDxSprite->End();
+}
 
-	m_pSprite->End();
+
+/***********************************************************
+ * Initialise les données Dx.
+ **********************************************************/
+void Sprite::InitDxData()
+{
+	if( m_IsDxReady )
+		return;
+	
+	// Création du sprite Dx et récupération de la texture
+	D3DXCreateSprite( Renderer::GetInstance()->m_pd3dDevice, &m_pDxSprite );
+	m_pDxTexture = ResourceManager::GetInstance()->Load<Texture>( m_TextureName )->m_pTex;
+
+	m_IsDxReady = true;
+}
+
+/***********************************************************
+ * Libère les données Dx.
+ **********************************************************/
+void Sprite::ClearDxData()
+{
+	if( m_IsDxReady )
+	{
+		m_pDxSprite->Release();
+	}
+	m_IsDxReady = false;
 }

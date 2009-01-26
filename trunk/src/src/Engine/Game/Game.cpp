@@ -32,21 +32,21 @@ Game::~Game( void )
  **********************************************************/
 void Game::Update( void )
 {
-	ObjIt	obj		= m_ObjList->begin();
-	Obj2DIt	obj2d	= m_Obj2DList->begin();
+	ObjIt	itObj	= m_ObjList->begin();
+	Obj2DIt	itObj2d	= m_Obj2DList->begin();
 	
 	// Update des objets 3d
-	while( obj != m_ObjList->end() )
+	while( itObj != m_ObjList->end() )
 	{
-		(*obj)->Update();
-		++obj;
+		(*itObj)->Update();
+		++itObj;
 	}
 
 	// Update des objets 2d
-	while( obj2d != m_Obj2DList->end() )
+	while( itObj2d != m_Obj2DList->end() )
 	{
-		(*obj2d)->Update();
-		++obj2d;
+		(*itObj2d)->Update();
+		++itObj2d;
 	}
 	
 	if( m_CurrentLevel )

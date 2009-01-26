@@ -20,8 +20,8 @@ LevelStart::LevelStart( crc32 levelID )
  **********************************************************/
 LevelStart::~LevelStart( void )
 {
-	if( m_pSprite )
-		delete m_pSprite;
+	/*if( m_pSprite )
+		delete m_pSprite;*/
 
 	/*if ( m_pSObject)
 		delete m_pSObject;*/
@@ -36,7 +36,7 @@ void LevelStart::Init( void )
 	//m_pCamera->SetTarget( Vector3f(10.0f, 10.0f, 0.0f) );
 	Renderer::GetInstance()->SetCamera( m_pCamera );
 
-	m_pSprite = new Sprite( 0 );
+	//m_pSprite = new Sprite( 0 );
 
 	m_pSObjectAnimated = NULL;
 	m_pSObjectAnimated = new SceneObjectAnimated("Skinned_Box.DAE","","",D3DXVECTOR3(0.f,0.f,0.f));

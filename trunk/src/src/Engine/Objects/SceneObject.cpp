@@ -192,12 +192,14 @@ void SceneObject::DeleteDeviceData()
 
 void SceneObject::DeleteData()
 {
-	m_PtrMesh->Release();
+	ResourceManager::GetInstance()->Remove<Mesh>(m_Mesh);
+	ResourceManager::GetInstance()->Remove<Shader>(m_Shader);
+	//m_PtrMesh->Release();
 
 	/*for(TTextureMap::const_iterator it=m_MapTexture.begin() ; it!=m_MapTexture.end() ; ++it)
 	{
 			it->second->Release();
 	}*/
-	m_PtrShader->Release();
+	//m_PtrShader->Release();
 
 }

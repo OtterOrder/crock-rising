@@ -18,7 +18,6 @@ Resource::Resource(): m_RefCount(0)
 //===========================================================================//
 Resource::~Resource()
 {
-	ResourceManager::GetInstance()->Remove(m_Name);
 }
 
 

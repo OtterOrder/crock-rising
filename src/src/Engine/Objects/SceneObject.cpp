@@ -25,18 +25,19 @@ void SceneObject::CommonInit( void )
 // Constructeurs & destructeur de SceneObject		                         //
 //===========================================================================//
 SceneObject::SceneObject()
+:Object()
 {
 	CommonInit();
 }
 
 SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader)
-{
+:Object(Position)
+{	
 	CommonInit();
-	
+
 	m_Mesh=mesh;
 	m_Tex=Tex;
 	m_Offset=Position;
-	D3DXMatrixIdentity(&m_WorldMatrix);
 
 	m_Shader = shader;
 }

@@ -2,6 +2,7 @@
 
 
 SceneObjectAnimated::SceneObjectAnimated()
+:SceneObject()
 {
 }
 

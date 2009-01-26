@@ -30,12 +30,17 @@ public:
 	void SetPosition( const Point2f &position );				// Change la position
 	Point2f GetPosition() const;								// Donne la position
 
-	void SetDepth( float depth );								// Change la profondeur (z)
-	float GetDepth();											// Donne la profondeur (z)
+	//void Set3DPosition( float posX, float posY, float posZ );	// Change la position 3D
+	//void Set3DPosition( const Point3f &position );				// Change la position 3D
+	//Point3f Get3DPosition() const;								// Donne la position 3D
 
-	void Set3DPosition( float posX, float posY, float posZ );	// Change la position 3D
-	void Set3DPosition( const Point3f &position );				// Change la position 3D
-	Point3f Get3DPosition() const;								// Donne la position 3D
+	void SetVisibility( bool isVisible );						// Rend visible/invisible l'objet
+	bool IsVisible() const;										// Vérifie si l'objet est visible
+
+	// Méthodes spécifiques pour DirectX, appelées lors
+	// de la création/destruction/perte du device Dx.
+	virtual void InitDxData(){}									// Initialise les données Dx
+	virtual void ClearDxData(){}								// Libère les données Dx
 
 
 protected:
@@ -44,6 +49,7 @@ protected:
 	// Données protégées
 	
 	Point3f		m_Position;			// Position
+	bool		m_IsVisible;		// Si l'objet est visible
 
 private:
 

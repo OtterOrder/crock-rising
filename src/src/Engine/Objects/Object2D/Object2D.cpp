@@ -17,6 +17,9 @@ list< Object2D* > Object2D::RefList;
  **********************************************************/
 void Object2D::CommonInit()
 {
+	m_Position.z	= OBJECT2D_DEFAULT_Z;
+	m_IsVisible		= true;
+	
 	Object2D::RefList.push_front( this ); // enregistrement dans la liste
 }
 
@@ -26,7 +29,6 @@ void Object2D::CommonInit()
 Object2D::Object2D()
 {
 	CommonInit();
-	m_Position.z = OBJECT2D_DEFAULT_Z;
 }
 
 /***********************************************************
@@ -75,50 +77,19 @@ Point2f Object2D::GetPosition() const
 }
 
 /***********************************************************
- * Change la profondeur.
- * @param[in]	depth : profondeur = coordonnée z
+ * Rend visible/invisible l'objet.
+ * @param[in]	isVisible : visible si vrai
  **********************************************************/
-void Object2D::SetDepth( float depth )
+void Object2D::SetVisibility( bool isVisible )
 {
-	m_Position.z = depth;
+	m_IsVisible = isVisible;
 }
 
 /***********************************************************
- * Donne la profondeur.
- * @return	profondeur = coordonnée z de l'objet
+ * Vérifie si l'objet est visible.
+ * @return	vrai si l'objet est visible, faux sinon
  **********************************************************/
-float Object2D::GetDepth()
+bool Object2D::IsVisible() const
 {
-	return m_Position.z;
-}
-
-/***********************************************************
- * Change la position 3D.
- * @param[in]	posX : coordonnée x
- * @param[in]	posY : coordonnée y
- * @param[in]	posZ : coordonnée z
- **********************************************************/
-void Object2D::Set3DPosition( float posX, float posY, float posZ )
-{
-	m_Position.x = posX;
-	m_Position.y = posY;
-	m_Position.z = posZ;
-}
-
-/***********************************************************
- * Change la position 3D.
- * @param[in]	position : (x,y,z)
- **********************************************************/
-void Object2D::Set3DPosition( const Point3f &position )
-{
-	m_Position = position;
-}
-
-/***********************************************************
- * Donne la position 3D.
- * @return	position 3D du l'objet
- **********************************************************/
-Point3f Object2D::Get3DPosition() const
-{
-	return m_Position;
+	return m_IsVisible;
 }

@@ -27,9 +27,10 @@ void Camera::SetTarget( Vector3f target ){
 	m_Target = target;
 }
 
-void Camera::SetTarget( Object* obj  ){
-	D3DXMATRIX* transObj = obj->GetTransform();
-	SetTarget( Vector3f( transObj->_41, transObj->_42, transObj->_43 ) );
+void Camera::SetTarget( Object* obj  )
+{
+	Vector3f pos = obj->GetPosition();
+	SetTarget( pos );
 }
 
 D3DXMATRIX Camera::GetViewMatrix()

@@ -156,8 +156,6 @@ void SceneObject::Draw()
 {
 	m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
-	m_pDevice->BeginScene();
-
 	m_pDevice->SetVertexDeclaration(m_PtrMesh->m_decl);
 
 	m_PtrShader->m_pEffect->SetTechnique( "RenderSceneNoTex" );
@@ -180,8 +178,6 @@ void SceneObject::Draw()
 	m_PtrShader->m_pEffect->EndPass();
 
 	m_PtrShader->m_pEffect->End();
-
-	m_pDevice->EndScene();
 
 }
 

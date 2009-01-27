@@ -160,6 +160,8 @@ HRESULT Renderer::Render()
 	D3DXMatrixIdentity(&MatWorld);
 	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 
+	m_pd3dDevice->BeginScene();
+
 	ScObjIt scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
@@ -171,7 +173,6 @@ HRESULT Renderer::Render()
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
 
-	m_pd3dDevice->BeginScene();
 
 		m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
@@ -183,7 +184,6 @@ HRESULT Renderer::Render()
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
 	
 	m_pd3dDevice->EndScene();
-
 
 	return S_OK;
 }

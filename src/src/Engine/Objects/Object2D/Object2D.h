@@ -24,7 +24,7 @@ public:
 	virtual ~Object2D();
 
 	virtual void Draw() const =0;								// Affiche l'objet
-	virtual void Update();										// Update
+	virtual void Update();										// Update, à surcharger
 
 	void SetPosition( float posX, float posY );					// Change la position
 	void SetPosition( const Point2f &position );				// Change la position

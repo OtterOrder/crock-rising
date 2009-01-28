@@ -48,6 +48,8 @@ void Sprite::Draw() const
 {
 	if( !m_IsDxReady )
 		return;
+
+	// Là on est sûr que les données directx sont initialisées..
 	
 	m_pDxSprite->Begin( 0 );
 
@@ -70,11 +72,13 @@ void Sprite::InitDxData()
 {
 	if( m_IsDxReady )
 		return;
+
+	//TODO: blinder cette méthode (FAILED?)
 	
 	// Création du sprite Dx et récupération de la texture
 	D3DXCreateSprite( Renderer::GetInstance()->m_pd3dDevice, &m_pDxSprite );
-	m_pDxTexture = ResourceManager::GetInstance()->Load<Texture>( m_TextureName )->m_pTex;
-
+	m_pDxTexture = ResourceManager::GetInstance()->Load<Texture>( m_TextureName, (ResourceParam)TEX_SPRITE )->m_pTex;
+	
 	m_IsDxReady = true;
 }
 

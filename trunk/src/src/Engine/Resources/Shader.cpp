@@ -22,7 +22,7 @@ Shader::~Shader()
 //===========================================================================//
 // Chargement d'un shader                                                    //
 //===========================================================================//
-ResourceResult Shader::Load(std::string resource)
+ResourceResult Shader::Load( std::string resource, ResourceParam param )
 {
 	std::string str="..\\..\\data\\shader\\"+resource;
 

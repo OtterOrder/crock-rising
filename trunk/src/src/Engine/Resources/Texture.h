@@ -1,4 +1,5 @@
-#pragma once
+#ifndef		_Texture_H
+#define		_Texture_H
 
 //===========================================================================//
 // Include                                                                   //
@@ -6,7 +7,7 @@
 #include	"Resource.h"
 
 //===========================================================================//
-// Enums                                                                     //
+// Defines & enums                                                           //
 //===========================================================================//
 
 enum TextureType
@@ -22,16 +23,19 @@ enum TextureType
 //===========================================================================//
 class Texture: public Resource
 {
-	public:
+public:
+	
+	Texture();
+	~Texture();
+	
+	ResourceResult Load( std::string resource, ResourceParam param ); // Charge une texture
+	
+	LPDIRECT3DTEXTURE9 m_pTex; // Pointeur vers la texture
 
-		Texture();
-		~Texture();
+protected:
 
-		ResourceResult			Load	(std::string resource);
+	ResourceResult DxLoad( std::string path );
 
-				
-		LPDIRECT3DDEVICE9		m_pDevice;		// Device utilisé par le renderer
-		LPDIRECT3DTEXTURE9		m_pTex;			// Pointeur vers la texture
 };
 
-
+#endif		//_Texture_H

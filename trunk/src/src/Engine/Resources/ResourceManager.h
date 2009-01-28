@@ -3,11 +3,11 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#include "Resource.h"
-#include "../Core/Singleton.h"
-#include "../Core/Types/Crc32.h"
-#include <map>
-#include <string>
+#include	"Resource.h"
+#include	"Core/Singleton.h"
+#include	"Core/Types/Crc32.h"
+#include	<string>
+#include	<map>
 
 //===========================================================================//
 // Classe permettant de manager l'ensemble des resources                     //
@@ -20,7 +20,7 @@ class ResourceManager : public Singleton<ResourceManager>
 	//===========================================================================//
 	// Charge une resource								                     //
 	//===========================================================================//
-    template <class T> T* Load(const std::string& resource)
+    template <class T> T* Load( const std::string &resource, ResourceParam param = NULL )
 	{
 		// Recherche de la ressource
 		TResourcesMap::const_iterator It = m_Resources.find(resource);
@@ -34,9 +34,9 @@ class ResourceManager : public Singleton<ResourceManager>
 		else
 		{
 			T* Res=new T();
-			Resource * Ptr=dynamic_cast<Resource*>(Res);
-			Add(resource, Ptr);
-			Ptr->Load(resource);
+			Resource * Ptr=dynamic_cast<Resource*>( Res );
+			Add( resource, Ptr );
+			Ptr->Load( resource, param );
 			Ptr->AddRef();
 			return Res;
 		}

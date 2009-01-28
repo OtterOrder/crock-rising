@@ -17,24 +17,28 @@ Texture::Texture()
 //===========================================================================//
 Texture::~Texture()
 {
-	m_pTex->Release();
+	if( m_pTex ) m_pTex->Release();
 }
 
 //===========================================================================//
 // Charge une texture.
 // @param[in]	resource : nom du fichier
-// @param[in]	param : spécifie le répertoire à explorer
+// @param[in]	param : type de texture (TextureType)
 //===========================================================================//
 ResourceResult Texture::Load( std::string resource, ResourceParam param )
 {
-	m_Name = resource;
+	std::string dir;
+	//m_Name = resource;
 	
-	if( param )
+	// Sélection du répertoire en fonction du type
+	switch( (TextureType)(_int64)param ) // <-- Aaaalalala, c'est super naze ça !!!
 	{
-		//TODO
+		case TEX_SPRITE:	dir = "../../data/sprite/";	break;
+		default:			dir = "../../data/texture/";
 	}
 	
-	return DxLoad( "../../data/texture/" + m_Name );
+	// Chargement de la texture
+	return DxLoad( dir + resource );
 }
 
 //===========================================================================//

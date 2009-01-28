@@ -12,10 +12,12 @@
 
 enum TextureType
 {
-	TEX_MESH,
+	TEX_MESH = 1,	// (on commence à 1 pour ne pas confondre avec NULL = 0)
 	TEX_NORMALMAP,
 	TEX_BUMPMAP,
-	TEX_DISPLACEMENTMAP
+	TEX_DISPLACEMENTMAP,
+	
+	TEX_SPRITE
 };
 
 //===========================================================================//

@@ -40,7 +40,7 @@ Object2D::~Object2D()
 }
 
 /***********************************************************
- * Update, appelée à chaque tour moteur.
+ * Update, appelée à chaque tour moteur. A surcharger.
  **********************************************************/
 void Object2D::Update()
 {

@@ -37,9 +37,10 @@ Mesh::~Mesh()
 /***********************************************************
  * Supprime la ressource.
  * @param[in]	resource : crc32 de la ressource
+ * @param[?]	param : ce qu'on veut..
  * @return	le résultat du chargement
  **********************************************************/
-ResourceResult Mesh::Load(std::string resource)
+ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 {
 	std::string str="..\\..\\data\\models\\"+resource;
 

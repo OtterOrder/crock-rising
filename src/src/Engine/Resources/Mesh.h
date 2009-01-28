@@ -20,7 +20,7 @@ public:
 	Mesh(void);
 	virtual ~Mesh();
 
-	ResourceResult			Load		(std::string resource);
+	ResourceResult Load( std::string resource, ResourceParam param );
 
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
 	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource

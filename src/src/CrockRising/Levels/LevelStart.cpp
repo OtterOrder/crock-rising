@@ -1,6 +1,7 @@
 #include	"LevelStart.h"
 
 #include	<Renderer/Renderer.h>
+#include	<Objects/Camera.h>
 
 //******************************************************************
 

@@ -3,14 +3,13 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#include "D3DApp/d3dapp.h"
-#include "Core/Singleton.h"
-#include "Objects/Object.h"
-#include "Objects/SceneObject.h"
-#include "Objects/Camera.h"
-#include "Core/Inputs/InputManager.h"
-#include <vector>
+#include	"Core/Singleton.h"
+#include	"D3DApp/d3dapp.h"
+#include	<list>
 
+class SceneObject;
+class Camera;
+class Object2D;
 
 //===========================================================================//
 // Classe de base pour créer une application DX                              //
@@ -44,12 +43,16 @@ protected:
 	//===========================================================================//
 	
 	typedef std::list< SceneObject* >::iterator ScObjIt;
+	typedef std::list< Object2D* >::iterator Obj2DIt;
 	
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//
-	LPDIRECT3DVERTEXBUFFER9				m_pGridVB;
-	std::list< SceneObject* >			*m_ScObjList;	// Liste des objets de scène
+	LPDIRECT3DVERTEXBUFFER9 m_pGridVB; // ??
+	
+	std::list< SceneObject* >	*m_ScObjList; // Liste des objets de scène
+	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
 
-	Camera* m_Camera; //Une Copie de la camera
+	Camera *m_Camera; // Pointeur sur la camera
+
 };

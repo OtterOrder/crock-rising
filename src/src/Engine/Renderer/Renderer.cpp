@@ -1,7 +1,12 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#include "Renderer.h"
+#include	"Renderer.h"
+
+#include	"Core/Inputs/InputManager.h"
+#include	"Objects/SceneObject.h"
+#include	"Objects/Object2D/Object2D.h"
+#include	"Objects/Camera.h"
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -15,10 +20,12 @@ struct DEFAULT_VERTEX
 
 Renderer::Renderer()
 {
-	m_pGridVB = NULL;
+	m_pGridVB	= NULL;
+	m_Camera	= NULL;
 
-	// On récupère la liste des objets de scène
-	m_ScObjList = &SceneObject::RefList;
+	// On récupère les listes d'objets
+	m_ScObjList	= &SceneObject::RefList;
+	m_Obj2DList	= &Object2D::RefList;
 }
 
 //===========================================================================//
@@ -151,7 +158,10 @@ HRESULT Renderer::FrameMove(float fElapsedTime)
 //===========================================================================//
 HRESULT Renderer::Render()
 {
-    m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
+	ScObjIt scobj;
+	Obj2DIt obj2d;
+	
+	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
 	m_pd3dDevice->SetVertexShader(NULL);
 	m_pd3dDevice->SetPixelShader(NULL);
@@ -162,13 +172,29 @@ HRESULT Renderer::Render()
 
 	m_pd3dDevice->BeginScene();
 
-	ScObjIt scobj = m_ScObjList->begin();
+	//-- Affichage des objets 3D
+	
+	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
 		(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
 		(*scobj)->Draw();
 		++scobj;
 	}
+	
+	//-- Affichage des objets 2D
+	
+	obj2d = m_Obj2DList->begin();
+	while( obj2d != m_Obj2DList->end() )
+	{
+		if( (*obj2d)->IsVisible() )
+		{
+			(*obj2d)->Draw();
+		}
+		++obj2d;
+	}
+	
+	//-- ?
 	
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
@@ -193,15 +219,30 @@ HRESULT Renderer::Render()
 //===========================================================================//
 HRESULT Renderer::OnLostDevice()
 {
+	ScObjIt scobj;
+	Obj2DIt obj2d;
+	
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
 
-	ScObjIt scobj = m_ScObjList->begin();
+	//-- Objets 3D
+	
+	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
 		(*scobj)->DeleteDeviceData();
 		++scobj;
 	}
+
+	//-- Objets 2D
+
+	obj2d = m_Obj2DList->begin();
+	while( obj2d != m_Obj2DList->end() )
+	{
+		(*obj2d)->ClearDxData();
+		++obj2d;
+	}
+
 	return S_OK;
 }
 
@@ -211,8 +252,11 @@ HRESULT Renderer::OnLostDevice()
 HRESULT Renderer::OnDestroyDevice()
 {
 	ScObjIt scobj;
+	Obj2DIt obj2d;
 	
 	m_pStatsFont->DeleteDeviceObjects();
+
+	//-- Objets 3D
 	
 	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
@@ -220,6 +264,16 @@ HRESULT Renderer::OnDestroyDevice()
 		(*scobj)->DeleteData();
 		++scobj;
 	}
+
+	//-- Objets 2D
+	
+	obj2d = m_Obj2DList->begin();
+	while( obj2d != m_Obj2DList->end() )
+	{
+		(*obj2d)->ClearDxData();
+		++obj2d;
+	}
+
 	return S_OK;
 }
 

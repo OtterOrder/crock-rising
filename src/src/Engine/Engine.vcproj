@@ -491,11 +491,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PhysicalObject.cpp"
+				RelativePath=".\Physics\PhysicalObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PhysicalObject.h"
+				RelativePath=".\Physics\PhysicalObject.h"
 				>
 			</File>
 		</Filter>

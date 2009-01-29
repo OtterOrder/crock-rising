@@ -5,17 +5,20 @@
 
 #include	"Resource.h"
 
+#include    "AnimLoader.h"
+
 //******************************************************************
 
-class Anim : public Resource
+class Anim : public Resource 
 {
-public:
+public : 
+	Anim () ; 
+	virtual ~Anim() ; 
 
-	Anim(); // temporaire (sinon warning LNK4221)
+	ResourceResult Load ( crc32 resource ) ; 
 
-protected:
-
-	//TODO
+	ResourceResult    FillMatrices(); 
+	void			  ReleaseMatrices();
 
 };
 

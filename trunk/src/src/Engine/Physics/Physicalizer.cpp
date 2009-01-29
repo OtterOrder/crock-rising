@@ -4,20 +4,19 @@
 // ===============================================================================
 
 #include <stdio.h>
-#include "PhysX.h"
+#include "Physicalizer.h"
 
-bool PhysX::InitPhysX()
+bool Physicalizer::InitPhysX()
 {
+	m_PhysicsSDK = NULL;
+	m_Scene = NULL; 
+
 	// Initialize PhysicsSDK
 	NxSDKCreateError errorCode = NXCE_NO_ERROR;
 	m_PhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 
 	// Initialiser le sdk
-	if(m_PhysicsSDK == NULL) 
-	{
-//		printf("\nSDK create error (%d - %s).\nUnable to initialize the PhysX SDK, exiting the sample.\n\n", errorCode, getNxSDKCreateError(errorCode));
-		return false;
-	}
+	if(m_PhysicsSDK == NULL) return false;
 
 	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f);
 	m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
@@ -55,7 +54,7 @@ bool PhysX::InitPhysX()
 	return true;
 }
 
-void PhysX::ExitNx()
+void Physicalizer::ExitNx()
 {
 	if(m_PhysicsSDK != NULL)
 	{
@@ -66,12 +65,12 @@ void PhysX::ExitNx()
 	}
 }
 //static void CreatePlane(
-void PhysX::CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
+void Physicalizer::CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
 {
 	if(m_Scene == NULL) return;	
 
 	// Create body
- 	NxBodyDesc bodyDesc;
+ 	/*NxBodyDesc bodyDesc;
 	NxBoxShapeDesc boxDesc;
 	NxActorDesc actorDesc;
 
@@ -93,50 +92,20 @@ void PhysX::CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocit
 	actorDesc.globalPose.t	= pos;	
 	assert(actorDesc.isValid());
 	NxActor *pActor = m_Scene->createActor(actorDesc);	
-	assert(pActor);
+	assert(pActor);*/
 }
 
-void PhysX::HeavyCreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
-{
-	if(m_Scene == NULL) return;	
-
-	// Create body
- 	NxBodyDesc bodyDesc;
-	NxBoxShapeDesc boxDesc;
-	NxActorDesc actorDesc;
-
-	bodyDesc.angularDamping	= 0.5f;
-	if(initialVelocity) bodyDesc.linearVelocity = *initialVelocity;
-
-	boxDesc.mass = 100;
-	boxDesc.dimensions.set(size);
-	//boxDesc.localPose.t.set(pos);
-	// Initialiser la description de la futur boite.
-
-	// Créer l'acteur de la boite
-	actorDesc.shapes.push_back(&boxDesc);
-
-	actorDesc.body = &bodyDesc;
-	actorDesc.userData = (void*)size;
-
-	actorDesc.density		= 1.0f;
-	actorDesc.globalPose.t	= pos;	
-	assert(actorDesc.isValid());
-	NxActor *pActor = m_Scene->createActor(actorDesc);	
-	assert(pActor);
-}
-
-void PhysX::CreateCubeFromEye(int size)
+void Physicalizer::CreateCubeFromEye(int size)
 {
 	//HeavyCreateCube(gEye, 1.0, &tir);
 
 	// Créer un cube, centré sur gEye, et qui est lancé dans le sens du regard (gDir).
 }
 
-void PhysX::CreateStack(int size)
+void Physicalizer::CreateStack(int size)
 {
-	const float cubeSize = 1.0f;
-	const float spacing = 1.0f;
+	float cubeSize = 1.0f;
+	float spacing = 1.0f;
 	NxVec3 pos(0.0, cubeSize, 0.0);
 
 	int nbligne = size;
@@ -149,7 +118,7 @@ void PhysX::CreateStack(int size)
 			for(int z = y; z < nbcol; z++)
 			{
 				pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , (cubeSize + spacing)*z);
-				CreateCube(pos, cubeSize, NULL);
+				CreateCube(pos, (int)cubeSize, NULL);
 			}
 		}
 		nbligne-= 1;
@@ -158,10 +127,10 @@ void PhysX::CreateStack(int size)
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
 }
 
-void PhysX::CreateSin(int size)
+void Physicalizer::CreateSin(int size)
 {
-	const float cubeSize = 1.0f;
-	const float spacing = 1.0f;
+	float cubeSize = 1.0f;
+	float spacing = 1.0f;
 	NxVec3 pos(0.0, cubeSize, 0.0);
 
 	int Duree = 200;
@@ -169,11 +138,11 @@ void PhysX::CreateSin(int size)
 	float Intensite;
 	for(int x = 0; x < Duree; x++)
 	{
-		Intensite = ( sin(x*(3.14/100))+1 ) /2 * Periode;
+		Intensite = (float)( sin(x*(3.14/100))+1 ) /2 * Periode;
 		for(int y = 0; y < Intensite; y++)
 		{			
 			pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , 0.0f);
-			CreateCube(pos, cubeSize, NULL);
+			CreateCube(pos, (int)cubeSize, NULL);
 		}
 	}
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
@@ -182,37 +151,37 @@ void PhysX::CreateSin(int size)
 //Hauteur : Hauteur des pics en Y
 //Duree	  : Nombre de cube en X et en Z du premier étage
 //Période : Nombre de bosses
-void PhysX::CreateSinSuface(int Hauteur, int Duree, int Periode)
+void Physicalizer::CreateSinSuface(int Hauteur, int Duree, int Periode)
 {
-	const float cubeSize = 1.0f;
-	const float spacing = 0.01f;
+	float cubeSize = 1.0f;
+	float spacing = 0.01f;
 	NxVec3 pos(0.0, cubeSize, 0.0);
 
 	float Intensite1, Intensite2;
 	for(int x = 0; x < Duree; x++)
 	{
-		Intensite1 = ( sin((x)*(3.14/Periode))+1 ) /2 * Hauteur;
+		Intensite1 = (float)( sin((x)*(3.14/Periode))+1 ) /2 * Hauteur;
 		for(int z = 0; z < Duree; z++)
 		{
-			Intensite2 = ( sin((z)*(3.14/Periode))+1 ) /2 * Hauteur;
+			Intensite2 = (float)( sin((z)*(3.14/Periode))+1 ) /2 * Hauteur;
 			for(int y = 0; y < Intensite2+Intensite1; y++)
 			{			
 				pos.set((2*cubeSize + spacing)*x, cubeSize + (2*cubeSize + spacing)*y , (2*cubeSize + spacing)*z);
-				CreateCube(pos, cubeSize, NULL);
+				CreateCube(pos, (int)cubeSize, NULL);
 			}
 		}
 	} 
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
 }
 
-void PhysX::CreateTower(int size)
+void Physicalizer::CreateTower(int size)
 {
-	const float cubeSize = 1.0f;
-	const float spacing = 1.f;
+	float cubeSize = 1.0f;
+	float spacing = 1.0f;
 	NxVec3 pos(0.0, cubeSize, 0.0);
 	for(int i = 1; i <= size; i++)
 	{
-		CreateCube(pos, cubeSize, NULL);
+		CreateCube(pos, (int)cubeSize, NULL);
 		pos.set(0.0f, cubeSize + (cubeSize + spacing)*i , 0.0f);
 	}
 	// Créer une 'tour' de cubes (de la forme que vous voulez, il faut au moins 25 cubes).

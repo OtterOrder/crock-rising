@@ -483,11 +483,19 @@
 			Name="Physics"
 			>
 			<File
-				RelativePath=".\Physics\PhysX.cpp"
+				RelativePath=".\Physics\Physicalizer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Physics\PhysX.h"
+				RelativePath=".\Physics\Physicalizer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PhysicalObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PhysicalObject.h"
 				>
 			</File>
 		</Filter>

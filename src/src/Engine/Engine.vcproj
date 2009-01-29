@@ -397,6 +397,14 @@
 					RelativePath=".\Resources\Anim.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Resources\AnimLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Resources\AnimLoader.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Mesh"

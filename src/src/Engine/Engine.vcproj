@@ -38,8 +38,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -472,8 +472,16 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Physics"
+			Name="PhysX"
 			>
+			<File
+				RelativePath=".\PhysX\PhysX.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PhysX.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

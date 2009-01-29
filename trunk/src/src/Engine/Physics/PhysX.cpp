@@ -4,59 +4,42 @@
 // ===============================================================================
 
 #include <stdio.h>
+#include "PhysX.h"
 
-#include "NxPhysics.h"
-
-// Physics
-static NxPhysicsSDK*	gPhysicsSDK = NULL;
-static NxScene*			gScene = NULL;
-//static PerfRenderer    gPerfRenderer;
-NxVec3            gDefaultGravity(0,-9.8,0);
-
-// Rendering
-static NxVec3	gEye(50.0f, 50.0f, 50.0f);
-static NxVec3	gDir(-0.6f,-0.2f,-0.7f);
-static NxVec3	gViewY;
-static int		gMouseX = 0;
-static int		gMouseY = 0;
-
-
-static void CreateCube(const NxVec3& pos, int size=2, const NxVec3* initialVelocity=NULL);
-
-static bool InitNx()
+bool PhysX::InitPhysX()
 {
 	// Initialize PhysicsSDK
 	NxSDKCreateError errorCode = NXCE_NO_ERROR;
-	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
+	m_PhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 
 	// Initialiser le sdk
-	if(gPhysicsSDK == NULL) 
+	if(m_PhysicsSDK == NULL) 
 	{
 //		printf("\nSDK create error (%d - %s).\nUnable to initialize the PhysX SDK, exiting the sample.\n\n", errorCode, getNxSDKCreateError(errorCode));
 		return false;
 	}
 
-	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f);
-	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, 1);
+	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f);
+	m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
+	m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1);
+	m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, 1);
 
 
 	// Create a scene
     NxSceneDesc sceneDesc;
  	sceneDesc.simType				= NX_SIMULATION_SW;
-    sceneDesc.gravity               = gDefaultGravity;
-    gScene = gPhysicsSDK->createScene(sceneDesc);	
+   // sceneDesc.gravity               = gDefaultGravity;
+    m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 
 	// Créer une scene (gScene)
-	if(gScene == NULL) 
+	if(m_Scene == NULL) 
 	{
 		printf("\nError: Unable to create a PhysX scene, exiting the sample.\n\n");
 		return false;
 	}
 
 	// Set default material
-	NxMaterial* defaultMaterial = gScene->getMaterialFromIndex(0);
+	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);
 	defaultMaterial->setRestitution(0.5f);
 	defaultMaterial->setStaticFriction(0.5f);
 	defaultMaterial->setDynamicFriction(0.5f);
@@ -67,25 +50,25 @@ static bool InitNx()
 	
 	// Créer l'acteur "plan du sol"
     actorDesc.shapes.pushBack(&planeDesc);//On rajoute la boite englobante de ce plan
-	gScene->createActor(actorDesc);
+	m_Scene->createActor(actorDesc);
 
 	return true;
 }
 
-static void ExitNx()
+void PhysX::ExitNx()
 {
-	if(gPhysicsSDK != NULL)
+	if(m_PhysicsSDK != NULL)
 	{
-		if(gScene != NULL) gPhysicsSDK->releaseScene(*gScene);
-		gScene = NULL;
-		NxReleasePhysicsSDK(gPhysicsSDK);
-		gPhysicsSDK = NULL;
+		if(m_Scene != NULL) m_PhysicsSDK->releaseScene(*m_Scene);
+		m_Scene = NULL;
+		NxReleasePhysicsSDK(m_PhysicsSDK);
+		m_PhysicsSDK = NULL;
 	}
 }
 //static void CreatePlane(
-static void CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
+void PhysX::CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
 {
-	if(gScene == NULL) return;	
+	if(m_Scene == NULL) return;	
 
 	// Create body
  	NxBodyDesc bodyDesc;
@@ -109,13 +92,13 @@ static void CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocit
 	actorDesc.density		= 1.0f;
 	actorDesc.globalPose.t	= pos;	
 	assert(actorDesc.isValid());
-	NxActor *pActor = gScene->createActor(actorDesc);	
+	NxActor *pActor = m_Scene->createActor(actorDesc);	
 	assert(pActor);
 }
 
-static void HeavyCreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
+void PhysX::HeavyCreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
 {
-	if(gScene == NULL) return;	
+	if(m_Scene == NULL) return;	
 
 	// Create body
  	NxBodyDesc bodyDesc;
@@ -139,19 +122,18 @@ static void HeavyCreateCube(const NxVec3& pos, int size, const NxVec3* initialVe
 	actorDesc.density		= 1.0f;
 	actorDesc.globalPose.t	= pos;	
 	assert(actorDesc.isValid());
-	NxActor *pActor = gScene->createActor(actorDesc);	
+	NxActor *pActor = m_Scene->createActor(actorDesc);	
 	assert(pActor);
 }
 
-static void CreateCubeFromEye(int size)
+void PhysX::CreateCubeFromEye(int size)
 {
-	const NxVec3 tir(gDir.x*size, gDir.y*size, gDir.z*size);
-	HeavyCreateCube(gEye, 1.0, &tir);
+	//HeavyCreateCube(gEye, 1.0, &tir);
 
 	// Créer un cube, centré sur gEye, et qui est lancé dans le sens du regard (gDir).
 }
 
-static void CreateStack(int size)
+void PhysX::CreateStack(int size)
 {
 	const float cubeSize = 1.0f;
 	const float spacing = 1.0f;
@@ -167,7 +149,7 @@ static void CreateStack(int size)
 			for(int z = y; z < nbcol; z++)
 			{
 				pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , (cubeSize + spacing)*z);
-				CreateCube(pos, cubeSize);
+				CreateCube(pos, cubeSize, NULL);
 			}
 		}
 		nbligne-= 1;
@@ -176,7 +158,7 @@ static void CreateStack(int size)
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
 }
 
-static void CreateSin(int size)
+void PhysX::CreateSin(int size)
 {
 	const float cubeSize = 1.0f;
 	const float spacing = 1.0f;
@@ -191,7 +173,7 @@ static void CreateSin(int size)
 		for(int y = 0; y < Intensite; y++)
 		{			
 			pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , 0.0f);
-			CreateCube(pos, cubeSize);
+			CreateCube(pos, cubeSize, NULL);
 		}
 	}
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
@@ -200,7 +182,7 @@ static void CreateSin(int size)
 //Hauteur : Hauteur des pics en Y
 //Duree	  : Nombre de cube en X et en Z du premier étage
 //Période : Nombre de bosses
-static void CreateSinSuface(int Hauteur, int Duree, int Periode)
+void PhysX::CreateSinSuface(int Hauteur, int Duree, int Periode)
 {
 	const float cubeSize = 1.0f;
 	const float spacing = 0.01f;
@@ -216,100 +198,22 @@ static void CreateSinSuface(int Hauteur, int Duree, int Periode)
 			for(int y = 0; y < Intensite2+Intensite1; y++)
 			{			
 				pos.set((2*cubeSize + spacing)*x, cubeSize + (2*cubeSize + spacing)*y , (2*cubeSize + spacing)*z);
-				CreateCube(pos, cubeSize);
+				CreateCube(pos, cubeSize, NULL);
 			}
 		}
 	} 
 	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
 }
 
-static void CreateTower(int size)
+void PhysX::CreateTower(int size)
 {
 	const float cubeSize = 1.0f;
 	const float spacing = 1.f;
 	NxVec3 pos(0.0, cubeSize, 0.0);
 	for(int i = 1; i <= size; i++)
 	{
-		CreateCube(pos, cubeSize);
+		CreateCube(pos, cubeSize, NULL);
 		pos.set(0.0f, cubeSize + (cubeSize + spacing)*i , 0.0f);
 	}
 	// Créer une 'tour' de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
-}
-
-
-static void KeyboardCallback(unsigned char key, int x, int y)
-{
-	switch(key)
-	{
-		case 27:	
-			exit(0); 
-			break;
-		case '0':	
-			//gPerfRenderer.toggleEnable(); 
-			break;
-		case ' ':	
-			CreateCube(NxVec3(0.0f, 20.0f, 0.0f),1); 
-			break;
-		case 's':
-		case 'S':
-			CreateStack(10);
-			break;
-		case 'b':	
-		case 'B':	
-			CreateStack(30); 
-			break;
-		case 'c':	
-		case 'C':	
-			CreateSin(100); 
-			break;
-		case 'v':	
-		case 'V':	
-			CreateSinSuface(10, 50, 10); 
-			break;
-		case 't':
-		case 'T':
-			CreateTower(30);
-			break;
-		case 'w':
-		case 'W':
-			CreateCubeFromEye(100);
-			break;
-		case 'q':
-		case 'Q':
-			{
-				NxActor** actors = gScene->getActors();
-				if(gScene->getNbActors() > 1){
-					gScene->releaseActor(*actors[gScene->getNbActors()-1]);
-				}
-			}
-			break;		
-	}
-}
-
-static void ArrowKeyCallback(int key, int x, int y)
-{
-	KeyboardCallback(key,x,y);
-}
-
-static void MouseCallback(int button, int state, int x, int y)
-{
-	gMouseX = x;
-	gMouseY = y;
-}
-
-static void MotionCallback(int x, int y)
-{
-	int dx = gMouseX - x;
-	int dy = gMouseY - y;
-	
-	gDir.normalize();
-	gViewY.cross(gDir, NxVec3(0,1,0));
-
-	NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,1,0));
-	qx.rotate(gDir);
-	NxQuat qy(NxPiF32 * dy * 20/ 180.0f, gViewY);
-	qy.rotate(gDir);
-
-	gMouseX = x;
-	gMouseY = y;
 }

@@ -14,4 +14,8 @@ Il faut absolument installer le PhysX System Software en premier (dixit NVIDIA).
 
 == Ce qu'il faut rajouter dans Visual Studio ==
 
-TODO
+Linkage dans les options de visual: 
+ * (SDK DIR)\SDKs\Physics\include
+ * (SDK DIR)\SDKs\PhysXLoader\include
+ * (SDK DIR)\SDKs\Foundation\include
+ * (SDK DIR)\TrainingPrograms\Programs\Shared_Source\Timer

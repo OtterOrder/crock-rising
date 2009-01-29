@@ -7,8 +7,8 @@
 Tout ce dont vous avez besoin est disponible sur [http://developer.nvidia.com/object/physx_downloads.htm cette page].
 
 Téléchargez :
- * PhysX SDK x.x.x for Windows SDK
- * PhysX System Software x.x.x
+ * PhysX SDK x.x.x for Windows SDK(Dernière version au 30/01/09 : 2.8.1)
+ * PhysX System Software x.x.x (Dernière version au 30/01/09 : 9.09.0010)
 
 Il faut absolument installer le PhysX System Software en premier (dixit NVIDIA).
 

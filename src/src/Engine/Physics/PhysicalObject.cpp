@@ -9,9 +9,10 @@ PhysicalObject::PhysicalObject(void)
 	m_bDebugMode = false;
 }
 
+
+
 PhysicalObject::~PhysicalObject(void)
 {
-	//release de la liste
 }
 
 //===========================================================================//
@@ -27,3 +28,17 @@ bool PhysicalObject::IsInCollision(const PhysicalObject &po)
 //===========================================================================//
 void PhysicalObject::EnableDebugMode(bool enable)
 {}
+
+BoundingBox::BoundingBox(Mesh* aPrimitive, NxMaterial* aMat)
+{ 
+	pPrimitive = aPrimitive; 
+	pMat = aMat; 
+
+	if( pMat == NULL)
+	{
+		//TODO : Classe abstraite, comment faire si elle est nulle?
+		pMat->setRestitution(0.5);
+		pMat->setStaticFriction(0.5);
+		pMat->setDynamicFriction(0.5);
+	}
+}

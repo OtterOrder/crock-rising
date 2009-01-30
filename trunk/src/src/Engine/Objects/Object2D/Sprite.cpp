@@ -57,7 +57,7 @@ void Sprite::Draw() const
 		m_pDxTexture,
 		NULL,
 		NULL,
-		NULL,
+		&m_Position,
 		D3DCOLOR_RGBA( 255, 255, 255, 255 )
 	);
 
@@ -89,9 +89,8 @@ void Sprite::ClearDxData()
 {
 	if( m_IsDxReady )
 	{
-		m_pDxSprite->Release();
-		// On ne devrait pas avoir a détruire la texture ici bordel !!
 		ResourceManager::GetInstance()->Remove<Texture>( m_TextureName );
+		m_pDxSprite->Release();
 	}
 	m_IsDxReady = false;
 }

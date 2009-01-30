@@ -9,7 +9,7 @@
 bool Physicalizer::InitPhysX()
 {
 	m_PhysicsSDK = NULL;
-	m_Scene = NULL; 
+	m_Scene		 = NULL; 
 
 	// Initialize PhysicsSDK
 	NxSDKCreateError errorCode = NXCE_NO_ERROR;

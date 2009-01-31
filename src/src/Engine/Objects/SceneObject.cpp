@@ -30,7 +30,7 @@ SceneObject::SceneObject()
 	CommonInit();
 }
 
-SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader)
+SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position/*, const PhysicalObject PhysicObj*/, const std::string shader)
 :Object(Position)
 {	
 	CommonInit();
@@ -39,6 +39,7 @@ SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const 
 	m_Tex=Tex;
 	m_Offset=Position;
 
+	//m_PhysicObj = PhysicObj;
 	m_Shader = shader;
 }
 
@@ -104,6 +105,7 @@ void SceneObject::SetTransform(const D3DXMATRIX *world)
 
 void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)
 {
+	//Physicalizer::GetInstance()->getScene()-> ...
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
 	D3DXMatrixIdentity(&MatWorldView);

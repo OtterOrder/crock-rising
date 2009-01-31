@@ -2,9 +2,11 @@
 //
 //
 // ===============================================================================
+#include "Physicalizer.h"
 
 #include <stdio.h>
-#include "Physicalizer.h"
+#include "NxPhysics.h"
+
 
 bool Physicalizer::InitPhysX()
 {
@@ -61,7 +63,7 @@ bool Physicalizer::InitPhysX()
 	return true;
 }
 
-void Physicalizer::ExitNx()
+void Physicalizer::ExitPhysX()
 {
 	if(m_PhysicsSDK != NULL)
 	{
@@ -207,5 +209,11 @@ void Physicalizer::StartPhysics()
 void Physicalizer::GetPhysicsResults()
 {
 	// Get results from gScene->simulate(gDeltaTime)
-	while (!m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, false));
+	m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+}
+
+void Physicalizer::Update()
+{
+	GetPhysicsResults();
+	StartPhysics();
 }

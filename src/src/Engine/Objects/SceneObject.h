@@ -6,6 +6,7 @@
 #include	<map>
 #include	"Object.h"
 #include	"Resources/Texture.h"
+//#include	"Physics/PhysicalObject.h"
 
 //===========================================================================//
 
@@ -24,7 +25,7 @@ public:
 	static std::list< SceneObject* > RefList;
 
 	// Constructeurs & destructeur
-	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, const std::string shader = "default.fx");
+	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, /*const PhysicalObject PhysicObj,*/ const std::string shader = "default.fx");
 	SceneObject();
 	virtual ~SceneObject();
 
@@ -69,6 +70,8 @@ private:
 	D3DXVECTOR3		m_Offset;
 
 	Mesh*			m_PtrMesh;
+
+	//PhysicalObject	m_PhysicObj;
 
 	//===========================================================================//
 	// Méthodes privées												             //

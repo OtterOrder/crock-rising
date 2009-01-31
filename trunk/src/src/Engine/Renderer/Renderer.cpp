@@ -1,13 +1,16 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
+#define		NOMINMAX
+
 #include	"Renderer.h"
+#include	"Physics/Physicalizer.h"
+
 
 #include	"Core/Inputs/InputManager.h"
 #include	"Objects/SceneObject.h"
 #include	"Objects/Object2D/Object2D.h"
 #include	"Objects/Camera.h"
-//#include	"Physics/Physicalizer.h" // Fait une fucking erreur de nominmax
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -106,7 +109,50 @@ HRESULT Renderer::OnResetDevice()
 	{ 0.f, 5.f,  0.f, 0x0000ff00},
 
 	{ 0.f, 0.f,  0.f, 0x000000f0},	//axe Z
-	{ 0.f, 0.f,  5.f, 0x000000f0}
+	{ 0.f, 0.f,  5.f, 0x000000f0},
+
+	{ -10.0f, -10.0f, 10.0f, 0x00ff0000 }, //face 1
+	{ 10.0f, -10.0f, 10.0f, 0x00ff0000 },
+	{ -10.0f, 10.0f, 10.0f, 0x00ff0000 },
+	{ -10.0f, 10.0f, 10.0f, 0x00ff0000 },
+	{ 10.0f, -10.0f, 10.0f, 0x00ff0000 },
+	{ 10.0f, 10.0f, 10.0f, 0x00ff0000 }
+
+	/*,
+	{ -10.0f, -10.0f, -10.0f, 0x0000ff00 }, // face 2
+	{ 10.0f, -10.0f, -10.0f, 0x0000ff00 },
+	{ -10.0f, 10.0f, -10.0f, 0x0000ff00 },
+	{ -10.0f, 10.0f, -10.0f, 0x0000ff00 },
+	{ 10.0f, -10.0f, -10.0f, 0x0000ff00 },
+	{ 10.0f, 10.0f, -10.0f, 0x0000ff00 },
+
+	{ -10.0f, -10.0f, -10.0f, 0x000000ff }, // face 3
+	{ 10.0f, -10.0f, -10.0f, 0x000000ff },
+	{ -10.0f, -10.0f, 10.0f, 0x000000ff },
+	{ -10.0f, -10.0f, 10.0f, 0x000000ff },
+	{ 10.0f, -10.0f, -10.0f, 0x000000ff },
+	{ 10.0f, -10.0f, 10.0f, 0x000000ff },
+
+	{ -10.0f, 10.0f, -10.0f, 0x00ff0ff0 }, // face 4
+	{ 10.0f, 10.0f, -10.0f, 0x00ff0ff0 },
+	{ -10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
+	{ -10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
+	{ 10.0f, 10.0f, -10.0f, 0x00ff0ff0 },
+	{ 10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
+
+	{ -10.0f, -10.0f, -10.0f, 0xff0000ff }, // face 5
+	{ -10.0f, 10.0f, -10.0f, 0xff0000ff },
+	{ -10.0f, -10.0f, 10.0f, 0xff0000ff },
+	{ -10.0f, -10.0f, 10.0f, 0xff0000ff },
+	{ -10.0f, 10.0f,-10.0f, 0xff0000ff },
+	{ -10.0f, 10.0f, 10.0f, 0xff0000ff },
+
+	{ 10.0f, -10.0f, -10.0f, 0x00ffff00 }, // face 6
+	{ 10.0f, 10.0f, -10.0f, 0x00ffff00 },
+	{ 10.0f, -10.0f, 10.0f, 0x00ffff00 },
+	{ 10.0f, -10.0f, 10.0f, 0x00ffff00 },
+	{ 10.0f, 10.0f, -10.0f, 0x00ffff00 },
+	{ 10.0f, 10.0f, 10.0f, 0x00ffff00 }*/
 	
 	};
 
@@ -165,8 +211,9 @@ HRESULT Renderer::Render()
 	//////////////////////////////////////////////////////////////////////////
 	//Test d'intégration du moteur physique dans le renderer -> c'est lui qui doit obtenir les modifs des matrices.
 	//a voir si ca reste la.
-	//Physicalizer *physicalizer;
-	//physicalizer = Physicalizer::GetInstance();
+	Physicalizer *physicalizer;
+	physicalizer = Physicalizer::GetInstance();
+	physicalizer->Update();
 
 	//////////////////////////////////////////////////////////////////////////
 	
@@ -190,6 +237,7 @@ HRESULT Renderer::Render()
 		(*scobj)->Draw();
 		++scobj;
 	}
+
 	
 	//-- Affichage des objets 2D
 	
@@ -214,6 +262,7 @@ HRESULT Renderer::Render()
 		m_pd3dDevice->SetStreamSource(0, m_pGridVB, 0, sizeof(DEFAULT_VERTEX));
 
 		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 13);
+		//m_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 20, 32);
 		
 		//Affichage information frames
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );

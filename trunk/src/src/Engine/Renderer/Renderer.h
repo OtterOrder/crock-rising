@@ -1,4 +1,5 @@
-#pragma once
+#ifndef		_Renderer_H
+#define		_Renderer_H
 
 //===========================================================================//
 // Include                                                                   //
@@ -48,7 +49,7 @@ protected:
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//
-	LPDIRECT3DVERTEXBUFFER9 m_pGridVB; // ??
+	LPDIRECT3DVERTEXBUFFER9 m_pGridVB; // ?? = VB de la grille
 	
 	std::list< SceneObject* >	*m_ScObjList; // Liste des objets de scène
 	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
@@ -56,3 +57,4 @@ protected:
 	Camera *m_Camera; // Pointeur sur la camera
 
 };
+#endif

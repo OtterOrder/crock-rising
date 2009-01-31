@@ -8,7 +8,6 @@
 #include	<windows.h>
 
 #include	"NxPhysics.h"
-#include	"Timer/UpdateTime.h"
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"
 
@@ -51,12 +50,13 @@ class Physicalizer : public Singleton< Physicalizer >
 public:
 
 	bool InitPhysX();
-	void ExitNx();
+	void ExitPhysX();
 	void StartPhysics();
 	void GetPhysicsResults(); //Doit être avant chaque rendu pour la mise à jour des matrices.
+	void Update();
 
 	///////////////////////////////////////////////////////////////////////////
-	// Modificateurs														 //
+	// Accesseurs														 //
 	///////////////////////////////////////////////////////////////////////////
 	NxPhysicsSDK*		getPhysicsSDK()		{ return m_PhysicsSDK;		}	
 	NxScene*			getScene()			{ return m_Scene;			}	
@@ -64,12 +64,12 @@ public:
 	AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }	
 
 	///////////////////////////////////////////////////////////////////////////
-	// Accesseurs															 //
+	// Modificateurs															 //
 	///////////////////////////////////////////////////////////////////////////
-	void getPhysicsSDK	  (NxPhysicsSDK* aSDK)			{ m_PhysicsSDK = aSDK;		}	
-	void getScene		  (NxScene*		aScene)			{ m_Scene = aScene;			}	
-	void getGravity		  (Vector3f		aGravity)		{ m_Gravity = aGravity;		}	
-	void getAdvancedParam (AdvancedPhysXParam aParam)	{ m_AdvancedParam = aParam; }	
+	void setPhysicsSDK	  (NxPhysicsSDK* aSDK)			{ m_PhysicsSDK = aSDK;		}	
+	void setScene		  (NxScene*		aScene)			{ m_Scene = aScene;			}	
+	void setGravity		  (Vector3f		aGravity)		{ m_Gravity = aGravity;		}	
+	void setAdvancedParam (AdvancedPhysXParam aParam)	{ m_AdvancedParam = aParam; }	
 
 	void CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity);
 	void CreateCubeFromEye(int size);
@@ -78,11 +78,20 @@ public:
 	void CreateSinSuface(int Hauteur, int Duree, int Periode);
 	void CreateTower(int size);
 
+	//Fonction récupéré dans le fichier UpdateTime.h des trainings programme de physx, en attente d'avoir notre timer a nous.
+	float UpdateTime()
+	{
+		static unsigned int previousTime = timeGetTime();
+		unsigned int currentTime = timeGetTime();
+		unsigned int elapsedTime = currentTime - previousTime;
+		previousTime = currentTime;
+		return (float)(elapsedTime)*0.001f;
+	}
 	
 protected:
 	
 	Physicalizer(){ InitPhysX(); }
-	virtual ~Physicalizer(){ ExitNx(); }
+	virtual ~Physicalizer(){ ExitPhysX(); }
 			
 	HINSTANCE		m_Instance;			// Instance de l'application
 };

@@ -32,6 +32,7 @@ int System::MainLoop( void )
 	Renderer		*renderer;
 	InputManager	*inputManager;
 	Game			*game;
+
 	bool			bGotMsg;
 	MSG				msg;
 

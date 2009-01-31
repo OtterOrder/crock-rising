@@ -7,6 +7,7 @@
 #include	"Objects/SceneObject.h"
 #include	"Objects/Object2D/Object2D.h"
 #include	"Objects/Camera.h"
+//#include	"Physics/Physicalizer.h" // Fait une fucking erreur de nominmax
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -160,6 +161,14 @@ HRESULT Renderer::Render()
 {
 	ScObjIt scobj;
 	Obj2DIt obj2d;
+
+	//////////////////////////////////////////////////////////////////////////
+	//Test d'intégration du moteur physique dans le renderer -> c'est lui qui doit obtenir les modifs des matrices.
+	//a voir si ca reste la.
+	//Physicalizer *physicalizer;
+	//physicalizer = Physicalizer::GetInstance();
+
+	//////////////////////////////////////////////////////////////////////////
 	
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 

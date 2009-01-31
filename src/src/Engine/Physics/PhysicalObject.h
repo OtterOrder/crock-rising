@@ -4,7 +4,30 @@
 #include	"NxPhysics.h"
 #include	"Resources/Mesh.h"
 
+////////////////////////////////////////////////////////////////////////////
+// Structure material comprenant toutes les valeurs utiles de NxMaterials //
+////////////////////////////////////////////////////////////////////////////
+struct Material
+{
+	Material(NxReal aRestitution = 0.5,
+		     NxReal aStaticFriction = 0.5,
+			 NxReal aDynamicFriction = 0.5)
+	{
+		Restitution = aRestitution;
+		StaticFriction = aStaticFriction;
+		DynamicFriction = aDynamicFriction;
+	}
+	~Material(){}
 
+	NxReal Restitution;
+	NxReal StaticFriction;
+	NxReal DynamicFriction;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Structure BoundingBox qui englobera les objets. Elles seront fournies //
+// au moteur physique													 //
+///////////////////////////////////////////////////////////////////////////
 struct BoundingBox
 {
 	BoundingBox(Mesh* aPrimitive = NULL, NxMaterial* aMat = NULL);

@@ -10,6 +10,7 @@ bool Physicalizer::InitPhysX()
 {
 	m_PhysicsSDK = NULL;
 	m_Scene		 = NULL; 
+	m_DeltaTime	 = (NxReal)(1.0 / 60.0);
 
 	// Initialize PhysicsSDK
 	NxSDKCreateError errorCode = NXCE_NO_ERROR;
@@ -18,10 +19,11 @@ bool Physicalizer::InitPhysX()
 	// Initialiser le sdk
 	if(m_PhysicsSDK == NULL) return false;
 
-	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f);
-	m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
-	m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1);
-	m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, 1);
+	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH,				  m_AdvancedParam.SkinWidth);
+	m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE,		  m_AdvancedParam.VisualisationScale);
+	m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,		  m_AdvancedParam.VisualizeActorAxe);
+	m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, m_AdvancedParam.VisualizeCollisionShape);
+	m_PhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_SLEEP,	  m_AdvancedParam.VisualizeClothSleep);
 
 
 	// Create a scene
@@ -36,7 +38,6 @@ bool Physicalizer::InitPhysX()
 		printf("\nError: Unable to create a PhysX scene, exiting the sample.\n\n");
 		return false;
 	}
-
 	// Set default material
 	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);
 	defaultMaterial->setRestitution(0.5f);
@@ -50,6 +51,12 @@ bool Physicalizer::InitPhysX()
 	// Créer l'acteur "plan du sol"
     actorDesc.shapes.pushBack(&planeDesc);//On rajoute la boite englobante de ce plan
 	m_Scene->createActor(actorDesc);
+
+	// Récupération du temps
+	UpdateTime();
+
+	// Lance la première frame
+	if (m_Scene)  StartPhysics();
 
 	return true;
 }
@@ -185,4 +192,20 @@ void Physicalizer::CreateTower(int size)
 		pos.set(0.0f, cubeSize + (cubeSize + spacing)*i , 0.0f);
 	}
 	// Créer une 'tour' de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
+}
+
+void Physicalizer::StartPhysics()
+{
+	// Update the time step
+	m_DeltaTime = UpdateTime();
+
+	// Start collision and dynamics for delta time since the last frame
+	m_Scene->simulate(m_DeltaTime);
+	m_Scene->flushStream();
+}
+
+void Physicalizer::GetPhysicsResults()
+{
+	// Get results from gScene->simulate(gDeltaTime)
+	while (!m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, false));
 }

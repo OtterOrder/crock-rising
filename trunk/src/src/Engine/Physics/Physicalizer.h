@@ -6,19 +6,22 @@
 //===========================================================================//
 #define NOMINMAX
 #include	<windows.h>
+
 #include	"NxPhysics.h"
+#include	"Timer/UpdateTime.h"
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"
+
 
 //Structure qui contiendra tous les paramètres de l'instance physX qui ne seront pas indispensable
 //afin d'avoir une utilisation plus intuitive de la classe. 
 struct AdvancedPhysXParam
 {
-	AdvancedPhysXParam(float aSkinWidth = 0.05f,
-						int aVisualisationScale = 1,
-						int aVisualizeCollisionShape = 1,
-						int aVisualizeActorAxe = 1,
-						int aVisualizeClothSleep = 0)
+	AdvancedPhysXParam(NxReal aSkinWidth = 0.025f,			 // [0, inf[
+						NxReal aVisualisationScale = 1,		 // [0 / 1]
+						NxReal aVisualizeCollisionShape = 1, // [0 / 1]
+						NxReal aVisualizeActorAxe = 1,		 // [0 / 1]
+						NxReal aVisualizeClothSleep = 0)	 // [0 / 1]
 	{
 		SkinWidth				= aSkinWidth;
 		VisualisationScale		= aVisualisationScale;
@@ -28,11 +31,11 @@ struct AdvancedPhysXParam
 	}
 	~AdvancedPhysXParam(){}
 
-	float SkinWidth;
-	int VisualisationScale;
-	int VisualizeCollisionShape;
-	int VisualizeActorAxe;
-	int VisualizeClothSleep;
+	NxReal SkinWidth;
+	NxReal VisualisationScale;
+	NxReal VisualizeCollisionShape;
+	NxReal VisualizeActorAxe;
+	NxReal VisualizeClothSleep;
 };
 
 class Physicalizer : public Singleton< Physicalizer >
@@ -43,11 +46,14 @@ class Physicalizer : public Singleton< Physicalizer >
 	NxScene*			m_Scene			;
 	Vector3f			m_Gravity		;
 	AdvancedPhysXParam	m_AdvancedParam ;
+	NxReal				m_DeltaTime		;
 
 public:
 
 	bool InitPhysX();
 	void ExitNx();
+	void StartPhysics();
+	void GetPhysicsResults(); //Doit être avant chaque rendu pour la mise à jour des matrices.
 
 	///////////////////////////////////////////////////////////////////////////
 	// Modificateurs														 //

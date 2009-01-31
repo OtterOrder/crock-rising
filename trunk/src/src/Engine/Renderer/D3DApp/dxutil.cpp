@@ -6,6 +6,7 @@
 #ifndef STRICT
 #define STRICT
 #endif // !STRICT
+#define NOMINMAX
 #include <windows.h>
 #include <mmsystem.h>
 #include <tchar.h>

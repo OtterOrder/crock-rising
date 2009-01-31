@@ -1,6 +1,7 @@
 #ifndef		_System_H
 #define		_System_H
 
+#define NOMINMAX
 #include	<windows.h>
 //#include	<d3d9.h>
 

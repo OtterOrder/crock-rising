@@ -30,7 +30,7 @@ SceneObject::SceneObject()
 	CommonInit();
 }
 
-SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position/*, const PhysicalObject PhysicObj*/, const std::string shader)
+SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, BoundingBox* aBoundingBox, const std::string shader)
 :Object(Position)
 {	
 	CommonInit();
@@ -39,7 +39,10 @@ SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const 
 	m_Tex=Tex;
 	m_Offset=Position;
 
-	//m_PhysicObj = PhysicObj;
+	if(aBoundingBox)
+		m_BoundingBoxList.push_back(aBoundingBox);
+	else
+		m_BoundingBoxList.push_back(&BoundingBox());
 	m_Shader = shader;
 }
 
@@ -95,6 +98,36 @@ void SceneObject::InitObject()
 	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &WorldMatrix); 
 }
 
+//////////////////////////////////////////////////////////////////////////
+// Update de l'objet par la moteur physique
+//////////////////////////////////////////////////////////////////////////
+void SceneObject::Update()
+{
+	BoundingBox *test = *m_BoundingBoxList.begin();
+	if( test )
+	{
+		Physicalizer* physXInstance = Physicalizer::GetInstance();
+
+		physXInstance->StartPhysics();
+
+		Draw();
+
+		physXInstance->GetPhysicsResults();
+
+		//float DxMat[16];
+		int emp = test->getEmpListe();
+		//physXInstance->getScene()->getActors()[ emp ]->getGlobalPose().getRowMajor44( DxMat );
+
+		//D3DXMATRIX matrice( DxMat );
+		//m_WorldMatrix = matrice;
+
+	}
+}
+
+
+
+
+
 //===========================================================================//
 // Effectue une transformation				                                 //
 //===========================================================================//
@@ -105,7 +138,7 @@ void SceneObject::SetTransform(const D3DXMATRIX *world)
 
 void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)
 {
-	//Physicalizer::GetInstance()->getScene()-> ...
+	//Physicalizer::GetInstance()->getScene()->
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
 	D3DXMatrixIdentity(&MatWorldView);

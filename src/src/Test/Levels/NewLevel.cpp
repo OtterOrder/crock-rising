@@ -1,5 +1,5 @@
 #include	<Game/Level.h>
-
+#define		NOMINMAX
 #include	"LevelStart.h"
 
 //******************************************************************

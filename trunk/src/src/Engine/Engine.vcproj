@@ -484,19 +484,19 @@
 			Name="Physics"
 			>
 			<File
+				RelativePath=".\Physics\BoundingBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Physics\BoundingBox.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Physics\Physicalizer.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Physics\Physicalizer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Physics\PhysicalObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Physics\PhysicalObject.h"
 				>
 			</File>
 		</Filter>

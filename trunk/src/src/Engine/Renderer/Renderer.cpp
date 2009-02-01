@@ -117,42 +117,6 @@ HRESULT Renderer::OnResetDevice()
 	{ -10.0f, 10.0f, 10.0f, 0x00ff0000 },
 	{ 10.0f, -10.0f, 10.0f, 0x00ff0000 },
 	{ 10.0f, 10.0f, 10.0f, 0x00ff0000 }
-
-	/*,
-	{ -10.0f, -10.0f, -10.0f, 0x0000ff00 }, // face 2
-	{ 10.0f, -10.0f, -10.0f, 0x0000ff00 },
-	{ -10.0f, 10.0f, -10.0f, 0x0000ff00 },
-	{ -10.0f, 10.0f, -10.0f, 0x0000ff00 },
-	{ 10.0f, -10.0f, -10.0f, 0x0000ff00 },
-	{ 10.0f, 10.0f, -10.0f, 0x0000ff00 },
-
-	{ -10.0f, -10.0f, -10.0f, 0x000000ff }, // face 3
-	{ 10.0f, -10.0f, -10.0f, 0x000000ff },
-	{ -10.0f, -10.0f, 10.0f, 0x000000ff },
-	{ -10.0f, -10.0f, 10.0f, 0x000000ff },
-	{ 10.0f, -10.0f, -10.0f, 0x000000ff },
-	{ 10.0f, -10.0f, 10.0f, 0x000000ff },
-
-	{ -10.0f, 10.0f, -10.0f, 0x00ff0ff0 }, // face 4
-	{ 10.0f, 10.0f, -10.0f, 0x00ff0ff0 },
-	{ -10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
-	{ -10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
-	{ 10.0f, 10.0f, -10.0f, 0x00ff0ff0 },
-	{ 10.0f, 10.0f, 10.0f, 0x00ff0ff0 },
-
-	{ -10.0f, -10.0f, -10.0f, 0xff0000ff }, // face 5
-	{ -10.0f, 10.0f, -10.0f, 0xff0000ff },
-	{ -10.0f, -10.0f, 10.0f, 0xff0000ff },
-	{ -10.0f, -10.0f, 10.0f, 0xff0000ff },
-	{ -10.0f, 10.0f,-10.0f, 0xff0000ff },
-	{ -10.0f, 10.0f, 10.0f, 0xff0000ff },
-
-	{ 10.0f, -10.0f, -10.0f, 0x00ffff00 }, // face 6
-	{ 10.0f, 10.0f, -10.0f, 0x00ffff00 },
-	{ 10.0f, -10.0f, 10.0f, 0x00ffff00 },
-	{ 10.0f, -10.0f, 10.0f, 0x00ffff00 },
-	{ 10.0f, 10.0f, -10.0f, 0x00ffff00 },
-	{ 10.0f, 10.0f, 10.0f, 0x00ffff00 }*/
 	
 	};
 
@@ -207,15 +171,6 @@ HRESULT Renderer::Render()
 {
 	ScObjIt scobj;
 	Obj2DIt obj2d;
-
-	//////////////////////////////////////////////////////////////////////////
-	//Test d'intégration du moteur physique dans le renderer -> c'est lui qui doit obtenir les modifs des matrices.
-	//a voir si ca reste la.
-	Physicalizer *physicalizer;
-	physicalizer = Physicalizer::GetInstance();
-	physicalizer->Update();
-
-	//////////////////////////////////////////////////////////////////////////
 	
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
@@ -262,7 +217,6 @@ HRESULT Renderer::Render()
 		m_pd3dDevice->SetStreamSource(0, m_pGridVB, 0, sizeof(DEFAULT_VERTEX));
 
 		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 13);
-		//m_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 20, 32);
 		
 		//Affichage information frames
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );

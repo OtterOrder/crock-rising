@@ -138,7 +138,6 @@ void SceneObject::SetTransform(const D3DXMATRIX *world)
 
 void SceneObject::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)
 {
-	//Physicalizer::GetInstance()->getScene()->
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
 	D3DXMatrixIdentity(&MatWorldView);

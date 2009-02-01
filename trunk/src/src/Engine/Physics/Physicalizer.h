@@ -53,7 +53,6 @@ public:
 	void ExitPhysX();
 	void StartPhysics();
 	void GetPhysicsResults(); //Doit être avant chaque rendu pour la mise à jour des matrices.
-	void Update();
 
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //

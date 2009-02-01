@@ -211,9 +211,3 @@ void Physicalizer::GetPhysicsResults()
 	// Get results from gScene->simulate(gDeltaTime)
 	m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 }
-
-void Physicalizer::Update()
-{
-	GetPhysicsResults();
-	StartPhysics();
-}

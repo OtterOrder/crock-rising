@@ -6,7 +6,7 @@
 #include	<Game/Level.h>
 #include	<Objects/Camera.h>
 #include	<Renderer/Renderer.h>
-
+#include	<Objects/Skybox.h>
 #include	<Objects/SceneObjectAnimated.h>
 
 //******************************************************************
@@ -34,6 +34,8 @@ protected:
 	//Sprite	*m_pSprite;
 
 	SceneObjectAnimated*	m_pSObjectAnimated;
+
+	Skybox * skyb;
 };
 
 //******************************************************************

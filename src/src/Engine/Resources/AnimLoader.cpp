@@ -3,13 +3,15 @@
 #define KEY_FRAME 61 //temporaire. Définir key_frame comme 
 #define STRIDE 16
 
+#define MATRIX_SIZE		4
+
 
 AnimLoader::AnimLoader() 
 {
-	m_iNbBip = 22 ; //fixe pour l'instant 
+	m_iNbBones = 22 ; //fixe pour l'instant 
 	
-	m_bonesMatrices = new float***[m_iNbBip];
-	for (int i = 0 ; i < m_iNbBip ; i++){
+	m_bonesMatrices = new float***[m_iNbBones];
+	for (int i = 0 ; i < m_iNbBones ; i++){
 		m_bonesMatrices[i] = new float**[KEY_FRAME];	
 		for (int j = 0 ; j < KEY_FRAME ; j++){
 			m_bonesMatrices[i][j] = new float*[4];
@@ -20,7 +22,7 @@ AnimLoader::AnimLoader()
 
 	m_indiceBone = 0 ; 
 
-	m_sBonesName = new string[m_iNbBip];
+	m_sBonesName = new string[m_iNbBones];
 }
 
 /***********************************************************/
@@ -242,4 +244,34 @@ ResourceResult	 AnimLoader::ConvertTextToArray	(const char* ArrayText, float** &
 	}
 
 	return RES_FAILED;
+}
+
+
+/***********************************************************/
+void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
+{
+	float tmpMatrix [MATRIX_SIZE][MATRIX_SIZE];
+	float res;
+
+	for (int frame=0 ; frame < KEY_FRAME ; frame++)
+	{
+		//m_bonesMatrices[curBone.iIndice][frame] *= m_bonesMatrices[parentId][frame];
+		// Multiplie les matrices de transformation du bone avec celles de ses parents
+		for (int i=0 ; i < MATRIX_SIZE ; i++)
+		{
+			for (int j=0 ; j < MATRIX_SIZE ; j++)
+			{
+				res = 0;
+				for (int k=0 ; k < MATRIX_SIZE ; k++)
+					res += m_bonesMatrices[curBone.iIndice][frame][i][k]*m_bonesMatrices[parentId][frame][k][j];
+
+				tmpMatrix[i][j] = res;
+			}
+		}
+
+		memcpy(m_bonesMatrices[curBone.iIndice][frame], tmpMatrix, sizeof(float)*MATRIX_SIZE*MATRIX_SIZE);
+	}
+
+	for (int son=0 ; son < (int)curBone.Son.size() ; son ++)
+		ConvertToNoneHirearchy(curBone.Son[son], curBone.iIndice);
 }

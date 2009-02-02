@@ -29,7 +29,7 @@ struct Bone {
 class AnimLoader 
 {
 protected : 
-	int m_iNbBip ; 
+	int m_iNbBones ;
 	float ****m_bonesMatrices ;
 	int m_indiceBone ; // indice pour la matrice m_bonesMatrices , variable temporaire (?)
 	string *m_sBonesName ;
@@ -46,6 +46,7 @@ public :
 
 	Bone			BrowseBonesHierarchy (TiXmlNode* boneNode); //Fonction récursive
 
+	void			ConvertToNoneHirearchy (Bone curBone, int parentId);
 };
 
 //******************************************************************

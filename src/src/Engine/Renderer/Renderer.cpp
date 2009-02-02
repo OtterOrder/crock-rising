@@ -11,6 +11,7 @@
 #include	"Objects/SceneObject.h"
 #include	"Objects/Object2D/Object2D.h"
 #include	"Objects/Camera.h"
+#include	"Objects/Skybox.h"
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -26,6 +27,7 @@ Renderer::Renderer()
 {
 	m_pGridVB	= NULL;
 	m_Camera	= NULL;
+	m_Skybox	= NULL;
 
 	// On récupère les listes d'objets
 	m_ScObjList	= &SceneObject::RefList;
@@ -145,6 +147,9 @@ HRESULT Renderer::OnResetDevice()
 		(*scobj)->InitDeviceData();
 		++scobj;
 	}
+
+	if(m_Skybox)
+		m_Skybox->Init();
 	
 	return S_OK;
 }
@@ -177,11 +182,18 @@ HRESULT Renderer::Render()
 	m_pd3dDevice->SetVertexShader(NULL);
 	m_pd3dDevice->SetPixelShader(NULL);
 
-	D3DXMATRIX MatWorld;
-	D3DXMatrixIdentity(&MatWorld);
-	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 
 	m_pd3dDevice->BeginScene();
+
+	D3DXMATRIX MatWorld;
+	D3DXMatrixIdentity(&MatWorld);
+
+	//-- Affichage Skybox
+	if(m_Skybox)
+	{
+		m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		m_Skybox->Draw();
+	}
 
 	//-- Affichage des objets 3D
 	
@@ -208,18 +220,19 @@ HRESULT Renderer::Render()
 	
 	//-- ?
 	
+	// Affichage grille (Pipe line par défaut)
+	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
 
+	m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
-		m_pd3dDevice->SetFVF(DEFAULT_FVF);
+	m_pd3dDevice->SetStreamSource(0, m_pGridVB, 0, sizeof(DEFAULT_VERTEX));
 
-		m_pd3dDevice->SetStreamSource(0, m_pGridVB, 0, sizeof(DEFAULT_VERTEX));
-
-		m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 13);
-		
-		//Affichage information frames
-		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
+	m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 13);
+	
+	//Affichage information frames
+	m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
 	
 	m_pd3dDevice->EndScene();
 
@@ -236,6 +249,11 @@ HRESULT Renderer::OnLostDevice()
 	
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
+
+	if(m_Skybox)
+	{
+		m_Skybox->LostDevice();
+	}
 
 	//-- Objets 3D
 	
@@ -309,4 +327,10 @@ HRESULT Renderer::AfterDestroyDevice()
 void Renderer::SetCamera( Camera* cam )
 {
 	m_Camera = cam;
+}
+
+void Renderer::SetSkybox(Skybox *skybox)
+{
+	m_Skybox = skybox;
+
 }

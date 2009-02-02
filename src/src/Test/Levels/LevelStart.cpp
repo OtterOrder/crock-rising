@@ -36,6 +36,10 @@ void LevelStart::Init( void )
 	m_pCamera = new Camera( Vector3f(0.0f, 10.0f, -200.0f) );
 	Renderer::GetInstance()->SetCamera( m_pCamera );
 
+	skyb=new Skybox("default.dds");
+	skyb->Init();
+	Renderer::GetInstance()->SetSkybox(skyb);
+
 	//m_pSprite = new Sprite( 0 );
 
 	m_pSObjectAnimated = NULL;

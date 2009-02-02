@@ -77,6 +77,8 @@ void SceneObject::SetShader(const std::string& Shad)
 
 void SceneObject::InitObject()
 {
+	m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
+
 	m_PtrMesh=ResourceManager::GetInstance()->Load<Mesh>(m_Mesh);
 	m_MapTexture[TEX_MESH]=ResourceManager::GetInstance()->Load<Texture>(m_Tex);
 	m_PtrShader=ResourceManager::GetInstance()->Load<Shader>(m_Shader.c_str());
@@ -188,7 +190,6 @@ void SceneObject::FrameMove(float fElapsedTime)
 
 void SceneObject::Draw()
 {
-	m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	m_pDevice->SetVertexDeclaration(m_PtrMesh->m_decl);
 

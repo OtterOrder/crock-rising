@@ -11,6 +11,7 @@
 class SceneObject;
 class Camera;
 class Object2D;
+class Skybox;
 
 //===========================================================================//
 // Classe de base pour créer une application DX                              //
@@ -36,6 +37,7 @@ public:
 	HRESULT AfterDestroyDevice();
 
 	void SetCamera( Camera* cam );
+	void SetSkybox( Skybox* skybox);
 
 protected:
 
@@ -55,6 +57,7 @@ protected:
 	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
 
 	Camera *m_Camera; // Pointeur sur la camera
+	Skybox *m_Skybox;
 
 };
 #endif

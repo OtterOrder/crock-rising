@@ -39,7 +39,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="_WIN32;WIN32;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -121,6 +121,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="PhysXLoader.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 			/>
 			<Tool
@@ -299,6 +300,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Skybox"
+				>
+				<File
+					RelativePath=".\Objects\Skybox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Skybox.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Renderer"
@@ -456,6 +469,10 @@
 				</File>
 				<File
 					RelativePath=".\Resources\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\data\shader\skybox.fx"
 					>
 				</File>
 			</Filter>

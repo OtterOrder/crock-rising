@@ -17,10 +17,12 @@ samplerCUBE g_samEnvMap =
 sampler_state
 {
     Texture = <g_txEnvMap>;
-    AddressU = WRAP;
-    AddressV = WRAP;
-    MagFilter = Linear;
-    MipFilter = Linear;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    magfilter = LINEAR; 
+    minfilter = LINEAR; 
+    mipfilter = LINEAR; 
+
 };
 
 //===========================================================================//
@@ -42,7 +44,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION)
     Output.Position = mul(vPos, g_mWorldViewProjection);
     float3 ObjectPosition = mul(vPos, g_mWorld);
     
-    Output.ViewDirection = g_vCamPos - ObjectPosition;	
+    Output.ViewDirection = ObjectPosition-g_vCamPos;	
     
     return Output;    
 }
@@ -64,8 +66,8 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
     PS_OUTPUT Output;
 
 	float3 ViewDirection = normalize(In.ViewDirection);
-	float3 offset=float3(-0.1f, -0.1f, -0.0f);	
-	Output.RGBColor=texCUBE( g_samEnvMap, -ViewDirection+offset );
+	ViewDirection.x *= -1;
+	Output.RGBColor=texCUBE( g_samEnvMap, ViewDirection);
 
     return Output;
 }
@@ -78,7 +80,7 @@ technique RenderSkybox
 {
     pass P0
     {          
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader  = compile ps_2_0 RenderScenePS();
+        VertexShader = compile vs_3_0 RenderSceneVS();
+        PixelShader  = compile ps_3_0 RenderScenePS();
     }
 }

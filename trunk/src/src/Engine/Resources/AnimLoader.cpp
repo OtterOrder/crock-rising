@@ -17,7 +17,7 @@ AnimLoader::AnimLoader(const char* sAnimPath)
 			for (int k = 0 ; k < 4 ; ++k)
 				m_bonesMatrices[i][j][k] = new float[4];
 		}
-	} 
+	}
 
 	m_sBonesName = new string[m_iNbBones];
 
@@ -188,7 +188,7 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 	}
 
 	for (int i = 0 ; i < m_rootBone.Son.size() ; i++ )
-		//ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
+		ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
 		
 	return RES_SUCCEED ;
 }
@@ -416,7 +416,9 @@ void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 			}
 		}
 
-		memcpy(m_bonesMatrices[curBone.iIndice][frame], tmpMatrix, sizeof(float)*MATRIX_SIZE*MATRIX_SIZE);
+		for (int i=0 ; i < 4 ; i++)
+			for (int j=0 ; j< 4 ; j++)
+				m_bonesMatrices[curBone.iIndice][frame][i][j] = tmpMatrix[i][j];
 	}
 
 	for (int son=0 ; son < (int)curBone.Son.size() ; son ++)

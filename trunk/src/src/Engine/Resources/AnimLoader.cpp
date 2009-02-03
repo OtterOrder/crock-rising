@@ -1,35 +1,49 @@
 #include "AnimLoader.h"
 
-#define KEY_FRAME 61 //temporaire. Définir key_frame comme 
 #define STRIDE 16
+#define MATRIX_SIZE 4
 
-#define MATRIX_SIZE		4
+/***********************************************************/
 
-
-AnimLoader::AnimLoader() 
+AnimLoader::AnimLoader(const char* sAnimPath)
 {
-	m_iNbBones = 22 ; //fixe pour l'instant 
-	
+	GetSomeInfos(sAnimPath);
+
 	m_bonesMatrices = new float***[m_iNbBones];
-	for (int i = 0 ; i < m_iNbBones ; i++){
-		m_bonesMatrices[i] = new float**[KEY_FRAME];	
-		for (int j = 0 ; j < KEY_FRAME ; j++){
+	for (int i = 0 ; i < m_iNbBones ; ++i){
+		m_bonesMatrices[i] = new float**[m_iKeyFrame];	
+		for (int j = 0 ; j < m_iKeyFrame ; ++j){
 			m_bonesMatrices[i][j] = new float*[4];
-			for (int k = 0 ; k < 4 ; k++)
+			for (int k = 0 ; k < 4 ; ++k)
 				m_bonesMatrices[i][j][k] = new float[4];
 		}
-	}
-
-	m_indiceBone = 0 ; 
+	} 
 
 	m_sBonesName = new string[m_iNbBones];
+
+	m_fFrameValues = new float[m_iKeyFrame];
 }
 
 /***********************************************************/
 
 AnimLoader::~AnimLoader()
 {
-	delete [] m_sBonesName;
+	delete [] m_sBonesName ;
+	delete [] m_fFrameValues ;
+
+	//Destruction tableau 4d
+	for (int i = 0 ; i < m_iNbBones ; ++i)
+	{
+		for (int j = 0 ; j < m_iKeyFrame ; ++j)
+		{
+			for (int k = 0 ; k < 4 ; ++k)
+				delete [] m_bonesMatrices[i][j][k];
+
+			delete [] m_bonesMatrices[i][j];
+		}
+		delete [] m_bonesMatrices[i];
+	}
+	delete [] m_bonesMatrices ;
 }
 
 /***********************************************************/
@@ -44,9 +58,68 @@ ResourceResult AnimLoader::Load ( const char* sAnimPath )
 	TiXmlNode *rootNode ; 
 	rootNode = animFile.FirstChild("COLLADA"); // Get root node
 
-	FillMatrices(rootNode);
 	ExtractHierarchyBones(rootNode);
+	FillMatrices(rootNode);
+
+
+	return RES_SUCCEED ; 
+}
+
+/***********************************************************/
+
+ResourceResult AnimLoader::GetSomeInfos( const char* sAnimPath )
+{
+	TiXmlDocument animFile( sAnimPath );
+
+	if (!animFile.LoadFile()) 
+		return RES_FAILED ; 
 	
+	TiXmlNode *node, *rootNode ; 
+	rootNode = animFile.FirstChild("COLLADA"); // Get root node
+	node = rootNode ; 
+
+	//Dans un premier temps, récupération du nombre de bones
+	if (node)
+	{
+		node = node->FirstChild("library_controllers");
+		if (node)
+		{
+			node = node->FirstChild("controller");
+			if(node)
+			{
+				node = node->FirstChild("skin");
+				if(node)
+				{
+					node = node->FirstChild("source");
+					if(node)
+					{
+					    node->FirstChild("Name_array")->ToElement()->Attribute("count",&m_iNbBones);
+					}
+				}
+			}
+		}
+
+	}
+
+	//Ensuite, on récupère le nombre de KeyFrame
+	node = rootNode ; 
+	if (node)
+	{
+		node = node->FirstChild("library_animations");
+		if (node)
+		{
+			node = node->FirstChild("animation");
+			if(node)
+			{
+				node = node->FirstChild("source");
+				if(node)
+				{
+					node->FirstChild("float_array")->ToElement()->Attribute("count",&m_iKeyFrame);
+				}
+			}
+		}
+		
+	}
 	return RES_SUCCEED ; 
 }
 
@@ -56,22 +129,30 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 {
 	TiXmlNode *node , *temp ;  
 	int test = 0 ; 
+	bool fillArrayKeyFrameValues = false ; 
 
 	if (rootNode) {
 		node = rootNode->FirstChild("library_animations");
 		if (node) {
 			node = node->FirstChild("animation");
-			
+
 			while (node){
 				temp = node ; //sauvegarde du noeud
 				node = node->FirstChild("source");
+				if(!fillArrayKeyFrameValues)
+				{
+					node = node->FirstChild("float_array");
+					const char* ArrayText ; 
+					ArrayText = node->ToElement()->GetText();
+					ConvertTextToArray(ArrayText,m_fFrameValues,m_iKeyFrame);
+					fillArrayKeyFrameValues = true ; 
+					node = temp ; 
+				}
+
 				if (node){
 					node = node->NextSibling("source");
 					if (node){
 						node = node->FirstChild("float_array");
-						int testCount = 0 ; 
-						node->ToElement()->Attribute("count",&testCount);
-						if (testCount == 976)
 							ExtractMatricesDatas(node);
 					}
 				}
@@ -80,6 +161,35 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 			}
 		}
 	}
+
+	//Pour les matrices de bones qui ne subissent pas de transformations, on les remplit
+	//avec des matrices identitées
+	for (int i = 0 ; i < m_iNbBones ; ++i )
+	{
+		//Test la 1ère valeur pour savoir si la matrice a été remplie ou non
+		if (  m_bonesMatrices[i][0][0][0] < -400000000.f ) //matrice non remplie  -4.3160208e+008
+		{
+			for (int j = 0 ; j < m_iKeyFrame ; ++j)
+			{
+				for (int k = 0 ; k < 4 ; ++k)
+				{
+					for (int l = 0 ; l < 4 ; ++l)
+					{
+						if(k==l)					
+							m_bonesMatrices[i][j][k][l] = 1.f ;
+						else 
+							m_bonesMatrices[i][j][k][l] = 0.f ;
+
+					}
+				}
+			}
+		}
+
+	}
+
+	for (int i = 0 ; i < m_rootBone.Son.size() ; i++ )
+		//ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
+		
 	return RES_SUCCEED ;
 }
 
@@ -93,32 +203,42 @@ ResourceResult AnimLoader::ExtractMatricesDatas(TiXmlNode *sourceNode)
 	const char* ArrayText ; 
 	ArrayText = node->ToElement()->GetText();
 
-	temp = new float*[KEY_FRAME];	
-	for (int i=0 ; i < KEY_FRAME ; i++)
+	temp = new float*[m_iKeyFrame];	
+	for (int i=0 ; i < m_iKeyFrame ; i++)
 		temp[i] = new float[16];
-	
 
-	ConvertTextToArray(ArrayText,temp,KEY_FRAME,STRIDE);
+
+	ConvertTextToArray(ArrayText,temp,m_iKeyFrame,STRIDE);
+
+	string sGetNameBone = node->ToElement()->Attribute("id");
+	int iDashPos = sGetNameBone.find_first_of('-') ; //On récupère la position du tiret
+	sGetNameBone = sGetNameBone.substr(0,iDashPos);
+
+	int ind = 0 ;
+	while ( ind < m_iNbBones )
+	{
+		if ( strcmp (m_sBonesName[ind].c_str(),sGetNameBone.c_str()) == 0 )
+			break ; 
+		++ind ; 
+	}
 
 	int indice = 0 ; 
-	for ( int i = 0 ; i < KEY_FRAME ; ++i )
+	for ( int i = 0 ; i < m_iKeyFrame ; ++i )
 	{
-       for (int j = 0 ; j < 4 ; ++j )
-	   {
-		   for (int k = 0 ; k < 4 ; ++k )
-		   {
-			  m_bonesMatrices[m_indiceBone][i][j][k] = temp[i][indice];
-			  indice++ ; 
-		   } 
-	  }
-	   indice = 0 ;
+		for (int j = 0 ; j < 4 ; ++j )
+		{
+			for (int k = 0 ; k < 4 ; ++k )
+			{
+				m_bonesMatrices[ind][i][j][k] = temp[i][indice];
+				indice++ ; 
+			} 
+		}
+		indice = 0 ;
 	}
-	
-	for (int i = 0 ; i < KEY_FRAME ; ++i)
+
+	for (int i = 0 ; i < m_iKeyFrame ; ++i)
 		delete [] temp[i];
 	delete [] temp ; 
-
-	m_indiceBone++ ;
 
 	return RES_SUCCEED ; 
 }
@@ -130,8 +250,6 @@ ResourceResult AnimLoader::ExtractHierarchyBones(TiXmlNode *rootNode)
 {
 	TiXmlNode *node ;  
 
-	Bone listBone;
-	
 	if (rootNode) {
 		node = rootNode->FirstChild("library_visual_scenes");	
 		if (node) {
@@ -145,7 +263,7 @@ ResourceResult AnimLoader::ExtractHierarchyBones(TiXmlNode *rootNode)
 					node = node->FirstChild("node");
 					string tm = node->ToElement()->Attribute("name");
 
-					listBone = BrowseBonesHierarchy(node);
+					m_rootBone = BrowseBonesHierarchy(node);
 				}
 			}
 		}
@@ -180,7 +298,6 @@ Bone AnimLoader::BrowseBonesHierarchy (TiXmlNode* boneNode)
 
 		//On remplit également la donnée membre m_bonesName qui nous servira 
 		//à initialiser correctement le tableau 4d m_bonesMatrices
-		//m_bonesName[iIndiceBone] = sCurrentName;
 		m_sBonesName[iIndiceBone] = sCurrentName ;		
 
 		//Récupération de la matrice associée 
@@ -194,6 +311,11 @@ Bone AnimLoader::BrowseBonesHierarchy (TiXmlNode* boneNode)
 			ConvertTextToArray(curBone->FirstChild()->ToElement()->GetText(),matrice,4,4);
 
 		myBone.fMatrix = matrice ; 
+
+		for (int i = 0 ; i < 4 ; ++i)
+			delete [] matrice[i]; 
+		delete [] matrice ; 
+
 
 
 		// Sauvergarde des données du bone
@@ -210,50 +332,75 @@ Bone AnimLoader::BrowseBonesHierarchy (TiXmlNode* boneNode)
 }
 
 
-/***********************************************************
-* Copie les données d'une chaîne caractères provenant du fichier XML dans un tableau
-* @param[in]	text	: données sous forme de caractères
-*				Array	: tableau à remplir
-* @return	le résultat du chargement
-**********************************************************/
-ResourceResult	 AnimLoader::ConvertTextToArray	(const char* ArrayText, float** &Array, int iCount, int iStride)
+//===========================================================================//
+// Copie les données d'une chaîne caractères provenant du fichier XML dans   //
+// un tableau.																 //
+//===========================================================================//
+ResourceResult AnimLoader::ConvertTextToArray(const char* ArrayText, float** Array, int iCount, int iStride)
 {
-	int iStartData = 0;
-	int iDataSize = 0;
+	float* tmpArray = new float[iCount*iStride];
+	ConvertTextToArray(ArrayText, tmpArray, iCount*iStride);
+
+	for (int i = 0 ; i < iCount ; i++)
+		for (int j = 0 ; j < iStride ; j++)
+			Array[i][j] = tmpArray[i*iStride + j];
+
+	delete [] tmpArray;
+
+	return RES_SUCCEED;
+}
+
+//===========================================================================//
+
+ResourceResult	 AnimLoader::ConvertTextToArray (const char* ArrayText, float*  Array, int iCount)
+{
+	int id=0;
+	int dec=0;
+
+	float result	= 0;
+	float signe		= 1;
+	float mantisse	= 0.1f;
 
 	for (int i = 0 ; i < iCount ; i++)
 	{
-		for (int j = 0 ; j < iStride ; j++) // matrice 4x4
-		{
-			iDataSize = 0;
-			while (ArrayText[iStartData+iDataSize] != ' ')
-				iDataSize ++;
+		while(ArrayText[id+dec] != ' ' && ArrayText[id+dec] != '\0')
+		{			
+			if(ArrayText[id]!= '.')
+			{
+				if(ArrayText[id]== '-')
+					signe=-1;	
+				else
+					result=ArrayText[id]-'0'+result*10;	
+				id++;
+			}
+			else
+			{	
+				dec++;	
+				result=((ArrayText[id+dec]-'0')*mantisse)+result;
+				mantisse *= 0.1f;
 
-			char* cData = new char[iDataSize];
+				if(ArrayText[id+dec+1] == ' ')
+					dec++;
 
-			for (int k=0 ; k < iDataSize ; k++)
-				if(ArrayText[iStartData +k] == ',')	cData[k] = '.';
-				else cData[k] = ArrayText[iStartData +k];
-
-				Array[i][j] = (float)atof(cData);
-
-				delete [] cData;
-
-				iStartData += iDataSize+1;
+			}
 		}
+		Array[i]=result*signe;
+		id=id+dec+1;
+		dec=0, result=0, mantisse=0.1f, signe=1;
 	}
 
-	return RES_FAILED;
+	return RES_SUCCEED;
 }
 
 
-/***********************************************************/
+/**************************************************************************/
+
 void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 {
 	float tmpMatrix [MATRIX_SIZE][MATRIX_SIZE];
 	float res;
 
-	for (int frame=0 ; frame < KEY_FRAME ; frame++)
+	for (int frame=0 ; frame < m_iKeyFrame ; frame++)
 	{
 		//m_bonesMatrices[curBone.iIndice][frame] *= m_bonesMatrices[parentId][frame];
 		// Multiplie les matrices de transformation du bone avec celles de ses parents

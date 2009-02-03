@@ -58,9 +58,9 @@ class ResourceManager : public Singleton<ResourceManager>
 		// Si la ressource a été chargée
 		if (It != m_Resources.end())
 		{
-			It->second->Release();
+			if(It->second->Release()==0)
 			// Retrait de la ressource de la liste
-			m_Resources.erase(It);
+				m_Resources.erase(It);
 		}
 	}
 

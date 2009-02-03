@@ -30,7 +30,7 @@ public:
 	Resource();
 	virtual ~Resource() =0;
 	
-	virtual ResourceResult Load( std::string resource, ResourceParam param ) =0; // Fonction virtuelle de chargement
+	virtual ResourceResult Load( std::string resource, ResourceParam param ) = 0 ; // Fonction virtuelle de chargement
 	
 	virtual void AddRef();	// Ajoute une référence sur la ressource
 	int Release();			// Retire une référence sur la ressource

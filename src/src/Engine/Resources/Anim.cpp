@@ -1,12 +1,12 @@
 #include "Anim.h"
 
-ResourceResult Anim::Load(crc32 resource)
+ResourceResult Anim::Load(std::string resource , ResourceParam param)
 {
-	char sAnimPath[128];
-	sprintf_s(sAnimPath, "..\\..\\data\\test\\%u.DAE", resource);
+	std::string str="..\\..\\data\\test\\"+resource;
 
-	AnimLoader animLoader ; 
-	animLoader.Load(sAnimPath);
+	AnimLoader animLoader(str.c_str()); 
+	animLoader.Load(str.c_str());
 
 	return RES_SUCCEED ;
 }
+

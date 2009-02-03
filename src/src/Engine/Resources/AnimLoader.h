@@ -30,19 +30,24 @@ class AnimLoader
 {
 protected : 
 	int m_iNbBones ;
+	int m_iKeyFrame ; 
+	float *m_fFrameValues ;
 	float ****m_bonesMatrices ;
-	int m_indiceBone ; // indice pour la matrice m_bonesMatrices , variable temporaire (?)
 	string *m_sBonesName ;
+	Bone m_rootBone ; 
 
 public : 
-	AnimLoader ();
+	AnimLoader () {}
+	AnimLoader (const char* sAnimPath);
 	virtual ~AnimLoader(); 
 
-	ResourceResult Load (const char* sAnimPath ); 
-	ResourceResult FillMatrices ( TiXmlNode *rootNode ); 
-	ResourceResult ExtractMatricesDatas ( TiXmlNode *sourceNode );
-	ResourceResult ConvertTextToArray	( const char* ArrayText, float** &Array, int iCount, int iStride );
-	ResourceResult ExtractHierarchyBones ( TiXmlNode *rootNode );
+	ResourceResult		Load (const char* sAnimPath ); 
+	ResourceResult      GetSomeInfos (const char* sAnimPath);
+	ResourceResult		FillMatrices ( TiXmlNode *rootNode ); 
+	ResourceResult		ExtractMatricesDatas ( TiXmlNode *sourceNode );
+	ResourceResult		ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte
+	ResourceResult		ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);	
+	ResourceResult		ExtractHierarchyBones ( TiXmlNode *rootNode );
 
 	Bone			BrowseBonesHierarchy (TiXmlNode* boneNode); //Fonction récursive
 

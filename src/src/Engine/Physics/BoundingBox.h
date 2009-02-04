@@ -83,12 +83,12 @@ struct Material
 class BoundingBox
 {
 	bool			m_bDebugMode; //Si vrai, les bounding box se dessinent pour debugger.
-	Material*		m_pMat; 
+	Material		m_pMat; 
 	int				m_empListe;
 	//What else? Groupe de collision?
 
 public:
-	BoundingBox(ShapeDescription *ShapeDesc = &ShapeDescription(), ShapeType Type = BOX, Material* aMat = &Material());
+	BoundingBox(ShapeDescription *ShapeDesc = &ShapeDescription(), ShapeType Type = BOX, Material aMat = Material());
 	~BoundingBox(){}
 
 	bool IsInCollision(const BoundingBox &po);

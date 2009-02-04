@@ -10,6 +10,7 @@ using namespace std;
 //******************************************************************
 
 list< SceneObject* > SceneObject::RefList;
+//list< BoundingBox* > SceneObject::BoundingBoxList;
 
 //******************************************************************
 
@@ -30,7 +31,11 @@ SceneObject::SceneObject()
 	CommonInit();
 }
 
-SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, BoundingBox* aBoundingBox, const std::string shader)
+SceneObject::SceneObject(const std::string& mesh,
+						 const std::string& Tex,
+						 const D3DXVECTOR3& Position,
+						 const std::string shader,
+						 BoundingBox aBoundingBox)
 :Object(Position)
 {	
 	CommonInit();
@@ -39,10 +44,8 @@ SceneObject::SceneObject(const std::string& mesh, const std::string& Tex, const 
 	m_Tex=Tex;
 	m_Offset=Position;
 
-	if(aBoundingBox)
-		m_BoundingBoxList.push_back(aBoundingBox);
-	else
-		m_BoundingBoxList.push_back(&BoundingBox());
+	BoundingBoxList.push_back(aBoundingBox);
+
 	m_Shader = shader;
 }
 
@@ -103,9 +106,11 @@ void SceneObject::InitObject()
 //////////////////////////////////////////////////////////////////////////
 // Update de l'objet par la moteur physique
 //////////////////////////////////////////////////////////////////////////
+/*
 void SceneObject::Update()
 {
-	BoundingBox *test = *m_BoundingBoxList.begin();
+	BoundingBox *test = &(*BoundingBoxList.begin());
+
 	if( test )
 	{
 		Physicalizer* physXInstance = Physicalizer::GetInstance();
@@ -116,16 +121,15 @@ void SceneObject::Update()
 
 		physXInstance->GetPhysicsResults();
 
-		//float DxMat[16];
+		float DxMat[16];
 		int emp = test->getEmpListe();
-		//physXInstance->getScene()->getActors()[ emp ]->getGlobalPose().getRowMajor44( DxMat );
+		physXInstance->getScene()->getActors()[ emp ]->getGlobalPose().getColumnMajor44( DxMat );
 
-		//D3DXMATRIX matrice( DxMat );
-		//m_WorldMatrix = matrice;
-
+		D3DXMATRIX matrice( DxMat );
+		m_WorldMatrix = matrice;
 	}
 }
-
+*/
 
 
 

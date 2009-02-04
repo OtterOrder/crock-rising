@@ -9,7 +9,7 @@ bool BoundingBox::IsInCollision(const BoundingBox &po)
 }
 
 
-BoundingBox::BoundingBox(ShapeDescription *ShapeDesc, ShapeType Type, Material* aMat)
+BoundingBox::BoundingBox(ShapeDescription *ShapeDesc, ShapeType Type, Material aMat)
 { 
 	m_bDebugMode = true;
 

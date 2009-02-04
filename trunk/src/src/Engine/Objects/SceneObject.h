@@ -28,7 +28,11 @@ public:
 	static std::list< SceneObject* > RefList;
 
 	// Constructeurs & destructeur
-	SceneObject(const std::string& mesh, const std::string& Tex, const D3DXVECTOR3& Position, BoundingBox* aBoundingBox = NULL, const std::string shader = "default.fx");
+	SceneObject(const std::string& mesh,
+				const std::string& Tex,
+				const D3DXVECTOR3& Position,
+				const std::string shader = "default.fx",
+				BoundingBox aBoundingBox = BoundingBox());
 	SceneObject();
 	virtual ~SceneObject();
 
@@ -44,7 +48,7 @@ public:
 	// Utilisation de l'objet													 //
 	//===========================================================================//
 	void	InitObject();
-	void	Update();
+	//void	Update();
 	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
 	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	void	SetTransform(const D3DXMATRIX* world);
@@ -75,7 +79,8 @@ private:
 
 	Mesh*				m_PtrMesh;
 
-	std::list< BoundingBox* >	m_BoundingBoxList;
+	std::list< BoundingBox > BoundingBoxList;
+
 ;
 
 	//===========================================================================//

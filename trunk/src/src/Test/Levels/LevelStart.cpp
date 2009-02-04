@@ -43,7 +43,7 @@ void LevelStart::Init( void )
 	//m_pSprite = new Sprite( 0 );
 
 	m_pSObjectAnimated = NULL;
-	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f), NULL);
+	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
 	m_pSObjectAnimated->InitObjectAnimation();
 
 }

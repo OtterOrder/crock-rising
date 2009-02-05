@@ -54,6 +54,7 @@ HRESULT Renderer::BeforeCreateDevice()
 HRESULT Renderer::OnCreateDevice()
 {
 	ScObjIt	scobj;
+	Obj2DIt obj2d;
 	HRESULT	hr;
 
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
@@ -64,6 +65,15 @@ HRESULT Renderer::OnCreateDevice()
 	{
 		(*scobj)->InitObject();
 		++scobj;
+	}
+
+	//-- Objets 2D
+	
+	obj2d = m_Obj2DList->begin();
+	while( obj2d != m_Obj2DList->end() )
+	{
+		(*obj2d)->InitDxData();
+		++obj2d;
 	}
 	
 	return S_OK;
@@ -150,6 +160,15 @@ HRESULT Renderer::OnResetDevice()
 	{
 		(*scobj)->InitDeviceData();
 		++scobj;
+	}
+
+	//-- Objets 2D
+	
+	Obj2DIt obj2d = m_Obj2DList->begin();
+	while( obj2d != m_Obj2DList->end() )
+	{
+		(*obj2d)->InitDxData();
+		++obj2d;
 	}
 
 	if(m_Skybox)

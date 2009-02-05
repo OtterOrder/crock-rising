@@ -200,7 +200,6 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 				m_nMouseWheelDelta = (short)HIWORD(wParam) / sensibilite;
 
 			}
-
             break;
 		}
 

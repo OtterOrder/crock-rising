@@ -58,6 +58,8 @@ public:
 
 	}
 
+	void Update(){ UpdateMatrixView(); }
+
 	//Fonctions membres
 	void InitAngle();
 	void SetDefaultProjection();	// Applique les paramètres par defaut pour les variables de projection

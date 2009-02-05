@@ -32,7 +32,7 @@ LevelStart::~LevelStart( void )
 **********************************************************/
 void LevelStart::Init( void )
 {
-	m_pCamera = new Camera( Vector3f(0.0f, 10.0f, -200.0f) );
+	m_pCamera = new Camera( Vector3f(0.0f, 5.0f, -30.0f) );
 	Renderer::GetInstance()->SetCamera( m_pCamera );
 
 	skyb=new Skybox("mars.dds");
@@ -68,42 +68,8 @@ void LevelStart::Update( void )
 	const float sensibiliteRoulette = 25.0f;
 	const float sensibiliteTranslation = 0.1f;
 
-	int offsetCursor;
-
-
-	//Mouvement de la moulette :D
-	//if( pInputManager->GetMouseWheelDelta() > 0 )
-	//{
-	//	pInputManager->InitMouseWheelDelta(); //raz
-
-	//	Vector3f pos = m_pCamera->GetPosition();
-	//	pos.z =  pos.z + sensibiliteRoulette;		
-
-	//	float limZ = 60.f;
-	//	float distance = m_pCamera->GetDistanceWithTarget();
-	//	if( distance>limZ )
-	//		m_pCamera->SetPosition( pos );
-	//}
-
-	//if( pInputManager->GetMouseWheelDelta() < 0  )
-	//{
-	//	pInputManager->InitMouseWheelDelta(); //raz
-
-	//	Vector3f pos = m_pCamera->GetPosition();
-	//	pos.z =  pos.z - sensibiliteRoulette;		
-
-	//	float limZ = 300.f;
-	//	float distance = m_pCamera->GetDistanceWithTarget();
-	//	if( distance<limZ )
-	//		m_pCamera->SetPosition( pos );
-	//}
-
-	//Init pos
-	if( pInputManager->IsKeyPressed( 'A' ) )
-	{
-		m_pCamera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
-	}
-
+	
+	
 	//Mouvement de l'objet
 	if( pInputManager->IsKeyPressed( 'Z' ) )
 	{
@@ -130,7 +96,6 @@ void LevelStart::Update( void )
 		m_Alien->SetTranslation( xStep, 0.f, zStep );
 
 	}
-
 	if( pInputManager->IsKeyPressed( 'Q' ) )
 	{
 		D3DXMATRIX trans;
@@ -156,25 +121,45 @@ void LevelStart::Update( void )
 		m_Alien->SetTranslation( xStep, 0.f, zStep );
 	}
 
-	//Mouvement de la souris -> mouvement camera
+	//Mouvement de la souris = mouvement camera
 	if( point.x != 0 ) 
 	{
-		offsetCursor = (int)point.x%sensibiliteSouris; 
+		int offsetCursor = (int)point.x%sensibiliteSouris; 
 		m_pCamera->SetOrientationY( -offsetCursor );
 		
 		m_Alien->SetRotation( 0, offsetCursor, 0);
 		
 	}
-
 	if( point.y != 0 ) 
 	{
-		offsetCursor = (int)point.y%sensibiliteSouris; 
+		int offsetCursor = (int)point.y%sensibiliteSouris; 
 		m_pCamera->SetOrientationX( offsetCursor );
 	}
 
-	m_pCamera->SetTarget( m_Alien );
-	m_pCamera->UpdateMatrixView();
 
+	////Mouvement de la molette  = zoom sur l'alien
+	if( pInputManager->GetMouseWheelDelta()>0 )
+	{
+		Vector3f posCam = m_pCamera->GetPosition();
+		if( fabs(posCam.z) < 60 ) posCam.z--;
+
+		m_pCamera->SetPosition( posCam );
+
+		pInputManager->InitMouseWheelDelta();
+	}
+
+	if( pInputManager->GetMouseWheelDelta()<0 )
+	{
+		Vector3f posCam = m_pCamera->GetPosition();
+		if( fabs(posCam.z) > 10 ) posCam.z++;
+
+		m_pCamera->SetPosition( posCam );
+
+		pInputManager->InitMouseWheelDelta();
+	}
+
+
+	m_pCamera->SetTarget( m_Alien );
 
 }
 

@@ -5,6 +5,8 @@ Camera::Camera( Vector3f pos, Vector3f target, Vector3f up )
 { 
 	InitAngle();
 
+	SetPosition( pos );
+
 	SetUp( up );
 	SetTarget( target );
 
@@ -67,6 +69,8 @@ void Camera::SetDefaultProjection()
 
 void  Camera::SetPosition( Vector3f pos )
 { 
+
+
 	m_WorldMatrix._41 = pos.x;
 	m_WorldMatrix._42 = pos.y;
 	m_WorldMatrix._43 = pos.z;

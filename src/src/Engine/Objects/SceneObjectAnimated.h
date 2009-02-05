@@ -5,6 +5,9 @@
 
 #include	"SceneObject.h"
 
+class Texture;
+class Shader;
+class Mesh;
 class Anim ; 
 
 //******************************************************************
@@ -22,9 +25,16 @@ public:
 						BoundingBox aBoundingBox = BoundingBox());
 
 	void InitObjectAnimation();
+
+	void	Draw();
+	virtual void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
 private:
 	unsigned int m_uCurrentAnim;
 	std::string			m_Anim;
+
+	Anim*		m_pAnim;
+
+	D3DXMATRIX* m_AnimMatrices;
 
 protected:
 };

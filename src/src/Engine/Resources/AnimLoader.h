@@ -41,7 +41,7 @@ public :
 	AnimLoader (const char* sAnimPath);
 	virtual ~AnimLoader(); 
 
-	ResourceResult		Load (const char* sAnimPath ); 
+	ResourceResult		Load (const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues); 
 	ResourceResult      GetSomeInfos (const char* sAnimPath);
 	ResourceResult		FillMatrices ( TiXmlNode *rootNode ); 
 	ResourceResult		ExtractMatricesDatas ( TiXmlNode *sourceNode );

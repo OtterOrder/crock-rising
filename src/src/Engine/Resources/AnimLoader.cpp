@@ -17,7 +17,7 @@ AnimLoader::AnimLoader(const char* sAnimPath)
 			for (int k = 0 ; k < 4 ; ++k)
 				m_bonesMatrices[i][j][k] = new float[4];
 		}
-	}
+	} 
 
 	m_sBonesName = new string[m_iNbBones];
 
@@ -48,7 +48,7 @@ AnimLoader::~AnimLoader()
 
 /***********************************************************/
 
-ResourceResult AnimLoader::Load ( const char* sAnimPath ) 
+ResourceResult AnimLoader::Load ( const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues ) 
 {
 	TiXmlDocument animFile( sAnimPath );
 
@@ -60,6 +60,35 @@ ResourceResult AnimLoader::Load ( const char* sAnimPath )
 
 	ExtractHierarchyBones(rootNode);
 	FillMatrices(rootNode);
+
+	fBonesMatrice = new float***[m_iNbBones];
+	for (int i = 0 ; i < m_iNbBones ; ++i){
+		fBonesMatrice[i] = new float**[m_iKeyFrame];	
+		for (int j = 0 ; j < m_iKeyFrame ; ++j){
+			fBonesMatrice[i][j] = new float*[4];
+			for (int k = 0 ; k < 4 ; ++k)
+				fBonesMatrice[i][j][k] = new float[4];
+		}
+	} 
+
+
+
+	for (int i = 0 ; i < m_iNbBones ; i++)
+	{
+		for (int j = 0 ; j < m_iKeyFrame ; j++)
+		{
+			for (int k = 0 ; k < 4 ; k++) 
+			{
+				for (int l = 0 ; l < 4 ; l++)
+					fBonesMatrice[i][j][k][l] = m_bonesMatrices[i][j][k][l];
+			}
+		}
+	}
+
+	fTimeValues = new float[m_iKeyFrame];
+
+	for (int i = 0 ; i < m_iKeyFrame ; i++)
+		fTimeValues[i] = m_fFrameValues[i];
 
 
 	return RES_SUCCEED ; 
@@ -187,7 +216,7 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 
 	}
 
-	for (int i = 0 ; i < m_rootBone.Son.size() ; i++ )
+	for (int i = 0 ; i < (int)m_rootBone.Son.size() ; i++ )
 		ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
 		
 	return RES_SUCCEED ;
@@ -402,22 +431,21 @@ void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 
 	for (int frame=0 ; frame < m_iKeyFrame ; frame++)
 	{
-		//m_bonesMatrices[curBone.iIndice][frame] *= m_bonesMatrices[parentId][frame];
 		// Multiplie les matrices de transformation du bone avec celles de ses parents
-		for (int i=0 ; i < MATRIX_SIZE ; i++)
+		for (int i=0 ; i < 4 ; i++)
 		{
-			for (int j=0 ; j < MATRIX_SIZE ; j++)
+			for (int j=0 ; j < 4 ; j++)
 			{
 				res = 0;
-				for (int k=0 ; k < MATRIX_SIZE ; k++)
-					res += m_bonesMatrices[curBone.iIndice][frame][i][k]*m_bonesMatrices[parentId][frame][k][j];
+				for (int k=0 ; k < 4 ; k++)
+					res += m_bonesMatrices[curBone.iIndice][frame][k][j]*m_bonesMatrices[parentId][frame][i][k];
 
 				tmpMatrix[i][j] = res;
 			}
 		}
 
 		for (int i=0 ; i < 4 ; i++)
-			for (int j=0 ; j< 4 ; j++)
+			for (int j=0 ; j < 4 ; j++)
 				m_bonesMatrices[curBone.iIndice][frame][i][j] = tmpMatrix[i][j];
 	}
 

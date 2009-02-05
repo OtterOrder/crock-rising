@@ -75,7 +75,8 @@ MeshLoader::~MeshLoader()
 // Chargement de la ressource                                                //
 //===========================================================================//
 ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl,
-								Vector3f &Position, Vector4f &Rotation, Vector3f &Scale)
+								Vector3f &Position, Vector4f &Rotation, Vector3f &Scale,
+								bool& bSkinned)
 {
 	TiXmlDocument meshFile( sMeshPath );
 	if (!meshFile.LoadFile ())
@@ -100,6 +101,8 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, i
 	iNbIndex	= m_iNbFaces*NbFaceVertices;
 
 	Renderer::GetInstance()->m_pd3dDevice->CreateVertexDeclaration(&DxElements[0], &vertdecl);
+
+	bSkinned = m_Skinned;
 
 	return RES_SUCCEED;
 }
@@ -187,9 +190,9 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 								CurrentElement.Method = D3DDECLMETHOD_DEFAULT;
 								CurrentElement.Usage = D3DDECLUSAGE_POSITION;
 								CurrentElement.UsageIndex = 0;
-								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT4;
 
-								VertexDeclarationOffset += 3*4;
+								VertexDeclarationOffset += 4*4;
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
@@ -228,7 +231,6 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 						VertexDeclarationOffset += 4*4;
 
 						DxElements.push_back(CurrentElement);
-
 
 						CurrentElement.Offset = VertexDeclarationOffset;
 						CurrentElement.Usage = D3DDECLUSAGE_BLENDWEIGHT;
@@ -535,22 +537,23 @@ ResourceResult	MeshLoader::FillSkinArray (TiXmlNode* VertexWeightsNode)
 
 		node = node->NextSiblingElement("v");
 		const char* JointsWeightsText	= node->ToElement()->GetText();
-		int* JointsWeightsArray = new int [NbWeightsUsed];
-		ConvertTextToArray(JointsWeightsText, JointsWeightsArray, NbWeightsUsed);
+		int* JointsWeightsArray = new int [NbWeightsUsed*2];
+		ConvertTextToArray(JointsWeightsText, JointsWeightsArray, NbWeightsUsed*2);
 
 		int iCurrentSkinnedVertex = 0;
 		int iJointsWeightsPos = 0;
 
+		//iJointsWeightsPos = 0;
+
 		for (int i = 0 ; i <  m_iNbSkinnedVertices ; i++)
 		{
-			iJointsWeightsPos = 0;
 			memset(m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint, 0, sizeof(m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint));
 			memset(m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight, 0, sizeof(m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight));
 			for (int j = 0 ; j < NbWeightsArray[i]; j++)
 			{
 				if (j < NbWeightsMax)
 				{
-					m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint[j]		= JointsWeightsArray[iJointsWeightsPos];
+					m_SkinnedVertices[iCurrentSkinnedVertex].m_Joint[j]		= (float)JointsWeightsArray[iJointsWeightsPos];
 					m_SkinnedVertices[iCurrentSkinnedVertex].m_Weight[j]	= m_Weights[JointsWeightsArray[iJointsWeightsPos+1]][0];
 				}
 
@@ -595,21 +598,28 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuff
 		VectTexCoord = Vector2f (TexCoord[0], TexCoord[1]);
 	}
 
-	VertexBuffer[VertexIndex].m_Position	= VectPosition;
+	VertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
 	VertexBuffer[VertexIndex].m_Normal		= VectNormal;
 	VertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
 
 	if (m_Skinned)
 	{
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[0];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[1];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[2];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Bones.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[3];
-
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[0];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[1];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[2];
-		((SkinnedVertex*)VertexBuffer)[VertexIndex].m_Weights.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[3];
+		SkinnedVertex* l_VertexBuffer = (SkinnedVertex*)VertexBuffer;
+		//*
+		l_VertexBuffer[VertexIndex].m_Bones.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[0];
+		l_VertexBuffer[VertexIndex].m_Bones.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[1];
+		l_VertexBuffer[VertexIndex].m_Bones.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[2];
+		l_VertexBuffer[VertexIndex].m_Bones.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[3];
+		//*/
+		//l_VertexBuffer[VertexIndex].m_Bones	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
+		
+		//*
+		l_VertexBuffer[VertexIndex].m_Weights.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[0];
+		l_VertexBuffer[VertexIndex].m_Weights.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[1];
+		l_VertexBuffer[VertexIndex].m_Weights.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[2];
+		l_VertexBuffer[VertexIndex].m_Weights.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[3];
+		//*/
+		//l_VertexBuffer[VertexIndex].m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
 	}
 }
 

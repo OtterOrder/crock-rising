@@ -39,8 +39,7 @@ public:
 
 
 
-private:
-
+	bool		m_Skinned;
 	Vertex		*m_VertexBuffer;					// Tableau de vertex
 	int			*m_IndexBuffer;					// Tableau d'indexation des faces
 };

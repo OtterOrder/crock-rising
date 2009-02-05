@@ -7,6 +7,7 @@ float4x4 g_mWorld;                  // World matrix
 float4x4 g_mWorldViewProjection;    // World * View * Projection matrix
 matrix	 g_mWorldView;				// World * View matrix
 matrix	 g_mView;					// View matrix
+matrix	 g_mViewProj;				// View * Projection matrix
 
 texture g_MeshTexture;              // Texture du mesh
 
@@ -20,6 +21,12 @@ float  g_MaterialSpecularPower=8.0f;
 
 float3 g_vLightPos=float3(0.0f, 50.0f, 0.0f );
 float3 g_vCamPos;
+
+static const int MAX_MATRICES = 30;
+float4x4	g_skinningMatrices[MAX_MATRICES];
+
+float4x4	g_mIdentity;
+
 
 //===========================================================================//
 // Texture samplers	                                                         //
@@ -44,7 +51,7 @@ struct VS_OUTPUT
     float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
     float3 Normal	  : TEXCOORD1;
     float4 oPosition  : TEXCOORD2;
-    float4 Weights	  : TEXCOORD3;	// temp
+    float4 Test		  : TEXCOORD3;	//// TEMP
 };
 
 //===========================================================================//
@@ -53,17 +60,38 @@ struct VS_OUTPUT
 VS_OUTPUT RenderSceneVS( float4 vPos : POSITION, 
                          float3 vNormal : NORMAL,
                          float2 vTexCoord0 : TEXCOORD0,
-                         float4 vWeights : BLENDWEIGHT)
+                         float4 vWeights : BLENDWEIGHT,
+                         float4 vIndices : BLENDINDICES)
 {
     VS_OUTPUT Output;
     
-    Output.Position = mul(vPos, g_mWorldViewProjection);
+    // Calculate skinning transformations
+    float3 skinnedPos  = (0.f).xxx;
+    float3 skinnedNorm = (0.f).xxx;
+	
+	vWeights.w = 1.f - (vWeights.x + vWeights.y + vWeights.z);
+	
+	int id = 0;
+	//Output.Test = float4(vIndices.xyz, 1.f);
+	//Output.Test = ((int)vIndices[id] == 0)? float4(1.f, 0.f, 0.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
+	Output.Test = ((int)vIndices[id] >= 22)? float4(1.f, 0.f, 0.f, 1.f) : ((int)vIndices[id] < 0)? float4(0.f, 0.f, 1.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
+	
+	float4x4	skinningTransform  = g_skinningMatrices[(int)vIndices[0]] ;//* vWeights[0];
+	/*
+				skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
+				skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
+				skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[3];
+	//*/
+	
+	//skinningTransform = g_mIdentity;
+
+	//vPos = mul (vPos, skinningTransform);
+	
+	Output.Position = mul(vPos, g_mWorldViewProjection);
     Output.oPosition = Output.Position;
     Output.Normal = (mul( vNormal, g_mWorldView ));
     
     Output.TextureUV = vTexCoord0;
-    
-    Output.Weights = vWeights;
     
     return Output;    
 }
@@ -105,8 +133,8 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
     Output.RGBColor.xyz = tex2D(MeshTextureSampler, In.TextureUV.xy)* FinalIllumination; 
     Output.RGBColor.a = 1.0f;
     
-    Output.RGBColor = In.Weights;
-    Output.RGBColor.a = 1.0f;
+    //Output.RGBColor = In.Weights;
+    //Output.RGBColor.a = 1.0f;
 
     return Output;
 }
@@ -139,7 +167,7 @@ PS_OUTPUT RenderScenePSNoTex( VS_OUTPUT In )
     Output.RGBColor.xyz = FinalIllumination; 
     Output.RGBColor.a = 1.0f;
     
-    Output.RGBColor = In.Weights;
+    Output.RGBColor += In.Test;
     Output.RGBColor.a = 1.0f;
 
     return Output;
@@ -154,8 +182,8 @@ technique RenderScene
 {
     pass P0
     {          
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader  = compile ps_2_0 RenderScenePS();
+        VertexShader = compile vs_3_0 RenderSceneVS();
+        PixelShader  = compile ps_3_0 RenderScenePS();
     }
 }
 
@@ -163,8 +191,8 @@ technique RenderSceneNoTex
 {
     pass P0
     {          
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader  = compile ps_2_0 RenderScenePSNoTex();
+        VertexShader = compile vs_3_0 RenderSceneVS();
+        PixelShader  = compile ps_3_0 RenderScenePSNoTex();
     }
 }
 

@@ -49,16 +49,16 @@ public:
 	//===========================================================================//
 	void	InitObject();
 	//void	Update();
-	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
-	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
-	void	SetTransform(const D3DXMATRIX* world);
+	virtual void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
+	virtual void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
+	virtual void	SetTransform(const D3DXMATRIX* world);
 	void	InitDeviceData();
 	void	FrameMove(float fElapsedTime);
-	void	Draw();
+	virtual void	Draw();
 	void	DeleteDeviceData();
 	void	DeleteData();
 	
-private:
+protected:
 
 	//===========================================================================//
 	// Types												                     //

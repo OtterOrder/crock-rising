@@ -18,7 +18,7 @@ using namespace std;
 
 struct Vertex
 {
-	Vector3f m_Position;
+	Vector4f m_Position;
 	Vector3f m_Normal;
 	Vector2f m_TexCoord;
 };
@@ -41,7 +41,7 @@ struct FaceVertex
 
 struct VertexSkinning
 {
-	int		m_Joint[NbWeightsMax];
+	float	m_Joint[NbWeightsMax];
 	float	m_Weight[NbWeightsMax];
 };
 
@@ -80,9 +80,9 @@ public:
 	MeshLoader(void);
 	virtual	~MeshLoader(void);
 
-	ResourceResult	Load				(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
-		D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale);
-
+	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
+												 D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale,
+												 bool& bSkinned);
 	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
 	ResourceResult	ExtractArrayDatas			(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements);	// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte

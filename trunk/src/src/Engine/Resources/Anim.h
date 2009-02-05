@@ -10,11 +10,15 @@
 
 class Anim : public Resource 
 {
-public : 
-	Anim () {}
-	virtual ~Anim() {} 
 
-	ResourceResult Load ( std::string resource , ResourceParam param ) ; 
+public : 
+	float ****m_fBonesMatrice ;
+	float *m_fTimeValues ;
+
+	Anim () {}
+	virtual ~Anim() {}
+
+	ResourceResult Load ( std::string resource , ResourceParam param) ; 
 
 	ResourceResult    FillMatrices(); 
 	void			  ReleaseMatrices();

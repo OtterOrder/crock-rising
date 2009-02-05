@@ -79,6 +79,8 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 
+	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.0f, 4000.f);
+
 
 	DEFAULT_VERTEX sommets[]=
 	{
@@ -191,7 +193,8 @@ HRESULT Renderer::Render()
 	//-- Affichage Skybox
 	if(m_Skybox)
 	{
-		m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		//m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		m_Skybox->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
 		m_Skybox->Draw();
 	}
 
@@ -200,7 +203,8 @@ HRESULT Renderer::Render()
 	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
-		(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		//(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		(*scobj)->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix());
 		(*scobj)->Draw();
 		++scobj;
 	}
@@ -222,8 +226,12 @@ HRESULT Renderer::Render()
 	
 	// Affichage grille (Pipe line par défaut)
 	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
-	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
-	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
+	//m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
+	//m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
+
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, m_DevCamera.GetViewMatrix());
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, m_DevCamera.GetProjMatrix() );
+
 
 	m_pd3dDevice->SetFVF(DEFAULT_FVF);
 

@@ -73,7 +73,7 @@ public:
     LPDIRECT3DDEVICE9 		m_pd3dDevice;        // Pointeur vers le device de rendu
     D3DCAPS9          		m_d3dCaps;           // Capabilities du device
     D3DSURFACE_DESC   		m_d3dsdBackBuffer;   // Description de la surface du backbuffer
-	CFirstPersonCamera 	    m_Camera;
+	CFirstPersonCamera 	    m_DevCamera;
 
 
     //===========================================================================//

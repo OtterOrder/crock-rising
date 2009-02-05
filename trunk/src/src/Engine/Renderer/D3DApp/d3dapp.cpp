@@ -607,7 +607,7 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
 
     }
 
-	m_Camera.HandleMessages(hWnd, uMsg, wParam, lParam);
+	m_DevCamera.HandleMessages(hWnd, uMsg, wParam, lParam);
 
 	return S_OK;
 }
@@ -1228,7 +1228,7 @@ HRESULT CD3DApplication::Render3DEnvironment()
         // On fait l'animation
         if( FAILED( hr = FrameMove(m_fElapsedTime) ) )
             return hr;
-		m_Camera.FrameMove(m_fElapsedTime);
+		m_DevCamera.FrameMove(m_fElapsedTime);
 
         m_bSingleStep = false;
     }

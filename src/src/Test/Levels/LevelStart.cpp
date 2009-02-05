@@ -13,7 +13,7 @@
 LevelStart::LevelStart( crc32 levelID )
 : Level( levelID )
 {
-	//CBaseCamera
+	m_pDemoRising = NULL;
 }
 
 /***********************************************************
@@ -21,9 +21,8 @@ LevelStart::LevelStart( crc32 levelID )
  **********************************************************/
 LevelStart::~LevelStart( void )
 {
-	/*if( m_pSprite )
-		delete m_pSprite;*/
-
+	FreeInterface();
+	
 	/*if ( m_pSObject)
 		delete m_pSObject;*/
 }
@@ -40,8 +39,6 @@ void LevelStart::Init( void )
 	skyb->Init();
 	Renderer::GetInstance()->SetSkybox(skyb);
 
-	//m_pSprite = new Sprite( 0 );
-
 	/*m_pSObjectAnimated = NULL;
 	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
 	m_pSObjectAnimated->InitObjectAnimation();*/
@@ -54,6 +51,7 @@ void LevelStart::Init( void )
 	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
 	obj1->InitObject();
 
+	InitInterface();
 }
 
 /***********************************************************
@@ -178,4 +176,16 @@ void LevelStart::Update( void )
 	m_pCamera->UpdateMatrixView();
 
 
+}
+
+void LevelStart::InitInterface()
+{
+	m_pDemoRising = new Sprite( "demorising.png" );
+	m_pDemoRising->SetPosition( 0.f, 0.f );
+	m_pDemoRising->SetAlpha( 0.85f );
+}
+
+void LevelStart::FreeInterface()
+{
+	if( m_pDemoRising ) delete m_pDemoRising;
 }

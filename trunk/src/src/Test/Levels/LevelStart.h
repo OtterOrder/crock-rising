@@ -29,14 +29,18 @@ public:
 
 
 protected:
-	Camera* m_pCamera;
 	
-	//Sprite	*m_pSprite;
+	Camera* m_pCamera;
 
 	SceneObjectAnimated*	m_pSObjectAnimated;
 	SceneObject*			m_Alien;
 
 	Skybox * skyb;
+
+	Sprite	*m_pDemoRising;
+
+	void InitInterface();	// Initialise l'interface
+	void FreeInterface();	// Libère l'interface
 };
 
 //******************************************************************

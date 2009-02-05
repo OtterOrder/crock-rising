@@ -60,8 +60,10 @@ void Object::Update()
 
 	D3DXMatrixTranslation( &translation, m_vPosition.x, m_vPosition.y, m_vPosition.z );
 
-	D3DXMatrixIdentity( &m_WorldMatrix );
-	m_WorldMatrix = rotY * translation;
+	// Si on met la matrice à identité ici on reset n'importe quelle transformation qui n'est pas effectuée avec
+	// rotX, rotY, rotZ, vPosition etc...
+	//D3DXMatrixIdentity( &m_WorldMatrix );
+	//m_WorldMatrix = rotY * translation;
 	
 }
 

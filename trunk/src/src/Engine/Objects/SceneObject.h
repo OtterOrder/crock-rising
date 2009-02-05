@@ -31,7 +31,7 @@ public:
 	SceneObject(const std::string& mesh,
 				const std::string& Tex,
 				const D3DXVECTOR3& Position,
-				const std::string shader = "default.fx",
+				const std::string shader,
 				BoundingBox aBoundingBox = BoundingBox());
 	SceneObject();
 	virtual ~SceneObject();

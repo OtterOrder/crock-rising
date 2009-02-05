@@ -2,6 +2,7 @@
 // Include                                                                   //
 //===========================================================================//
 #define		NOMINMAX
+//#define		DEVCAMERA
 
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"
@@ -79,8 +80,9 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 
+#ifdef DEVCAMERA
 	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.0f, 4000.f);
-
+#endif
 
 	DEFAULT_VERTEX sommets[]=
 	{
@@ -193,8 +195,12 @@ HRESULT Renderer::Render()
 	//-- Affichage Skybox
 	if(m_Skybox)
 	{
-		//m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+
+		#ifdef DEVCAMERA
 		m_Skybox->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
+		#else
+		m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		#endif
 		m_Skybox->Draw();
 	}
 
@@ -203,8 +209,11 @@ HRESULT Renderer::Render()
 	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
-		//(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		#ifdef DEVCAMERA
 		(*scobj)->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix());
+		#else
+		(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		#endif
 		(*scobj)->Draw();
 		++scobj;
 	}
@@ -229,8 +238,14 @@ HRESULT Renderer::Render()
 	//m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	//m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
 
+	#ifdef DEVCAMERA
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, m_DevCamera.GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, m_DevCamera.GetProjMatrix() );
+	#else
+	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
+	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
+	#endif
+
 
 
 	m_pd3dDevice->SetFVF(DEFAULT_FVF);

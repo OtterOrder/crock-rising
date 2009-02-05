@@ -4,7 +4,6 @@
 //******************************************************************
 
 #include	<list>
-
 #include	"Core/Math.h"
 
 //******************************************************************
@@ -16,8 +15,7 @@ public:
 	// Liste de références sur les objets 2D
 	static std::list< Object2D* > RefList;
 	
-	// =========================================================
-	// Méthodes publiques
+	//-- Méthodes publiques
 	
 	Object2D();
 	virtual ~Object2D();
@@ -28,10 +26,13 @@ public:
 	void SetPosition( float posX, float posY );					// Change la position
 	void SetPosition( const Point2f &position );				// Change la position
 	Point2f GetPosition() const;								// Donne la position
+	
+	void SetScale( float scaleX, float scaleY );				// Change l'échelle
+	void SetScale( const Vector2f &scale );						// Change l'échelle
+	Vector2f GetScale() const;									// Donne l'échelle
 
-	//void Set3DPosition( float posX, float posY, float posZ );	// Change la position 3D
-	//void Set3DPosition( const Point3f &position );				// Change la position 3D
-	//Point3f Get3DPosition() const;								// Donne la position 3D
+	void SetAlpha( float alpha );								// Change l'alpha (0->1)
+	float GetAlpha() const;										// Donne l'alpha
 
 	void SetVisibility( bool isVisible );						// Rend visible/invisible l'objet
 	bool IsVisible() const;										// Vérifie si l'objet est visible
@@ -44,16 +45,21 @@ public:
 
 protected:
 
-	// =========================================================
-	// Données protégées
+	//-- Données protégées
 	
-	Point3f		m_Position;			// Position
+	Vector3f	m_Size;				// Taille
+	Vector3f	m_Position;			// Position
+	Vector3f	m_Scale;			// Echelle
+	Color4f		m_Color;			// Couleur
 	bool		m_IsVisible;		// Si l'objet est visible
+
+	//-- Méthodes protégées
+
+	void WorldMatrix( D3DMATRIX *matrix ) const;	// Calcule la matrice de l'objet dans le repère world
 
 private:
 
-	// =========================================================
-	// Méthodes privées
+	//-- Méthodes privées
 	
 	void CommonInit();	// Initialisation commune aux constructeurs
 

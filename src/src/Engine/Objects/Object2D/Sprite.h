@@ -17,15 +17,6 @@ public:
 
 	virtual void Draw() const;		// Affiche l'objet
 
-	// Transformations d'échelle
-	void SetScale( float scaleX, float scaleY );	// Change l'échelle
-	void SetScale( const Vector2f &scale );			// Change l'échelle
-	Vector2f GetScale() const;						// Donne l'échelle
-
-	// Alpha
-	void SetAlpha( float alpha );	// Change l'alpha (0->1)
-	float GetAlpha() const;			// Donne l'alpha
-
 	// Méthodes spécifiques pour DirectX, appelées lors
 	// de la création/destruction/perte du device Dx.
 	virtual void InitDxData();		// Initialise les données Dx
@@ -34,9 +25,6 @@ public:
 
 protected:
 
-	Vector3f			m_Scale;		// Echelle
-	float				m_Alpha;		// Alpha
-	
 	//crc32				m_TextureID;	// ID de la texture
 	std::string			m_TextureName;	// Nom de la texture
 	

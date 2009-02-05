@@ -3,8 +3,8 @@
 
 #include	"Object.h"
 
-#define DEFAULT_ZNEAR	4.0f
-#define DEFAULT_ZFAR	1000.0f
+#define DEFAULT_ZNEAR	2.0f
+#define DEFAULT_ZFAR	4000.0f
 #define DEFAULT_RATIO	1.0f
 #define DEFAUT_FOV_DEG	45
 

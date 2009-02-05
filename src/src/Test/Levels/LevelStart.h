@@ -34,6 +34,7 @@ protected:
 	//Sprite	*m_pSprite;
 
 	SceneObjectAnimated*	m_pSObjectAnimated;
+	SceneObject*			m_Alien;
 
 	Skybox * skyb;
 };

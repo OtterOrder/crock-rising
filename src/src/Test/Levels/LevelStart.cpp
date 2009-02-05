@@ -44,11 +44,11 @@ void LevelStart::Init( void )
 
 	/*m_pSObjectAnimated = NULL;
 	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
-	m_pSObjectAnimated->InitObjectAnimation();
-*/
-	SceneObject* obj = NULL;
-	obj = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
-	obj->InitObject();
+	m_pSObjectAnimated->InitObjectAnimation();*/
+
+	m_Alien = NULL;
+	m_Alien = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
+	m_Alien->InitObject();
 
 	SceneObject* obj1 = NULL;
 	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
@@ -101,7 +101,7 @@ void LevelStart::Update( void )
 	//}
 
 	//Init pos
-	/*if( pInputManager->IsKeyPressed( 'A' ) )
+	if( pInputManager->IsKeyPressed( 'A' ) )
 	{
 		m_pCamera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
 	}
@@ -117,7 +117,7 @@ void LevelStart::Update( void )
 		xStep = -sin( angleY )*sensibiliteTranslation;
 	 	zStep = cos( angleY )*sensibiliteTranslation;
 
-		m_pSObjectAnimated->SetTranslation( xStep, 0.f, zStep );
+		m_Alien->SetTranslation( xStep, 0.f, zStep );
 	}
 	if( pInputManager->IsKeyPressed( 'S' ) )
 	{
@@ -129,7 +129,7 @@ void LevelStart::Update( void )
 		xStep = sin( angleY )*sensibiliteTranslation;
 	 	zStep = -cos( angleY )*sensibiliteTranslation;
 
-		m_pSObjectAnimated->SetTranslation( xStep, 0.f, zStep );
+		m_Alien->SetTranslation( xStep, 0.f, zStep );
 
 	}
 
@@ -143,7 +143,7 @@ void LevelStart::Update( void )
 		xStep = -cos( angleY )*sensibiliteTranslation;
 	 	zStep = -sin( angleY )*sensibiliteTranslation;
 
-		m_pSObjectAnimated->SetTranslation( xStep, 0.f, zStep );
+		m_Alien->SetTranslation( xStep, 0.f, zStep );
 	}
 	if( pInputManager->IsKeyPressed( 'D' ) )
 	{
@@ -155,7 +155,7 @@ void LevelStart::Update( void )
 		xStep = cos( angleY )*sensibiliteTranslation;
 	 	zStep = sin( angleY )*sensibiliteTranslation;
 
-		m_pSObjectAnimated->SetTranslation( xStep, 0.f, zStep );
+		m_Alien->SetTranslation( xStep, 0.f, zStep );
 	}
 
 	//Mouvement de la souris -> mouvement camera
@@ -164,7 +164,7 @@ void LevelStart::Update( void )
 		offsetCursor = (int)point.x%sensibiliteSouris; 
 		m_pCamera->SetOrientationY( -offsetCursor );
 		
-		m_pSObjectAnimated->SetRotation( 0, offsetCursor, 0);
+		m_Alien->SetRotation( 0, offsetCursor, 0);
 		
 	}
 
@@ -174,8 +174,8 @@ void LevelStart::Update( void )
 		m_pCamera->SetOrientationX( offsetCursor );
 	}
 
-	m_pCamera->SetTarget( m_pSObjectAnimated );
-	m_pCamera->UpdateMatrixView();*/
+	m_pCamera->SetTarget( m_Alien );
+	m_pCamera->UpdateMatrixView();
 
 
 }

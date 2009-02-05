@@ -180,13 +180,13 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			POINT pointMouse;
 			GetCursorPos( &pointMouse );
 
-			/*if( pointMouse.x!=posX || pointMouse.y != posY )
+			if( pointMouse.x!=posX || pointMouse.y != posY )
 			{
 				m_MouseOffset.x = (FLOAT)pointMouse.x - (FLOAT)posX;
 				m_MouseOffset.y = (FLOAT)pointMouse.y - (FLOAT)posY;
 
 				SetCursorPos( posX, posY );
-			}*/
+			}
 			break;
 		}
 

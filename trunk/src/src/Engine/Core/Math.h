@@ -8,6 +8,7 @@
 
 #include	"Types/Crc32.h"
 #include	"Types/Vector.h"
+#include	"Types/Color.h"
 
 //******************************************************************
 

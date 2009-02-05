@@ -180,6 +180,14 @@
 				Name="Types"
 				>
 				<File
+					RelativePath=".\Core\Types\Color.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Core\Types\Color.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Core\Types\Crc32.cpp"
 					>
 				</File>
@@ -287,6 +295,14 @@
 			<Filter
 				Name="Object2D"
 				>
+				<File
+					RelativePath=".\Objects\Object2D\Mask.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Mask.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Objects\Object2D\Object2D.cpp"
 					>

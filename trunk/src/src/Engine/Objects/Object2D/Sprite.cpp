@@ -3,15 +3,10 @@
 //#include	<assert.h>
 #include	<d3dx9.h>
 
-#include	"Core/Math.h"
+//#include	"Core/Math.h"
 #include	"Renderer/Renderer.h"
 #include	"Resources/ResourceManager.h"
 #include	"Resources/Texture.h"
-
-//******************************************************************
-
-#define		SPRITE_DEFAULT_SCALE	(Vector3f( 1.f, 1.f, 1.f ))	// Echelle par défaut
-#define		SPRITE_DEFAULT_ALPHA	(1.f)						// Alpha par défaut
 
 //******************************************************************
 
@@ -20,8 +15,6 @@
  **********************************************************/
 void Sprite::CommonInit()
 {
-	m_Scale		= SPRITE_DEFAULT_SCALE;
-	m_Alpha		= SPRITE_DEFAULT_ALPHA;
 	m_IsDxReady	= false;
 }
 
@@ -64,13 +57,8 @@ void Sprite::Draw() const
 		return;
 
 	// Application des transformations
-	D3DXMATRIX rotat, trans, scale, world;
-	
-	D3DXMatrixIdentity( &rotat ); //------------------------------- TEMP, pas de rotation pour le moment
-	D3DXMatrixTranslation( &trans, m_Position.x, m_Position.y, m_Position.z );
-	D3DXMatrixScaling( &scale, m_Scale.x, m_Scale.y, m_Scale.z );
-
-	world = scale * trans * rotat;
+	D3DXMATRIX world;
+	WorldMatrix( &world );
 	m_pDxSprite->SetTransform( &world );
 
 	m_pDxSprite->Begin( D3DXSPRITE_ALPHABLEND );
@@ -81,7 +69,7 @@ void Sprite::Draw() const
 		NULL,			// on utilise toute l'image
 		NULL,
 		NULL,
-		D3DCOLOR_RGBA( 255, 255, 255, (unsigned char)(m_Alpha*255) )
+		D3DCOLOR_COLOR4F( m_Color )
 	);
 
 	m_pDxSprite->End();
@@ -115,47 +103,4 @@ void Sprite::ClearDxData()
 		m_pDxSprite->Release();
 	}
 	m_IsDxReady = false;
-}
-
-/***********************************************************
- * Change l'échelle.
- **********************************************************/
-void Sprite::SetScale( float scaleX, float scaleY )
-{
-	m_Scale.x = scaleX;
-	m_Scale.y = scaleY;
-}
-
-/***********************************************************
- * Change l'échelle.
- **********************************************************/
-void Sprite::SetScale( const Vector2f &scale )
-{
-	SetScale( scale.x, scale.y );
-}
-
-/***********************************************************
- * Donne l'échelle.
- **********************************************************/
-Vector2f Sprite::GetScale() const
-{
-	return Vector2f( m_Scale.x, m_Scale.y );
-}
-
-/***********************************************************
- * Change l'alpha (= transparence).
- * @param[in]	alpha : alpha (0->1)
- **********************************************************/
-void Sprite::SetAlpha( float alpha )
-{
-	m_Alpha = MATH_Clamp( alpha, 0.f, 1.f );
-}
-
-/***********************************************************
- * Donne l'alpha.
- * @return	l'alpha (woohoo)
- **********************************************************/
-float Sprite::GetAlpha() const
-{
-	return m_Alpha;
 }

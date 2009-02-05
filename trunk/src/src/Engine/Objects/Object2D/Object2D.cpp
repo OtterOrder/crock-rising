@@ -4,7 +4,7 @@ using namespace std;
 
 //******************************************************************
 
-#define		OBJECT2D_DEFAULT_Z		0.f		// Profondeur par défaut
+#define		OBJECT2D_DEFAULT_POS	(Vector3f( 0.f, 0.f, 0.f ))	// Position par défaut
 
 //******************************************************************
 
@@ -17,8 +17,8 @@ list< Object2D* > Object2D::RefList;
  **********************************************************/
 void Object2D::CommonInit()
 {
-	m_Position.z	= OBJECT2D_DEFAULT_Z;
-	m_IsVisible		= true;
+	m_Position	= OBJECT2D_DEFAULT_POS;
+	m_IsVisible	= true;
 	
 	Object2D::RefList.push_front( this ); // enregistrement dans la liste
 }
@@ -63,8 +63,7 @@ void Object2D::SetPosition( float posX, float posY )
  **********************************************************/
 void Object2D::SetPosition( const Point2f &position )
 {
-	m_Position.x = position.x;
-	m_Position.y = position.y;
+	SetPosition( position.x, position.y );
 }
 
 /***********************************************************

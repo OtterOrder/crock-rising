@@ -1,14 +1,29 @@
 #include	"Sprite.h"
 
-#include	<assert.h>
+//#include	<assert.h>
 #include	<d3dx9.h>
 
-#include	"Core/System.h"
+#include	"Core/Math.h"
 #include	"Renderer/Renderer.h"
 #include	"Resources/ResourceManager.h"
 #include	"Resources/Texture.h"
 
 //******************************************************************
+
+#define		SPRITE_DEFAULT_SCALE	(Vector3f( 1.f, 1.f, 1.f ))	// Echelle par défaut
+#define		SPRITE_DEFAULT_ALPHA	(1.f)						// Alpha par défaut
+
+//******************************************************************
+
+/***********************************************************
+ * Initialisation commune aux constructeurs.
+ **********************************************************/
+void Sprite::CommonInit()
+{
+	m_Scale		= SPRITE_DEFAULT_SCALE;
+	m_Alpha		= SPRITE_DEFAULT_ALPHA;
+	m_IsDxReady	= false;
+}
 
 /***********************************************************
  * Constructeur.
@@ -17,7 +32,7 @@
 /*Sprite::Sprite( crc32 spriteID )
 : Object2D()
 {
-	//TODO
+	CommonInit();
 }*/
 
 /***********************************************************
@@ -27,9 +42,8 @@
 Sprite::Sprite( const char *path )
 : Object2D()
 {
-	m_TextureName	= path;
-	m_IsDxReady		= false;
-
+	CommonInit();
+	m_TextureName = path;
 	InitDxData();
 }
 
@@ -49,21 +63,29 @@ void Sprite::Draw() const
 	if( !m_IsDxReady )
 		return;
 
-	// Là on est sûr que les données directx sont initialisées..
+	// Application des transformations
+	D3DXMATRIX rotat, trans, scale, world;
 	
-	m_pDxSprite->Begin( 0 );
+	D3DXMatrixIdentity( &rotat ); //------------------------------- TEMP, pas de rotation pour le moment
+	D3DXMatrixTranslation( &trans, m_Position.x, m_Position.y, m_Position.z );
+	D3DXMatrixScaling( &scale, m_Scale.x, m_Scale.y, m_Scale.z );
 
+	world = scale * trans * rotat;
+	m_pDxSprite->SetTransform( &world );
+
+	m_pDxSprite->Begin( D3DXSPRITE_ALPHABLEND );
+	
+	// On dessine..
 	m_pDxSprite->Draw(
 		m_pDxTexture,
+		NULL,			// on utilise toute l'image
 		NULL,
 		NULL,
-		&m_Position,
-		D3DCOLOR_RGBA( 255, 255, 255, 255 )
+		D3DCOLOR_RGBA( 255, 255, 255, (unsigned char)(m_Alpha*255) )
 	);
 
 	m_pDxSprite->End();
 }
-
 
 /***********************************************************
  * Initialise les données Dx.
@@ -93,4 +115,47 @@ void Sprite::ClearDxData()
 		m_pDxSprite->Release();
 	}
 	m_IsDxReady = false;
+}
+
+/***********************************************************
+ * Change l'échelle.
+ **********************************************************/
+void Sprite::SetScale( float scaleX, float scaleY )
+{
+	m_Scale.x = scaleX;
+	m_Scale.y = scaleY;
+}
+
+/***********************************************************
+ * Change l'échelle.
+ **********************************************************/
+void Sprite::SetScale( const Vector2f &scale )
+{
+	SetScale( scale.x, scale.y );
+}
+
+/***********************************************************
+ * Donne l'échelle.
+ **********************************************************/
+Vector2f Sprite::GetScale() const
+{
+	return Vector2f( m_Scale.x, m_Scale.y );
+}
+
+/***********************************************************
+ * Change l'alpha (= transparence).
+ * @param[in]	alpha : alpha (0->1)
+ **********************************************************/
+void Sprite::SetAlpha( float alpha )
+{
+	m_Alpha = MATH_Clamp( alpha, 0.f, 1.f );
+}
+
+/***********************************************************
+ * Donne l'alpha.
+ * @return	l'alpha (woohoo)
+ **********************************************************/
+float Sprite::GetAlpha() const
+{
+	return m_Alpha;
 }

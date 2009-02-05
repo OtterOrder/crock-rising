@@ -149,6 +149,10 @@
 			Name="Core"
 			>
 			<File
+				RelativePath=".\Core\Math.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\Singleton.h"
 				>
 			</File>

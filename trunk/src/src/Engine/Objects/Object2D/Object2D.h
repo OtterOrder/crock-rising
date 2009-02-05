@@ -5,8 +5,7 @@
 
 #include	<list>
 
-#include	"Core/Types/Crc32.h"
-#include	"Core/Types/Vector.h"
+#include	"Core/Math.h"
 
 //******************************************************************
 

@@ -46,13 +46,13 @@ void LevelStart::Init( void )
 	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
 	m_pSObjectAnimated->InitObjectAnimation();
 */
-	/*SceneObject* obj = NULL;
-	obj = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), NULL);
+	SceneObject* obj = NULL;
+	obj = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
 	obj->InitObject();
 
 	SceneObject* obj1 = NULL;
-	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), NULL);
-	obj1->InitObject();*/
+	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
+	obj1->InitObject();
 
 }
 

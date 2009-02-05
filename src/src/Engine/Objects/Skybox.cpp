@@ -119,7 +119,7 @@ void Skybox::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const
 	mView._42 = -0.4f; 
 	mView._43 =  0.0f;
 
-    D3DXMatrixScaling( &m_WorldMatrix, 30.0f, 30.0f, 30.0f );
+    D3DXMatrixScaling( &m_WorldMatrix, 100.0f, 100.0f, 100.0f );
     D3DXMatrixMultiply( &MatWorldView, &m_WorldMatrix, &mView );
 	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
 

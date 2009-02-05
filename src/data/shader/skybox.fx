@@ -31,7 +31,7 @@ sampler_state
 struct VS_OUTPUT
 {
     float4 Position   : POSITION;   // vertex position 
-    float3 ViewDirection : TEXCOORD2;
+    float3 CoordTex : TEXCOORD2;
 };
 
 //===========================================================================//
@@ -44,7 +44,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION)
     Output.Position = mul(vPos, g_mWorldViewProjection);
     float3 ObjectPosition = mul(vPos, g_mWorld);
     
-    Output.ViewDirection = ObjectPosition-g_vCamPos;	
+    Output.CoordTex = ObjectPosition;	
     
     return Output;    
 }
@@ -65,9 +65,9 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 { 
     PS_OUTPUT Output;
 
-	float3 ViewDirection = normalize(In.ViewDirection);
-	ViewDirection.x *= -1;
-	Output.RGBColor=texCUBE( g_samEnvMap, ViewDirection);
+	//float3 ViewDirection = normalize(In.ViewDirection);
+	//ViewDirection.x *= -1;
+	Output.RGBColor=texCUBE( g_samEnvMap, In.CoordTex);
 
     return Output;
 }

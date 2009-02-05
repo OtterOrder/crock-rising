@@ -93,7 +93,7 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, i
 	FillArrays (rootNode, VertexBuffer, IndexBuffer);
 
 	Position =	Vector3f(m_OffsetPosition[0],	m_OffsetPosition[2],	m_OffsetPosition[1]); 
-	Rotation =	Vector4f(m_OffsetRotation[0],	m_OffsetRotation[2],	m_OffsetRotation[1], m_OffsetRotation[3]);
+	Rotation =	Vector4f(abs(m_OffsetRotation[0]),	abs(m_OffsetRotation[2]),	abs(m_OffsetRotation[1]), m_OffsetRotation[3]);
 	Scale	 =	Vector3f(m_OffsetScale[0],		m_OffsetScale[2],		m_OffsetScale[1]); 
 
 	iNbVertices	= m_iNbVertices;

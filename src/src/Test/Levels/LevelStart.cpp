@@ -42,9 +42,17 @@ void LevelStart::Init( void )
 
 	//m_pSprite = new Sprite( 0 );
 
-	m_pSObjectAnimated = NULL;
+	/*m_pSObjectAnimated = NULL;
 	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
 	m_pSObjectAnimated->InitObjectAnimation();
+*/
+	/*SceneObject* obj = NULL;
+	obj = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), NULL);
+	obj->InitObject();
+
+	SceneObject* obj1 = NULL;
+	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), NULL);
+	obj1->InitObject();*/
 
 }
 
@@ -93,7 +101,7 @@ void LevelStart::Update( void )
 	//}
 
 	//Init pos
-	if( pInputManager->IsKeyPressed( 'A' ) )
+	/*if( pInputManager->IsKeyPressed( 'A' ) )
 	{
 		m_pCamera->SetPosition(Vector3f(0.0f, 10.0f, -100.0f));
 	}
@@ -167,7 +175,7 @@ void LevelStart::Update( void )
 	}
 
 	m_pCamera->SetTarget( m_pSObjectAnimated );
-	m_pCamera->UpdateMatrixView();
+	m_pCamera->UpdateMatrixView();*/
 
 
 }

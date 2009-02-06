@@ -1,22 +1,13 @@
 #ifndef		_Color_H
 #define		_Color_H
 
-#include	<d3d9.h>
+#include	<d3dx9math.h>
 
 //******************************************************************
 
-// Couleur en 4 flottants ;
+// Couleur en 4 flottants : rgba ;
 // les valeurs sont comprisent entre 0.f et 1.f
-
-struct Color4f
-{
-	float r, g, b, a;
-
-	// Constructeurs
-	Color4f(){}
-	Color4f( float cr, float cg, float cb, float ca );
-
-};
+typedef D3DXCOLOR Color4f;
 
 //******************************************************************
 

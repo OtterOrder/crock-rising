@@ -33,6 +33,8 @@ protected :
 	int m_iKeyFrame ; 
 	float *m_fFrameValues ;
 	float ****m_bonesMatrices ;
+	float **m_fBindShapeMatrix ; 
+	float ***m_fBindPosesArray ;
 	string *m_sBonesName ;
 	Bone m_rootBone ; 
 
@@ -41,7 +43,7 @@ public :
 	AnimLoader (const char* sAnimPath);
 	virtual ~AnimLoader(); 
 
-	ResourceResult		Load (const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues); 
+	ResourceResult		Load (const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues, float **&fBindShapeMatrix, float ***&fBindPosesArray); 
 	ResourceResult      GetSomeInfos (const char* sAnimPath);
 	ResourceResult		FillMatrices ( TiXmlNode *rootNode ); 
 	ResourceResult		ExtractMatricesDatas ( TiXmlNode *sourceNode );

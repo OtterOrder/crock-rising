@@ -14,6 +14,8 @@ class Anim : public Resource
 public : 
 	float ****m_fBonesMatrice ;
 	float *m_fTimeValues ;
+	float **m_fBindShapeMatrix ; 
+	float ***m_fBindPosesArray ; 
 
 	Anim () {}
 	virtual ~Anim() {}

@@ -438,7 +438,7 @@ void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 			{
 				res = 0;
 				for (int k=0 ; k < 4 ; k++)
-					res += m_bonesMatrices[curBone.iIndice][frame][k][j]*m_bonesMatrices[parentId][frame][i][k];
+					res += m_bonesMatrices[curBone.iIndice][frame][i][k]*m_bonesMatrices[parentId][frame][k][j];
 
 				tmpMatrix[i][j] = res;
 			}

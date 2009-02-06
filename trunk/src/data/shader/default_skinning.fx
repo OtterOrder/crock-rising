@@ -72,20 +72,18 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
 	vWeights.w = 1.f - (vWeights.x + vWeights.y + vWeights.z);
 	
 	int id = 0;
-	//Output.Test = float4(vIndices.xyz, 1.f);
+	Output.Test = float4(vWeights.xyz, 1.f);
 	//Output.Test = ((int)vIndices[id] == 0)? float4(1.f, 0.f, 0.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
-	Output.Test = ((int)vIndices[id] >= 22)? float4(1.f, 0.f, 0.f, 1.f) : ((int)vIndices[id] < 0)? float4(0.f, 0.f, 1.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
+	//Output.Test = ((int)vIndices[id] >= 22)? float4(1.f, 0.f, 0.f, 1.f) : ((int)vIndices[id] < 0)? float4(0.f, 0.f, 1.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
 	
-	float4x4	skinningTransform  = g_skinningMatrices[(int)vIndices[0]] ;//* vWeights[0];
-	/*
+	float4x4	skinningTransform  = g_skinningMatrices[(int)vIndices[0]] * vWeights[0];
 				skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
 				skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
 				skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[3];
-	//*/
 	
 	//skinningTransform = g_mIdentity;
 
-	//vPos = mul (vPos, skinningTransform);
+	vPos = mul (vPos, skinningTransform);
 	
 	Output.Position = mul(vPos, g_mWorldViewProjection);
     Output.oPosition = Output.Position;
@@ -167,7 +165,7 @@ PS_OUTPUT RenderScenePSNoTex( VS_OUTPUT In )
     Output.RGBColor.xyz = FinalIllumination; 
     Output.RGBColor.a = 1.0f;
     
-    Output.RGBColor += In.Test;
+    //Output.RGBColor += In.Test;
     Output.RGBColor.a = 1.0f;
 
     return Output;

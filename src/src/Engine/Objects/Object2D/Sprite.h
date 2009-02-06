@@ -34,8 +34,7 @@ protected:
 
 private:
 
-	// =========================================================
-	// Méthodes privées
+	//-- Méthodes privées
 	
 	void CommonInit();	// Initialisation commune aux constructeurs
 

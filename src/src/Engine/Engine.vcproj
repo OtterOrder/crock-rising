@@ -180,10 +180,6 @@
 				Name="Types"
 				>
 				<File
-					RelativePath=".\Core\Types\Color.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Core\Types\Color.h"
 					>
 				</File>

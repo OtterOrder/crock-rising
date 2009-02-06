@@ -19,6 +19,18 @@ AnimLoader::AnimLoader(const char* sAnimPath)
 		}
 	} 
 
+	m_fBindShapeMatrix = new float*[4];
+	for (int i = 0 ; i < 4 ; i++)
+		m_fBindShapeMatrix[i] = new float[4];
+
+	m_fBindPosesArray = new float**[m_iNbBones];
+	for (int i = 0 ; i < m_iNbBones ; i++)
+	{
+		m_fBindPosesArray[i] = new float*[4];
+		for (int j = 0 ; j < 4 ; j++)
+			m_fBindPosesArray[i][j] = new float[4];
+	}
+
 	m_sBonesName = new string[m_iNbBones];
 
 	m_fFrameValues = new float[m_iKeyFrame];
@@ -44,11 +56,33 @@ AnimLoader::~AnimLoader()
 		delete [] m_bonesMatrices[i];
 	}
 	delete [] m_bonesMatrices ;
+
+	
+
+
+	for (int i = 0 ; i < 4 ; i++)
+		delete[] m_fBindShapeMatrix[i];
+
+	delete [] m_fBindShapeMatrix;
+
+
+	for (int i = 0 ; i < m_iNbBones ; ++i)
+	{
+		for (int j = 0 ; j < 4 ; ++j)
+		{
+			delete [] m_fBindPosesArray[i][j];
+		}
+		delete [] m_fBindPosesArray[i];
+	}
+	delete [] m_fBindPosesArray ;
+
+
+
 }
 
 /***********************************************************/
 
-ResourceResult AnimLoader::Load ( const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues ) 
+ResourceResult AnimLoader::Load ( const char* sAnimPath , float ****&fBonesMatrice, float *&fTimeValues, float **&fBindShapeMatrix, float ***&fBindPosesArray ) 
 {
 	TiXmlDocument animFile( sAnimPath );
 
@@ -61,6 +95,9 @@ ResourceResult AnimLoader::Load ( const char* sAnimPath , float ****&fBonesMatri
 	ExtractHierarchyBones(rootNode);
 	FillMatrices(rootNode);
 
+	//Allocation puis remplissage des matrices que l'on récupère depuis une instance de la classe Anim
+
+	//fBonesMatrice 
 	fBonesMatrice = new float***[m_iNbBones];
 	for (int i = 0 ; i < m_iNbBones ; ++i){
 		fBonesMatrice[i] = new float**[m_iKeyFrame];	
@@ -85,11 +122,41 @@ ResourceResult AnimLoader::Load ( const char* sAnimPath , float ****&fBonesMatri
 		}
 	}
 
+
+	//fTimeValues
 	fTimeValues = new float[m_iKeyFrame];
 
 	for (int i = 0 ; i < m_iKeyFrame ; i++)
 		fTimeValues[i] = m_fFrameValues[i];
 
+
+	//fBindShapeMatrix
+	fBindShapeMatrix = new float*[4];
+	for (int i = 0 ; i < 4 ; i++)
+		fBindShapeMatrix[i] = new float[4];
+
+	for(int i = 0 ; i < 4 ; i++)
+		for (int j = 0 ; j < 4 ; j++)
+			fBindShapeMatrix[i][j] = m_fBindShapeMatrix[i][j];
+
+
+	//fBindPosesArray
+	fBindPosesArray = new float**[m_iNbBones];
+	for (int i = 0 ; i < m_iNbBones ; i++)
+	{
+		fBindPosesArray[i] = new float*[4];
+		for (int j = 0 ; j < 4 ; j++)
+			fBindPosesArray[i][j] = new float[4];
+	}
+
+	for (int i = 0 ; i < m_iNbBones ; i++)
+	{
+		for (int j = 0 ; j < 4 ; j++)
+		{
+			for (int k = 0 ; k < 4 ; k++)
+				fBindPosesArray[i][j][k] = m_fBindPosesArray[i][j][k];
+		}
+	}
 
 	return RES_SUCCEED ; 
 }
@@ -218,6 +285,59 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 
 	for (int i = 0 ; i < (int)m_rootBone.Son.size() ; i++ )
 		ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
+
+
+	//Récupération de BindShapeMatrix et bindPosesArray
+	float *tempArray = new float[m_iNbBones*STRIDE]; 
+	node = rootNode->FirstChild("library_controllers");
+	if (node)
+	{
+			node = node->FirstChild("controller");
+			if(node)
+			{
+				node = node->FirstChild("skin");
+				temp = node ;
+				if(node)
+				{
+					node = node->FirstChild("bind_shape_matrix");
+					if(node)
+					{
+						const char* ArrayText ; 
+						ArrayText = node->ToElement()->GetText();
+						ConvertTextToArray(ArrayText,m_fBindShapeMatrix,4,4);
+
+						node = temp ; 
+						node = node->FirstChild("source");
+						if (node)
+						{
+							node = node->NextSibling("source");
+							if (node)
+							{
+								node = node->FirstChild("float_array"); 
+								if (node)
+								{ 
+									int iCount = m_iNbBones*STRIDE ; 
+									ArrayText = node->ToElement()->GetText();
+									ConvertTextToArray(ArrayText,tempArray,iCount);
+									int indice = 0 ; 
+									for (int i = 0 ; i < m_iNbBones ; i++)
+									{
+										for (int j = 0 ; j < 4 ; j++)
+										{
+											for (int k = 0 ; k < 4 ; k++){
+												m_fBindPosesArray[i][j][k] = tempArray[indice];
+												indice++ ; 
+											}
+										}
+									}
+								}
+								}
+							}
+						}
+					}
+				}
+			}
+
 		
 	return RES_SUCCEED ;
 }

@@ -48,7 +48,8 @@ public :
 	ResourceResult		FillMatrices ( TiXmlNode *rootNode ); 
 	ResourceResult		ExtractMatricesDatas ( TiXmlNode *sourceNode );
 	ResourceResult		ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte
-	ResourceResult		ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);	
+	ResourceResult		ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);
+	//ResourceResult		ConvertTextToMatrix			(const char* ArrayText, float** Matrix, int iSize);
 	ResourceResult		ExtractHierarchyBones ( TiXmlNode *rootNode );
 
 	Bone			BrowseBonesHierarchy (TiXmlNode* boneNode); //Fonction récursive

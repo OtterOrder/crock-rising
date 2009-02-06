@@ -27,7 +27,7 @@ void SceneObjectAnimated::InitObjectAnimation()
 	InitObject();
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_Anim);
 
-	m_AnimMatrices = new D3DXMATRIX[22];
+	m_AnimMatrices = new D3DXMATRIX[30];
 }
 
 void SceneObjectAnimated::Draw()
@@ -44,10 +44,7 @@ void SceneObjectAnimated::Draw()
 
 	if (m_pAnim)
 	{
-		//D3DXMATRIX l_MatricesTest [22];
-		//D3DXMATRIX* l_MatricesTest = new D3DXMATRIX[22];
-
-		for(int m=0 ; m<22 ; m++)
+		for(int m=0 ; m<30 ; m++)
 		{
 			for (int i=0 ; i<4 ; i++)
 			{
@@ -58,7 +55,7 @@ void SceneObjectAnimated::Draw()
 			 D3DXMatrixIdentity(&m_AnimMatrices[m]);
 		}
 
-		m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_AnimMatrices, 22);
+		m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_AnimMatrices, 30);
 	}
 
 	m_PtrShader->m_pEffect->Begin(0, 0);
@@ -67,7 +64,7 @@ void SceneObjectAnimated::Draw()
 
 	if (m_PtrMesh->m_pVB)
 	{
-		m_pDevice->SetStreamSource(0, m_PtrMesh->m_pVB, 0, sizeof(Vertex));
+		m_pDevice->SetStreamSource(0, m_PtrMesh->m_pVB, 0, sizeof(SkinnedVertex));
 
 		m_pDevice->SetIndices ( m_PtrMesh->m_pIB );
 

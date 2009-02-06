@@ -80,17 +80,17 @@ public:
 	MeshLoader(void);
 	virtual	~MeshLoader(void);
 
-	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
+	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
 												 D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale,
 												 bool& bSkinned);
-	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
+	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
 	ResourceResult	ExtractArrayDatas			(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements);	// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);								// Remplit un tableau de float à l'aide d'un texte
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, int*    Array, int iCount);								// Remplit un tableau de int à l'aide d'un texte
 
-	ResourceResult	FillVBArray					(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, int *&IndexBuffer);			// Remplit le tableau de vertex
-	void			FillVertex					(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, int *&IndexBuffer);
+	ResourceResult	FillVBArray					(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);			// Remplit le tableau de vertex
+	void			FillVertex					(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);
 
 	ResourceResult	FillSkinArray				(TiXmlNode* VertexWeightsNode);													// Remplit le tableau de skinning
 

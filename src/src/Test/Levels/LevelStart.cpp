@@ -40,7 +40,7 @@ void LevelStart::Init( void )
 	Renderer::GetInstance()->SetSkybox(skyb);
 
 	m_pSObjectAnimated = NULL;
-	m_pSObjectAnimated = new SceneObjectAnimated("15_Mesh.DAE","15_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
+	m_pSObjectAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
 	m_pSObjectAnimated->InitObjectAnimation();
 
 	m_Alien = NULL;

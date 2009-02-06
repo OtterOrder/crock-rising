@@ -46,7 +46,7 @@ ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale, m_Skinned) == RES_SUCCEED)
+	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_SVertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale, m_Skinned) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 			return RES_SUCCEED;
@@ -59,7 +59,7 @@ ResourceResult	Mesh::FillD3DBuffers ()
 {
 	ReleaseD3DBuffers ();
 
-	if (m_VertexBuffer && m_IndexBuffer)
+	if ((m_VertexBuffer || m_SVertexBuffer) && m_IndexBuffer)
 	{
 		LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
@@ -67,11 +67,11 @@ ResourceResult	Mesh::FillD3DBuffers ()
 		if (!m_Skinned)
 			BufferSize = sizeof(Vertex)*m_iNbVertices;
 		else
-			BufferSize = sizeof(SkinnedVertex)*m_iNbVertices; 
-
+			BufferSize = sizeof(SkinnedVertex)*m_iNbVertices;
+	
 		pDevice->CreateVertexBuffer (	BufferSize, 
 										NULL, 
-										Mesh_FVF, 
+										0, 
 										D3DPOOL_DEFAULT, 
 										&m_pVB, 
 										NULL);
@@ -81,7 +81,10 @@ ResourceResult	Mesh::FillD3DBuffers ()
 		if(FAILED(m_pVB->Lock(0, BufferSize, (void **)&pVertexBuffer, 0)))
 			return RES_FAILED;
 
-		memcpy(pVertexBuffer, m_VertexBuffer, BufferSize);
+		if (!m_Skinned)
+			memcpy(pVertexBuffer, m_VertexBuffer, BufferSize);
+		else
+			memcpy(pVertexBuffer, m_SVertexBuffer, BufferSize);
 
 		m_pVB->Unlock();
 

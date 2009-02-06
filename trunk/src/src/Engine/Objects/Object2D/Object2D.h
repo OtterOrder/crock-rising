@@ -45,6 +45,15 @@ public:
 
 protected:
 
+	//-- Structures protégées
+
+	struct O2DVertex	// Vertex déclaration pour les objets 2D
+	{
+		Vector4f	position;	// xyzrhw
+		Color4f		color;		// rgba
+		Vector2f	texCoord;	// uv
+	};
+	
 	//-- Données protégées
 	
 	Vector3f	m_Size;				// Taille
@@ -56,12 +65,6 @@ protected:
 	//-- Méthodes protégées
 
 	void WorldMatrix( D3DMATRIX *matrix ) const;	// Calcule la matrice de l'objet dans le repère world
-
-private:
-
-	//-- Méthodes privées
-	
-	void CommonInit();	// Initialisation commune aux constructeurs
 
 };
 

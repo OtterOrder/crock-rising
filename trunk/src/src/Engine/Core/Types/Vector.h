@@ -1,7 +1,7 @@
 #ifndef		_Vector_H
 #define		_Vector_H
 
-#include	<d3dx9.h>
+#include	<d3dx9math.h>
 
 //******************************************************************
 

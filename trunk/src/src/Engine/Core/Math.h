@@ -4,7 +4,7 @@
 //******************************************************************
 
 #include	<math.h>
-//#include	<D3DX9Math.h> // utile ?
+#include	<d3dx9math.h>
 
 #include	"Types/Crc32.h"
 #include	"Types/Vector.h"

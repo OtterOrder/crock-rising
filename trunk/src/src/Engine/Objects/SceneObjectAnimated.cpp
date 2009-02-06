@@ -5,6 +5,11 @@
 #include	"Resources/Shader.h"
 #include	"Resources/Anim.h"
 
+//#define __NB_BONES	25
+//#define	__NB_FRAME	210
+#define __NB_BONES	22
+#define	__NB_FRAME	61
+
 SceneObjectAnimated::SceneObjectAnimated()
 :SceneObject()
 {
@@ -27,7 +32,9 @@ void SceneObjectAnimated::InitObjectAnimation()
 	InitObject();
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_Anim);
 
-	m_AnimMatrices = new D3DXMATRIX[30];
+	m_AnimMatrices = new D3DXMATRIX[__NB_BONES];
+
+	m_curFrame = 0;
 }
 
 void SceneObjectAnimated::Draw()
@@ -37,25 +44,45 @@ void SceneObjectAnimated::Draw()
 
 	m_PtrShader->m_pEffect->SetTechnique( "RenderSceneNoTex" );
 
-	/*
-	D3DXMATRIX l_MatricesTest [22];
-	m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", l_MatricesTest, 22);
-	*/
+	D3DXMATRIX skinBindShape;
+	for (int i=0 ; i<4 ; i++)
+			for (int j=0 ; j<4 ; j++)
+				skinBindShape(i,j) = m_pAnim->m_fBindShapeMatrix[i][j];
 
 	if (m_pAnim)
 	{
-		for(int m=0 ; m<30 ; m++)
+		m_curFrame ++;
+
+		if (m_curFrame >= __NB_FRAME)
+			m_curFrame = 0;
+
+		for(int m=0 ; m<__NB_BONES ; m++)
 		{
 			for (int i=0 ; i<4 ; i++)
 			{
 				for (int j=0 ; j<4 ; j++)
-					;//m_AnimMatrices[m](i,j) = m_pAnim->m_fBonesMatrice[m][0][i][j];
+					m_AnimMatrices[m](i,j) = m_pAnim->m_fBonesMatrice[m][m_curFrame][i][j];
 			}
 
-			 D3DXMatrixIdentity(&m_AnimMatrices[m]);
+			//D3DXMatrixMultiply(&m_AnimMatrices[m], &m_AnimMatrices[m], &skinBindShape);
+			//m_AnimMatrices[m].
+
+			D3DXMATRIX skinBindPoses;
+			for (int i=0 ; i<4 ; i++)
+					for (int j=0 ; j<4 ; j++)
+						skinBindPoses(i,j) = m_pAnim->m_fBindPosesArray[m][i][j];
+
+			//D3DXMatrixInverse(&skinBindPoses, NULL,&skinBindPoses);
+			D3DXMatrixMultiply(&skinBindPoses, &skinBindPoses, &skinBindShape);
+
+			m_AnimMatrices[m] = skinBindPoses;
+			//D3DXMatrixMultiply(&m_AnimMatrices[m], &skinBindPoses, &m_AnimMatrices[m]);
+			//D3DXMatrixMultiply(&m_AnimMatrices[m], &m_AnimMatrices[m], &skinBindPoses);
+		
+			//D3DXMatrixIdentity(&m_AnimMatrices[m]);
 		}
 
-		m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_AnimMatrices, 30);
+		m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_AnimMatrices, __NB_BONES);
 	}
 
 	m_PtrShader->m_pEffect->Begin(0, 0);

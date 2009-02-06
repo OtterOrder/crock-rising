@@ -37,6 +37,7 @@ private:
 	D3DXMATRIX* m_AnimMatrices;
 
 protected:
+	int m_curFrame;
 };
 
 //******************************************************************

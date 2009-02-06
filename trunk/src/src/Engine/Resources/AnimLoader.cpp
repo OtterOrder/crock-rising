@@ -284,7 +284,7 @@ ResourceResult AnimLoader::FillMatrices (TiXmlNode *rootNode)
 	}
 
 	for (int i = 0 ; i < (int)m_rootBone.Son.size() ; i++ )
-		ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
+		;//ConvertToNoneHirearchy(m_rootBone.Son[i],m_rootBone.iIndice);
 
 
 	//Récupération de BindShapeMatrix et bindPosesArray
@@ -540,8 +540,17 @@ ResourceResult	 AnimLoader::ConvertTextToArray (const char* ArrayText, float*  A
 
 	return RES_SUCCEED;
 }
+/*
+ResourceResult ConvertTextToMatrix (const char* ArrayText, float** Matrix, int iSize)
+{
+	float* tmpMatrix = new float[iSize*iSize];
+	ConvertTextToArray(ArrayText, tmpMatrix, iSize*iSize);
 
-
+	for (int i=0 ; i < iSize ; i++)
+		for (int j=0 ; j < iSize ; j++)
+			Matrix[i][j] = 
+}
+*/
 /**************************************************************************/
 
 void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
@@ -552,6 +561,7 @@ void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 	for (int frame=0 ; frame < m_iKeyFrame ; frame++)
 	{
 		// Multiplie les matrices de transformation du bone avec celles de ses parents
+		/*
 		for (int i=0 ; i < 4 ; i++)
 		{
 			for (int j=0 ; j < 4 ; j++)
@@ -567,6 +577,24 @@ void AnimLoader::ConvertToNoneHirearchy (Bone curBone, int parentId)
 		for (int i=0 ; i < 4 ; i++)
 			for (int j=0 ; j < 4 ; j++)
 				m_bonesMatrices[curBone.iIndice][frame][i][j] = tmpMatrix[i][j];
+		//*/
+
+
+		D3DXMATRIX curSkinTransform;
+		for (int i=0 ; i<4 ; i++)
+				for (int j=0 ; j<4 ; j++)
+					curSkinTransform(i,j) = m_bonesMatrices[curBone.iIndice][frame][i][j];
+
+		D3DXMATRIX parentSkinTransform;
+		for (int i=0 ; i<4 ; i++)
+				for (int j=0 ; j<4 ; j++)
+					parentSkinTransform(i,j) = m_bonesMatrices[parentId][frame][i][j];
+
+		D3DXMatrixMultiply(&curSkinTransform, &parentSkinTransform, &curSkinTransform);
+
+		for (int i=0 ; i < 4 ; i++)
+			for (int j=0 ; j < 4 ; j++)
+				m_bonesMatrices[curBone.iIndice][frame][i][j] = curSkinTransform(i,j);
 	}
 
 	for (int son=0 ; son < (int)curBone.Son.size() ; son ++)

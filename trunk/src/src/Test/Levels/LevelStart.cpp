@@ -4,6 +4,8 @@
 #include	<Core/Inputs/InputManager.h>
 #include	<Objects/Object2D/Sprite.h>
 
+static float angle=0.0f;
+
 //******************************************************************
 
 /***********************************************************
@@ -32,24 +34,28 @@ LevelStart::~LevelStart( void )
 **********************************************************/
 void LevelStart::Init( void )
 {
-	m_pCamera = new Camera( Vector3f(0.0f, 5.0f, -30.0f) );
+	m_pCamera = new Camera( Vector3f(0.0f, -10.0f, -30.0f) );
 	Renderer::GetInstance()->SetCamera( m_pCamera );
 
 	skyb=new Skybox("mars.dds");
 	skyb->Init();
 	Renderer::GetInstance()->SetSkybox(skyb);
 
-	m_pSObjectAnimated = NULL;
+	/*m_pSObjectAnimated = NULL;
 	m_pSObjectAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE","",D3DXVECTOR3(0.f,0.f,0.f));//, NULL, "default.fx");
-	m_pSObjectAnimated->InitObjectAnimation();
+	m_pSObjectAnimated->InitObjectAnimation();*/
 
 	m_Alien = NULL;
-	m_Alien = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
+	m_Alien = new SceneObject("Alien1.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "blinn.fx");
 	m_Alien->InitObject();
 
 	SceneObject* obj1 = NULL;
-	obj1 = new SceneObject("canyon.DAE","",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
+	obj1 = new SceneObject("canyon1.DAE","roche.jpg",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
 	obj1->InitObject();
+
+	/*SceneObject* obj2 = NULL;
+	obj2 = new SceneObject("de.DAE","roche.jpg",D3DXVECTOR3(0.f,0.f,0.f), "default.fx");
+	obj2->InitObject();*/
 
 	InitInterface();
 }
@@ -73,7 +79,6 @@ void LevelStart::Update( void )
 	//Mouvement de l'objet
 	if( pInputManager->IsKeyPressed( 'Z' ) )
 	{
-		D3DXMATRIX trans;
 		float angleY = m_pCamera->GetOrientationYRad();
 
 		float xStep, zStep;
@@ -82,10 +87,10 @@ void LevelStart::Update( void )
 	 	zStep = cos( angleY )*sensibiliteTranslation;
 
 		m_Alien->SetTranslation( xStep, 0.f, zStep );
+
 	}
 	if( pInputManager->IsKeyPressed( 'S' ) )
 	{
-		D3DXMATRIX trans;
 		float angleY = m_pCamera->GetOrientationYRad();
 
 		float xStep, zStep;
@@ -98,7 +103,6 @@ void LevelStart::Update( void )
 	}
 	if( pInputManager->IsKeyPressed( 'Q' ) )
 	{
-		D3DXMATRIX trans;
 		float angleY = m_pCamera->GetOrientationYRad();
 
 		float xStep, zStep;
@@ -110,7 +114,6 @@ void LevelStart::Update( void )
 	}
 	if( pInputManager->IsKeyPressed( 'D' ) )
 	{
-		D3DXMATRIX trans;
 		float angleY = m_pCamera->GetOrientationYRad();
 
 		float xStep, zStep;
@@ -128,7 +131,6 @@ void LevelStart::Update( void )
 		m_pCamera->SetOrientationY( -offsetCursor );
 		
 		m_Alien->SetRotation( 0, offsetCursor, 0);
-		
 	}
 	if( point.y != 0 ) 
 	{

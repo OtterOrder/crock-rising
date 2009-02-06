@@ -476,6 +476,10 @@
 				Name="Shader"
 				>
 				<File
+					RelativePath="..\..\data\shader\blinn.fx"
+					>
+				</File>
+				<File
 					RelativePath="..\..\data\shader\default.fx"
 					>
 				</File>

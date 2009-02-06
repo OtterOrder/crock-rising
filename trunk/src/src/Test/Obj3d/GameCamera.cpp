@@ -6,7 +6,7 @@
 
 void GameCamera::Update()
 {
-	InputManager *pIM = InputManager::GetInstance();
+	/*InputManager *pIM = InputManager::GetInstance();
 	Point2f point = pIM->GetMouseOffset();
 	
 	//OffsetCurseur -> Camera
@@ -67,5 +67,5 @@ void GameCamera::Update()
 		SetOrientationX( offsetCursor );
 	}
 
-	UpdateMatrixView();
+	UpdateMatrixView();*/
 }

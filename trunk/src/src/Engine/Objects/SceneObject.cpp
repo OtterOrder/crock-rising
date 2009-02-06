@@ -62,12 +62,16 @@ void SceneObject::SetTexture(const std::string& Tex, TextureType Type)
 	// On teste si la resource existe déjà
 	m_MapTexture[Type]=ResourceManager::GetInstance()->Load<Texture>(Tex);
 
-	/*switch (Type)
+	switch (Type)
 	{
-		case NORMALMAP :
-			   m_SceneShader->m_pEffect->SetTexture("g_NormalMap", m_MapTexture[NORMALMAP]->m_pTex);
+		case TEX_MESH :
+			   m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[TEX_MESH]->m_pTex);
 			   break;
-	}*/
+
+		/*case NORMALMAP :
+			   m_PtrShader->m_pEffect->SetTexture("g_NormalMap", m_MapTexture[NORMALMAP]->m_pTex);
+			   break;*/
+	}
 }
 
 //===========================================================================//
@@ -86,7 +90,7 @@ void SceneObject::InitObject()
 	m_MapTexture[TEX_MESH]=ResourceManager::GetInstance()->Load<Texture>(m_Tex);
 	m_PtrShader=ResourceManager::GetInstance()->Load<Shader>(m_Shader.c_str());
 
-	m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[TEX_MESH]->m_pTex);
+	//m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[TEX_MESH]->m_pTex);
 
 	// Matrice World par défaut de l'objet
 	D3DXMATRIX WorldMatrix;
@@ -197,7 +201,9 @@ void SceneObject::Draw()
 
 	m_pDevice->SetVertexDeclaration(m_PtrMesh->m_decl);
 
-	m_PtrShader->m_pEffect->SetTechnique( "RenderSceneNoTex" );
+	m_PtrShader->m_pEffect->SetTexture("g_MeshTexture", m_MapTexture[TEX_MESH]->m_pTex);
+
+	m_PtrShader->m_pEffect->SetTechnique( "RenderScene" );
 
 	m_PtrShader->m_pEffect->Begin(0, 0);
 
@@ -205,7 +211,6 @@ void SceneObject::Draw()
 
 	if (m_PtrMesh->m_pVB)
 	{
-			//m_pDevice->SetFVF(Mesh_FVF);
 			
 			m_pDevice->SetStreamSource(0, m_PtrMesh->m_pVB, 0, sizeof(Vertex));
 
@@ -232,10 +237,11 @@ void SceneObject::DeleteData()
 	ResourceManager::GetInstance()->Remove<Shader>(m_Shader);
 	//m_PtrMesh->Release();
 
-	/*for(TTextureMap::const_iterator it=m_MapTexture.begin() ; it!=m_MapTexture.end() ; ++it)
+	for(TTextureMap::const_iterator it=m_MapTexture.begin() ; it!=m_MapTexture.end() ; ++it)
 	{
-			it->second->Release();
-	}*/
+			ResourceManager::GetInstance()->Remove<Texture>(it->second->GetName());
+			//it->second->Release();
+	}
 	//m_PtrShader->Release();
 
 }

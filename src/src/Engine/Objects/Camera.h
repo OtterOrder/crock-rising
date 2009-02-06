@@ -63,7 +63,7 @@ public:
 	//Fonctions membres
 	void InitAngle();
 	void SetDefaultProjection();	// Applique les paramètres par defaut pour les variables de projection
-	void UpdateMatrixView();		// Mise à jour de la matrice View en fontion des paramètres		
+	void UpdateMatrixView();		// Mise à jour de la matrice View en fontion des paramètres	
 
 private:
 	//Variables pour matrice de visualisation

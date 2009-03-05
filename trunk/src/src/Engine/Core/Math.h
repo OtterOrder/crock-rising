@@ -20,7 +20,24 @@
 // Merci de respecter la même syntaxe pour les macros et
 // fonctions de math, à savoir : MATH_MyFunction().
 
-#define	MATH_Clamp( x, min, max )	(((x)<(min))?(min):(((x)>(max))?(max):(x)))
+#define MATH_Clamp( x, min, max )	(((x)<(min))?(min):(((x)>(max))?(max):(x)))
+
+//******************************************************************
+
+// Manipulation de flags facile
+// @param field	: champs de flag sur lequel on travaille
+// @param flag	: flag à activer, désactiver, tester, etc.
+
+// Note: pour faire des flags simplement, il suffit de
+// définir des constantes qui sont des puissances de 2 :
+// MY_FLAG_A = 1<<0 (->001)
+// MY_FLAG_B = 1<<1 (->010)
+// MY_FLAG_C = 1<<2 (->100)
+// etc.
+
+#define FLAG_Set( field, flag )		((field)|=(flag))
+#define FLAG_Unset( field, flag )	((field)^=(flag))
+#define FLAG_IsSet( field, flag )	(((field)&(flag))==(flag))
 
 //******************************************************************
 #endif		//_Math_H_CrockEngine

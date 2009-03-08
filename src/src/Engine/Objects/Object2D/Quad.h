@@ -1,21 +1,21 @@
-#ifndef		_Sprite_H
-#define		_Sprite_H
+#ifndef		_Quad_H
+#define		_Quad_H
 
 //******************************************************************
 
-#include	"Quad.h"
+#include	"Object2D.h"
 
 //******************************************************************
 
-class Sprite : public Quad
+class Quad : public Object2D
 {
 public:
 
 	//-- Méthodes publiques
 	
-	//Sprite( crc32 spriteID );
-	Sprite( const char *path );
-	virtual ~Sprite();
+	Quad( float width, float height, const Color4f &color );
+	Quad( const Vector2f &size, const Color4f &color );
+	virtual ~Quad();
 
 	virtual void Draw();		// Affiche l'objet
 
@@ -24,13 +24,15 @@ public:
 	virtual void InitDxData();		// Initialise les données Dx
 	virtual void ClearDxData();		// Libère les données Dx
 
-
 protected:
 
-	//crc32				m_TextureID;	// ID de la texture
-	std::string			m_TextureName;	// Nom de la texture
+	//-- Données protégées
+
+	IDirect3DVertexDeclaration9	*m_pVertexDeclaration;
+	IDirect3DVertexBuffer9		*m_pVertexBuffer;
+	int							m_VBSize;
 
 };
 
 //******************************************************************
-#endif		//_Sprite_H
+#endif		//_Quad_H

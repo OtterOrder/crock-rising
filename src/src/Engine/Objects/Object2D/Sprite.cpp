@@ -11,21 +11,13 @@
 //******************************************************************
 
 //**********************************************************
-// Initialisation commune aux constructeurs.
-//**********************************************************
-void Sprite::CommonInit()
-{
-	m_IsDxReady	= false;
-}
-
-//**********************************************************
 // Constructeur.
 // @param[in]	spriteID : ID du sprite
 //**********************************************************
 /*Sprite::Sprite( crc32 spriteID )
 : Object2D()
 {
-	CommonInit();
+	m_TextureID = spriteID;
 }*/
 
 //**********************************************************
@@ -33,11 +25,9 @@ void Sprite::CommonInit()
 // @param[in]	path : chemin vers l'image (texture)
 //**********************************************************
 Sprite::Sprite( const char *path )
-: Object2D()
+: Quad( 0.f, 0.f, Color4f( 0.f, 0.f, 0.f, 1.f ) )
 {
-	CommonInit();
 	m_TextureName = path;
-	InitDxData();
 }
 
 //**********************************************************
@@ -51,28 +41,12 @@ Sprite::~Sprite()
 //**********************************************************
 // Affiche l'objet.
 //**********************************************************
-void Sprite::Draw() const
+void Sprite::Draw()
 {
 	if( !m_IsDxReady )
 		return;
 
-	// Application des transformations
-	D3DXMATRIX world;
-	WorldMatrix( &world );
-	m_pDxSprite->SetTransform( &world );
-
-	m_pDxSprite->Begin( D3DXSPRITE_ALPHABLEND );
-	
-	// On dessine..
-	m_pDxSprite->Draw(
-		m_pDxTexture,
-		NULL,			// on utilise toute l'image
-		NULL,
-		NULL,
-		D3DCOLOR_COLOR4F( m_Color )
-	);
-
-	m_pDxSprite->End();
+	//TODO
 }
 
 //**********************************************************
@@ -83,11 +57,7 @@ void Sprite::InitDxData()
 	if( m_IsDxReady )
 		return;
 
-	//TODO: blinder cette méthode (FAILED?)
-	
-	// Création du sprite Dx et récupération de la texture
-	D3DXCreateSprite( Renderer::GetInstance()->m_pd3dDevice, &m_pDxSprite );
-	m_pDxTexture = ResourceManager::GetInstance()->Load<Texture>( m_TextureName, (ResourceParam)TEX_SPRITE )->m_pTex;
+	//TODO
 	
 	m_IsDxReady = true;
 }
@@ -99,8 +69,7 @@ void Sprite::ClearDxData()
 {
 	if( m_IsDxReady )
 	{
-		ResourceManager::GetInstance()->Remove<Texture>( m_TextureName );
-		m_pDxSprite->Release();
+		//TODO
 	}
 	m_IsDxReady = false;
 }

@@ -292,19 +292,19 @@
 				Name="Object2D"
 				>
 				<File
-					RelativePath=".\Objects\Object2D\Mask.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\Object2D\Mask.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Objects\Object2D\Object2D.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Objects\Object2D\Object2D.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Quad.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\Object2D\Quad.h"
 					>
 				</File>
 				<File

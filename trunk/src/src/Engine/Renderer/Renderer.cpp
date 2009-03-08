@@ -198,7 +198,7 @@ HRESULT Renderer::FrameMove(float fElapsedTime)
 HRESULT Renderer::Render()
 {
 	ScObjIt scobj;
-	Obj2DIt obj2d;
+	Obj2DIt obj2d, lastObj2d;
 	
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
 
@@ -237,13 +237,14 @@ HRESULT Renderer::Render()
 		++scobj;
 	}
 
-	
 	//-- Affichage des objets 2D
-	
-	obj2d = m_Obj2DList->begin();
-	while( obj2d != m_Obj2DList->end() )
+
+	obj2d		= m_Obj2DList->begin();
+	lastObj2d	= m_Obj2DList->end();
+
+	while( obj2d != lastObj2d )
 	{
-		if( (*obj2d)->IsVisible() )
+		if( !(*obj2d)->IsHidden() )
 		{
 			(*obj2d)->Draw();
 		}

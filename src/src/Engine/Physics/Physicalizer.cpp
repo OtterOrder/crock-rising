@@ -4,15 +4,13 @@
 // ===============================================================================
 #include "Physicalizer.h"
 
-#include <stdio.h>
-#include "NxPhysics.h"
-
 
 bool Physicalizer::InitPhysX()
 {
 	m_PhysicsSDK = NULL;
 	m_Scene		 = NULL; 
 	m_DeltaTime	 = (NxReal)(1.0 / 60.0);
+	m_Gravity	 = Vector3f( 0.f, -9.8f, 0.f );
 
 	// Initialize PhysicsSDK
 	NxSDKCreateError errorCode = NXCE_NO_ERROR;
@@ -31,7 +29,7 @@ bool Physicalizer::InitPhysX()
 	// Create a scene
     NxSceneDesc sceneDesc;
  	sceneDesc.simType				= NX_SIMULATION_SW;
-   // sceneDesc.gravity               = gDefaultGravity;
+	sceneDesc.gravity               = NxVec3(m_Gravity.x, m_Gravity.y, m_Gravity.z) ;
     m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 
 	// Créer une scene (gScene)
@@ -42,16 +40,14 @@ bool Physicalizer::InitPhysX()
 	}
 	// Set default material
 	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);
-	defaultMaterial->setRestitution(0.5f);
+	defaultMaterial->setRestitution(0.1f);
 	defaultMaterial->setStaticFriction(0.5f);
 	defaultMaterial->setDynamicFriction(0.5f);
 
-	// Create ground plane
-	NxPlaneShapeDesc planeDesc; //Contient les caracteristiques du plan
-	NxActorDesc actorDesc;		//Acteur qui contiendra le plan
-	
-	// Créer l'acteur "plan du sol"
-    actorDesc.shapes.pushBack(&planeDesc);//On rajoute la boite englobante de ce plan
+
+	NxPlaneShapeDesc planeDesc;
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&planeDesc);
 	m_Scene->createActor(actorDesc);
 
 	// Récupération du temps
@@ -73,127 +69,11 @@ void Physicalizer::ExitPhysX()
 		m_PhysicsSDK = NULL;
 	}
 }
-//static void CreatePlane(
-void Physicalizer::CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity)
+
+bool Physicalizer::ReloadPhysX()
 {
-	if(m_Scene == NULL) return;	
-
-	// Create body
- 	/*NxBodyDesc bodyDesc;
-	NxBoxShapeDesc boxDesc;
-	NxActorDesc actorDesc;
-
-	bodyDesc.angularDamping	= 0.5f;
-	if(initialVelocity) bodyDesc.linearVelocity = *initialVelocity;
-
-	boxDesc.mass = 1;
-	boxDesc.dimensions.set(size);
-	//boxDesc.localPose.t.set(pos);
-	// Initialiser la description de la futur boite.
-
-	// Créer l'acteur de la boite
-	actorDesc.shapes.push_back(&boxDesc);
-
-	actorDesc.body = &bodyDesc;
-	actorDesc.userData = (void*)size;
-
-	actorDesc.density		= 1.0f;
-	actorDesc.globalPose.t	= pos;	
-	assert(actorDesc.isValid());
-	NxActor *pActor = m_Scene->createActor(actorDesc);	
-	assert(pActor);*/
-}
-
-void Physicalizer::CreateCubeFromEye(int size)
-{
-	//HeavyCreateCube(gEye, 1.0, &tir);
-
-	// Créer un cube, centré sur gEye, et qui est lancé dans le sens du regard (gDir).
-}
-
-void Physicalizer::CreateStack(int size)
-{
-	float cubeSize = 1.0f;
-	float spacing = 1.0f;
-	NxVec3 pos(0.0, cubeSize, 0.0);
-
-	int nbligne = size;
-	int nbcol = size;
-
-	for(int y = 0; y < size; y++)
-	{
-		for(int x = y; x < nbligne; x++)
-		{
-			for(int z = y; z < nbcol; z++)
-			{
-				pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , (cubeSize + spacing)*z);
-				CreateCube(pos, (int)cubeSize, NULL);
-			}
-		}
-		nbligne-= 1;
-		nbcol-= 1;
-	}
-	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
-}
-
-void Physicalizer::CreateSin(int size)
-{
-	float cubeSize = 1.0f;
-	float spacing = 1.0f;
-	NxVec3 pos(0.0, cubeSize, 0.0);
-
-	int Duree = 200;
-	int Periode = size;
-	float Intensite;
-	for(int x = 0; x < Duree; x++)
-	{
-		Intensite = (float)( sin(x*(3.14/100))+1 ) /2 * Periode;
-		for(int y = 0; y < Intensite; y++)
-		{			
-			pos.set((cubeSize + spacing)*x, cubeSize + (cubeSize + spacing)*y , 0.0f);
-			CreateCube(pos, (int)cubeSize, NULL);
-		}
-	}
-	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
-}
-
-//Hauteur : Hauteur des pics en Y
-//Duree	  : Nombre de cube en X et en Z du premier étage
-//Période : Nombre de bosses
-void Physicalizer::CreateSinSuface(int Hauteur, int Duree, int Periode)
-{
-	float cubeSize = 1.0f;
-	float spacing = 0.01f;
-	NxVec3 pos(0.0, cubeSize, 0.0);
-
-	float Intensite1, Intensite2;
-	for(int x = 0; x < Duree; x++)
-	{
-		Intensite1 = (float)( sin((x)*(3.14/Periode))+1 ) /2 * Hauteur;
-		for(int z = 0; z < Duree; z++)
-		{
-			Intensite2 = (float)( sin((z)*(3.14/Periode))+1 ) /2 * Hauteur;
-			for(int y = 0; y < Intensite2+Intensite1; y++)
-			{			
-				pos.set((2*cubeSize + spacing)*x, cubeSize + (2*cubeSize + spacing)*y , (2*cubeSize + spacing)*z);
-				CreateCube(pos, (int)cubeSize, NULL);
-			}
-		}
-	} 
-	// Créer un tas de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
-}
-
-void Physicalizer::CreateTower(int size)
-{
-	float cubeSize = 1.0f;
-	float spacing = 1.0f;
-	NxVec3 pos(0.0, cubeSize, 0.0);
-	for(int i = 1; i <= size; i++)
-	{
-		CreateCube(pos, (int)cubeSize, NULL);
-		pos.set(0.0f, cubeSize + (cubeSize + spacing)*i , 0.0f);
-	}
-	// Créer une 'tour' de cubes (de la forme que vous voulez, il faut au moins 25 cubes).
+	ExitPhysX();
+	return InitPhysX();
 }
 
 void Physicalizer::StartPhysics()
@@ -202,7 +82,7 @@ void Physicalizer::StartPhysics()
 	m_DeltaTime = UpdateTime();
 
 	// Start collision and dynamics for delta time since the last frame
-	m_Scene->simulate(m_DeltaTime);
+	m_Scene->simulate( NxReal(0.01667) );//m_DeltaTime
 	m_Scene->flushStream();
 }
 
@@ -210,4 +90,64 @@ void Physicalizer::GetPhysicsResults()
 {
 	// Get results from gScene->simulate(gDeltaTime)
 	m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+}
+
+PhysXResult Physicalizer::RunPhysics()
+{
+	if( m_Scene )
+	{
+		StartPhysics();
+		GetPhysicsResults();
+
+		return DoTransform();
+	}
+	return PHYSX_FAILED;
+}
+
+PhysXResult Physicalizer::DoTransform()
+{	//matrice obtenue de PhysX
+	std::list< SceneObject* > List = SceneObject::RefList;
+	std::list< SceneObject* >::iterator it = List.begin();
+	int Size = List.size();
+
+	while( it != List.end() )
+	{
+		SceneObject* aSObj = *it; 
+		if (IsPhysicable(aSObj))
+		{
+			int emp = (*aSObj->getEmpList()->begin());
+			if(emp < 0) return PHYSX_FAILED;
+
+			NxActor** ac =  getScene()->getActors(); //La liste des acteurs
+			NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
+
+			D3DXMATRIX WorldMat;
+			pac->getGlobalPose().getColumnMajor44( WorldMat );
+			aSObj->SetTransform( &WorldMat );
+		}
+		++it;
+	}
+	return PHYSX_SUCCEED;
+}
+
+PhysXResult Physicalizer::SetPhysicable( SceneObject* SceObj, BoundingBox* bb )
+{
+	if(SceObj) //Le SceneObject est valide, OK
+	{
+		if(bb) //La BB existe donc on l'applique
+			SceObj->getEmpList()->push_front( bb->getEmplacement() );
+		else //Elle ne l'est pas donc on retire le SceneObject de la liste si il y est.
+			if(IsPhysicable(SceObj))
+				SceObj->getEmpList()->clear();
+
+		return PHYSX_SUCCEED;
+	}
+	return PHYSX_FAILED; // Le SceneObject n'est pas bon, probleme 
+}
+
+bool Physicalizer::IsPhysicable( SceneObject* SceObj )
+{
+	if(SceObj) 
+		return !SceObj->getEmpList()->empty();
+	return false;
 }

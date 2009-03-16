@@ -21,8 +21,7 @@ public:
 						const std::string& anim,
 						const std::string& Tex,
 						const D3DXVECTOR3& Position,
-						const std::string shader = "default_skinning.fx",
-						BoundingBox aBoundingBox = BoundingBox());
+						const std::string shader = "default_skinning.fx");
 
 	void InitObjectAnimation();
 

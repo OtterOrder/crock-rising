@@ -164,6 +164,14 @@
 				RelativePath=".\Core\System.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Core\Time.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\Time.h"
+				>
+			</File>
 			<Filter
 				Name="Inputs"
 				>

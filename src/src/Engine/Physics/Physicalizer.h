@@ -6,10 +6,22 @@
 //===========================================================================//
 #define NOMINMAX
 #include	<windows.h>
+#include	<stdio.h>
 
 #include	"NxPhysics.h"
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"
+#include	"../Objects/SceneObject.h"
+#include	"BoundingBox.h"
+
+
+enum PhysXResult
+{
+	PHYSX_SUCCEED,
+	PHYSX_FAILED
+};
+
+
 
 
 //Structure qui contiendra tous les paramètres de l'instance physX qui ne seront pas indispensable
@@ -37,6 +49,7 @@ struct AdvancedPhysXParam
 	NxReal VisualizeClothSleep;
 };
 
+
 class Physicalizer : public Singleton< Physicalizer >
 {
 	friend class Singleton< Physicalizer >;
@@ -51,8 +64,14 @@ public:
 
 	bool InitPhysX();
 	void ExitPhysX();
-	void StartPhysics();
+	bool ReloadPhysX();
+	void StartPhysics(); 
 	void GetPhysicsResults(); //Doit être avant chaque rendu pour la mise à jour des matrices.
+	PhysXResult DoTransform(); //Applique les transformations à tous la liste des SceneObject.
+	PhysXResult RunPhysics(); //Permet de récupérer le résultat de la physique, en appelant les fonctions dans le bon ordre
+
+	PhysXResult SetPhysicable(SceneObject* SceObj, BoundingBox* bb = NULL); //Applique une BB au SO, si la BB est nulle, on retire la physique du SO
+	bool IsPhysicable(SceneObject* SceObj);
 
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //
@@ -70,12 +89,6 @@ public:
 	void setGravity		  (Vector3f		aGravity)		{ m_Gravity = aGravity;		}	
 	void setAdvancedParam (AdvancedPhysXParam aParam)	{ m_AdvancedParam = aParam; }	
 
-	void CreateCube(const NxVec3& pos, int size, const NxVec3* initialVelocity);
-	void CreateCubeFromEye(int size);
-	void CreateStack(int size);
-	void CreateSin(int size);
-	void CreateSinSuface(int Hauteur, int Duree, int Periode);
-	void CreateTower(int size);
 
 	//Fonction récupéré dans le fichier UpdateTime.h des trainings programme de physx, en attente d'avoir notre timer a nous.
 	float UpdateTime()

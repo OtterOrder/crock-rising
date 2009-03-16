@@ -4,7 +4,7 @@
 //******************************************************************
 
 #include	<Game/Level.h>
-#include	<Objects/Camera.h>
+#include	<Objects/CameraFPS.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Skybox.h>
 #include	<Objects/SceneObjectAnimated.h>
@@ -26,6 +26,15 @@ public:
 
 	virtual void	Init		( void );					// Initialisation
 	virtual void	Update		( void );					// Update du niveau
+
+
+//////////////////////////////////////////////////////////////////////////
+// FONCTIONS INUTILES DE TEST PHYSX
+//////////////////////////////////////////////////////////////////////////
+void CreateCube(float demiSize, Vector3f Pos, float density, Vector3f initialVel = Vector3f(0.f, 0.f, 0.f));
+void CreateCubeFromEye(float demisize, float density,  int Patate);
+void CreateStack(float demisize, float density, int StackSize);
+// FIN
 
 
 protected:

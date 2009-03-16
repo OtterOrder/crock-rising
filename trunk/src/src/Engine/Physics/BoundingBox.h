@@ -1,4 +1,5 @@
-#pragma once
+#ifndef		_BOUNDINGBOX_H
+#define		_BOUNDINGBOX_H
 
 #include	<list>
 #include	"NxPhysics.h"
@@ -9,52 +10,102 @@ enum ShapeType
 {
 	BOX,
 	SPHERE,
-	CAPSULE
+	CAPSULE,
+	PLAN
 };
+
+NxVec3 VecToNxVec(const Vector3f V);
+void Normalize(Vector3f &V);
+float Norme(Vector3f V);
 
 //////////////////////////////////////////////////////////////////////////
 //Interface des classes de description des Shape. la classe 
-//ShapeDescritption contient les paramêtres communs. Non exhaustif
+//ShapeDescritption contient les paramêtres physiques des BB. Non exhaustif
 //////////////////////////////////////////////////////////////////////////
-
-struct ShapeDescription
+struct BoundingDescription
 {
-	ShapeDescription(float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f))
-		: density( aDensity ), mass( aMass ), globalPosition( aglobalPosition )
+	//Initialisation des variables non indispensables
+	void CommonInit()
 	{
+		initialvelocity = Vector3f(0.f, 0.f, 0.f);
+		mass = 1.0f;
 	}
 
+	//Constructeur BOX
+	BoundingDescription(Vector3f aDimension = Vector3f(1.0f, 1.0f, 1.0f),
+						Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f),
+						float aDensity = 1.0f)
+			: density( aDensity ), globalPosition( aglobalPosition ), dimension(aDimension){CommonInit();}
+
+	//Constructeur SPHERE
+	BoundingDescription(float aRadius,
+						Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f),
+						float aDensity = 1.0f)
+			: density( aDensity ), globalPosition( aglobalPosition ), radius(aRadius){CommonInit();}
+	//Constructeur CAPS
+	BoundingDescription(float aRadius,
+					float aHeight,
+					Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f),
+					float aDensity = 1.0f)
+			: density( aDensity ), globalPosition( aglobalPosition ), radius(aRadius), height(aHeight){CommonInit();}
+	//Constructeur PLAN
+	BoundingDescription(Vector2f aSurface,
+					Vector3f aglobalPosition = Vector3f(0.0f,0.0f, 0.f))
+			: globalPosition( aglobalPosition ), surface(aSurface){CommonInit();}
+
+//Variables de ShapeDesc
 	float    density;		//[0, inf[ def : 0
 	float    mass;			//[0, inf[ def : 0
 	Vector3f globalPosition;
-};
+	Vector3f initialvelocity;
 
-//Les structures qui suivent sont particulières à chaque shapes
-struct BoxDescription : public ShapeDescription
-{
-	BoxDescription(Vector3f aDimension = Vector3f(0.0f, 0.0f, 0.0f), float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f)) 
-		: ShapeDescription( aDensity, aMass, aglobalPosition), dimension( aDimension)
-	{ }
-
+//Variables de BoxDesc
 	Vector3f dimension;
-};
-
-struct SphereDescription : public ShapeDescription
-{
-	SphereDescription(float aRadius = 1.0f, float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f)) 
-		: ShapeDescription( aDensity, aMass, aglobalPosition), radius( aRadius)
-	{ }
+//Variables de SphereDesc
 	float radius;
+//Variables de CapsuleDesc
+	float height;
+//Variables de PlaneDesc
+	Vector2f surface;
 };
 
-struct CapsuleDescription : public ShapeDescription
-{
-	CapsuleDescription(float aRadius = 1.0f, float aHeight = 1.0f, float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f)) 
-		: ShapeDescription( aDensity, aMass, aglobalPosition), radius( aRadius ), height( aHeight)
-	{ }
-	float radius, height;
-};
-
+//
+////Les structures qui suivent sont particulières à chaque shapes
+//struct BoxDescription : public ShapeDescription
+//{
+//	BoxDescription(Vector3f aDimension = Vector3f(1.0f, 1.0f, 1.0f), float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f)) 
+//		: ShapeDescription( aDensity, aMass, aglobalPosition), dimension( aDimension)
+//	{ }
+//	BoxDescription(ShapeDescription* SD, Vector3f aDimension = Vector3f(0.0f, 0.0f, 0.0f))
+//		: ShapeDescription(SD->density, SD->mass, SD->globalPosition), dimension( aDimension)
+//	{ }
+//
+//	Vector3f dimension;
+//};
+//
+//struct SphereDescription : public ShapeDescription
+//{
+//	SphereDescription(float aRadius = 1.0f, float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 0.0f, 0.0f)) 
+//		: ShapeDescription( aDensity, aMass, aglobalPosition), radius( aRadius)
+//	{ }
+//	float radius;
+//};
+//
+//struct CapsuleDescription : public ShapeDescription
+//{
+//	CapsuleDescription(float aRadius = 1.0f, float aHeight = 1.0f, float aDensity = 1.0f, float aMass = 1.0f, Vector3f aglobalPosition = Vector3f(0.0f, 10.0f, 0.0f)) 
+//		: ShapeDescription( aDensity, aMass, aglobalPosition), radius( aRadius ), height( aHeight)
+//	{ }
+//	float radius, height;
+//};
+//
+//struct GroundDescription : public ShapeDescription
+//{
+//	GroundDescription(Vector2f asurface, Vector3f aglobalPosition = Vector3f(0.0f, 10.0f, 0.0f)) 
+//		: ShapeDescription( 0.f, 0.f, aglobalPosition), surface(asurface)
+//	{ }
+//	Vector2f surface;
+//};
 
 ////////////////////////////////////////////////////////////////////////////
 // Structure material comprenant toutes les valeurs utiles de NxMaterials //
@@ -74,26 +125,49 @@ struct Material
 	float Restitution;
 	float StaticFriction;
 	float DynamicFriction;
+
+	Material& operator =(const Material& m)
+	{
+		Restitution = m.Restitution;
+		StaticFriction = m.StaticFriction;
+		DynamicFriction = m.DynamicFriction;
+		return *this;
+	}
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Structure BoundingBox qui englobera les objets. Elles seront fournies //
-// au moteur physique													 //
-///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+// Structure BoundingBox qui englobera les objets.	   //
+// Elles seront fournies au moteur physique.		   //
+/////////////////////////////////////////////////////////
 class BoundingBox
 {
 	bool			m_bDebugMode; //Si vrai, les bounding box se dessinent pour debugger.
-	Material		m_pMat; 
-	int				m_empListe;
+	Material		m_Mat; 
+	int				m_iEmplacement;
 	//What else? Groupe de collision?
+	BoundingBox BoundingBoxInit(BoundingDescription *Desc, ShapeType Type = BOX, Material Mat = Material());
 
 public:
-	BoundingBox(ShapeDescription *ShapeDesc = &ShapeDescription(), ShapeType Type = BOX, Material aMat = Material());
+	//Constructeur par défaut
+	BoundingBox(){}
+	//Constructeurs spécifiques, simplifiées
+	BoundingBox(Vector3f adimension			, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //BOX
+	BoundingBox(float aradius				, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //SPHERE
+	BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //CAPS
+	BoundingBox(Vector2f asurface			, float Hauteur,																		 Material aMat = Material()); //SOL
+	BoundingBox& operator =(const BoundingBox& bb);
+
 	~BoundingBox(){}
 
 	bool IsInCollision(const BoundingBox &po);
-	void EnableDebugMode(bool enable){ m_bDebugMode = enable; }
 
-	int getEmpListe(){ return m_empListe; }
+	bool getDebugMode	() const { return m_bDebugMode; }
+	Material getMat		() const { return m_Mat; }
+	int getEmplacement	() const { return m_iEmplacement; }
+
+	void setDebugMode	(bool DebugMode) { m_bDebugMode = DebugMode; }
+	void setMat			(Material Mat)	 { m_Mat = Mat; }
+	void setEmplacement	(int Emp)		 { m_iEmplacement = Emp; }
 };
 
+#endif

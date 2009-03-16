@@ -6,9 +6,9 @@
 #define		NOMINMAX
 
 #include	<map>
+#include	<vector>
 #include	"Object.h"
 #include	"Resources/Texture.h"
-#include	"Physics/BoundingBox.h"
 
 
 //===========================================================================//
@@ -16,6 +16,8 @@
 class Texture;
 class Shader;
 class Mesh;
+class BoundingBox;
+typedef std::list< int > TEmpList;
 
 //===========================================================================//
 // Classe pour un objet affichable dans la scène 3D                          //
@@ -31,8 +33,7 @@ public:
 	SceneObject(const std::string& mesh,
 				const std::string& Tex,
 				const D3DXVECTOR3& Position,
-				const std::string shader,
-				BoundingBox aBoundingBox = BoundingBox());
+				const std::string shader);
 	SceneObject();
 	virtual ~SceneObject();
 
@@ -58,6 +59,9 @@ public:
 	void	DeleteDeviceData();
 	void	DeleteData();
 	
+	TEmpList* getEmpList(){ return m_EmpList; }
+	void setEmpList(TEmpList* L){ m_EmpList = L; }
+
 protected:
 
 	//===========================================================================//
@@ -78,10 +82,10 @@ protected:
 	D3DXVECTOR3			m_Offset;
 
 	Mesh*				m_PtrMesh;
+	TEmpList*			m_EmpList;
 
-	std::list< BoundingBox > BoundingBoxList;
+	
 
-;
 
 	//===========================================================================//
 	// Méthodes privées												             //

@@ -219,11 +219,4 @@ void SceneObject::DeleteData()
 			//it->second->Release();
 	}
 	//m_PtrShader->Release();
-
-}
-
-void SceneObject::SetScale( const Vector3f Scale )
-{
-	if (m_PtrMesh)
-		m_PtrMesh->m_Scale = Scale; 
 }

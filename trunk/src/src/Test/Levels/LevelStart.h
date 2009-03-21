@@ -4,10 +4,6 @@
 //******************************************************************
 
 #include	<Game/Level.h>
-#include	<Objects/CameraFPS.h>
-#include	<Renderer/Renderer.h>
-#include	<Objects/Skybox.h>
-#include	<Objects/SceneObjectAnimated.h>
 
 //******************************************************************
 
@@ -15,7 +11,7 @@
 
 //******************************************************************
 
-class Sprite;
+class Camera;
 
 class LevelStart : public Level
 {
@@ -27,29 +23,12 @@ public:
 	virtual void	Init		( void );					// Initialisation
 	virtual void	Update		( void );					// Update du niveau
 
-
-//////////////////////////////////////////////////////////////////////////
-// FONCTIONS INUTILES DE TEST PHYSX
-//////////////////////////////////////////////////////////////////////////
-void CreateCube(float demiSize, Vector3f Pos, float density, Vector3f initialVel = Vector3f(0.f, 0.f, 0.f));
-void CreateCubeFromEye(float demisize, float density,  int Patate);
-void CreateStack(float demisize, float density, int StackSize);
-// FIN
-
-
 protected:
 	
 	Camera* m_pCamera;
 
-	SceneObjectAnimated*	m_pSObjectAnimated;
-	SceneObject*			m_Alien;
+	//TODO
 
-	Skybox * skyb;
-
-	Sprite	*m_pDemoRising;
-
-	void InitInterface();	// Initialise l'interface
-	void FreeInterface();	// Libère l'interface
 };
 
 //******************************************************************

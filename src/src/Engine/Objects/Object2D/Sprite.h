@@ -7,6 +7,8 @@
 
 //******************************************************************
 
+class Texture;
+
 class Sprite : public Quad
 {
 public:
@@ -19,16 +21,17 @@ public:
 
 	virtual void Draw();		// Affiche l'objet
 
-	//-- Méthodes spécifiques pour DirectX (utilisées dans le Renderer)
+	//-- Méthodes spécifiques pour DirectX
 	
 	virtual void InitDxData();		// Initialise les données Dx
 	virtual void ClearDxData();		// Libère les données Dx
-
+	virtual bool IsDxReady() const;	// Vérifie si les données Dx sont prètes
 
 protected:
 
 	//crc32				m_TextureID;	// ID de la texture
 	std::string			m_TextureName;	// Nom de la texture
+	Texture				*m_pTexture;	// Texture
 
 };
 

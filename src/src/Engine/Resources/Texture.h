@@ -27,14 +27,19 @@ class Texture: public Resource
 {
 public:
 	
+	LPDIRECT3DTEXTURE9	m_pTex;	// Pointeur sur la texture Dx
+	
 	Texture();
 	~Texture();
 	
 	ResourceResult Load( std::string resource, ResourceParam param ); // Charge une texture
-	
-	LPDIRECT3DTEXTURE9 m_pTex; // Pointeur vers la texture
+
+	int GetSrcWidth() const;	// Donne la largeur de l'image source
+	int GetSrcHeight() const;	// Donne la hauteur de l'image source
 
 protected:
+
+	D3DXIMAGE_INFO	m_SrcInfo;	// Infos sur l'image source
 
 	ResourceResult DxLoad( std::string path );
 

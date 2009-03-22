@@ -21,6 +21,22 @@ Texture::~Texture()
 }
 
 //===========================================================================//
+// Donne la largeur de l'image source.
+//===========================================================================//
+int Texture::GetSrcWidth() const
+{
+	return (int)m_SrcInfo.Width;
+}
+
+//===========================================================================//
+// Donne la hauteur de l'image source.
+//===========================================================================//
+int Texture::GetSrcHeight() const
+{
+	return (int)m_SrcInfo.Height;
+}
+
+//===========================================================================//
 // Charge une texture.
 // @param[in]	resource : nom du fichier
 // @param[in]	param : type de texture (TextureType)
@@ -59,7 +75,7 @@ ResourceResult Texture::DxLoad( std::string path )
 		D3DX_DEFAULT,
 		D3DX_DEFAULT,
 		0,
-		NULL,
+		&m_SrcInfo,
 		NULL,
 		&m_pTex ) ) )
 	{

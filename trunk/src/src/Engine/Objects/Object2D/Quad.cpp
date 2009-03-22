@@ -1,5 +1,6 @@
 #include	"Quad.h"
 
+//#include	<assert.h>
 #include	"Renderer/Renderer.h"
 
 using namespace std;
@@ -7,30 +8,43 @@ using namespace std;
 //******************************************************************
 
 //**********************************************************
+// Initialisation commune à tous les constructeurs.
+//**********************************************************
+void Quad::CommonInit()
+{
+	m_pVertexDeclaration	= NULL;
+	m_pVertexBuffer			= NULL;
+}
+
+//**********************************************************
 // Constructeur.
 // @param[in]	width : largeur
 // @param[in]	height : hauteur
 // @param[in]	color : couleur
 //**********************************************************
-Quad::Quad( float width, float height, const Color4f &color )
+Quad::Quad( int width, int height, const Color4f &color )
 : Object2D()
 {
 	m_Width		= width;
 	m_Height	= height;
 	m_Color		= color;
+
+	CommonInit();
 }
 
 //**********************************************************
 // Constructeur.
-// @param[in]	size : taille
+// @param[in]	size : { largeur, hauteur }
 // @param[in]	color : couleur
 //**********************************************************
 Quad::Quad( const Vector2f &size, const Color4f &color )
 : Object2D()
 {
-	m_Width		= size.x;
-	m_Height	= size.y;
+	m_Width		= (int)size.x;
+	m_Height	= (int)size.y;
 	m_Color		= color;
+	
+	CommonInit();
 }
 
 //**********************************************************
@@ -46,7 +60,7 @@ Quad::~Quad()
 //**********************************************************
 void Quad::Draw()
 {
-	if( !m_IsDxReady )
+	if( !IsDxReady() )
 	{
 		// Si les données directx ne sont pas initialisées,
 		// on le fait au premier affichage, ça évite de le
@@ -79,9 +93,6 @@ void Quad::Draw()
 //**********************************************************
 void Quad::InitDxData()
 {
-	if( m_IsDxReady )
-		return;
-
 	LPDIRECT3DDEVICE9			pDevice;
 	vector<D3DVERTEXELEMENT9>	elements;
 
@@ -89,23 +100,27 @@ void Quad::InitDxData()
 	m_VBSize	= 4*sizeof(Vertex);
 
 	// Vertex déclaration
-	Vertex::GenDeclaration( &elements );
-	pDevice->CreateVertexDeclaration(
-		&elements[0],
-		&m_pVertexDeclaration
-	);
+	if( !m_pVertexDeclaration )
+	{
+		Vertex::GenDeclaration( &elements );
+		pDevice->CreateVertexDeclaration(
+			&elements[0],
+			&m_pVertexDeclaration
+		);
+	}
 
 	// Vertex buffer
-	pDevice->CreateVertexBuffer(
-		m_VBSize,
-		NULL,
-		0,
-		D3DPOOL_DEFAULT,
-		&m_pVertexBuffer,
-		NULL
-	);
-
-	m_IsDxReady = true;
+	if( !m_pVertexBuffer )
+	{
+		pDevice->CreateVertexBuffer(
+			m_VBSize,
+			NULL,
+			0,
+			D3DPOOL_DEFAULT,
+			&m_pVertexBuffer,
+			NULL
+		);
+	}
 }
 
 //**********************************************************
@@ -113,10 +128,24 @@ void Quad::InitDxData()
 //**********************************************************
 void Quad::ClearDxData()
 {
-	if( m_IsDxReady )
+	if( m_pVertexDeclaration )
 	{
 		m_pVertexDeclaration->Release();
-		m_pVertexBuffer->Release();
+		m_pVertexDeclaration = NULL;
 	}
-	m_IsDxReady = false;
+	
+	if( m_pVertexBuffer )
+	{
+		m_pVertexBuffer->Release();
+		m_pVertexBuffer = NULL;
+	}
+}
+
+//**********************************************************
+// Vérifie si les données Dx sont prètes.
+//**********************************************************
+bool Quad::IsDxReady() const
+{
+	return m_pVertexDeclaration
+		&& m_pVertexBuffer;
 }

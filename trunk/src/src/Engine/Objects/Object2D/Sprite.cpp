@@ -10,6 +10,10 @@
 
 //******************************************************************
 
+#define		SPRITE_DEFAULT_COLOR	(Color4f( 1.f, 1.f, 1.f, 1.f ))
+
+//******************************************************************
+
 //**********************************************************
 // Constructeur.
 // @param[in]	spriteID : ID du sprite
@@ -25,9 +29,10 @@
 // @param[in]	path : chemin vers l'image (texture)
 //**********************************************************
 Sprite::Sprite( const char *path )
-: Quad( 0.f, 0.f, Color4f( 0.f, 0.f, 0.f, 1.f ) )
+: Quad( 0, 0, SPRITE_DEFAULT_COLOR )
 {
-	m_TextureName = path;
+	m_TextureName	= path;
+	m_pTexture		= NULL;
 }
 
 //**********************************************************
@@ -43,10 +48,20 @@ Sprite::~Sprite()
 //**********************************************************
 void Sprite::Draw()
 {
-	if( !m_IsDxReady )
-		return;
+	if( !IsDxReady() )
+	{
+		// Si les données directx ne sont pas initialisées,
+		// on le fait au premier affichage, ça évite de le
+		// faire dans les constructeurs..
+		InitDxData();
+	}
 
-	//TODO
+	LPDIRECT3DDEVICE9 pDevice;
+	pDevice = Renderer::GetInstance()->m_pd3dDevice;
+	
+	pDevice->SetTexture( 0, m_pTexture->m_pTex );
+	Quad::Draw();
+	pDevice->SetTexture( 0, NULL );
 }
 
 //**********************************************************
@@ -54,12 +69,17 @@ void Sprite::Draw()
 //**********************************************************
 void Sprite::InitDxData()
 {
-	if( m_IsDxReady )
-		return;
+	Quad::InitDxData();
 
-	//TODO
-	
-	m_IsDxReady = true;
+	// Chargement de la texture..
+	m_pTexture = ResourceManager::GetInstance()->Load<Texture>(
+		m_TextureName,
+		(ResourceParam)TEX_SPRITE
+	);
+
+	// Initialisation de la taille du sprite
+	m_Width		= m_pTexture->GetSrcWidth();
+	m_Height	= m_pTexture->GetSrcHeight();
 }
 
 //**********************************************************
@@ -67,9 +87,18 @@ void Sprite::InitDxData()
 //**********************************************************
 void Sprite::ClearDxData()
 {
-	if( m_IsDxReady )
-	{
-		//TODO
-	}
-	m_IsDxReady = false;
+	Quad::ClearDxData();
+
+	// Déchargement de la texture..
+	ResourceManager::GetInstance()->Remove<Texture>( m_TextureName );
+	m_pTexture = NULL;
+}
+
+//**********************************************************
+// Vérifie si les données Dx sont prètes.
+//**********************************************************
+bool Sprite::IsDxReady() const
+{
+	return Quad::IsDxReady()
+		&& m_pTexture;
 }

@@ -7,8 +7,8 @@ using namespace std;
 
 //******************************************************************
 
-#define		O2D_DEFAULT_WIDTH			(0.f)
-#define		O2D_DEFAULT_HEIGHT			(0.f)
+#define		O2D_DEFAULT_WIDTH			(0)
+#define		O2D_DEFAULT_HEIGHT			(0)
 #define		O2D_DEFAULT_COLOR			(Color4f( 1.f, 1.f, 1.f, 1.f ))
 #define		O2D_DEFAULT_POSITION		(Vector3f( 0.f, 0.f, 0.f ))
 #define		O2D_DEFAULT_SCALE			(Vector3f( 1.f, 1.f, 1.f ))
@@ -42,14 +42,13 @@ Object2D::Object2D()
 	m_HotPoint			= O2D_HOTPOINT_V0;
 	m_HotPointIndex		= 0;
 	m_IsHidden			= false;
-	m_IsDxReady			= false;
 	
 	m_Position			= O2D_DEFAULT_POSITION;
 	m_Scale				= O2D_DEFAULT_SCALE;
 	m_Rotation			= O2D_DEFAULT_ROTATION;
 	
 	// Enregistrement dans la liste
-	Object2D::RefList.push_front( this );
+	Object2D::RefList.push_back( this );
 }
 
 //**********************************************************
@@ -69,9 +68,106 @@ void Object2D::Update()
 }
 
 //**********************************************************
+// Change la taille.
+// @param[in]	width : largeur en pixels
+// @param[in]	height : hauteur en pixels
+//**********************************************************
+void Object2D::SetSize( int width, int height )
+{
+	m_Width = width;
+	m_Height = height;
+}
+
+//**********************************************************
+// Change la taille.
+// @param[in]	size : { largeur, hauteur }
+//**********************************************************
+void Object2D::SetSize( const Vector2f &size )
+{
+	SetSize( (int)size.x, (int)size.y );
+}
+
+//**********************************************************
+// Donne la largeur de l'objet.
+//**********************************************************
+int Object2D::GetWidth() const
+{
+	return m_Width;
+}
+
+//**********************************************************
+// Donne la hauteur de l'objet.
+//**********************************************************
+int Object2D::GetHeight() const
+{
+	return m_Height;
+}
+
+//**********************************************************
+// Change la couleur.
+// @param[in]	color : RGBA (0->1)
+//**********************************************************
+void Object2D::SetColor( const Color4f &color )
+{
+	m_Color = color;
+}
+
+//**********************************************************
+// Donne la couleur.
+// @return	la couleur RGBA
+//**********************************************************
+Color4f Object2D::GetColor() const
+{
+	return m_Color;
+}
+
+//**********************************************************
+// Change l'alpha (= transparence).
+// @param[in]	alpha : alpha (0->1)
+//**********************************************************
+void Object2D::SetAlpha( float alpha )
+{
+	m_Color.a = alpha;
+}
+
+//**********************************************************
+// Donne l'alpha.
+// @return	l'alpha (woohoo)
+//**********************************************************
+float Object2D::GetAlpha() const
+{
+	return m_Color.a;
+}
+
+//**********************************************************
+// Rend l'objet visible.
+//**********************************************************
+void Object2D::Show()
+{
+	m_IsHidden = false;
+}
+
+//**********************************************************
+// Rend l'objet invisible (Draw n'est plus appelée).
+//**********************************************************
+void Object2D::Hide()
+{
+	m_IsHidden = true;
+}
+
+//**********************************************************
+// Vérifie si l'objet est caché.
+// @return	vrai si l'objet est caché, faux sinon
+//**********************************************************
+bool Object2D::IsHidden() const
+{
+	return m_IsHidden;
+}
+
+//**********************************************************
 // Change la position.
-// @param[in]	posX : coordonnée x
-// @param[in]	posY : coordonnée y
+// @param[in]	posX : coordonnée x (pixels)
+// @param[in]	posY : coordonnée y (pixels)
 //**********************************************************
 void Object2D::SetPosition( float posX, float posY )
 {
@@ -155,67 +251,6 @@ void Object2D::SetRotation( float angle )
 float Object2D::GetRotation() const
 {
 	return m_Rotation.z;
-}
-
-//**********************************************************
-// Change la couleur.
-// @param[in]	color : RGBA (0->1)
-//**********************************************************
-void Object2D::SetColor( const Color4f &color )
-{
-	m_Color = color;
-}
-
-//**********************************************************
-// Donne la couleur.
-// @return	la couleur RGBA
-//**********************************************************
-Color4f Object2D::GetColor() const
-{
-	return m_Color;
-}
-
-//**********************************************************
-// Change l'alpha (= transparence).
-// @param[in]	alpha : alpha (0->1)
-//**********************************************************
-void Object2D::SetAlpha( float alpha )
-{
-	m_Color.a = alpha;
-}
-
-//**********************************************************
-// Donne l'alpha.
-// @return	l'alpha (woohoo)
-//**********************************************************
-float Object2D::GetAlpha() const
-{
-	return m_Color.a;
-}
-
-//**********************************************************
-// Rend l'objet visible.
-//**********************************************************
-void Object2D::Show()
-{
-	m_IsHidden = false;
-}
-
-//**********************************************************
-// Rend l'objet invisible (Draw n'est plus appelée).
-//**********************************************************
-void Object2D::Hide()
-{
-	m_IsHidden = true;
-}
-
-//**********************************************************
-// Vérifie si l'objet est caché.
-// @return	vrai si l'objet est caché, faux sinon
-//**********************************************************
-bool Object2D::IsHidden() const
-{
-	return m_IsHidden;
 }
 
 //**********************************************************

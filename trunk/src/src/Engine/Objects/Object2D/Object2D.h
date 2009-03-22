@@ -33,6 +33,23 @@ public:
 	virtual void Draw() =0;		// Affiche l'objet
 	virtual void Update();		// Update, à surcharger
 
+	// Taille
+	void SetSize( int width, int height );
+	void SetSize( const Vector2f &size );
+	int GetWidth() const;
+	int GetHeight() const;
+
+	// Couleur
+	void SetColor( const Color4f &color );
+	void SetAlpha( float alpha );
+	Color4f GetColor() const;
+	float GetAlpha() const;
+
+	// Visibilité (optim)
+	void Show();
+	void Hide();
+	bool IsHidden() const;
+
 	// Position
 	void SetPosition( float posX, float posY );
 	void SetPosition( const Point2f &position );
@@ -48,21 +65,14 @@ public:
 	void SetRotation( float angle );
 	float GetRotation() const;
 
-	// Couleur
-	void SetColor( const Color4f &color );
-	void SetAlpha( float alpha );
-	Color4f GetColor() const;
-	float GetAlpha() const;
-
-	// Visibilité (optim)
-	void Show();
-	void Hide();
-	bool IsHidden() const;
-
 	//-- Méthodes spécifiques pour DirectX (utilisées dans le Renderer)
 	
-	virtual void InitDxData(){}		// Initialise les données Dx
-	virtual void ClearDxData(){}	// Libère les données Dx
+	virtual void InitDxData(){}			// Initialise les données Dx
+	virtual void ClearDxData(){}		// Libère les données Dx
+	virtual bool IsDxReady() const		// Vérifie si les données Dx sont prètes
+	{
+		return false;
+	}
 
 protected:
 
@@ -80,13 +90,12 @@ protected:
 
 	//-- Données protégées
 	
-	float			m_Width;			// Largeur
-	float			m_Height;			// Hauteur
+	int				m_Width;			// Largeur
+	int				m_Height;			// Hauteur
 	Color4f			m_Color;			// Couleur
 	O2DHotPoint		m_HotPoint;			// Point chaud
 	int				m_HotPointIndex;	// Index du point chaud (O2D_HOTPOINT_INDEX)
 	bool			m_IsHidden;			// Si l'objet est caché
-	bool			m_IsDxReady;		// Si les données Dx sont initialisées
 
 	Vector3f		m_Position;			// Position (du point chaud)
 	Vector3f		m_Scale;			// Echelle

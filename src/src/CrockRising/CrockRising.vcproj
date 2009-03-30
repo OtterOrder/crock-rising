@@ -60,7 +60,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib Winmm.lib tinyxmld.lib"
+				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib Winmm.lib tinyxml.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"

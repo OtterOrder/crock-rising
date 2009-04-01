@@ -1,5 +1,7 @@
 #include "InputManager.h"
 
+#include "Renderer/Renderer.h"
+
 using namespace std;
 
 /***********************************************************
@@ -7,12 +9,12 @@ using namespace std;
  **********************************************************/
 InputManager::InputManager( void )
 {
-	ShowCursor( false );
 	InitMouseWheelDelta();
 
-	m_MouseOffset		= Point2f( 0.f, 0.f );
-	m_MouseOldPosition	= Point2f( 0.f, 0.f );
-	m_MousePosition		= Point2f( 0.f, 0.f );
+	m_MousePosition			= Point2f( 0.f, 0.f );
+	m_MouseVector			= Vector2f( 0.f, 0.f );
+	m_IsMouseMoved			= false;
+	m_IsMouseHeldAtCenter	= false;
 }
 
 
@@ -96,9 +98,26 @@ Point2f InputManager::GetMousePosition( void ) const
  **********************************************************/
 Vector2f InputManager::GetMouseVector( void ) const
 {
-	return m_MousePosition - m_MouseOldPosition;
+	return m_MouseVector;
 }
 
+//**********************************************************
+// Vérouille ou non la souris au centre de l'écran.
+// @param[in]	isHeld : vrai = souris vérouillée au centre
+//**********************************************************
+void InputManager::HoldMouseAtCenter( bool isHeld )
+{
+	m_IsMouseHeldAtCenter = isHeld;
+}
+
+//**********************************************************
+// Rend le curseur par défaut du système visible ou non.
+// @param[in]	isShown : vrai = curseur visible
+//**********************************************************
+void InputManager::ShowOSCursor( bool isShown )
+{
+	ShowCursor( isShown );
+}
 
 /***********************************************************
  * Update (méthode à appeler à chaque tour moteur).
@@ -108,7 +127,11 @@ void InputManager::Update( void )
 	UpdateList( m_Keys );
 	UpdateList( m_MouseButtons );
 
-	m_MouseOldPosition = m_MousePosition;
+	if( m_IsMouseMoved )
+	{
+		m_MouseVector	= Vector2f( 0.f, 0.f );
+		m_IsMouseMoved	= false;
+	}
 }
 
 
@@ -123,8 +146,6 @@ void InputManager::Update( void )
  **********************************************************/
 LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	POINTS	mouseCoordinates;
-	
 	switch( uMsg )
 	{
 		// Touche du clavier enfoncée
@@ -168,24 +189,45 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 		// Mouvement de la souris
 		case WM_MOUSEMOVE:
 		{
-			mouseCoordinates	= MAKEPOINTS( lParam );
-			m_MousePosition.x	= (float)mouseCoordinates.x;
-			m_MousePosition.y	= (float)mouseCoordinates.y;
+			Point2f oldMousePosition;
 
-			RECT rect;
-			GetWindowRect( hWnd, &rect );
-			int posX = ( rect.left + rect.right )/ 2;
-			int posY = ( rect.top + rect.bottom )/ 2;
+			m_IsMouseMoved = true;
+			oldMousePosition = m_MousePosition;
 
-			POINT pointMouse;
-			GetCursorPos( &pointMouse );
-
-			if( pointMouse.x!=posX || pointMouse.y != posY )
+			if( !m_IsMouseHeldAtCenter )
 			{
-				m_MouseOffset.x = (FLOAT)pointMouse.x - (FLOAT)posX;
-				m_MouseOffset.y = (FLOAT)pointMouse.y - (FLOAT)posY;
+				POINTS mouseWndPosition;
+				mouseWndPosition	= MAKEPOINTS( lParam );
+				m_MousePosition.x	= (float)mouseWndPosition.x;
+				m_MousePosition.y	= (float)mouseWndPosition.y;
+				m_MouseVector		= m_MousePosition - oldMousePosition;
+			}
+			else
+			{
+				// La souris doit être coincée au centre..
 
-				SetCursorPos( posX, posY );
+				int centerX, centerY;
+				POINT mouseAbsPosition;
+				RECT window;
+				
+				GetCursorPos( &mouseAbsPosition );
+				GetWindowRect( hWnd, &window );
+				centerX = ( window.left + window.right ) / 2;
+				centerY = ( window.top + window.bottom ) / 2;
+
+				// Coordonnées de la souris dans l'espace de la fenêtre
+				m_MousePosition.x = (float)mouseAbsPosition.x - window.left;
+				m_MousePosition.y = (float)mouseAbsPosition.y - window.top;
+				
+				if( mouseAbsPosition.x != centerX	||
+					mouseAbsPosition.y != centerY	)
+				{
+					SetCursorPos( centerX, centerY );
+					
+					// Vecteur du déplacement
+					m_MouseVector.x = (float)mouseAbsPosition.x - centerX;
+					m_MouseVector.y = (float)mouseAbsPosition.y - centerY;
+				}
 			}
 			break;
 		}
@@ -202,12 +244,9 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 			}
             break;
 		}
-
-
 	}
 	return S_OK;
 }
-
 
 /***********************************************************
  * Appuie l'item.
@@ -327,18 +366,6 @@ const std::list< InputManager::Item >* InputManager::GetConstList( ItemType type
 		case TYPE_MOUSE:	return &m_MouseButtons;
 	}
 	return NULL;
-}
-
-
-
-Point2f InputManager::GetMouseOffset( void )
-{
-	Point2f toReturn = m_MouseOffset;
-
-	m_MouseOffset.x = 0.f;
-	m_MouseOffset.y = 0.f;
-
-	return toReturn;
 }
 
 int InputManager::GetMouseWheelDelta()

@@ -1,9 +1,6 @@
 #ifndef		_InputManager_H
 #define		_InputManager_H
 
-
-
-
 //Define pour utilisé plus de chose (WM_MOUSEWHEEL entre autre) et en jarté d'autre
 
 #ifndef VC_EXTRALEAN
@@ -73,8 +70,10 @@ public:
 	
 	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
 	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
-	Point2f		GetMouseOffset( void );
 	int			GetMouseWheelDelta( void );
+
+	void		HoldMouseAtCenter	( bool isHeld );
+	void		ShowOSCursor		( bool isShown );
 
 	void		Update				( void );				// Update
 	void		InitMouseWheelDelta( void );
@@ -114,10 +113,11 @@ protected:
 	std::list< Item >	m_Keys;					// Liste des touches
 	std::list< Item >	m_MouseButtons;			// Liste des boutons de souris
 	
-	Point2f				m_MouseOldPosition;		// Ancienne position de la souris
 	Point2f				m_MousePosition;		// Position de la souris
+	Vector2f			m_MouseVector;			// Vecteur déplacement de la souris
+	bool				m_IsMouseMoved;			// Si la souris vient juste de bouger
+	bool				m_IsMouseHeldAtCenter;	// Si la souris est vérouillée au centre
 
-	Point2f				m_MouseOffset;			//...
 	int                 m_nMouseWheelDelta;
 
 	

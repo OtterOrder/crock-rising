@@ -108,12 +108,11 @@ HRESULT Skybox::Init()
 
 }
 
-void Skybox::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
+void Skybox::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
 {
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
 
-	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, world);
 	D3DXMATRIXA16 mView = *view;
     mView._41 =  0.0f;
 	mView._42 = -0.4f; 

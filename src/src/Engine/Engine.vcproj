@@ -504,6 +504,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Material"
+				>
+				<File
+					RelativePath=".\Resources\Material.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Resources\Material.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Game"

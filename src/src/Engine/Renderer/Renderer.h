@@ -1,5 +1,4 @@
-#ifndef		_Renderer_H
-#define		_Renderer_H
+#pragma once
 
 //===========================================================================//
 // Include                                                                   //
@@ -11,6 +10,7 @@
 class SceneObject;
 class Camera;
 class Object2D;
+class Light;
 class Skybox;
 
 //===========================================================================//
@@ -47,6 +47,7 @@ protected:
 	
 	typedef std::list< SceneObject* >::iterator ScObjIt;
 	typedef std::list< Object2D* >::iterator Obj2DIt;
+	typedef std::list< Light* >::iterator LightIt;
 	
 	//===========================================================================//
 	// Données membres protégées				                                 //
@@ -55,9 +56,9 @@ protected:
 	
 	std::list< SceneObject* >	*m_ScObjList; // Liste des objets de scène
 	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
+	std::list< Light* >			*m_LightList; // Liste des lumières
 
 	Camera *m_Camera; // Pointeur sur la camera
 	Skybox *m_Skybox;
 
 };
-#endif

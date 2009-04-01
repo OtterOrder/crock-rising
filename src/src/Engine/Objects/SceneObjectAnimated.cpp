@@ -1,15 +1,18 @@
-#include	"SceneObjectAnimated.h"
-#include	"Resources/ResourceManager.h"
+//===========================================================================//
+// Include                                                                   //
+//===========================================================================//
+#include "SceneObjectAnimated.h"
+#include "Resources/ResourceManager.h"
+#include "Resources/Mesh.h"
+#include "Resources/Texture.h"
+#include "Resources/Shader.h"
+#include "Resources/Anim.h"
+#include "Renderer/Renderer.h"
+#include "Resources/Material.h"
 
-#include	"Resources/Mesh.h"
-#include	"Resources/Shader.h"
-#include	"Resources/Anim.h"
-
-//#define __NB_BONES	25
-//#define	__NB_FRAME	210
-#define __NB_BONES	22
-#define	__NB_FRAME	61
-
+//===========================================================================//
+// Constructeur SceneAnimObject                                              //
+//===========================================================================//
 SceneObjectAnimated::SceneObjectAnimated()
 :SceneObject()
 {
@@ -17,111 +20,246 @@ SceneObjectAnimated::SceneObjectAnimated()
 
 SceneObjectAnimated::SceneObjectAnimated(const std::string& mesh,
 										 const std::string& anim,
-										 const std::string& Tex,
-										 const D3DXVECTOR3& Position,
-										 const std::string shader)
-:SceneObject(mesh, Tex, Position, shader)
+										 const D3DXVECTOR3& Position)
+										 :SceneObject(mesh, Position)
 {
-	m_Anim = anim ;
+	m_strAnim = anim;
 	m_pAnim = NULL;
+	m_strShader="default_skinning.fx";
+	m_CurrentFrame=0;
+	m_bShowBone=false;
+	m_bIsRunning=true;
+	m_fAnimFPS=50.f;
 }
 
-void SceneObjectAnimated::InitObjectAnimation()
+//===========================================================================//
+// Initialisation ressources de l'objet                                      //
+//===========================================================================//
+void SceneObjectAnimated::InitObject()
 {
-	InitObject();
-	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_Anim);
+	m_Instance=Renderer::GetInstance();
 
-	m_AnimMatrices = new D3DXMATRIX[__NB_BONES];
+	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_strAnim);
+	SceneObject::InitObject();
+	m_pMesh->OrderIndices(m_pAnim->m_BoneArrayOrder);
 
-	m_curFrame = 0;
+	if(m_bShowBone)
+		m_pBoneMesh=ResourceManager::GetInstance()->Load<Mesh>("showbone.DAE");
+
+	m_matrices=new D3DXMATRIX[m_pAnim->m_Bones.size()];
+
 }
 
+//===========================================================================//
+// Initialisation données liées au device                                    //
+//===========================================================================//
+void SceneObjectAnimated::InitDeviceData()
+{
+	SceneObject::InitDeviceData();
+	if(m_bShowBone)
+		m_pBoneMesh->FillD3DBuffers();
+}
+
+void SceneObjectAnimated::SetShader(const std::string &strShader)
+{
+	SceneObject::SetShader(strShader);
+}
+
+//===========================================================================//
+// Mise à jour de l'animation   		                                     //
+//===========================================================================//
+void SceneObjectAnimated::UpdateAnimation()
+{
+	int uCurrentFrame=(int)(m_Instance->m_fTime*m_fAnimFPS)%m_pAnim->m_NbFrames;
+	if(uCurrentFrame<0)
+		uCurrentFrame=0;
+	if(uCurrentFrame==m_CurrentFrame)
+		return;
+	m_CurrentFrame=uCurrentFrame;
+
+	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+
+	// Pour chaque bones
+	while( it != m_pAnim->m_Bones.end() )
+	{
+		(*it)->FinalMatrix=(*it)->animationMatrix[uCurrentFrame];
+
+		if((*it)->Parent!=NULL)
+			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
+
+		++it;
+
+	}
+
+}
+
+//===========================================================================//
+// On dessine l'objet					                                     //
+//===========================================================================//
 void SceneObjectAnimated::Draw()
 {
+	// Si il ne faut pas afficher
+	if(!m_bVisible)
+		return;
 
-	m_pDevice->SetVertexDeclaration(m_PtrMesh->m_decl);
+	// Mise à jour animation
+	if(m_bIsRunning)
+		UpdateAnimation();
 
-	m_PtrShader->m_pEffect->SetTechnique( "RenderSceneNoTex" );
+	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
-	D3DXMATRIX skinBindShape;
-	for (int i=0 ; i<4 ; i++)
-			for (int j=0 ; j<4 ; j++)
-				skinBindShape(i,j) = m_pAnim->m_fBindShapeMatrix[i][j];
-
-	if (m_pAnim)
+	// Pour chaque bones
+	while( it != m_pAnim->m_Bones.end() )
 	{
-		m_curFrame ++;
-
-		if (m_curFrame >= __NB_FRAME)
-			m_curFrame = 0;
-
-		for(int m=0 ; m<__NB_BONES ; m++)
-		{
-			for (int i=0 ; i<4 ; i++)
-			{
-				for (int j=0 ; j<4 ; j++)
-					m_AnimMatrices[m](i,j) = m_pAnim->m_fBonesMatrice[m][m_curFrame][i][j];
-			}
-
-			//D3DXMatrixMultiply(&m_AnimMatrices[m], &m_AnimMatrices[m], &skinBindShape);
-			//m_AnimMatrices[m].
-
-			D3DXMATRIX skinBindPoses;
-			for (int i=0 ; i<4 ; i++)
-					for (int j=0 ; j<4 ; j++)
-						skinBindPoses(i,j) = m_pAnim->m_fBindPosesArray[m][i][j];
-
-			//D3DXMatrixInverse(&skinBindPoses, NULL,&skinBindPoses);
-			D3DXMatrixMultiply(&skinBindPoses, &skinBindPoses, &skinBindShape);
-
-			m_AnimMatrices[m] = skinBindPoses;
-			//D3DXMatrixMultiply(&m_AnimMatrices[m], &skinBindPoses, &m_AnimMatrices[m]);
-			//D3DXMatrixMultiply(&m_AnimMatrices[m], &m_AnimMatrices[m], &skinBindPoses);
-		
-			//D3DXMatrixIdentity(&m_AnimMatrices[m]);
-		}
-
-		m_PtrShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_AnimMatrices, __NB_BONES);
+		m_matrices[(*it)->Num]=m_pAnim->m_BindShape*(*it)->invBoneSkinMatrix*(*it)->FinalMatrix*m_WorldMatrix;
+		++it;
 	}
 
-	m_PtrShader->m_pEffect->Begin(0, 0);
+	m_pShader->m_pEffect->SetMatrixArray("g_skinningMatrices", m_matrices, (int)m_pAnim->m_Bones.size());
 
-	m_PtrShader->m_pEffect->BeginPass(0);
+	m_pMaterial->SetGraphicalData();
 
-	if (m_PtrMesh->m_pVB)
+	m_pDevice->SetVertexDeclaration(m_pMesh->m_decl);
+
+	m_pShader->m_pEffect->SetTechnique( "RenderScene" );
+
+	m_pShader->m_pEffect->Begin(0, 0);
+
+	m_pShader->m_pEffect->BeginPass(0);
+
+
+	if (m_pMesh->m_pVB)
 	{
-		m_pDevice->SetStreamSource(0, m_PtrMesh->m_pVB, 0, sizeof(SkinnedVertex));
+		m_pDevice->SetStreamSource(0, m_pMesh->m_pVB, 0, D3DXGetDeclVertexSize(m_pMesh->m_VBdecl, 0));
 
-		m_pDevice->SetIndices ( m_PtrMesh->m_pIB );
+		m_pDevice->SetIndices ( m_pMesh->m_pIB );
 
-		m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_PtrMesh->m_iNbVertices, 0, m_PtrMesh->m_iNbIndex/3); 
+		m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3); 
 	}
 
-	m_PtrShader->m_pEffect->EndPass();
+	m_pShader->m_pEffect->EndPass();
 
-	m_PtrShader->m_pEffect->End();
+	m_pShader->m_pEffect->End();
 
 }
 
-void SceneObjectAnimated::SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj)
+//===========================================================================//
+// Mise à jour matrices de transformation                                    //
+//===========================================================================//
+void SceneObjectAnimated::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
 {
+
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
 	D3DXMATRIX mViewProjection;
-	D3DXMatrixIdentity(&MatWorldView);
-	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, world);
-	D3DXMatrixMultiply(&MatWorldView, &m_WorldMatrix, view);
-	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
+	
+
+	if(m_bShowBone)
+	{
+		//D3DXMatrixIdentity(&m_WorldMatrix);
+		std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+
+		// Pour chaque bones
+		while( it != m_pAnim->m_Bones.end() )
+		{
+
+			// Matrice de départ du bone
+			D3DXMATRIX boneWorld=m_pAnim->m_BindShape*(*it)->FinalMatrix*m_WorldMatrix;
+			D3DXMatrixMultiply(&MatWorldView, &boneWorld, view);
+			D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
+			D3DXMatrixMultiply(&mViewProjection, view, proj);
+
+			m_pShader->m_pEffect->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
+
+			m_pShader->m_pEffect->SetBool("g_bShowBone", true);
+
+			m_pDevice->SetVertexDeclaration(m_pBoneMesh->m_decl);
+
+			m_pShader->m_pEffect->SetTechnique( "RenderScene" );
+
+			m_pShader->m_pEffect->Begin(0, 0);
+
+			m_pShader->m_pEffect->BeginPass(0);
+
+
+			if (m_pBoneMesh->m_pVB)
+			{
+				m_pDevice->SetStreamSource(0, m_pBoneMesh->m_pVB, 0, D3DXGetDeclVertexSize(m_pBoneMesh->m_VBdecl, 0));
+
+				m_pDevice->SetIndices ( m_pBoneMesh->m_pIB );
+
+				m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pBoneMesh->m_iNbVertices, 0, m_pBoneMesh->m_iNbIndex/3); 
+			}
+
+			m_pShader->m_pEffect->EndPass();
+
+
+			m_pShader->m_pEffect->End();
+
+			++it;
+		}
+	}
+
 	D3DXMatrixMultiply(&mViewProjection, view, proj);
-
-	m_PtrShader->m_pEffect->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
-	m_PtrShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
-	m_PtrShader->m_pEffect->SetMatrix( "g_mView", view);
-	D3DXMATRIXA16 mWorldView = (*m_WorldMatrix) * (*view);
-	m_PtrShader->m_pEffect->SetMatrix( "g_mWorldView", &MatWorldView);
-	m_PtrShader->m_pEffect->SetMatrix( "g_mViewProj", &mViewProjection);
-
-	D3DXMATRIX mIndentity;
-	D3DXMatrixIdentity(&mIndentity);
-	m_PtrShader->m_pEffect->SetMatrix( "g_mIdentity", &mIndentity);
+	m_pShader->m_pEffect->SetMatrix( "g_mViewProj", &mViewProjection);
+	m_pShader->m_pEffect->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
 }
+
+void SceneObjectAnimated::SetTransform(const D3DXMATRIX* world)
+{
+	SceneObject::SetTransform(world);
+}
+
+
+void SceneObjectAnimated::DeleteData()
+{
+	SceneObject::DeleteData();
+	ResourceManager::GetInstance()->Remove<Anim>(m_strAnim);
+	if(m_bShowBone)
+		ResourceManager::GetInstance()->Remove<Mesh>("showbone.DAE");
+
+	delete [] m_matrices;
+}
+
+void SceneObjectAnimated::SetVisible(bool value)	{m_bVisible = value;}
+bool SceneObjectAnimated::GetVisible()				{return m_bVisible;}
+
+//===========================================================================//
+// Fonction de contrôle de l'animation                                       //
+//===========================================================================//
+
+void SceneObjectAnimated::StartAnim()
+{
+	m_bIsRunning=true;
+}
+
+void SceneObjectAnimated::PauseAnim()
+{
+	m_bIsRunning=!m_bIsRunning;
+}
+
+void SceneObjectAnimated::StopAnim()
+{
+	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+
+	// Pour chaque bones
+	while( it != m_pAnim->m_Bones.end() )
+	{
+		(*it)->FinalMatrix=(*it)->animationMatrix[0];
+
+		if((*it)->Parent!=NULL)
+			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
+
+		++it;
+
+	}
+	m_bIsRunning=false;
+
+}
+
+void SceneObjectAnimated::SetAnimFPS(float fps)
+{
+	m_fAnimFPS=fps;
+}
+
+

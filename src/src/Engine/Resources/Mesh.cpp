@@ -46,7 +46,7 @@ ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_SVertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Position, m_Rotation, m_Scale, m_Skinned) == RES_SUCCEED)
+	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_SVertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Skinned) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 			return RES_SUCCEED;
@@ -107,9 +107,29 @@ ResourceResult	Mesh::FillD3DBuffers ()
 
 		m_pIB->Unlock();
 
+		UINT numElements;
+		m_decl->GetDeclaration( m_VBdecl, &numElements);
+
 		return RES_SUCCEED;
 	}
 	return RES_FAILED;
+}
+
+void Mesh::OrderIndices(int * ArrayOrder)
+{
+	// On met les indices dans l'ordre hiérarchique
+	if(!m_bOrdered)
+	{
+		for(int i=0; i<m_iNbVertices; i++)
+		{
+			m_SVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.x];
+			m_SVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.y];
+			m_SVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.z];
+			m_SVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.w];
+		}
+		m_bOrdered=true;
+	}
+
 }
 
 void	Mesh::ReleaseD3DBuffers()

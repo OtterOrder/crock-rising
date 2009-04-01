@@ -13,6 +13,7 @@
 #include	"Objects/Object2D/Object2D.h"
 #include	"Objects/Camera.h"
 #include	"Objects/Skybox.h"
+#include	"Objects/Light.h"
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -33,6 +34,7 @@ Renderer::Renderer()
 	// On récupère les listes d'objets
 	m_ScObjList	= &SceneObject::RefList;
 	m_Obj2DList	= &Object2D::RefList;
+	m_LightList	= &Light::RefList;
 }
 
 //===========================================================================//
@@ -75,6 +77,9 @@ HRESULT Renderer::OnCreateDevice()
 		(*obj2d)->InitDxData();
 		++obj2d;
 	}
+
+	// Lumière par défaut : lumière directionnelle
+	Light * DefaultLight=new DirectionalLight();
 	
 	return S_OK;
 
@@ -216,9 +221,9 @@ HRESULT Renderer::Render()
 	{
 
 		#ifdef DEVCAMERA
-		m_Skybox->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
+		m_Skybox->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
 		#else
-		m_Skybox->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		m_Skybox->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
 		#endif
 		m_Skybox->Draw();
 	}
@@ -229,9 +234,9 @@ HRESULT Renderer::Render()
 	while( scobj != m_ScObjList->end() )
 	{
 		#ifdef DEVCAMERA
-		(*scobj)->SetTransform(&MatWorld, m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix());
+		(*scobj)->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix());
 		#else
-		(*scobj)->SetTransform(&MatWorld, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		(*scobj)->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
 		#endif
 		(*scobj)->Draw();
 		++scobj;
@@ -353,14 +358,26 @@ HRESULT Renderer::OnDestroyDevice()
 //===========================================================================//
 HRESULT Renderer::AfterDestroyDevice()
 {
+	// Suppression liste d'objets 3d
 	ScObjIt scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
-		// 9a c'est super foireux, normalement on doit
-		// faire ça dans le destructeur du Level !
-		//delete (*scobj);
+		delete (*scobj);
 		++scobj;
 	}
+
+	m_ScObjList->clear();
+
+	// Suppression liste de lumières
+	LightIt it=m_LightList->begin();
+	while(it != m_LightList->end())
+	{
+		delete (*it);
+		++it;
+	}
+
+	m_LightList->clear();
+
 	return S_OK;
 }
 

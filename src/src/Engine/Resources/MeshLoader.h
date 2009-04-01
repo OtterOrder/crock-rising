@@ -61,10 +61,6 @@ class MeshLoader
 				m_iNbNormals,
 				m_iNbTexCoords;
 
-	float		m_OffsetPosition[3];
-	float		m_OffsetRotation[4];
-	float		m_OffsetScale[3];
-
 	bool		m_Skinned;
 	int			m_iNbWeights;
 	float**		m_Weights;
@@ -80,9 +76,7 @@ public:
 	MeshLoader(void);
 	virtual	~MeshLoader(void);
 
-	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, 
-												 D3DXVECTOR3 &Position, D3DXVECTOR4 &Rotation, D3DXVECTOR3 &Scale,
-												 bool& bSkinned);
+	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, bool& bSkinned);
 	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
 	ResourceResult	ExtractArrayDatas			(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements);	// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte

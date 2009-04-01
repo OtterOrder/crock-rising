@@ -1,7 +1,8 @@
 
 
+
 //===========================================================================//
-// Variables globales                                                        //
+// Variables uniformes                                                       //
 //===========================================================================//
 float4x4 g_mWorld;                  // World matrix
 float4x4 g_mWorldViewProjection;    // World * View * Projection matrix
@@ -9,16 +10,19 @@ matrix	 g_mWorldView;				// World * View matrix
 matrix	 g_mView;					// View matrix
 
 texture g_MeshTexture;              // Texture du mesh
+    
+float4 g_ObjectAmbient;				// Propriétés de l'objet
+float4 g_ObjectDiffuse;
+float4 g_ObjectSpecular;
+bool   g_UseTex=false;
+float  g_Glossiness;
 
-float4 g_MaterialAmbientColor=float4(0.5f, 0.5f, 0.5f, 1.0f);      
-float4 g_MaterialDiffuseColor=float4(0.6f, 0.6f, 0.6f, 1.0f);  
-float4 g_LightDiffuse=float4(0.5f, 0.5f, 0.5f, 1.0f);
-float3 g_LightDir=float3(0.0f, 0.0f, 0.0f);
-float4 g_LightAmbient=float4(0.8f, 0.8f, 0.7f, 1.0f);
-float4 g_MaterialSpecularColor=float4(0.5f, 0.5f, 0.5f, 1.0f);
-float  g_MaterialSpecularPower=8.0f;
+int	   g_NumLights=1;				// Propriétés des lumières
+int	   g_LightsType[4];				   
+float3 m_LightsPosition[4]; 
+float4 g_LightsColor[4]; 
+float4 g_LightsSpecular[4]; 
 
-float3 g_vLightPos=float3(20.0f, 100.0f, 0.0f );
 float3 g_vCamPos;
 
 //===========================================================================//
@@ -40,7 +44,7 @@ sampler_state
 //===========================================================================//
 struct VS_OUTPUT
 {
-    float4 Position   : POSITION;   // vertex position 
+    float4 Position   : POSITION;   // vertex position
     float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
     float3 Normal	  : TEXCOORD1;
     float4 oPosition  : TEXCOORD2;
@@ -55,15 +59,11 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
 {
     VS_OUTPUT Output;
     
-   /* Output.Position = mul(vPos, g_mWorldViewProjection);
-    Output.oPosition = Output.Position;
-    Output.Normal = (mul( vNormal, g_mWorldView ));*/
-    
     Output.Position = mul(vPos, g_mWorldViewProjection);
     Output.oPosition = mul(vPos, g_mWorld);
     Output.Normal = mul( vNormal, g_mWorld);
     
-    Output.TextureUV = vTexCoord0; 
+    Output.TextureUV = vTexCoord0;
     
     return Output;    
 }
@@ -84,73 +84,28 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 { 
     PS_OUTPUT Output;
     
-    float3 pos=In.oPosition.xyz;
+    float3 pos=In.oPosition.xyz/In.oPosition.w;
   
-	float3 L=normalize(g_vLightPos.xyz-pos);
-	float3 V=normalize(g_vCamPos-pos);
-	float3 H=normalize(L+V);
-	float3 N=normalize(In.Normal.xyz);
-	
-	float4 lumiere=lit(dot(N, L),dot(N, H), 30);
-  
-    float4 FinalIllumination=g_MaterialAmbientColor*lumiere.x+g_MaterialDiffuseColor*lumiere.y;
-    Output.RGBColor =tex2D(MeshTextureSampler, In.TextureUV.xy)*FinalIllumination; 
-    
-  /* float4 lightInView= mul( g_vLightPos, g_mView);
-    
-    // Vecteurs utiles pour calculer la lumière
-    float3 L = normalize(lightInView.xyz-In.oPosition);
-    float3 N = normalize(In.Normal);
-    float3 V = normalize(g_vCamPos-In.oPosition);
-    float3 H = normalize(L+V);
-	
-	float specularTerm =  pow(max(0.0f, dot(N, H)), g_MaterialSpecularPower );
-	
-	//Réflexion diffuse
-	float3 vLightDiffuse=g_LightDiffuse * max(0,dot(N, L));
-	
-	//Réflexion spéculaire
-	float4 SpecResult=saturate(g_MaterialSpecularColor*specularTerm);
-    
-    //Couleur finale (ambient+diffuse+specular)
-    float4 FinalIllumination = SpecResult+g_MaterialDiffuseColor*float4(vLightDiffuse, 1.0f)+g_MaterialAmbientColor*g_LightAmbient;
-    Output.RGBColor.xyz = tex2D(MeshTextureSampler, In.TextureUV.xy)* FinalIllumination; 
-    Output.RGBColor.a = 1.0f; */
+	for(int i=0; i<1; i++)
+	{
+		float3 L=normalize(m_LightsPosition[i]-pos);
+		float3 dist = length(L);
 
-    return Output;
+		float3 V=normalize(g_vCamPos-pos);
+		float3 H=normalize(L+V);
+		float3 N=normalize(In.Normal.xyz);
+		
+		float4 lumiere=lit(dot(N, L),dot(N, H), g_Glossiness);
+		float att = 1.0 / (0.5f + 0.5f * dist + 0.5f * dist * dist);
+		
+		if(g_UseTex)
+			Output.RGBColor.xyz = att*(g_ObjectAmbient*g_LightsColor[i]+tex2D(MeshTextureSampler, In.TextureUV.xy)*lumiere.y+g_ObjectSpecular*lumiere.z);
+		else
+			Output.RGBColor.xyz = att*(g_ObjectAmbient*lumiere.x+g_ObjectDiffuse*lumiere.y+g_ObjectSpecular*lumiere.z);
+	}
+
+	return Output;
 }
-
-//===========================================================================//
-// Illumination phong pixel shader                                           //
-//===========================================================================//
-PS_OUTPUT RenderScenePSNoTex( VS_OUTPUT In ) 
-{ 
-    PS_OUTPUT Output;
-    
-    float4 lightInView= mul( g_vLightPos, g_mView);
-    
-    // Vecteurs utiles pour calculer la lumière
-    float3 L = normalize(lightInView.xyz-In.oPosition);
-    float3 N = normalize(In.Normal);
-    float3 V = normalize(g_vCamPos-In.oPosition);
-    float3 H = normalize(L+V);
-    
-    float specularTerm =  pow(max(0.0f, dot(N, H)), g_MaterialSpecularPower );
-	
-	//Réflexion diffuse
-	float3 vLightDiffuse=g_LightDiffuse * max(0,dot(N, L));
-	
-	//Réflexion spéculaire
-	float4 SpecResult=saturate(g_MaterialSpecularColor*specularTerm);
-    
-    //Couleur finale (ambient+diffuse+specular)
-    float4 FinalIllumination = /*SpecResult+*/g_MaterialDiffuseColor*float4(vLightDiffuse, 1.0f)+g_MaterialAmbientColor*g_LightAmbient;
-    Output.RGBColor.xyz = FinalIllumination; 
-    Output.RGBColor.a = 1.0f; 
-
-    return Output;
-}
-
 
 //===========================================================================//
 // Techniques					                                             //
@@ -160,17 +115,7 @@ technique RenderScene
 {
     pass P0
     {          
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader  = compile ps_2_0 RenderScenePS();
+        VertexShader = compile vs_3_0 RenderSceneVS();
+        PixelShader  = compile ps_3_0 RenderScenePS();
     }
 }
-
-technique RenderSceneNoTex
-{
-    pass P0
-    {          
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader  = compile ps_2_0 RenderScenePSNoTex();
-    }
-}
-

@@ -1,10 +1,14 @@
 #include	"LevelAlafraise.h"
 
+#include	<Core/Inputs/InputManager.h>
+#include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Objects/Object2D/Sprite.h>
 
 //******************************************************************
+
+#define		LEVEL_mainmenu			0x56b55f63
 
 /***********************************************************
  * Constructeur.
@@ -53,6 +57,13 @@ void LevelAlafraise::Init( void )
  **********************************************************/
 void LevelAlafraise::Update( void )
 {
+	if( InputManager::GetInstance()->IsKeyReleased( VK_SPACE ) )
+	{
+		// On passe au level suivant dès qu'on appuie sur Espace..
+		Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
+		return;
+	}
+	
 	int logoX, logoY;
 	Renderer *pRenderer = Renderer::GetInstance();
 	
@@ -61,6 +72,4 @@ void LevelAlafraise::Update( void )
 	logoX = pRenderer->GetWindowWidth()/2 - m_pLogo->GetWidth()/2;
 	logoY = pRenderer->GetWindowHeight()/2 - m_pLogo->GetHeight()/2;
 	m_pLogo->SetPosition( (float)logoX, (float)logoY );
-	
-	//TODO: passer au level suivant au bout d'un moment..
 }

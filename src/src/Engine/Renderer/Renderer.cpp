@@ -251,6 +251,9 @@ HRESULT Renderer::Render()
 	obj2d		= m_Obj2DList->begin();
 	lastObj2d	= m_Obj2DList->end();
 
+	// Tri par priorité croissante.. /!\ A optimiser si besoin
+	m_Obj2DList->sort( Object2D::ComparePriority );
+
 	// Filtre texture pour la 2D
 	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
 	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );

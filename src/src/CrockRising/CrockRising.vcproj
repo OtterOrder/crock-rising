@@ -174,14 +174,6 @@
 			Name="Levels"
 			>
 			<File
-				RelativePath=".\Levels\LevelStart.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Levels\LevelStart.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Levels\NewLevel.cpp"
 				>
 			</File>
@@ -194,6 +186,30 @@
 				</File>
 				<File
 					RelativePath=".\Levels\LevelAlafraise.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Menus"
+				>
+				<File
+					RelativePath=".\Levels\LevelMainMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelMainMenu.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Games"
+				>
+				<File
+					RelativePath=".\Levels\LevelStart.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelStart.h"
 					>
 				</File>
 			</Filter>

@@ -275,6 +275,31 @@ float Object2D::GetRotation() const
 }
 
 //**********************************************************
+// Update tous les objets 2D.
+//**********************************************************
+void Object2D::UpdateAll()
+{
+	list< Object2D* >::iterator it = RefList.begin();
+	
+	while( it != RefList.end() )
+	{
+		(*it)->Update();
+		++it;
+	}
+}
+
+//**********************************************************
+// Compare les priorités des objets. Permet de trier les
+// objets par ordre de priorité croissante (pour l'affichage).
+//**********************************************************
+bool Object2D::ComparePriority( const Object2D *o1, const Object2D *o2 )
+{
+	// o1 est avant o2 si sa priorité est plus faible, la
+	// priorité la plus faible étant 255, la plus forte 0.
+	return o1->m_Priority > o2->m_Priority;
+}
+
+//**********************************************************
 // Calcule la matrice de l'objet dans le repère world.
 // @param[out]	matrix : matrice world de l'objet
 //**********************************************************

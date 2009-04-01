@@ -110,9 +110,9 @@ struct BoundingDescription
 ////////////////////////////////////////////////////////////////////////////
 // Structure material comprenant toutes les valeurs utiles de NxMaterials //
 ////////////////////////////////////////////////////////////////////////////
-struct Material
+struct MaterialPhysics
 {
-	Material(float aRestitution = 0.5,
+	MaterialPhysics(float aRestitution = 0.5,
 		     float aStaticFriction = 0.5,
 			 float aDynamicFriction = 0.5)
 	{
@@ -120,13 +120,13 @@ struct Material
 		StaticFriction = aStaticFriction;
 		DynamicFriction = aDynamicFriction;
 	}
-	~Material(){}
+	~MaterialPhysics(){}
 
 	float Restitution;
 	float StaticFriction;
 	float DynamicFriction;
 
-	Material& operator =(const Material& m)
+	MaterialPhysics& operator =(const MaterialPhysics& m)
 	{
 		Restitution = m.Restitution;
 		StaticFriction = m.StaticFriction;
@@ -142,19 +142,19 @@ struct Material
 class BoundingBox
 {
 	bool			m_bDebugMode; //Si vrai, les bounding box se dessinent pour debugger.
-	Material		m_Mat; 
+	MaterialPhysics		m_Mat; 
 	int				m_iEmplacement;
 	//What else? Groupe de collision?
-	BoundingBox BoundingBoxInit(BoundingDescription *Desc, ShapeType Type = BOX, Material Mat = Material());
+	BoundingBox BoundingBoxInit(BoundingDescription *Desc, ShapeType Type = BOX, MaterialPhysics Mat = MaterialPhysics());
 
 public:
 	//Constructeur par défaut
 	BoundingBox(){}
 	//Constructeurs spécifiques, simplifiées
-	BoundingBox(Vector3f adimension			, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //BOX
-	BoundingBox(float aradius				, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //SPHERE
-	BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), Material aMat = Material()); //CAPS
-	BoundingBox(Vector2f asurface			, float Hauteur,																		 Material aMat = Material()); //SOL
+	BoundingBox(Vector3f adimension			, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), MaterialPhysics aMat = MaterialPhysics()); //BOX
+	BoundingBox(float aradius				, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), MaterialPhysics aMat = MaterialPhysics()); //SPHERE
+	BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity = Vector3f(0.f, 0.f, 0.f), MaterialPhysics aMat = MaterialPhysics()); //CAPS
+	BoundingBox(Vector2f asurface			, float Hauteur,																		 MaterialPhysics aMat = MaterialPhysics()); //SOL
 	BoundingBox& operator =(const BoundingBox& bb);
 
 	~BoundingBox(){}
@@ -162,11 +162,11 @@ public:
 	bool IsInCollision(const BoundingBox &po);
 
 	bool getDebugMode	() const { return m_bDebugMode; }
-	Material getMat		() const { return m_Mat; }
+	MaterialPhysics getMat		() const { return m_Mat; }
 	int getEmplacement	() const { return m_iEmplacement; }
 
 	void setDebugMode	(bool DebugMode) { m_bDebugMode = DebugMode; }
-	void setMat			(Material Mat)	 { m_Mat = Mat; }
+	void setMat			(MaterialPhysics Mat)	 { m_Mat = Mat; }
 	void setEmplacement	(int Emp)		 { m_iEmplacement = Emp; }
 };
 

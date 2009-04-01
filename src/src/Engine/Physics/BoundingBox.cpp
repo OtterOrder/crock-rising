@@ -9,7 +9,7 @@ bool BoundingBox::IsInCollision(const BoundingBox &po)
 }
 
 
-BoundingBox BoundingBox::BoundingBoxInit(BoundingDescription *Desc, ShapeType Type, Material Mat)
+BoundingBox BoundingBox::BoundingBoxInit(BoundingDescription *Desc, ShapeType Type, MaterialPhysics Mat)
 { 
 	m_bDebugMode = true;
 
@@ -102,7 +102,7 @@ BoundingBox BoundingBox::BoundingBoxInit(BoundingDescription *Desc, ShapeType Ty
 
 //////////////////////////////////////////////////////////////////////////
 //BOX
-BoundingBox::BoundingBox(Vector3f adimension, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, Material aMat)
+BoundingBox::BoundingBox(Vector3f adimension, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, MaterialPhysics aMat)
 {
 	BoundingDescription bd(adimension, aglobalpos, adenstity);
 	bd.initialvelocity = InitVelocity;
@@ -111,7 +111,7 @@ BoundingBox::BoundingBox(Vector3f adimension, Vector3f aglobalpos, float adensti
 
 //////////////////////////////////////////////////////////////////////////
 //SPHERE
-BoundingBox::BoundingBox(float aradius, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, Material aMat)
+BoundingBox::BoundingBox(float aradius, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, MaterialPhysics aMat)
 {
 	BoundingDescription sd(aradius, aglobalpos, adenstity);
 	sd.initialvelocity = InitVelocity;
@@ -120,7 +120,7 @@ BoundingBox::BoundingBox(float aradius, Vector3f aglobalpos, float adenstity, Ve
 
 //////////////////////////////////////////////////////////////////////////
 //CAPS
-BoundingBox::BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, Material aMat)
+BoundingBox::BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, MaterialPhysics aMat)
 {
 	BoundingDescription cd(aradius, aheight, aglobalpos, adenstity);
 	cd.initialvelocity = InitVelocity;
@@ -129,7 +129,7 @@ BoundingBox::BoundingBox(float aradius, float aheight, Vector3f aglobalpos, floa
 
 //////////////////////////////////////////////////////////////////////////
 //SOL
-BoundingBox::BoundingBox(Vector2f asurface, float Hauteur, Material aMat)
+BoundingBox::BoundingBox(Vector2f asurface, float Hauteur, MaterialPhysics aMat)
 {
 	BoundingDescription gd(asurface, Vector3f(0.f, Hauteur, 0.f));
 	*this = BoundingBoxInit(&gd, PLAN, aMat);

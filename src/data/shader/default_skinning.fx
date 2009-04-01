@@ -138,6 +138,7 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 	else
 		Output.RGBColor.xyz = g_ObjectAmbient*lumiere.x+g_ObjectDiffuse*lumiere.y+g_ObjectSpecular*lumiere.z;
 
+	Output.RGBColor.w=1.f;
 	return Output;
 }
 

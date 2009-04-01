@@ -29,7 +29,7 @@ SceneObjectAnimated::SceneObjectAnimated(const std::string& mesh,
 	m_CurrentFrame=0;
 	m_bShowBone=false;
 	m_bIsRunning=true;
-	m_fAnimFPS=50.f;
+	m_fAnimFPS=30.f;
 }
 
 //===========================================================================//
@@ -88,7 +88,6 @@ void SceneObjectAnimated::UpdateAnimation()
 			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
 
 		++it;
-
 	}
 
 }

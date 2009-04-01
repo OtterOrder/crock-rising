@@ -2,7 +2,7 @@
 // Include                                                                   //
 //===========================================================================//
 #define		NOMINMAX
-//#define		DEVCAMERA
+#define		DEVCAMERA
 
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"
@@ -238,7 +238,7 @@ HRESULT Renderer::Render()
 	while( scobj != m_ScObjList->end() )
 	{
 		#ifdef DEVCAMERA
-		(*scobj)->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix());
+		(*scobj)->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
 		#else
 		(*scobj)->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
 		#endif

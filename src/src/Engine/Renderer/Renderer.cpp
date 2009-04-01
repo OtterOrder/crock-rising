@@ -7,13 +7,16 @@
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"
 
-
 #include	"Core/Inputs/InputManager.h"
 #include	"Objects/SceneObject.h"
 #include	"Objects/Object2D/Object2D.h"
 #include	"Objects/Camera.h"
 #include	"Objects/Skybox.h"
 #include	"Objects/Light.h"
+
+//===========================================================================//
+
+#define		DEFAULT_CLEAR_COLOR		(Color4f(0.2f,0.23f,0.75f,1.f))
 
 //===========================================================================//
 // FVF par défaut                                                            //
@@ -27,9 +30,10 @@ struct DEFAULT_VERTEX
 
 Renderer::Renderer()
 {
-	m_pGridVB	= NULL;
-	m_Camera	= NULL;
-	m_Skybox	= NULL;
+	m_pGridVB		= NULL;
+	m_Camera		= NULL;
+	m_Skybox		= NULL;
+	m_ClearColor	= DEFAULT_CLEAR_COLOR;
 
 	// On récupère les listes d'objets
 	m_ScObjList	= &SceneObject::RefList;
@@ -205,7 +209,7 @@ HRESULT Renderer::Render()
 	ScObjIt scobj;
 	Obj2DIt obj2d, lastObj2d;
 	
-	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 45, 50, 170), 1.0f, 0);
+	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( m_ClearColor ), 1.0f, 0);
 
 	m_pd3dDevice->SetVertexShader(NULL);
 	m_pd3dDevice->SetPixelShader(NULL);
@@ -247,6 +251,10 @@ HRESULT Renderer::Render()
 	obj2d		= m_Obj2DList->begin();
 	lastObj2d	= m_Obj2DList->end();
 
+	// Filtre texture pour la 2D
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );
+
 	while( obj2d != lastObj2d )
 	{
 		if( !(*obj2d)->IsHidden() )
@@ -255,6 +263,9 @@ HRESULT Renderer::Render()
 		}
 		++obj2d;
 	}
+
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_NONE );
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_NONE );
 	
 	//-- ?
 	
@@ -391,4 +402,36 @@ void Renderer::SetSkybox(Skybox *skybox)
 {
 	m_Skybox = skybox;
 
+}
+
+//**********************************************************
+// Largeur de la fenêtre en pixels.
+//**********************************************************
+int Renderer::GetWindowWidth() const
+{
+	return (int)m_d3dsdBackBuffer.Width;
+}
+
+//**********************************************************
+// Hauteur de la fenêtre en pixels..
+//**********************************************************
+int Renderer::GetWindowHeight() const
+{
+	return (int)m_d3dsdBackBuffer.Height;
+}
+
+//**********************************************************
+// Change la couleur de fond.
+//**********************************************************
+void Renderer::SetClearColor( const Color4f &color )
+{
+	m_ClearColor = color;
+}
+
+//**********************************************************
+// Donne la couleur de fond.
+//**********************************************************
+Color4f Renderer::GetClearColor() const
+{
+	return m_ClearColor;
 }

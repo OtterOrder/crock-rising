@@ -5,6 +5,7 @@
 //******************************************************************
 
 #define		LEVEL_start				0x9f79558f
+#define		LEVEL_alafraise			0xa77df32f
 
 //******************************************************************
 
@@ -28,7 +29,7 @@ int WINAPI WinMain(
 	System::GetInstance();
 	
 	// On indique le niveau de démarrage
-	Game::GetInstance()->ChangeLevel( LEVEL_start );
+	Game::GetInstance()->ChangeLevel( LEVEL_alafraise );
 
 	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();

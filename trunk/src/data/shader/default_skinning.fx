@@ -11,21 +11,24 @@ matrix	 g_mViewProj;				// View * Projection matrix
 
 texture g_MeshTexture;              // Texture du mesh
 
-float4 g_MaterialAmbientColor=float4(0.5f, 0.5f, 0.5f, 1.0f);      
-float4 g_MaterialDiffuseColor=float4(0.6f, 0.6f, 0.6f, 1.0f);  
-float4 g_LightDiffuse=float4(0.5f, 0.5f, 0.5f, 1.0f);
-float3 g_LightDir=float3(0.0f, 0.0f, 0.0f);
-float4 g_LightAmbient=float4(0.8f, 0.8f, 0.7f, 1.0f);
-float4 g_MaterialSpecularColor=float4(0.5f, 0.5f, 0.5f, 1.0f);
-float  g_MaterialSpecularPower=8.0f;
+float4 g_ObjectAmbient;				// Propriétés de l'objet
+float4 g_ObjectDiffuse;
+float4 g_ObjectSpecular;
+bool   g_UseTex=false;
+float  g_Glossiness;
 
-float3 g_vLightPos=float3(0.0f, 50.0f, 0.0f );
+int	   g_NumLights=1;				// Propriétés des lumières
+int	   g_LightsType[4];				   
+float3 m_LightsPosition[4]; 
+float4 g_LightsColor[4]; 
+float4 g_LightsSpecular[4]; 
+
 float3 g_vCamPos;
 
-static const int MAX_MATRICES = 30;
+static const int MAX_MATRICES = 50;
 float4x4	g_skinningMatrices[MAX_MATRICES];
-
-float4x4	g_mIdentity;
+bool		g_bShowBone=false;
+bool		g_bTex=false;
 
 
 //===========================================================================//
@@ -51,7 +54,6 @@ struct VS_OUTPUT
     float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
     float3 Normal	  : TEXCOORD1;
     float4 oPosition  : TEXCOORD2;
-    float4 Test		  : TEXCOORD3;	//// TEMP
 };
 
 //===========================================================================//
@@ -68,32 +70,33 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     // Calculate skinning transformations
     float3 skinnedPos  = (0.f).xxx;
     float3 skinnedNorm = (0.f).xxx;
+    
+    if(!g_bShowBone)
+    {
 	
-	vWeights.w = 1.f - (vWeights.x + vWeights.y + vWeights.z);
-	
-	int id = 0;
-	//Output.Test = float4(vWeights.xyz, 1.f);
-	//Output.Test = ((int)vIndices[id] == 0)? float4(1.f, 0.f, 0.f, 1.f) : float4(0.f, 0.f, 0.f, 1.f);
-	Output.Test = ((int)vIndices[id] >= 25)? float4(1.f, 0.f, 0.f, 1.f) : ((int)vIndices[id] < 0)? float4(0.f, 0.f, 1.f, 1.f) : float4(0.f, 1.f, 0.f, 1.f);
-	
-	float4x4	skinningTransform  = g_skinningMatrices[0] ;//* vWeights[0];
-/*
-				skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
-				skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
-				skinningTransform += g_skinningMatrices[(int)vIndices[3]] * vWeights[3];
-//*/
-	
-	//skinningTransform = g_mIdentity;
+		vWeights.w = 1.f - (vWeights.x + vWeights.y + vWeights.z);
+				
+		float4x4 skinningTransform = g_skinningMatrices[(int)vIndices[0]] * vWeights[0];
+		skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
+		skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
+		skinningTransform += g_skinningMatrices[(int)vIndices[3]] * vWeights[3];
 
-	//vPos = mul (vPos, g_mWorld);
-	//vPos = mul (vPos, skinningTransform);
-	
-	float4x4 localWorld = mul(g_mWorld, skinningTransform);
-	vPos = mul(localWorld, vPos);
-	
-	Output.Position = mul(vPos, g_mViewProj);
-    Output.oPosition = Output.Position;
-    Output.Normal = (mul( vNormal, g_mWorldView ));
+		//vPos = mul (vPos, g_mWorld);
+		//vPos = mul (vPos, skinningTransform);
+		
+		vPos = mul(float4(vPos.xyz, 1.0f), skinningTransform);
+		Output.Normal = mul( vNormal, skinningTransform);
+		Output.Position =  mul(vPos, g_mViewProj);
+		
+		Output.oPosition = Output.Position;
+    
+    }
+    else
+    {
+		Output.Position = mul(vPos, g_mWorldViewProjection);
+		Output.Normal = vNormal;
+    }
+    
     
     Output.TextureUV = vTexCoord0;
     
@@ -116,67 +119,27 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 { 
     PS_OUTPUT Output;
     
-    float4 lightInView= mul( g_vLightPos, g_mView);
-    
-    // Vecteurs utiles pour calculer la lumière
-    float3 L = normalize(lightInView.xyz-In.oPosition);
-    float3 N = normalize(In.Normal);
-    float3 V = normalize(g_vCamPos-In.oPosition);
-    float3 H = normalize(L+V);
-	
-	float specularTerm =  pow(max(0.0f, dot(N, H)), g_MaterialSpecularPower );
-	
-	//Réflexion diffuse
-	float3 vLightDiffuse=g_LightDiffuse * max(0,dot(N, L));
-	
-	//Réflexion spéculaire
-	float4 SpecResult=saturate(g_MaterialSpecularColor*specularTerm);
-    
-    //Couleur finale (ambient+diffuse+specular)
-    float4 FinalIllumination = SpecResult+g_MaterialDiffuseColor*float4(vLightDiffuse, 1.0f)+g_MaterialAmbientColor*g_LightAmbient;
-    Output.RGBColor.xyz = tex2D(MeshTextureSampler, In.TextureUV.xy)* FinalIllumination; 
-    Output.RGBColor.a = 1.0f;
-    
-    //Output.RGBColor = In.Weights;
-    //Output.RGBColor.a = 1.0f;
+    float3 pos=In.oPosition.xyz/In.oPosition.w;
+  
+	int i=0;
 
-    return Output;
+	float3 L=normalize(m_LightsPosition[i]-pos);
+	float3 dist = length(L);
+
+	float3 V=normalize(g_vCamPos-pos);
+	float3 H=normalize(L+V);
+	float3 N=normalize(In.Normal.xyz);
+	
+	float4 lumiere=lit(dot(N, L),dot(N, H), g_Glossiness);
+	float att = 1.0 / (1.f + 0.3f * dist + 0.3f * dist * dist);;
+	
+	if(g_UseTex)
+		Output.RGBColor.xyz = att*(g_ObjectAmbient*g_LightsColor[i]+tex2D(MeshTextureSampler, In.TextureUV.xy)*lumiere.y+g_ObjectSpecular*lumiere.z);
+	else
+		Output.RGBColor.xyz = g_ObjectAmbient*lumiere.x+g_ObjectDiffuse*lumiere.y+g_ObjectSpecular*lumiere.z;
+
+	return Output;
 }
-
-//===========================================================================//
-// Illumination phong pixel shader                                           //
-//===========================================================================//
-PS_OUTPUT RenderScenePSNoTex( VS_OUTPUT In ) 
-{ 
-    PS_OUTPUT Output;
-    
-    float4 lightInView= mul( g_vLightPos, g_mView);
-    
-    // Vecteurs utiles pour calculer la lumière
-    float3 L = normalize(lightInView.xyz-In.oPosition);
-    float3 N = normalize(In.Normal);
-    float3 V = normalize(g_vCamPos-In.oPosition);
-    float3 H = normalize(L+V);
-    
-    float specularTerm =  pow(max(0.0f, dot(N, H)), g_MaterialSpecularPower );
-	
-	//Réflexion diffuse
-	float3 vLightDiffuse=g_LightDiffuse * max(0,dot(N, L));
-	
-	//Réflexion spéculaire
-	float4 SpecResult=saturate(g_MaterialSpecularColor*specularTerm);
-    
-    //Couleur finale (ambient+diffuse+specular)
-    float4 FinalIllumination = /*SpecResult+*/g_MaterialDiffuseColor*float4(vLightDiffuse, 1.0f)+g_MaterialAmbientColor*g_LightAmbient;
-    Output.RGBColor.xyz = FinalIllumination; 
-    Output.RGBColor.a = 1.0f;
-    
-    Output.RGBColor += In.Test;
-    Output.RGBColor.a = 1.0f;
-
-    return Output;
-}
-
 
 //===========================================================================//
 // Techniques					                                             //
@@ -190,13 +153,3 @@ technique RenderScene
         PixelShader  = compile ps_3_0 RenderScenePS();
     }
 }
-
-technique RenderSceneNoTex
-{
-    pass P0
-    {          
-        VertexShader = compile vs_3_0 RenderSceneVS();
-        PixelShader  = compile ps_3_0 RenderScenePSNoTex();
-    }
-}
-

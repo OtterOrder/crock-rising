@@ -11,7 +11,7 @@ public:
 	~Skybox();
 
 	HRESULT Init();
-	void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
+	void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	HRESULT Draw();
 	HRESULT LostDevice();
 

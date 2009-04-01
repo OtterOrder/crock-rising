@@ -22,13 +22,13 @@ public:
 
 	ResourceResult Load( std::string resource, ResourceParam param );
 
-	LPDIRECT3DVERTEXBUFFER9	m_pVB;			// Vertex Buffer de la ressource
-	LPDIRECT3DINDEXBUFFER9	m_pIB;			// Index Buffer de la ressource
+	LPDIRECT3DVERTEXBUFFER9			m_pVB;			// Vertex Buffer de la ressource
+	LPDIRECT3DINDEXBUFFER9			m_pIB;			// Index Buffer de la ressource
+	IDirect3DVertexDeclaration9*	m_decl;			// Vertex declaration de la ressource
+	D3DVERTEXELEMENT9				m_VBdecl[MAXD3DDECLLENGTH];
 
 	int		m_iNbVertices;
 	int		m_iNbIndex;
-
-	IDirect3DVertexDeclaration9*	m_decl;			// Vertex declaration de la ressource
 
 	D3DXVECTOR3					m_Position;			// Position de départ
 	D3DXVECTOR4					m_Rotation;			// Rotation de départ
@@ -36,6 +36,7 @@ public:
 
 	ResourceResult			FillD3DBuffers ();
 	void					ReleaseD3DBuffers();
+	void					OrderIndices(int * ArrayOrder);
 
 
 
@@ -43,6 +44,7 @@ public:
 	Vertex			*m_VertexBuffer;					// Tableau de vertex
 	SkinnedVertex	*m_SVertexBuffer;					// Tableau de vertex skinnés
 	int				*m_IndexBuffer;						// Tableau d'indexation des faces
+	bool			m_bOrdered;							// Pour savoir si l'index buffer a été trié
 };
 
 //******************************************************************

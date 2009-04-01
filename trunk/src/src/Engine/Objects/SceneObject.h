@@ -1,5 +1,4 @@
-#ifndef _SCENEOBJECT_H
-#define _SCENEOBJECT_H
+#pragma once
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
@@ -16,6 +15,7 @@
 class Texture;
 class Shader;
 class Mesh;
+class Materials;
 class BoundingBox;
 typedef std::list< int > TEmpList;
 
@@ -30,18 +30,22 @@ public:
 	static std::list< SceneObject* > RefList;
 
 	// Constructeurs & destructeur
-	SceneObject(const std::string& mesh,
-				const std::string& Tex,
-				const D3DXVECTOR3& Position,
-				const std::string shader);
+	SceneObject(const std::string& mesh, const D3DXVECTOR3& Position);
 	SceneObject();
 	virtual ~SceneObject();
 
 	//===========================================================================//
 	// Gestion apparence des objets											     //
 	//===========================================================================//
-	void	SetTexture(const std::string& Tex, TextureType Type);	// Ajout d'une texture
-	void	SetShader(const std::string& Shad); 
+	void				SetMaterial(Materials * mat);
+	Materials*			GetMaterial() {return m_pMaterial;}
+	void				SetShader(const std::string& strShader);
+
+	//===========================================================================//
+	// Visibilité de l'objet													 //
+	//===========================================================================//
+	virtual void	SetVisible(bool value);
+	virtual bool	GetVisible();
 
 public:
 
@@ -50,43 +54,35 @@ public:
 	//===========================================================================//
 	void	InitObject();
 	//void	Update();
-	virtual void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj);
-	virtual void	SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
+	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj);
+	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
-	void	InitDeviceData();
+	virtual void	ApplyTransform(const D3DXMATRIX* world) {m_WorldMatrix = *world;}
+	virtual void	InitDeviceData();
 	void	FrameMove(float fElapsedTime);
 	virtual void	Draw();
-	void	DeleteDeviceData();
-	void	DeleteData();
+	virtual void	DeleteDeviceData();
+	virtual void	DeleteData();
 	
 	TEmpList* getEmpList(){ return m_EmpList; }
 	void setEmpList(TEmpList* L){ m_EmpList = L; }
 
+
 protected:
-
-	//===========================================================================//
-	// Types												                     //
-	//===========================================================================//
-	typedef std::map<TextureType, Texture*> TTextureMap;
-
 	//===========================================================================//
 	// Données membres												             //
 	//===========================================================================//
-	std::string			m_Mesh;
-	std::string			m_Tex;
-	std::string			m_Shader;
-	TTextureMap			m_MapTexture;
+	D3DXVECTOR3						m_Offset;
+	std::string						m_strMesh;
+	std::string						m_strTex;
+	std::string						m_strShader;
+	Materials*						m_pMaterial;	// Matériau de l'objet
+	Mesh*							m_pMesh;		// Mesh de l'objet
+	Shader*							m_pShader;		// Shader de l'objet
+	bool							m_bVisible;		// Visibilité de l'objet
+	TEmpList*						m_EmpList;
 
 	
-	Shader*				m_PtrShader;
-	D3DXVECTOR3			m_Offset;
-
-	Mesh*				m_PtrMesh;
-	TEmpList*			m_EmpList;
-
-	
-
-
 	//===========================================================================//
 	// Méthodes privées												             //
 	//===========================================================================//
@@ -95,4 +91,3 @@ protected:
 	
 };
 
-#endif

@@ -22,13 +22,6 @@ MeshLoader::MeshLoader()
 	m_iNbWeights	= 0;
 	m_Weights		= NULL;
 
-	for(int i=0; i<3; i++)
-		m_OffsetPosition[i]=0;
-	for(int i=0; i<4; i++)
-		m_OffsetRotation[i]=0;
-	for(int i=0; i<3; i++)
-		m_OffsetScale[i]=1;
-
 	m_Faces		= NULL;
 
 	m_SkinnedVertices	= NULL;
@@ -74,9 +67,7 @@ MeshLoader::~MeshLoader()
 //===========================================================================//
 // Chargement de la ressource                                                //
 //===========================================================================//
-ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl,
-								Vector3f &Position, Vector4f &Rotation, Vector3f &Scale,
-								bool& bSkinned)
+ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, bool& bSkinned)
 {
 	TiXmlDocument meshFile( sMeshPath );
 	if (!meshFile.LoadFile ())
@@ -95,10 +86,6 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, S
 	rootNode =  meshFile.FirstChild( "COLLADA" );  // Get Root Node
 
 	FillArrays (rootNode, VertexBuffer, SVertexBuffer, IndexBuffer);
-
-	Position =	Vector3f(m_OffsetPosition[0],	m_OffsetPosition[2],	m_OffsetPosition[1]); 
-	Rotation =	Vector4f(abs(m_OffsetRotation[0]),	abs(m_OffsetRotation[2]),	abs(m_OffsetRotation[1]), m_OffsetRotation[3]);
-	Scale	 =	Vector3f(m_OffsetScale[0],		m_OffsetScale[2],		m_OffsetScale[1]); 
 
 	iNbVertices	= m_iNbVertices;
 	iNbIndex	= m_iNbFaces*NbFaceVertices;
@@ -254,42 +241,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 				}
 			}
 		}
-		//--------------------------------------------------------------------------------//
 
-		//-------------------------------- Transformation --------------------------------//
-		node =  rootNode->FirstChild()->NextSibling("library_visual_scenes");
-		if(node) 
-		{
-			node = node->FirstChild( "visual_scene" );
-			if(node)
-			{
-				node = node->FirstChild( "node" );
-				if(node)
-				{
-					const char* ArrayText;
-					node = node->FirstChild( "translate" );
-					if(node)
-					{
-						ArrayText=node->ToElement()->GetText();
-						ConvertTextToArray(ArrayText, m_OffsetPosition, 3);
-
-						node = node->NextSibling( "rotate" );
-						if(node)
-						{
-							ArrayText=node->ToElement()->GetText();
-							ConvertTextToArray(ArrayText, m_OffsetRotation, 4);
-
-							node = node->NextSibling( "scale" );
-							if(node)
-							{
-								ArrayText=node->ToElement()->GetText();
-								ConvertTextToArray(ArrayText, m_OffsetScale, 3);
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 	//--------------------------------------------------------------------------------//
 

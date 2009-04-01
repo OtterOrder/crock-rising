@@ -49,7 +49,7 @@ Anim::~Anim()
 
 ResourceResult Anim::Load(std::string resource , ResourceParam param)
 {
-	std::string str="..\\resources\\GraphicEngine\\anim\\"+resource;
+	std::string str="..\\..\\data\\anim\\"+resource;
 
 	AnimLoader animLoader; 
 	animLoader.Load(str.c_str(), m_Bones, m_BindShape, m_BoneArrayOrder, m_NbFrames);

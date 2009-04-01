@@ -185,6 +185,18 @@
 				RelativePath=".\Levels\NewLevel.cpp"
 				>
 			</File>
+			<Filter
+				Name="Logos"
+				>
+				<File
+					RelativePath=".\Levels\LevelAlafraise.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelAlafraise.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\Main.cpp"

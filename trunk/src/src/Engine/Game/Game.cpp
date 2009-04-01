@@ -14,8 +14,8 @@
 Game::Game( void )
 {
 	m_CurrentLevel	= NULL;
+	m_PrevLevelID	= CRC32_NULL;
 	m_ObjList		= &Object::RefList;
-	m_Obj2DList		= &Object2D::RefList;
 }
 
 /***********************************************************
@@ -32,22 +32,21 @@ Game::~Game( void )
  **********************************************************/
 void Game::Update( void )
 {
-	ObjIt	itObj	= m_ObjList->begin();
-	Obj2DIt	itObj2d	= m_Obj2DList->begin();
+	ObjIt	obj, lastObj;
 	
-	// Update des objets 3d
-	while( itObj != m_ObjList->end() )
+	// Update des objets 3D
+	
+	obj = m_ObjList->begin();
+	lastObj = m_ObjList->end();
+
+	while( obj != lastObj )
 	{
-		(*itObj)->Update();
-		++itObj;
+		(*obj)->Update();
+		++obj;
 	}
 
-	// Update des objets 2d
-	while( itObj2d != m_Obj2DList->end() )
-	{
-		(*itObj2d)->Update();
-		++itObj2d;
-	}
+	// Update des objets 2D
+	Object2D::UpdateAll();
 	
 	if( m_CurrentLevel )
 	{
@@ -62,11 +61,12 @@ void Game::Update( void )
  **********************************************************/
 void Game::ChangeLevel( crc32 levelID )
 {
+	m_PrevLevelID = GetLevelID();
+	
 	if( m_CurrentLevel )
 		delete m_CurrentLevel;
 
-	// Ici il faudra peut-être gérer un temps
-	// de déchargement/chargement..
+	// Ici il faudra peut-être gérer un temps de déchargement/chargement..
 
 	m_CurrentLevel = Level::NewLevel( levelID );
 	m_CurrentLevel->Init();
@@ -76,10 +76,19 @@ void Game::ChangeLevel( crc32 levelID )
  * Donne l'ID du niveau courant.
  * @return	l'ID du niveau, ou CRC32_NULL si aucun
  **********************************************************/
-crc32 Game::GetLevelID( void )
+crc32 Game::GetLevelID( void ) const
 {
 	if( m_CurrentLevel )
 		return m_CurrentLevel->GetLevelID();
-	
+
 	return CRC32_NULL;
+}
+
+/***********************************************************
+ * Donne l'ID du niveau précédent.
+ * @return	l'ID du niveau précédent, CRC32_NULL si aucun
+ **********************************************************/
+crc32 Game::GetPrevLevelID( void ) const
+{
+	return m_PrevLevelID;
 }

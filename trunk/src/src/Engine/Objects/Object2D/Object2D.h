@@ -78,13 +78,10 @@ public:
 		return false;
 	}
 
-	// Compare les priorités des objets
-	static bool	ComparePriority( const Object2D *o1, const Object2D *o2 )
-	{
-		// o1 est avant o2 si sa priorité est plus faible, la
-		// priorité la plus faible étant 255, la plus forte 0.
-		return o1->m_Priority > o2->m_Priority;
-	}
+	//-- Méthodes statiques
+	
+	static void UpdateAll();			// Update tous les objets 2D
+	static bool	ComparePriority( const Object2D *o1, const Object2D *o2 );
 
 protected:
 

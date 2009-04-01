@@ -538,13 +538,13 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuff
 	if ( m_Positions )
 	{
 		float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-		VectPosition = Vector3f(Position[0], Position[2], Position[1] );
+		VectPosition = Vector3f(Position[0], Position[1], Position[2] );
 	}
 
 	if ( m_Normals )
 	{
 		float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-		VectNormal = Vector3f (Normal[0], Normal[2], Normal[1] );
+		VectNormal = Vector3f (Normal[0], Normal[1], Normal[2] );
 	}
 
 	if ( m_TexCoords )

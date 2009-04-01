@@ -28,6 +28,9 @@ LevelStart::~LevelStart( void )
 **********************************************************/
 void LevelStart::Init( void )
 {
+	// Fond noir
+	Renderer::GetInstance()->SetClearColor( Color4f( 0.f, 0.f, 0.f, 1.f ) );
+	
 	// Initialisation de la caméra
 	m_Camera = new Camera( Vector3f( 0.0f, 10.0f, -100.0f ) );
 	m_Camera->SetTarget( Vector3f( 10.0f, 10.0f, 0.0f ) );

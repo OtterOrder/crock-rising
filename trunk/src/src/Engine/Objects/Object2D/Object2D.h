@@ -9,21 +9,21 @@
 
 //******************************************************************
 
-enum O2DHotPoint
-{
-	O2D_HOTPOINT_V0,		// Vertex 0 (par défaut)
-	//O2D_HOTPOINT_CENTER,	// Isobarycentre des vertices
-	//O2D_HOTPOINT_INDEX		// Un vertex de l'objet
-};
-
-//******************************************************************
-
 class Object2D
 {
 public:
 
 	// Liste de références sur les objets 2D
 	static std::list< Object2D* > RefList;
+
+	//-- Enum publiques
+
+	enum HotPoint
+	{
+		HOTPOINT_V0,		// Vertex 0 (par défaut)
+		//HOTPOINT_CENTER,	// Isobarycentre des vertices
+		//HOTPOINT_INDEX		// Un vertex de l'objet
+	};
 	
 	//-- Méthodes publiques
 	
@@ -45,6 +45,10 @@ public:
 	Color4f GetColor() const;
 	float GetAlpha() const;
 
+	// Priorité (ordre d'affichage)
+	void SetPriority( int priority );	// 0>>255
+	int GetPriority() const;
+
 	// Visibilité (optim)
 	void Show();
 	void Hide();
@@ -53,7 +57,7 @@ public:
 	// Position
 	void SetPosition( float posX, float posY );
 	void SetPosition( const Point2f &position );
-	//void SetHotPoint( O2DHotPoint hotPoint, int vertex = 0 );
+	//void SetHotPoint( HotPoint hotPoint, int vertex = 0 );
 	Point2f GetPosition() const;
 	
 	// Echelle
@@ -72,6 +76,14 @@ public:
 	virtual bool IsDxReady() const		// Vérifie si les données Dx sont prètes
 	{
 		return false;
+	}
+
+	// Compare les priorités des objets
+	static bool	ComparePriority( const Object2D *o1, const Object2D *o2 )
+	{
+		// o1 est avant o2 si sa priorité est plus faible, la
+		// priorité la plus faible étant 255, la plus forte 0.
+		return o1->m_Priority > o2->m_Priority;
 	}
 
 protected:
@@ -93,8 +105,9 @@ protected:
 	int				m_Width;			// Largeur
 	int				m_Height;			// Hauteur
 	Color4f			m_Color;			// Couleur
-	O2DHotPoint		m_HotPoint;			// Point chaud
-	int				m_HotPointIndex;	// Index du point chaud (O2D_HOTPOINT_INDEX)
+	HotPoint		m_HotPoint;			// Point chaud
+	int				m_HotPointIndex;	// Index du point chaud (HOTPOINT_INDEX)
+	int				m_Priority;			// Priorité d'affichage de l'objet (0>>255)
 	bool			m_IsHidden;			// Si l'objet est caché
 
 	Vector3f		m_Position;			// Position (du point chaud)

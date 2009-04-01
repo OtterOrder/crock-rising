@@ -13,6 +13,7 @@ using namespace std;
 #define		O2D_DEFAULT_POSITION		(Vector3f( 0.f, 0.f, 0.f ))
 #define		O2D_DEFAULT_SCALE			(Vector3f( 1.f, 1.f, 1.f ))
 #define		O2D_DEFAULT_ROTATION		(Vector3f( 0.f, 0.f, 0.f ))
+#define		O2D_DEFAULT_PRIORITY		(0)
 
 //******************************************************************
 
@@ -39,8 +40,9 @@ Object2D::Object2D()
 	m_Width				= O2D_DEFAULT_WIDTH;
 	m_Height			= O2D_DEFAULT_HEIGHT;
 	m_Color				= O2D_DEFAULT_COLOR;
-	m_HotPoint			= O2D_HOTPOINT_V0;
+	m_HotPoint			= HOTPOINT_V0;
 	m_HotPointIndex		= 0;
+	m_Priority			= O2D_DEFAULT_PRIORITY;
 	m_IsHidden			= false;
 	
 	m_Position			= O2D_DEFAULT_POSITION;
@@ -140,6 +142,25 @@ float Object2D::GetAlpha() const
 }
 
 //**********************************************************
+// Change la priorité (ordre d'affichage).
+// @param[in]	priority : priorité entre 0 et 255
+//				0 : devant, 255 : derrière
+//**********************************************************
+void Object2D::SetPriority( int priority )
+{
+	m_Priority = MATH_Clamp( priority, 0, 255 );
+}
+
+//**********************************************************
+// Donne la priorité.
+// @return	la priorité
+//**********************************************************
+int Object2D::GetPriority() const
+{
+	return m_Priority;
+}
+
+//**********************************************************
 // Rend l'objet visible.
 //**********************************************************
 void Object2D::Show()
@@ -188,11 +209,11 @@ void Object2D::SetPosition( const Point2f &position )
 // Change le point chaud de l'objet.
 // @param[in]	hotPoint : type de point chaud
 // @param[in]	vertex : index du vertex (utile si hotPoint
-//				= O2D_HOTPOINT_INDEX)
+//				= HOTPOINT_INDEX)
 //**********************************************************
-/*void Object2D::SetHotPoint( O2DHotPoint hotPoint, int vertex )
+/*void Object2D::SetHotPoint( HotPoint hotPoint, int vertex )
 {
-	if( hotPoint == O2D_HOTPOINT_INDEX )
+	if( hotPoint == HOTPOINT_INDEX )
 	{
 		// En mode INDEX, on vérifie que le vertex existe
 		assert( vertex >= 0 && vertex < 4 );
@@ -295,7 +316,7 @@ void Object2D::GenQuad( Vertex *vertices ) const
 	// Les coordonnées dépendent du point chaud..
 	switch( m_HotPoint )
 	{
-		case O2D_HOTPOINT_V0:
+		case HOTPOINT_V0:
 			vertices[1].position.x	+= m_Width;
 			vertices[2].position.x	+= m_Width;
 			vertices[2].position.y	+= m_Height;

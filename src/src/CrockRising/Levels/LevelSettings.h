@@ -1,5 +1,5 @@
-#ifndef		_LevelStart_H
-#define		_LevelStart_H
+#ifndef		_LevelSettings_H_
+#define		_LevelSettings_H_
 
 //******************************************************************
 
@@ -7,18 +7,18 @@
 
 //******************************************************************
 
-#define		LEVEL_start				0x9f79558f
+#define		LEVEL_settings			0xe545a0c5
 
 //******************************************************************
 
 class Camera;
 
-class LevelStart : public Level
+class LevelSettings : public Level
 {
 public:
 
-	LevelStart					( crc32 levelID );			// Constructeur
-	virtual ~LevelStart			( void );					// Destructeur
+	LevelSettings				( crc32 levelID );			// Constructeur
+	virtual ~LevelSettings		( void );					// Destructeur
 
 	virtual void	Init		( void );					// Initialisation
 	virtual void	Update		( void );					// Update du niveau
@@ -26,9 +26,9 @@ public:
 
 protected:
 	
-	Camera	*m_Camera;
+	Camera	*m_pCamera;
 
 };
 
 //******************************************************************
-#endif		//_LevelStart_H
+#endif		//_LevelSettings_H_

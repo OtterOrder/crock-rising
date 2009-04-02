@@ -4,7 +4,7 @@
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
-#include	<Objects/Object2D/Sprite.h>
+#include	<Objects/2D/Sprite.h>
 
 //******************************************************************
 

@@ -9,7 +9,7 @@
 
 #include	"Core/Inputs/InputManager.h"
 #include	"Objects/SceneObject.h"
-#include	"Objects/Object2D/Object2D.h"
+#include	"Objects/2D/Object2D.h"
 #include	"Objects/Camera.h"
 #include	"Objects/Skybox.h"
 #include	"Objects/Light.h"

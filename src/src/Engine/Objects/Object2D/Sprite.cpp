@@ -74,7 +74,7 @@ void Sprite::InitDxData()
 	// Chargement de la texture..
 	m_pTexture = ResourceManager::GetInstance()->Load<Texture>(
 		m_TextureName,
-		(ResourceParam)TEX_SPRITE
+		(ResourceParam)Texture::SPRITE
 	);
 
 	// Initialisation de la taille du sprite

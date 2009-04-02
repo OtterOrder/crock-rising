@@ -47,10 +47,10 @@ ResourceResult Texture::Load( std::string resource, ResourceParam param )
 	//m_Name = resource;
 	
 	// Sélection du répertoire en fonction du type
-	switch( (TextureType)(int)param )
+	switch( (Texture::Type)(int)param )
 	{
-		case TEX_SPRITE:	dir = "../../data/sprite/";	break;
-		default:			dir = "../../data/texture/";
+		case SPRITE:	dir = "../../data/sprite/";	break;
+		default:		dir = "../../data/texture/";
 	}
 	
 	// Chargement de la texture

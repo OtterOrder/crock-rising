@@ -34,11 +34,11 @@ private:
 	//===========================================================================//
 	// Types												                     //
 	//===========================================================================//
-	typedef std::map<TextureType, Texture*> TTextureMap;
+	typedef std::map<Texture::Type, Texture*> TTextureMap;
 
 public:
-	void			SetTexture(const std::string& strTex, TextureType Type);
-	void			SetTexture(LPDIRECT3DTEXTURE9 Tex, TextureType Type);
+	void			SetTexture(const std::string& strTex, Texture::Type Type);
+	void			SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type);
 
 protected:
 	void			SetShader(Shader* shader);

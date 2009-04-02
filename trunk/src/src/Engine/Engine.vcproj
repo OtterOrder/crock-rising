@@ -200,6 +200,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Core\Types\Types.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Core\Types\Vector.cpp"
 					>
 				</File>
@@ -329,6 +333,14 @@
 				</File>
 				<File
 					RelativePath=".\Objects\2D\Sprite.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\2D\Text.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Objects\2D\Text.h"
 					>
 				</File>
 			</Filter>

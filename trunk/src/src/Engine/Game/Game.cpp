@@ -4,7 +4,7 @@
 
 #include	"Level.h"
 #include	"Objects/Object.h"
-#include	"Objects/Object2D/Object2D.h"
+#include	"Objects/2D/Object2D.h"
 
 //using namespace std;
 

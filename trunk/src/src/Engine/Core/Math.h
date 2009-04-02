@@ -6,6 +6,7 @@
 #include	<math.h>
 #include	<d3dx9math.h>
 
+#include	"Types/Types.h"
 #include	"Types/Crc32.h"
 #include	"Types/Vector.h"
 #include	"Types/Color.h"

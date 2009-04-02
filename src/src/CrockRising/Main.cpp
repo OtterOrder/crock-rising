@@ -2,6 +2,8 @@
 #include	<Core/System.h>
 #include	<Game/Game.h>
 
+#include	"Backup.h"
+
 //******************************************************************
 
 #define		LEVEL_start				0x9f79558f
@@ -27,6 +29,10 @@ int WINAPI WinMain(
 
 	// Création du System
 	System::GetInstance();
+
+	// Création/enregistrement de la sauvegarde
+	CRBackup *pBackup = new CRBackup;
+	Game::GetInstance()->StoreBackup( pBackup );
 	
 	// On indique le niveau de démarrage
 	Game::GetInstance()->ChangeLevel( LEVEL_alafraise );

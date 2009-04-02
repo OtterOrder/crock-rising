@@ -1,5 +1,7 @@
 #include	"Game.h"
 
+#include	<assert.h>
+
 #include	"Level.h"
 #include	"Objects/Object.h"
 #include	"Objects/Object2D/Object2D.h"
@@ -8,28 +10,32 @@
 
 //******************************************************************
 
-/***********************************************************
- * Constructeur.
- **********************************************************/
+//**********************************************************
+// Constructeur.
+//**********************************************************
 Game::Game( void )
 {
+	m_Backup		= NULL;
 	m_CurrentLevel	= NULL;
 	m_PrevLevelID	= CRC32_NULL;
 	m_ObjList		= &Object::RefList;
 }
 
-/***********************************************************
- * Destructeur.
- **********************************************************/
+//**********************************************************
+// Destructeur.
+//**********************************************************
 Game::~Game( void )
 {
+	if( m_Backup )
+		delete m_Backup;
+	
 	if( m_CurrentLevel )
 		delete m_CurrentLevel;
 }
 
-/***********************************************************
- * Update du jeu, appellée à chaque tour moteur.
- **********************************************************/
+//**********************************************************
+// Update du jeu, appellée à chaque tour moteur.
+//**********************************************************
 void Game::Update( void )
 {
 	ObjIt	obj, lastObj;
@@ -55,10 +61,31 @@ void Game::Update( void )
 	}
 }
 
-/***********************************************************
- * Change de niveau.
- * @param[in]	levelID	: ID du prochain niveau
- **********************************************************/
+//**********************************************************
+// Enregistre la sauvegarde du jeu. On ne doit enregistrer
+// cette structure qu'une seule fois au lancement du jeu..
+// @param[in]	pBackup : pointeur sur la sauvegarde
+//**********************************************************
+void Game::StoreBackup( Backup *pBackup )
+{
+	assert( !m_Backup );
+	m_Backup = pBackup;
+}
+
+//**********************************************************
+// Donne la sauvegarde du jeu.
+// @return	pointeur sur la sauvegarde du jeu
+//**********************************************************
+Game::Backup* Game::GetBackup( void ) const
+{
+	assert( m_Backup );
+	return m_Backup;
+}
+
+//**********************************************************
+// Change de niveau.
+// @param[in]	levelID	: ID du prochain niveau
+//**********************************************************
 void Game::ChangeLevel( crc32 levelID )
 {
 	m_PrevLevelID = GetLevelID();
@@ -72,10 +99,10 @@ void Game::ChangeLevel( crc32 levelID )
 	m_CurrentLevel->Init();
 }
 
-/***********************************************************
- * Donne l'ID du niveau courant.
- * @return	l'ID du niveau, ou CRC32_NULL si aucun
- **********************************************************/
+//**********************************************************
+// Donne l'ID du niveau courant.
+// @return	l'ID du niveau, ou CRC32_NULL si aucun
+//**********************************************************
 crc32 Game::GetLevelID( void ) const
 {
 	if( m_CurrentLevel )
@@ -84,10 +111,10 @@ crc32 Game::GetLevelID( void ) const
 	return CRC32_NULL;
 }
 
-/***********************************************************
- * Donne l'ID du niveau précédent.
- * @return	l'ID du niveau précédent, CRC32_NULL si aucun
- **********************************************************/
+//**********************************************************
+// Donne l'ID du niveau précédent.
+// @return	l'ID du niveau précédent, CRC32_NULL si aucun
+//**********************************************************
 crc32 Game::GetPrevLevelID( void ) const
 {
 	return m_PrevLevelID;

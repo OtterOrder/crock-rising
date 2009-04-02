@@ -246,6 +246,18 @@
 				>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Backup"
+			>
+			<File
+				RelativePath=".\Backup.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Backup.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
 			>

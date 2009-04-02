@@ -7,7 +7,7 @@
 #include "Texture.h"
 #include "Objects/Light.h"
 
-Materials::Materials()
+Material::Material()
 {
 	m_DiffuseColor=D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.f);
 	m_AmbientColor=D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.f);
@@ -19,12 +19,12 @@ Materials::Materials()
 	m_LightList=&Light::RefList;
 }
 
-void Materials::SetShader(Shader* shader)
+void Material::SetShader(Shader* shader)
 {
 	m_pShader=shader;
 }
 
-void Materials::SetTexture(const std::string& strTex, Texture::Type Type)
+void Material::SetTexture(const std::string& strTex, Texture::Type Type)
 {
 	switch(Type)
 	{
@@ -35,7 +35,7 @@ void Materials::SetTexture(const std::string& strTex, Texture::Type Type)
 
 }
 
-void Materials::SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type)
+void Material::SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type)
 {
 	switch(Type)
 	{
@@ -48,7 +48,7 @@ void Materials::SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type)
 }
 
 
-void Materials::SetGraphicalData()
+void Material::SetGraphicalData()
 {
 	// On transmet les textures de l'objet au shader
 	if(m_Maps[Texture::DIFFUSE])
@@ -73,7 +73,7 @@ void Materials::SetGraphicalData()
 
 }
 
-void Materials::SetTextureData()
+void Material::SetTextureData()
 {
 	if(m_Maps[Texture::DIFFUSE])
 	{
@@ -83,7 +83,7 @@ void Materials::SetTextureData()
 
 }
 
-void Materials::DeleteData()
+void Material::DeleteData()
 {
 	for(std::map<Texture::Type, Texture*>::const_iterator it=m_Maps.begin() ; it!=m_Maps.end() ; ++it)
 	{

@@ -193,6 +193,30 @@
 				Name="Menus"
 				>
 				<File
+					RelativePath=".\Levels\LevelDefeat.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelDefeat.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelGameMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelGameMenu.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelHighScores.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelHighScores.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Levels\LevelMainMenu.cpp"
 					>
 				</File>
@@ -200,18 +224,26 @@
 					RelativePath=".\Levels\LevelMainMenu.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Levels\LevelSettings.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelSettings.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelVictory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelVictory.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Games"
 				>
-				<File
-					RelativePath=".\Levels\LevelStart.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Levels\LevelStart.h"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<File

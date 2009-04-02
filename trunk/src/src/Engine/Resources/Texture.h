@@ -10,15 +10,6 @@
 // Defines & enums                                                           //
 //===========================================================================//
 
-enum TextureType
-{
-	TEX_MESH = 1,	// (on commence à 1 pour ne pas confondre avec NULL = 0)
-	TEX_NORMALMAP,
-	TEX_BUMPMAP,
-	TEX_DISPLACEMENTMAP,
-	
-	TEX_SPRITE
-};
 
 //===========================================================================//
 // Classe texture                                                            //
@@ -26,6 +17,15 @@ enum TextureType
 class Texture: public Resource
 {
 public:
+	enum Type
+	{
+		DIFFUSE = 1,	// (on commence à 1 pour ne pas confondre avec NULL = 0)
+		NORMALMAP,
+		BUMPMAP,
+		DISPLACEMENTMAP,
+		
+		SPRITE
+	};
 	
 	LPDIRECT3DTEXTURE9	m_pTex;	// Pointeur sur la texture Dx
 	

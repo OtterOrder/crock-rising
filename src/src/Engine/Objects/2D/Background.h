@@ -16,6 +16,10 @@ public:
 	Background( const char *path );
 	virtual ~Background();
 
+	//-- Méthodes spécifiques pour DirectX
+	
+	virtual void InitDxData();		// Initialise les données Dx
+
 protected:
 
 	//TODO

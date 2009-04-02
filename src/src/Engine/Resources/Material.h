@@ -12,14 +12,14 @@ class Shader;
 class Texture;
 class Light;
 
-class Materials
+class Material
 {
 	friend class SceneObject;
 	friend class SceneObjectAnimated;
 
 public:
-	Materials();
-	~Materials(){}
+	Material();
+	~Material(){}
 
 	//===========================================================================//
 	// Propriétés de l'objet    							                     //

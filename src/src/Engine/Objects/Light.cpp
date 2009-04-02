@@ -52,7 +52,7 @@ void Light::SetLightData(Shader * shader)
 DirectionalLight::DirectionalLight()
 {
 	m_LightsType[m_LightId]=0;
-	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, -100.f);
+	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, 0.f);
 }
 
 DirectionalLight::~DirectionalLight()

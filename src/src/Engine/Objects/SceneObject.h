@@ -15,7 +15,7 @@
 class Texture;
 class Shader;
 class Mesh;
-class Materials;
+class Material;
 class BoundingBox;
 typedef std::list< int > TEmpList;
 
@@ -37,8 +37,8 @@ public:
 	//===========================================================================//
 	// Gestion apparence des objets											     //
 	//===========================================================================//
-	void				SetMaterial(Materials * mat);
-	Materials*			GetMaterial() {return m_pMaterial;}
+	void				SetMaterial(Material * mat);
+	Material*			GetMaterial() {return m_pMaterial;}
 	void				SetShader(const std::string& strShader);
 
 	//===========================================================================//
@@ -76,7 +76,7 @@ protected:
 	std::string						m_strMesh;
 	std::string						m_strTex;
 	std::string						m_strShader;
-	Materials*						m_pMaterial;	// Matériau de l'objet
+	Material*						m_pMaterial;	// Matériau de l'objet
 	Mesh*							m_pMesh;		// Mesh de l'objet
 	Shader*							m_pShader;		// Shader de l'objet
 	bool							m_bVisible;		// Visibilité de l'objet

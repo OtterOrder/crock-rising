@@ -62,7 +62,7 @@ SceneObject::~SceneObject()
 //===========================================================================//
 // Gestion matériaux				                                         //
 //===========================================================================//
-void SceneObject::SetMaterial(Materials * mat)
+void SceneObject::SetMaterial(Material * mat)
 {
 	m_pMaterial=mat;
 }
@@ -88,7 +88,7 @@ void SceneObject::InitObject()
 	m_pShader=ResourceManager::GetInstance()->Load<Shader>(m_strShader.c_str());
 
 	// Matériau par défaut de l'objet
-	m_pMaterial=new Materials();
+	m_pMaterial=new Material();
 
 	// On assigne le shader au matériau
 	m_pMaterial->SetShader(m_pShader);

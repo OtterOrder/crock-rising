@@ -9,6 +9,10 @@
 
 //******************************************************************
 
+#define		O2D_VERTICES		4	// Nombre de vertices des objets 2D
+
+//******************************************************************
+
 class Object2D
 {
 public:
@@ -99,21 +103,25 @@ protected:
 
 	//-- Données protégées
 	
-	int				m_Width;			// Largeur
-	int				m_Height;			// Hauteur
-	Color4f			m_Color;			// Couleur
-	HotPoint		m_HotPoint;			// Point chaud
-	int				m_HotPointIndex;	// Index du point chaud (HOTPOINT_INDEX)
-	int				m_Priority;			// Priorité d'affichage de l'objet (0>>255)
-	bool			m_IsHidden;			// Si l'objet est caché
+	int				m_Width;					// Largeur
+	int				m_Height;					// Hauteur
+	Color4f			m_Color;					// Couleur
+	HotPoint		m_HotPoint;					// Point chaud
+	int				m_HotPointIndex;			// Index du point chaud (HOTPOINT_INDEX)
+	int				m_Priority;					// Priorité d'affichage de l'objet (0>>255)
+	bool			m_IsHidden;					// Si l'objet est caché
 
-	Vector3f		m_Position;			// Position (du point chaud)
-	Vector3f		m_Scale;			// Echelle
-	Vector3f		m_Rotation;			// Rotation
+	Vector3f		m_Position;					// Position (du point chaud)
+	Vector3f		m_Scale;					// Echelle
+	Vector3f		m_Rotation;					// Rotation
+
+	Vertex			m_Vertices[O2D_VERTICES];	// Tableau des vertices
 
 	//-- Méthodes protégées
 
-	void WorldMatrix( D3DMATRIX *matrix ) const;	// Calcule la matrice de l'objet dans le repère world
+	virtual void SetTransform( const D3DMATRIX *pMatrix );	// Applique la matrice aux points du l'objets (m_Vertices)
+	
+	void WorldMatrix( D3DMATRIX *pMatrix ) const;	// Calcule la matrice de l'objet dans le repère world
 	void GenQuad( Vertex *vertices ) const;			// Génère les points d'un quad à partir des données de l'objet
 
 };

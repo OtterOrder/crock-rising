@@ -1,6 +1,7 @@
 #ifndef		_Vector_H
 #define		_Vector_H
 
+#include	"Core/Types/Types.h"
 #include	<d3dx9math.h>
 
 //******************************************************************
@@ -32,5 +33,12 @@ bool VEC_AreAlmostEqual( const Vector4f &v1, const Vector4f &v2 );
 
 
 //******************************************************************
+
+struct Coord
+{
+	s32 x;
+	s32 y;
+	Coord (s32 _x =0, s32 _y =0) { x = _x; y = _y; };
+};
 
 #endif		// _Vector_H

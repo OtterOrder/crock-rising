@@ -20,6 +20,8 @@ public:
 	// Liste de références sur les objets 2D
 	static std::list< Object2D* > RefList;
 
+	typedef std::list< Object2D* >::iterator Obj2DIt;
+
 	//-- Enum publiques
 
 	enum HotPoint

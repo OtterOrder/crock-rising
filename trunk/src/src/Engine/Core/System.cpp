@@ -2,6 +2,7 @@
 
 #include	"Core/Inputs/InputManager.h"
 #include	"Renderer/Renderer.h"
+#include	"PostPorcesses/PostRenderer.h"
 #include	"Game/Game.h"
 
 
@@ -30,6 +31,7 @@ System::~System( void )
 int System::MainLoop( void )
 {
 	Renderer		*renderer;
+	PostRenderer	*postRenderer;
 	InputManager	*inputManager;
 	Game			*game;
 
@@ -40,6 +42,7 @@ int System::MainLoop( void )
 	// pas avoir à le faire dans la boucle
 	renderer		= Renderer::GetInstance();
 	inputManager	= InputManager::GetInstance();
+	postRenderer	= PostRenderer::GetInstance();
 	game			= Game::GetInstance();
 	
 	msg.message = WM_NULL;
@@ -71,6 +74,9 @@ int System::MainLoop( void )
 			
 			//Rendu de de la scene
 			renderer->Run();
+
+			//Post effects
+			postRenderer->RenderPostEffects();
 
 			// Update des inputs
 			inputManager->Update();

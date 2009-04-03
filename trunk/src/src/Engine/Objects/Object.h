@@ -36,7 +36,7 @@ public:
 	void SetTranslation( float x, float y, float z );
 	void SetRotation( int angleX, int angleY, int angleZ );
 	
-
+	D3DXMATRIX GetWorldMatrix ()	{ return m_WorldMatrix; };
 protected:
 	
 	D3DXMATRIX			m_WorldMatrix;

@@ -17,6 +17,8 @@ public:
 	// Liste de références sur les lumières
 	static std::list< Light* > RefList;
 
+	typedef std::list< Light* >::iterator LightIt;
+
 	static	int				m_LightsType[MAX_LIGHTS];		// Tableaux de données des lumières
 	static	D3DXVECTOR4		m_LightsColor[MAX_LIGHTS]; 
 	static	D3DXVECTOR4		m_LightsSpecular[MAX_LIGHTS];

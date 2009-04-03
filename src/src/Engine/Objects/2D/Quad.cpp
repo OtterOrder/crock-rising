@@ -68,7 +68,7 @@ void Quad::Draw()
 		InitDxData();
 	}
 	
-	Vertex vertices[4];
+	Vertex vertices[O2D_VERTICES];
 	LPDIRECT3DDEVICE9 pDevice;
 	void *pData;
 
@@ -97,7 +97,7 @@ void Quad::InitDxData()
 	vector<D3DVERTEXELEMENT9>	elements;
 
 	pDevice		= Renderer::GetInstance()->m_pd3dDevice;
-	m_VBSize	= 4*sizeof(Vertex);
+	m_VBSize	= O2D_VERTICES*sizeof(Vertex);
 
 	// Vertex déclaration
 	if( !m_pVertexDeclaration )

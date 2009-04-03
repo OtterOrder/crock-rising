@@ -22,7 +22,7 @@ list< Object2D* > Object2D::RefList;
 //******************************************************************
 
 // Coordonnées de texture par défaut d'un quad
-static Vector2f g_QuadTexCoord[4] =
+static Vector2f g_QuadTexCoord[O2D_VERTICES] =
 {
 	Vector2f( 0.f, 0.f ),
 	Vector2f( 1.f, 0.f ),
@@ -216,7 +216,7 @@ void Object2D::SetPosition( const Point2f &position )
 	if( hotPoint == HOTPOINT_INDEX )
 	{
 		// En mode INDEX, on vérifie que le vertex existe
-		assert( vertex >= 0 && vertex < 4 );
+		assert( vertex >= 0 && vertex < O2D_VERTICES );
 		m_HotPointIndex = vertex;
 	}
 	m_HotPoint = hotPoint;
@@ -300,16 +300,32 @@ bool Object2D::ComparePriority( const Object2D *o1, const Object2D *o2 )
 }
 
 //**********************************************************
-// Calcule la matrice de l'objet dans le repère world.
-// @param[out]	matrix : matrice world de l'objet
+// Applique la matrice aux points du l'objets (m_Vertices).
+// @param[in]	pMatrix : matrice
 //**********************************************************
-void Object2D::WorldMatrix( D3DMATRIX *matrix ) const
+void Object2D::SetTransform( const D3DMATRIX *pMatrix )
+{
+	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
+	{
+		D3DXVec4Transform(
+			&m_Vertices[vertex].position,
+			&m_Vertices[vertex].position,
+			(D3DXMATRIX*)pMatrix
+		);
+	}
+}
+
+//**********************************************************
+// Calcule la matrice de l'objet dans le repère world.
+// @param[out]	pMatrix : matrice world de l'objet
+//**********************************************************
+void Object2D::WorldMatrix( D3DMATRIX *pMatrix ) const
 {
 	D3DXMATRIX trans, rotat, scale;
 	D3DXMatrixTranslation( &trans, m_Position.x, m_Position.y, m_Position.z );
 	D3DXMatrixRotationYawPitchRoll( &rotat, m_Rotation.x, m_Rotation.y, m_Rotation.z );
 	D3DXMatrixScaling( &scale, m_Scale.x, m_Scale.y, m_Scale.z );
-	*matrix = scale * rotat * trans;
+	*pMatrix = scale * rotat * trans;
 }
 
 //**********************************************************
@@ -331,7 +347,7 @@ void Object2D::GenQuad( Vertex *vertices ) const
 	WorldMatrix( &world );
 	
 	// Initialisation des points
-	for( int vertex = 0; vertex < 4; vertex++ )
+	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
 	{
 		vertices[vertex].position	= Vector4f( 0.f, 0.f, 0.f, 1.f );
 		vertices[vertex].color		= m_Color;
@@ -354,7 +370,7 @@ void Object2D::GenQuad( Vertex *vertices ) const
 	}
 
 	// On applique la transformation
-	for( int vertex = 0; vertex < 4; vertex++ )
+	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
 	{
 		D3DXVec4Transform(
 			&vertices[vertex].position,

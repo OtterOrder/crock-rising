@@ -48,16 +48,8 @@ public:
 	void SetClearColor( const Color4f &color );
 	Color4f GetClearColor() const;
 
-protected:
-
-	//===========================================================================//
-	// Types protégées				                                             //
-	//===========================================================================//
-	
-	typedef std::list< SceneObject* >::iterator ScObjIt;
-	typedef std::list< Object2D* >::iterator Obj2DIt;
-	typedef std::list< Light* >::iterator LightIt;
-	
+	D3DXMATRIX GetViewProjMatrix ();
+protected:	
 	//===========================================================================//
 	// Données membres protégées				                                 //
 	//===========================================================================//

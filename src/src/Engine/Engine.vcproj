@@ -222,6 +222,10 @@
 						RelativePath=".\Core\Types\CCRC32.h"
 						>
 					</File>
+					<File
+						RelativePath=".\Core\Types\Types.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>
@@ -512,6 +516,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\data\shader\motionBlurVelocity.fx"
+					>
+				</File>
+				<File
 					RelativePath=".\Resources\Shader.cpp"
 					>
 				</File>
@@ -576,6 +584,46 @@
 				RelativePath=".\Physics\Physicalizer.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="PostProcesses"
+			>
+			<File
+				RelativePath=".\PostPorcesses\PostRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PostPorcesses\PostRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PostPorcesses\RenderTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PostPorcesses\RenderTarget.h"
+				>
+			</File>
+			<Filter
+				Name="PostEffects"
+				>
+				<File
+					RelativePath=".\PostPorcesses\MotionBlur.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PostPorcesses\MotionBlur.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PostPorcesses\PostEffect.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PostPorcesses\PostEffect.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

@@ -14,6 +14,8 @@
 #include	"Objects/Skybox.h"
 #include	"Objects/Light.h"
 
+#include	"PostPorcesses/PostRenderer.h"
+
 //===========================================================================//
 
 #define		DEFAULT_CLEAR_COLOR		(Color4f(0.2f,0.23f,0.75f,1.f))
@@ -59,8 +61,8 @@ HRESULT Renderer::BeforeCreateDevice()
 //===========================================================================//
 HRESULT Renderer::OnCreateDevice()
 {
-	ScObjIt	scobj;
-	Obj2DIt obj2d;
+	SceneObject::ScObjIt	scobj;
+	Object2D::Obj2DIt obj2d;
 	HRESULT	hr;
 
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
@@ -164,7 +166,7 @@ HRESULT Renderer::OnResetDevice()
 
 	m_pGridVB->Unlock();
 
-	ScObjIt scobj = m_ScObjList->begin();
+	SceneObject::ScObjIt scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
 		(*scobj)->InitDeviceData();
@@ -173,7 +175,7 @@ HRESULT Renderer::OnResetDevice()
 
 	//-- Objets 2D
 	
-	Obj2DIt obj2d = m_Obj2DList->begin();
+	Object2D::Obj2DIt obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
 		(*obj2d)->InitDxData();
@@ -182,6 +184,12 @@ HRESULT Renderer::OnResetDevice()
 
 	if(m_Skybox)
 		m_Skybox->Init();
+
+	//-- Post Processes
+	LPDIRECT3DSURFACE9 pBackBuffer;
+	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
+	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
+	PostRenderer::GetInstance()->CreateSceneRender(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
 	
 	return S_OK;
 }
@@ -191,7 +199,7 @@ HRESULT Renderer::OnResetDevice()
 //===========================================================================//
 HRESULT Renderer::FrameMove(float fElapsedTime)
 {
-	ScObjIt scobj = m_ScObjList->begin();
+	SceneObject::ScObjIt scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
 		(*scobj)->FrameMove(fElapsedTime);
@@ -206,8 +214,10 @@ HRESULT Renderer::FrameMove(float fElapsedTime)
 //===========================================================================//
 HRESULT Renderer::Render()
 {
-	ScObjIt scobj;
-	Obj2DIt obj2d, lastObj2d;
+	m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
+
+	SceneObject::ScObjIt scobj;
+	Object2D::Obj2DIt obj2d, lastObj2d;
 	
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( m_ClearColor ), 1.0f, 0);
 
@@ -304,8 +314,8 @@ HRESULT Renderer::Render()
 //===========================================================================//
 HRESULT Renderer::OnLostDevice()
 {
-	ScObjIt scobj;
-	Obj2DIt obj2d;
+	SceneObject::ScObjIt scobj;
+	Object2D::Obj2DIt obj2d;
 	
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
@@ -341,8 +351,8 @@ HRESULT Renderer::OnLostDevice()
 //===========================================================================//
 HRESULT Renderer::OnDestroyDevice()
 {
-	ScObjIt scobj;
-	Obj2DIt obj2d;
+	SceneObject::ScObjIt scobj;
+	Object2D::Obj2DIt obj2d;
 	
 	m_pStatsFont->DeleteDeviceObjects();
 
@@ -364,6 +374,8 @@ HRESULT Renderer::OnDestroyDevice()
 		++obj2d;
 	}
 
+
+
 	return S_OK;
 }
 
@@ -373,7 +385,7 @@ HRESULT Renderer::OnDestroyDevice()
 HRESULT Renderer::AfterDestroyDevice()
 {
 	// Suppression liste d'objets 3d
-	ScObjIt scobj = m_ScObjList->begin();
+	SceneObject::ScObjIt scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
 	{
 		delete (*scobj);
@@ -383,7 +395,7 @@ HRESULT Renderer::AfterDestroyDevice()
 	m_ScObjList->clear();
 
 	// Suppression liste de lumières
-	LightIt it=m_LightList->begin();
+	Light::LightIt it=m_LightList->begin();
 	while(it != m_LightList->end())
 	{
 		delete (*it);
@@ -437,4 +449,24 @@ void Renderer::SetClearColor( const Color4f &color )
 Color4f Renderer::GetClearColor() const
 {
 	return m_ClearColor;
+}
+
+//**********************************************************
+//
+//**********************************************************
+D3DXMATRIX Renderer::GetViewProjMatrix ()
+{
+	D3DXMATRIX ViewProjMatrix;
+/*
+	D3DXMATRIX View;
+	D3DXMATRIX Proj;
+	#ifdef DEVCAMERA
+	D3DXMatrixMultiply(&ViewProjMatrix, &m_DevCamera.GetViewMatrix(), &m_DevCamera.GetProjMatrix());
+	#else
+	D3DXMatrixMultiply(&ViewProjMatrix, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+	#endif
+
+	D3DXMatrixMultiply(&ViewProjMatrix, &View, &Proj);
+*/
+	return ViewProjMatrix;
 }

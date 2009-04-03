@@ -29,6 +29,8 @@ public:
 	// Liste de références sur les objets de scène
 	static std::list< SceneObject* > RefList;
 
+	typedef std::list< SceneObject* >::iterator ScObjIt;
+
 	// Constructeurs & destructeur
 	SceneObject(const std::string& mesh, const D3DXVECTOR3& Position);
 	SceneObject();
@@ -47,6 +49,7 @@ public:
 	virtual void	SetVisible(bool value);
 	virtual bool	GetVisible();
 
+	virtual Mesh*	GetMesh ()	{ return m_pMesh; };
 public:
 
 	//===========================================================================//

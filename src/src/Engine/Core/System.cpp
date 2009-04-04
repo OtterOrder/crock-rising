@@ -3,6 +3,7 @@
 #include	"Core/Inputs/InputManager.h"
 #include	"Renderer/Renderer.h"
 #include	"PostPorcesses/PostRenderer.h"
+#include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
 
 
@@ -30,30 +31,27 @@ System::~System( void )
  **********************************************************/
 int System::MainLoop( void )
 {
+	ResourceManager	*resourceManager;
+	InputManager	*inputManager;
 	Renderer		*renderer;
 	PostRenderer	*postRenderer;
-	InputManager	*inputManager;
 	Game			*game;
 
 	bool			bGotMsg;
 	MSG				msg;
 
-	// On initialise les singletons ici pour ne
-	// pas avoir à le faire dans la boucle
-	renderer		= Renderer::GetInstance();
+	// On initialise les singletons ici pour
+	// ne pas avoir à le faire dans la boucle
+	resourceManager	= ResourceManager::GetInstance();
 	inputManager	= InputManager::GetInstance();
+	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
 	game			= Game::GetInstance();
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
-	/*
-	// Création du device, initialisation D3D, création de la fenêtre
-	if( FAILED( InitWindow() ) )
-		return 0;*/
 	
-
-    // Boucle principale..
+	// Boucle principale..
 	while( msg.message != WM_QUIT )
     {
 		// Use PeekMessage() if the app is active, so we can use idle time to
@@ -84,9 +82,11 @@ int System::MainLoop( void )
 	}
 
 	// Destruction des singletons
+	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
+	postRenderer->Destroy();
 	inputManager->Destroy();
-	game->Destroy();
+	resourceManager->Destroy();
 
 	return (int)msg.wParam;
 }

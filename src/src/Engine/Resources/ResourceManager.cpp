@@ -11,7 +11,6 @@ using namespace std;
 //===========================================================================//
 ResourceManager::ResourceManager()
 {
-
 }
 
 //===========================================================================//
@@ -19,16 +18,8 @@ ResourceManager::ResourceManager()
 //===========================================================================//
 ResourceManager::~ResourceManager()
 {
-    // S'il reste des ressources dans la liste, on le signale
-    if (!m_Resources.empty())
-    {
-
-        for (TResourcesMap::const_iterator i = m_Resources.begin(); i != m_Resources.end(); ++i)
-        {
-			// Signalement
-
-        }
-    }
+	// Destruction de toutes les ressources restantes
+	Clear();
 }
 
 //===========================================================================//
@@ -46,25 +37,19 @@ void ResourceManager::Add(const std::string& resource, Resource* Res)
     Res->m_Name = resource;
 }
 
-void ResourceManager::test()
-{
-}
-
 //===========================================================================//
-// Retire une resource					                                     //
+// Détruit toutes les resources			                                     //
 //===========================================================================//
-/*void ResourceManager::Remove(const std::string& resource)
+void ResourceManager::Clear( void )
 {
-    // Recherche de la ressource dans la table
-    TResourcesMap::iterator It = m_Resources.find(resource);
-
-    // Si la ressource n'avait pas été chargée, on le signale
-    if (It != m_Resources.end())
+	if( !m_Resources.empty() )
 	{
-
+		for( TResourcesMap::iterator it = m_Resources.begin(); it != m_Resources.end(); it++ )
+		{
+			// On détruit la ressource quelque soit
+			// le nombre de références restantes
+			while( it->second->Release() > 0 );
+		}
+		m_Resources.clear();
 	}
-        // Signalement
-
-    // Retrait de la ressource de la liste
-    m_Resources.erase(It);
-}*/
+}

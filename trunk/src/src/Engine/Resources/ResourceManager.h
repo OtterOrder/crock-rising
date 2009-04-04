@@ -16,11 +16,13 @@ class ResourceManager : public Singleton<ResourceManager>
 {
 	friend class Singleton< ResourceManager >;
 
-	public :
-	//===========================================================================//
-	// Charge une resource								                     //
-	//===========================================================================//
-    template <class T> T* Load( const std::string &resource, ResourceParam param = NULL )
+public:
+	
+	//=======================================================================//
+	// Charge une resource					                                 //
+	//=======================================================================//
+	template< class T >
+	T* Load( const std::string &resource, ResourceParam param = NULL )
 	{
 		// Recherche de la ressource
 		TResourcesMap::const_iterator It = m_Resources.find(resource);
@@ -41,16 +43,12 @@ class ResourceManager : public Singleton<ResourceManager>
 			return Res;
 		}
 	}
-
-	//===========================================================================//
-	// Ajoute une resource									                     //
-	//===========================================================================//
-    void Add(const std::string& resource, Resource* Res);
-
-	//===========================================================================//
-	// Retire une resource									                     //
-	//===========================================================================//
-    template <class T> void Remove(const std::string& resource)
+	
+	//=======================================================================//
+	// Retire une resource									                 //
+	//=======================================================================//
+	template< class T >
+	void Remove( const std::string& resource )
 	{
 		// Recherche de la ressource dans la table
 		TResourcesMap::iterator It = m_Resources.find(resource);
@@ -58,29 +56,33 @@ class ResourceManager : public Singleton<ResourceManager>
 		// Si la ressource a été chargée
 		if (It != m_Resources.end())
 		{
-			if(It->second->Release()==0)
-			// Retrait de la ressource de la liste
+			if( It->second->Release() == 0 )
+			{
+				// Retrait de la ressource de la liste
 				m_Resources.erase(It);
+			}
 		}
 	}
 
-private :
+protected:
 	
-	void test();
-
-    ResourceManager();
+	ResourceManager();
     ~ResourceManager();
 
-	//===========================================================================//
-	// Types												                     //
-	//===========================================================================//
+	//=======================================================================//
+	// Types												                 //
+	//=======================================================================//
 	typedef std::map<std::string, Resource*> TResourcesMap;
 
-	//===========================================================================//
-	// Données membres										                     //
-	//===========================================================================//
+	//=======================================================================//
+	// Données membres										                 //
+	//=======================================================================//
     TResourcesMap m_Resources; // Table contenant les ressources associées à leur nom de fichier
 
-
+	//=======================================================================//
+	// Méthodes protégées													 //
+	//=======================================================================//
+	void Add( const std::string& resource, Resource* Res );
+	void Clear( void );
 
 };

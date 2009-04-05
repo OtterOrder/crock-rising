@@ -9,12 +9,13 @@ RenderTarget::RenderTarget(void)
 	m_pTexture = NULL;
 }
 
-RenderTarget::RenderTarget(Coord _Size)
+RenderTarget::RenderTarget(u32 _width, u32 _height)
 {
 	m_pSurface = NULL;
 	m_pTexture = NULL;
 
-	m_Size = _Size;
+	m_width  = _width;
+	m_height = _height;
 }
 
 //----------------------------------------------------------------------------------------------
@@ -48,8 +49,8 @@ HRESULT RenderTarget::Create (LPDIRECT3DDEVICE9 _pDevice)
 	Release ();
 
 	HRESULT result = D3DXCreateTexture(	_pDevice,
-										m_Size.x,
-										m_Size.y,
+										m_width,
+										m_height,
 										1,
 										D3DUSAGE_RENDERTARGET,
 										D3DFMT_A8R8G8B8,
@@ -61,4 +62,13 @@ HRESULT RenderTarget::Create (LPDIRECT3DDEVICE9 _pDevice)
 	m_pTexture->GetSurfaceLevel(0, &m_pSurface);
 
 	return result;
+}
+
+void RenderTarget::operator = (const RenderTarget& _RenderTarget)
+{
+	m_width		= _RenderTarget.m_width;
+	m_height	= _RenderTarget.m_height;
+
+	m_pSurface	= _RenderTarget.m_pSurface;
+	m_pTexture	= _RenderTarget.m_pTexture;
 }

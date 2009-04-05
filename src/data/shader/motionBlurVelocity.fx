@@ -10,7 +10,7 @@ float4x4 g_mWorldViewProjLast;		// Last WorldViewProjection matrix
 struct VS_OUTPUT
 {
     float4 Position   : POSITION;   // vertex position
-    float2 oPosition  : TEXCOORD0;  // vertex in
+    float4 oPosition  : TEXCOORD0;  // vertex in
 };
 
 //===========================================================================//
@@ -60,7 +60,8 @@ PS_OUTPUT PSVelocity( VS_OUTPUT In )
 { 
     PS_OUTPUT Output;
 	
-	 Output.RGBColor = float4( (ComputeVelocity(In.oPosition) +1.f)/2.f, 0.f, 1.f);
+	//Output.RGBColor = float4( (ComputeVelocity(In.oPosition) +1.f)/2.f, 0.f, 1.f);
+	Output.RGBColor = float4(ComputeVelocity(In.oPosition), 0.f, 1.f);
 
 	return Output;
 }

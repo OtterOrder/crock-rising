@@ -504,22 +504,6 @@
 				Name="Shader"
 				>
 				<File
-					RelativePath="..\..\data\shader\blinn.fx"
-					>
-				</File>
-				<File
-					RelativePath="..\..\data\shader\default.fx"
-					>
-				</File>
-				<File
-					RelativePath="..\..\data\shader\default_skinning.fx"
-					>
-				</File>
-				<File
-					RelativePath="..\..\data\shader\motionBlurVelocity.fx"
-					>
-				</File>
-				<File
 					RelativePath=".\Resources\Shader.cpp"
 					>
 				</File>
@@ -527,10 +511,34 @@
 					RelativePath=".\Resources\Shader.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\data\shader\skybox.fx"
+				<Filter
+					Name="Shaders"
 					>
-				</File>
+					<File
+						RelativePath="..\..\data\shader\blinn.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\default.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\default_skinning.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\motionBlurVelocity.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\skybox.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\vectorialBlur.fx"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Material"
@@ -621,6 +629,14 @@
 				</File>
 				<File
 					RelativePath=".\PostPorcesses\PostEffect.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PostPorcesses\VectorialBlur.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PostPorcesses\VectorialBlur.h"
 					>
 				</File>
 			</Filter>

@@ -4,10 +4,6 @@
 //******************************************************************
 
 #include	<Game/Level.h>
-#include	<Objects/SceneObject.h>
-#include	<Objects/SceneObjectAnimated.h>
-#include	<Objects/Skybox.h>
-#include	<Resources/Material.h>
 
 //******************************************************************
 
@@ -30,10 +26,6 @@ public:
 protected:
 	
 	Camera* m_pCamera;
-
-	SceneObject*			_mpCanyon;
-	SceneObjectAnimated*	_mpAlien;
-	Skybox*					_mpSkyBox;
 
 	//TODO
 

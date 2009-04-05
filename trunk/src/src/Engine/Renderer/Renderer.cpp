@@ -184,13 +184,13 @@ HRESULT Renderer::OnResetDevice()
 
 	if(m_Skybox)
 		m_Skybox->Init();
-
+/*
 	//-- Post Processes
 	LPDIRECT3DSURFACE9 pBackBuffer;
 	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
 	PostRenderer::GetInstance()->CreateSceneRender(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
-	
+*/
 	return S_OK;
 }
 
@@ -214,7 +214,7 @@ HRESULT Renderer::FrameMove(float fElapsedTime)
 //===========================================================================//
 HRESULT Renderer::Render()
 {
-	m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
+	//m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
 
 	SceneObject::ScObjIt scobj;
 	Object2D::Obj2DIt obj2d, lastObj2d;
@@ -343,6 +343,8 @@ HRESULT Renderer::OnLostDevice()
 		++obj2d;
 	}
 
+	PostRenderer::GetInstance()->ReleaseSceneRender();
+
 	return S_OK;
 }
 
@@ -457,16 +459,18 @@ Color4f Renderer::GetClearColor() const
 D3DXMATRIX Renderer::GetViewProjMatrix ()
 {
 	D3DXMATRIX ViewProjMatrix;
-/*
-	D3DXMATRIX View;
-	D3DXMATRIX Proj;
+
+	D3DXMATRIX* View;
+	D3DXMATRIX* Proj;
 	#ifdef DEVCAMERA
-	D3DXMatrixMultiply(&ViewProjMatrix, &m_DevCamera.GetViewMatrix(), &m_DevCamera.GetProjMatrix());
+	View = (D3DXMATRIX*)m_DevCamera.GetViewMatrix();
+	Proj = (D3DXMATRIX*)m_DevCamera.GetProjMatrix();
 	#else
-	D3DXMatrixMultiply(&ViewProjMatrix, &m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+	View = m_Camera->GetViewMatrix();
+	Proj = m_Camera->GetProjMatrix();
 	#endif
 
-	D3DXMatrixMultiply(&ViewProjMatrix, &View, &Proj);
-*/
+	D3DXMatrixMultiply(&ViewProjMatrix, View, Proj);
+
 	return ViewProjMatrix;
 }

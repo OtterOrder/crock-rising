@@ -6,14 +6,15 @@
 
 class RenderTarget
 {
-	Coord m_Size;
+	u32		m_width;
+	u32		m_height;
 
 	LPDIRECT3DTEXTURE9	m_pTexture;
 	LPDIRECT3DSURFACE9	m_pSurface;
 
 public:
 	RenderTarget(void);
-	RenderTarget(Coord _Size);
+	RenderTarget(u32 _width, u32 _height);
 	virtual ~RenderTarget(void);
 
 	void Release ();
@@ -22,4 +23,6 @@ public:
 
 	LPDIRECT3DTEXTURE9 GetTexture ()	{ return m_pTexture; };
 	LPDIRECT3DSURFACE9 GetSurface ()	{ return m_pSurface; };
+
+	void operator = (const RenderTarget& _RenderTarget);
 };

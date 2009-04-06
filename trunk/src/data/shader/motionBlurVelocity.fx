@@ -57,11 +57,14 @@ float2 ComputeVelocity (float4 _position)
 }
 
 PS_OUTPUT PSVelocity( VS_OUTPUT In ) 
-{ 
+{
     PS_OUTPUT Output;
-	
+
 	//Output.RGBColor = float4( (ComputeVelocity(In.oPosition) +1.f)/2.f, 0.f, 1.f);
-	Output.RGBColor = float4(ComputeVelocity(In.oPosition), 0.f, 1.f);
+	float2 velocity = ComputeVelocity(In.oPosition);
+	Output.RGBColor.z = velocity.x >= 0.f ? 1.f : 0.f;
+	Output.RGBColor.w = velocity.y >= 0.f ? 1.f : 0.f;
+	Output.RGBColor.xy = abs(velocity);
 
 	return Output;
 }

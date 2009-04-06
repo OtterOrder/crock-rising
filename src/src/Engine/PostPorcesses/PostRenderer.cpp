@@ -13,7 +13,7 @@ PostRenderer::PostRenderer(void)
 /*
 	MotionBlur* pMotionBlur = new MotionBlur(Renderer::GetInstance()->GetWindowWidth(), Renderer::GetInstance()->GetWindowHeight());
 	m_pPostEffects.push_back(pMotionBlur);
-*/
+//*/
 }
 
 //----------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ void PostRenderer::RenderPostEffects ()
 	Renderer::GetInstance()->m_pd3dDevice->StretchRect(m_pSceneRenderTarget->GetSurface(), NULL, m_pBackBuffer, &windowRect, D3DTEXF_NONE);
 
 	//// Delete Me !!!!
-	Sleep(34);
+	//Sleep(10);
 }
 
 //----------------------------------------------------------------------------------------------

@@ -190,7 +190,7 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
 	PostRenderer::GetInstance()->CreateSceneRender(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
-*/
+//*/
 	return S_OK;
 }
 

@@ -2,9 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="Test"
-	ProjectGUID="{28413AA3-FCF1-46FA-8212-69EDCDBE7A5E}"
-	RootNamespace="Test"
+	Name="AIToolkit"
+	ProjectGUID="{7B387439-772C-4F73-9159-205505ADFCFC}"
+	RootNamespace="AIToolkit"
+	Keyword="Win32Proj"
 	>
 	<Platforms>
 		<Platform
@@ -18,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -39,11 +40,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="_WIN32;WIN32;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -58,18 +59,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="dxguid.lib d3dx9.lib d3d9.lib Engine.lib Winmm.lib tinyxml.lib AIToolkit.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -81,20 +74,15 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\debug\&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -115,9 +103,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -132,20 +120,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib Winmm.lib tinyxml.lib AIToolkit.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -157,49 +135,20 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\release\&quot;"
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="Levels"
-			>
-			<File
-				RelativePath=".\Levels\LevelStart.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Levels\LevelStart.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Levels\NewLevel.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Obj3d"
-			>
-			<File
-				RelativePath=".\Obj3d\GameCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Obj3d\GameCamera.h"
-				>
-			</File>
-		</Filter>
 		<File
-			RelativePath=".\Main.cpp"
+			RelativePath=".\AIManager.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AIManager.h"
 			>
 		</File>
 	</Files>

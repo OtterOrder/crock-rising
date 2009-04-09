@@ -428,6 +428,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Shadow Map"
+				>
+				<File
+					RelativePath=".\Renderer\Shadow Map\ShadowMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Renderer\Shadow Map\ShadowMap.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resources"

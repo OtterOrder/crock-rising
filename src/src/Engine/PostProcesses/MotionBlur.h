@@ -3,8 +3,8 @@
 #include	"PostEffect.h"
 #include	"Resources/Shader.h"
 
-#include	"PostPorcesses/PostRenderer.h"
-#include	"PostPorcesses/VectorialBlur.h"
+#include	"PostProcesses/PostRenderer.h"
+#include	"PostProcesses/VectorialBlur.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Todo :	- Skinning Velocity

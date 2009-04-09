@@ -5,8 +5,10 @@
 #include	"PostPorcesses/PostRenderer.h"
 #include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
+#include	"Physics/Physicalizer.h"
+#include	"Time.h"
 
-
+#define FPS_MAX 80
 //******************************************************************
 
 /***********************************************************
@@ -36,6 +38,7 @@ int System::MainLoop( void )
 	Renderer		*renderer;
 	PostRenderer	*postRenderer;
 	Game			*game;
+	Physicalizer	*physX;
 
 	bool			bGotMsg;
 	MSG				msg;
@@ -47,9 +50,13 @@ int System::MainLoop( void )
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
 	game			= Game::GetInstance();
+	physX			= Physicalizer::GetInstance();
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
+	
+	Time            *time = new Time();
+	unsigned int    nbFps = 1000 / FPS_MAX;
 	
 	// Boucle principale..
 	while( msg.message != WM_QUIT )
@@ -78,6 +85,13 @@ int System::MainLoop( void )
 
 			// Update des inputs
 			inputManager->Update();
+
+			//Update de physX				
+			if (time->getDeltaTimeF() >= nbFps) 
+			{
+				physX->RunPhysics();
+				time->resetDeltaTimeF();    // Reset du temps entre les 2 frames
+			}
 		}
 	}
 

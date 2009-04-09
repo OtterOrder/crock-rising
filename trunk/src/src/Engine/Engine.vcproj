@@ -592,6 +592,22 @@
 				RelativePath=".\Physics\Physicalizer.h"
 				>
 			</File>
+			<Filter
+				Name="Trigger"
+				>
+				<File
+					RelativePath=".\Physics\Trigger\Trigger.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Physics\Trigger\UserData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Physics\Trigger\UserData.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="PostProcesses"

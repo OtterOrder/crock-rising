@@ -17,8 +17,11 @@ protected:
 	Shader*	m_pShader;
 public:
 	PostEffect(void);
-	PostEffect(u32 _width, u32 _height);
 	virtual ~PostEffect(void);
+
+	virtual void Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height) =0;
+	virtual void Release () =0;
+	virtual void Destroy () =0;
 
 	virtual void Apply(list<SceneObject*>* m_pObjectList = NULL) = 0;
 protected:

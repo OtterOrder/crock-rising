@@ -16,8 +16,11 @@ class MotionBlur : public PostEffect
 {
 public:
 	MotionBlur(void);
-	MotionBlur(u32 _width, u32 _height);
 	virtual ~MotionBlur(void);
+
+	virtual void Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height);
+	virtual void Release ();
+	virtual void Destroy ();
 
 	virtual void Apply(list<SceneObject*>* _pObjectList = NULL);
 

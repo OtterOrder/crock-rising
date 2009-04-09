@@ -1,11 +1,13 @@
 #include "MotionBlur.h"
 
 #include "Resources/Mesh.h"
+#include "Resources/ResourceManager.h"
 
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
 MotionBlur::MotionBlur(void)
 {
+	m_pShader = NULL;
 	SetShader("motionBlurVelocity.fx");
 
 	D3DXMatrixIdentity(&m_ViewProj);
@@ -15,20 +17,46 @@ MotionBlur::MotionBlur(void)
 }
 
 //----------------------------------------------------------------------------------------------
-MotionBlur::MotionBlur(u32 _width, u32 _height)
+MotionBlur::~MotionBlur(void)
 {
-	SetShader("motionBlurVelocity.fx");
-
-	D3DXMatrixIdentity(&m_ViewProj);
-	D3DXMatrixIdentity(&m_LastViewProj);
-
-	m_pVelocity = new RenderTarget(_width, _height);
-	m_pVelocity->Create(Renderer::GetInstance()->m_pd3dDevice);
 }
 
 //----------------------------------------------------------------------------------------------
-MotionBlur::~MotionBlur(void)
+//----------------------------------------------------------------------------------------------
+void MotionBlur::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
 {
+	m_pVelocity = new RenderTarget(_width, _height);
+	m_pVelocity->Create(_pDevice);
+
+	if (!m_pShader)
+		return;
+	m_pShader->m_pEffect->OnResetDevice();
+
+	VectorialBlur::GetInstance()->Create();
+}
+
+//----------------------------------------------------------------------------------------------
+void MotionBlur::Release ()
+{
+	if (m_pVelocity)
+	{
+		delete m_pVelocity;
+		m_pVelocity = NULL;
+	}
+
+	if (!m_pShader)
+		return;
+	m_pShader->m_pEffect->OnLostDevice();
+
+	VectorialBlur::GetInstance()->Release();
+}
+
+//----------------------------------------------------------------------------------------------
+void MotionBlur::Destroy ()
+{
+	ResourceManager::GetInstance()->Remove<Shader>("motionBlurVelocity.fx");
+
+	VectorialBlur::GetInstance()->Destroy();
 }
 
 //----------------------------------------------------------------------------------------------

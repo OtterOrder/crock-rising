@@ -1,5 +1,9 @@
 #include "VectorialBlur.h"
 
+#include "Resources/ResourceManager.h"
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 VectorialBlur::VectorialBlur(void)
 {
 	SetShader("VectorialBlur.fx");
@@ -8,26 +12,56 @@ VectorialBlur::VectorialBlur(void)
 	m_pVectorsTexture	= NULL;
 	m_pBlurredSurface	= NULL;
 
-	m_pSurfaceToBlur	= NULL;
-	m_pRenderQuad = new Quad (10, 10, Color4f(0.f, 1.f, 0.f, 1.f));
-	Object2D::RefList.remove(m_pRenderQuad);
-
 	m_pCurrentRenderTarget	= NULL;
 }
 
+//----------------------------------------------------------------------------------------------
 VectorialBlur::~VectorialBlur(void)
 {
 }
 
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+void VectorialBlur::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
+{
+	if (!m_pShader)
+		return;
+	m_pShader->m_pEffect->OnResetDevice();
+	
+	m_pRenderQuad = new Quad (10, 10, Color4f(0.f, 1.f, 0.f, 1.f));
+	Object2D::RefList.remove(m_pRenderQuad);
+}
+
+//----------------------------------------------------------------------------------------------
+void VectorialBlur::Release ()
+{
+	if (!m_pShader)
+		return;
+	m_pShader->m_pEffect->OnLostDevice();
+	
+	if(m_pRenderQuad)
+	{
+		delete m_pRenderQuad;
+		m_pRenderQuad = NULL;
+	}
+}
+
+//----------------------------------------------------------------------------------------------
+void VectorialBlur::Destroy ()
+{
+	ResourceManager::GetInstance()->Remove<Shader>("VectorialBlur.fx");
+}
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 void VectorialBlur::Apply(list<SceneObject*>* m_pObjectList)
 {
 	if (!(m_pTextureToBlur && m_pVectorsTexture && m_pBlurredSurface))
 		return;
 
 	// Adapts Quad Size
-	m_pTextureToBlur->GetSurfaceLevel(0, &m_pSurfaceToBlur);
 	D3DSURFACE_DESC surfaceToBlurDesc;
-	m_pSurfaceToBlur->GetDesc(&surfaceToBlurDesc);
+	m_pTextureToBlur->GetLevelDesc(0, &surfaceToBlurDesc);
 	m_pRenderQuad->SetSize(surfaceToBlurDesc.Width, surfaceToBlurDesc.Height);
 
 	// Change Render target;
@@ -37,7 +71,6 @@ void VectorialBlur::Apply(list<SceneObject*>* m_pObjectList)
 	// Parameter shader
 	m_pShader->m_pEffect->SetTexture( "g_TextureToBlur",	m_pTextureToBlur);
 	m_pShader->m_pEffect->SetTexture( "g_VectorsTexture",	m_pVectorsTexture);
-
 
 	// Apply the shader
 	m_pShader->m_pEffect->SetTechnique( "VectorialBlur" );
@@ -54,4 +87,5 @@ void VectorialBlur::Apply(list<SceneObject*>* m_pObjectList)
 
 	// Restore Render target
 	PostRenderer::GetInstance()->SetRenderTarget(m_pCurrentRenderTarget);
+	m_pCurrentRenderTarget->Release();
 }

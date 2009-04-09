@@ -37,8 +37,11 @@ public:
 	LPDIRECT3DTEXTURE9 GetSceneRenderTextureTemp ()		{ return m_pSceneRenderTargetTemp->GetTexture(); };
 	LPDIRECT3DSURFACE9 GetSceneRenderSurfaceTemp ()		{ return m_pSceneRenderTargetTemp->GetSurface(); };
 
-	void ReleaseSceneRender ();
-	HRESULT CreateSceneRender (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height);
+
+	HRESULT Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height);
+	void Release ();
+	void Destroy ();
+
 	void SwapSceneRender ();
 
 	void SetRenderTarget (LPDIRECT3DSURFACE9 _pRenderTarget);

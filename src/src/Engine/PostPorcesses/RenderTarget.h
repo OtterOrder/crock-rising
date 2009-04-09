@@ -18,7 +18,6 @@ public:
 	virtual ~RenderTarget(void);
 
 	void Release ();
-
 	HRESULT Create (LPDIRECT3DDEVICE9 _pDevice);
 
 	LPDIRECT3DTEXTURE9 GetTexture ()	{ return m_pTexture; };

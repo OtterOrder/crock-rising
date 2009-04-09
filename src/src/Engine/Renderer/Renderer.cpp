@@ -184,12 +184,12 @@ HRESULT Renderer::OnResetDevice()
 
 	if(m_Skybox)
 		m_Skybox->Init();
-/*
+//*
 	//-- Post Processes
 	LPDIRECT3DSURFACE9 pBackBuffer;
 	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
+	PostRenderer::GetInstance()->Create(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
-	PostRenderer::GetInstance()->CreateSceneRender(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
 //*/
 	return S_OK;
 }
@@ -214,7 +214,7 @@ HRESULT Renderer::FrameMove(float fElapsedTime)
 //===========================================================================//
 HRESULT Renderer::Render()
 {
-	//m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
+	m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
 
 	SceneObject::ScObjIt scobj;
 	Object2D::Obj2DIt obj2d, lastObj2d;
@@ -343,7 +343,7 @@ HRESULT Renderer::OnLostDevice()
 		++obj2d;
 	}
 
-	PostRenderer::GetInstance()->ReleaseSceneRender();
+	PostRenderer::GetInstance()->Release();
 
 	return S_OK;
 }
@@ -376,7 +376,7 @@ HRESULT Renderer::OnDestroyDevice()
 		++obj2d;
 	}
 
-
+	PostRenderer::GetInstance()->Destroy();
 
 	return S_OK;
 }

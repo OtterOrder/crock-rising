@@ -10,8 +10,8 @@ PostRenderer::PostRenderer(void)
 
 	m_pSceneRenderTarget		= NULL;
 	m_pSceneRenderTargetTemp	= NULL;
-/*
-	MotionBlur* pMotionBlur = new MotionBlur(Renderer::GetInstance()->GetWindowWidth(), Renderer::GetInstance()->GetWindowHeight());
+//*
+	MotionBlur* pMotionBlur = new MotionBlur();
 	m_pPostEffects.push_back(pMotionBlur);
 //*/
 }
@@ -19,7 +19,13 @@ PostRenderer::PostRenderer(void)
 //----------------------------------------------------------------------------------------------
 PostRenderer::~PostRenderer(void)
 {
-	ReleaseSceneRender ();
+	Release ();
+
+	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
+	{
+		if (m_pPostEffects[postEffect])
+			delete m_pPostEffects[postEffect];
+	}
 }
 
 //----------------------------------------------------------------------------------------------
@@ -33,13 +39,14 @@ void PostRenderer::SetBackBuffer (LPDIRECT3DSURFACE9 _pBackBuffer)
 //----------------------------------------------------------------------------------------------
 void PostRenderer::RenderPostEffects ()
 {
-/*
+//*
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
 		if (m_pPostEffects[postEffect])
 			m_pPostEffects[postEffect]->Apply(&SceneObject::RefList);
 	}
 //*/
+
 	if (! (m_pSceneRenderTarget && m_pBackBuffer))
 		return;
 
@@ -55,7 +62,7 @@ void PostRenderer::RenderPostEffects ()
 }
 
 //----------------------------------------------------------------------------------------------
-void PostRenderer::ReleaseSceneRender ()
+void PostRenderer::Release ()
 {
 	if (m_pSceneRenderTarget)
 	{
@@ -67,15 +74,37 @@ void PostRenderer::ReleaseSceneRender ()
 		delete m_pSceneRenderTargetTemp;
 		m_pSceneRenderTargetTemp = NULL;
 	}
+
+	if (m_pBackBuffer)
+	{
+		m_pBackBuffer->Release();
+		m_pBackBuffer = NULL;
+	}
+//*
+	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
+	{
+		if (m_pPostEffects[postEffect])
+			m_pPostEffects[postEffect]->Release();
+	}
+//*/
 }
 
 //----------------------------------------------------------------------------------------------
-HRESULT PostRenderer::CreateSceneRender (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
+void PostRenderer::Destroy ()
 {
+	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
+	{
+		if (m_pPostEffects[postEffect])
+			m_pPostEffects[postEffect]->Destroy();
+	}
+}
+
+//----------------------------------------------------------------------------------------------
+HRESULT PostRenderer::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
+{
+
 	//// ToDo : Change return value
 	assert (_pDevice);
-
-	ReleaseSceneRender ();
 	
 	//HRESULT renderTargetCrateation;
 
@@ -84,7 +113,13 @@ HRESULT PostRenderer::CreateSceneRender (LPDIRECT3DDEVICE9 _pDevice, u32 _width,
 
 	m_pSceneRenderTargetTemp	= new RenderTarget(_width, _height);
 	m_pSceneRenderTargetTemp->Create(_pDevice);
-
+//*
+	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
+	{
+		if (m_pPostEffects[postEffect])
+			m_pPostEffects[postEffect]->Create(_pDevice, _width, _height);
+	}
+//*/
 	return S_OK;
 }
 
@@ -112,6 +147,8 @@ LPDIRECT3DSURFACE9 PostRenderer::GetRenderTarget ()
 	LPDIRECT3DSURFACE9 pRenderTarget = NULL;
 	Renderer::GetInstance()->m_pd3dDevice->GetRenderTarget(0, &pRenderTarget);
 	return pRenderTarget;
+
+	return NULL;
 }
 
 //----------------------------------------------------------------------------------------------
@@ -129,4 +166,6 @@ LPDIRECT3DSURFACE9 PostRenderer::GetRenderTarget (u32 _level)
 	LPDIRECT3DSURFACE9 pRenderTarget = NULL;
 	Renderer::GetInstance()->m_pd3dDevice->GetRenderTarget(_level, &pRenderTarget);
 	return pRenderTarget;
+
+	return NULL;
 }

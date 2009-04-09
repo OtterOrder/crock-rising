@@ -30,6 +30,7 @@ protected:
 	static	D3DXVECTOR4		m_LightsColor[MAX_LIGHTS]; 
 	static	D3DXVECTOR4		m_LightsSpecular[MAX_LIGHTS];
 	static	D3DXVECTOR3		m_LightsPosition[MAX_LIGHTS];
+	static  D3DXVECTOR3		m_LightsDirection[MAX_LIGHTS];
 	static	float			m_LightsAngle[MAX_LIGHTS];
 	static  float			m_LightsAttenuation[MAX_LIGHTS];
 
@@ -41,9 +42,11 @@ public:
 	void		 SetLightColor(D3DXVECTOR4 Color);
 	void		 SetLightSpecular(D3DXVECTOR4 Color);
 	void		 SetLightPosition(D3DXVECTOR3 pos);
-
 	virtual void SetLightAttenuation(float att){}
 	virtual void SetLightAngle(float angle){}
+
+	D3DXVECTOR3  GetLightPosition() {return m_LightsPosition[m_LightId];}
+	D3DXVECTOR3  GetLightDirection() {return m_LightsDirection[m_LightId];}
 
 protected:
 	void CommonInit();

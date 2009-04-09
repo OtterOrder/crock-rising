@@ -11,6 +11,7 @@ std::list< Light* > Light::RefList;
 D3DXVECTOR4 Light::m_LightsColor[MAX_LIGHTS];
 D3DXVECTOR4 Light::m_LightsSpecular[MAX_LIGHTS];
 D3DXVECTOR3 Light::m_LightsPosition[MAX_LIGHTS];
+D3DXVECTOR3 Light::m_LightsDirection[MAX_LIGHTS];
 float		Light::m_LightsAngle[MAX_LIGHTS];
 float		Light::m_LightsAttenuation[MAX_LIGHTS];
 
@@ -41,6 +42,7 @@ void Light::SetLightData(Shader * shader)
 	shader->m_pEffect->SetValue( "g_LightsColor", m_LightsColor, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
 	shader->m_pEffect->SetValue( "g_LightsSpecular", m_LightsSpecular, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
 	shader->m_pEffect->SetValue( "g_LightsPosition", m_LightsPosition, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
+	shader->m_pEffect->SetValue( "g_LightsDirection", m_LightsDirection, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
 	shader->m_pEffect->SetValue( "g_LightsAttenuation", m_LightsAttenuation, sizeof( float ) * MAX_LIGHTS );
 	shader->m_pEffect->SetValue( "g_LightsAngle", m_LightsAngle, sizeof( float ) * MAX_LIGHTS );
 
@@ -69,6 +71,7 @@ DirectionalLight::DirectionalLight()
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 1000.f, 0.f);
 	m_LightsAngle[m_LightId]=0.f;
 	m_LightsAttenuation[m_LightId]=1.5f;
+	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 0.f, 0.f);
 }
 
 DirectionalLight::~DirectionalLight()
@@ -84,6 +87,7 @@ PointLight::PointLight()
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, 0.f);
 	m_LightsAngle[m_LightId]=0.1f;
 	m_LightsAttenuation[m_LightId]=0.5f;
+	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 0.f, 0.f);
 }
 
 PointLight::~PointLight()
@@ -105,6 +109,7 @@ SpotLight::SpotLight()
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, 0.f);
 	m_LightsAngle[m_LightId]=0.65f;
 	m_LightsAttenuation[m_LightId]=2.0f;
+	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 0.f, 0.f);
 
 }
 

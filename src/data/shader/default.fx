@@ -19,6 +19,7 @@ float  g_Glossiness;
 
 static const int g_NumLights=1;				// Propriétés des lumières		   
 float3 g_LightsPosition[4]; 
+float3 g_LightsDirection[4];
 float4 g_LightsColor[4]; 
 float4 g_LightsSpecular[4]; 
 float  g_LightsAttenuation[4];
@@ -108,7 +109,7 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 		float3 dist = length(L);
 		float3 H=normalize(L+V);
 		
-		float spotEffect = dot(normalize(g_LightsPosition[i]), normalize(L));
+		float spotEffect = dot(normalize(g_LightsDirection[i]-g_LightsPosition[i]), -L);
 		
 		if(spotEffect > g_LightsAngle[i])
 		{

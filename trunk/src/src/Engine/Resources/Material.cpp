@@ -10,7 +10,7 @@
 Material::Material()
 {
 	m_DiffuseColor=D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.f);
-	m_AmbientColor=D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.f);
+	m_AmbientColor=D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.f);
 	m_SpecularColor=D3DXVECTOR4(1.f, 1.f, 1.f, 1.f);
 	m_Maps[Texture::DIFFUSE]=NULL;
 	m_Opacity=1.f;
@@ -56,6 +56,8 @@ void Material::SetGraphicalData()
 		m_pShader->m_pEffect->SetBool("g_UseTex", true);
 		m_pShader->m_pEffect->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->m_pTex);
 	}
+	else
+		m_pShader->m_pEffect->SetBool("g_UseTex", false);
 
 	// On transmet les couleurs de l'objet au shader
 	m_pShader->m_pEffect->SetVector("g_ObjectDiffuse", &m_DiffuseColor);

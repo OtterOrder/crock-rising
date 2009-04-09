@@ -5,11 +5,6 @@
 
 #include	<Game/Level.h>
 
-#include	<Objects/SceneObject.h>
-#include	<Objects/SceneObjectAnimated.h>
-#include	<Resources/Material.h>
-#include	<Objects/Skybox.h>
-
 //******************************************************************
 
 #define		LEVEL_start				0x9f79558f
@@ -31,10 +26,6 @@ public:
 protected:
 	
 	Camera* m_pCamera;
-
-	SceneObject*			m_pCanyon;
-	SceneObjectAnimated*	m_pAlien;
-	Skybox*					m_pSkybox;
 
 	//TODO
 

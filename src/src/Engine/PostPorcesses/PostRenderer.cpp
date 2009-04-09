@@ -10,10 +10,11 @@ PostRenderer::PostRenderer(void)
 
 	m_pSceneRenderTarget		= NULL;
 	m_pSceneRenderTargetTemp	= NULL;
-//*
+
 	MotionBlur* pMotionBlur = new MotionBlur();
 	m_pPostEffects.push_back(pMotionBlur);
-//*/
+
+	m_PostEffects = 0;
 }
 
 //----------------------------------------------------------------------------------------------
@@ -42,7 +43,7 @@ void PostRenderer::RenderPostEffects ()
 //*
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
-		if (m_pPostEffects[postEffect])
+		if (m_pPostEffects[postEffect] && (m_PostEffects & (1<<postEffect) == 1<<postEffect))
 			m_pPostEffects[postEffect]->Apply(&SceneObject::RefList);
 	}
 //*/

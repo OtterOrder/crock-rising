@@ -15,10 +15,18 @@
 class PostRenderer: public Singleton< PostRenderer >
 {
 public:
+	typedef enum
+	{
+		PE_MotionBlur =0
+	} PostEffectType;
+
+public:
 	PostRenderer(void);
 	virtual ~PostRenderer(void);
 
 protected:
+	u8	m_PostEffects;
+
 	LPDIRECT3DSURFACE9	m_pBackBuffer;
 
 	RenderTarget*		m_pSceneRenderTarget;
@@ -49,4 +57,7 @@ public:
 
 	void SetRenderTarget (u32 _level, LPDIRECT3DSURFACE9 _pRenderTarget);
 	LPDIRECT3DSURFACE9 GetRenderTarget (u32 _level);
+
+	void EnablePostEffect	(PostEffectType _postEffect)	{ m_PostEffects = m_PostEffects | (1 << _postEffect); };
+	void DisablePostEffect	(PostEffectType _postEffect)	{ m_PostEffects = !(!m_PostEffects | (1 << _postEffect)); };
 };

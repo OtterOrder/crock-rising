@@ -85,7 +85,10 @@ HRESULT Renderer::OnCreateDevice()
 	}
 
 	// Lumière par défaut : lumière directionnelle
-	Light * DefaultLight=new DirectionalLight();
+	//Light * DefaultLight=new DirectionalLight();
+	//Light * DefaultLight2=new PointLight();
+	//Light * DefaultLight2=new SpotLight();
+	//DefaultLight2->SetLightAngle(0.8f);
 	
 	return S_OK;
 

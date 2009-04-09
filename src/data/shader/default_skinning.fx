@@ -17,11 +17,12 @@ float4 g_ObjectSpecular;
 bool   g_UseTex=false;
 float  g_Glossiness;
 
-int	   g_NumLights=1;				// Propriétés des lumières
-int	   g_LightsType[4];				   
-float3 m_LightsPosition[4]; 
+static const int g_NumLights=1;				// Propriétés des lumières		   
+float3 g_LightsPosition[4]; 
 float4 g_LightsColor[4]; 
 float4 g_LightsSpecular[4]; 
+float  g_LightsAttenuation[4];
+float  g_LightsAngle[4];
 
 float3 g_vCamPos;
 
@@ -116,29 +117,49 @@ struct PS_OUTPUT
 // Illumination phong pixel shader                                           //
 //===========================================================================//
 PS_OUTPUT RenderScenePS( VS_OUTPUT In ) 
-{ 
-    PS_OUTPUT Output;
+{
+	 PS_OUTPUT Output;
+	 
+	float3 pos=In.oPosition.xyz/In.oPosition.w;
     
-    float3 pos=In.oPosition.xyz/In.oPosition.w;
-  
-	int i=0;
-
-	float3 L=normalize(m_LightsPosition[i]-pos);
-	float3 dist = length(L);
-
+    float4 DiffuseColor;
+    
+    if(g_UseTex)
+		DiffuseColor=tex2D(MeshTextureSampler, In.TextureUV.xy);
+    else
+		DiffuseColor=g_ObjectDiffuse;
+		
 	float3 V=normalize(g_vCamPos-pos);
-	float3 H=normalize(L+V);
 	float3 N=normalize(In.Normal.xyz);
+	float att;
+	float4 lumiere=float4(0.f, 0.f, 0.f, 0.f);
+	float3 Color=float3(0.f, 0.f, 0.f);
 	
-	float4 lumiere=lit(dot(N, L),dot(N, H), g_Glossiness);
-	float att = 1.0 / (1.f + 0.3f * dist + 0.3f * dist * dist);;
+	Output.RGBColor.xyz=float3(0.f, 0.f, 0.f);
+		
+	for(int i=0; i<g_NumLights; i++)
+	{
+		float3 L=normalize(g_LightsPosition[i]-pos);
+		float3 dist = length(L);
+		float3 H=normalize(L+V);
+		
+		float spotEffect = dot(normalize(g_LightsPosition[i]), normalize(L));
+		
+		if(spotEffect > g_LightsAngle[i])
+		{
+			lumiere=lit(dot(N, L),dot(N, H), g_Glossiness);
+			spotEffect = pow(spotEffect, 2);
+			att = spotEffect / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+		}
+		else 
+			att=1.f / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+		
+		Color += att*((g_ObjectAmbient+lumiere.y)*DiffuseColor+g_ObjectSpecular*lumiere.z);
+	}
 	
-	if(g_UseTex)
-		Output.RGBColor.xyz = att*(g_ObjectAmbient*g_LightsColor[i]+tex2D(MeshTextureSampler, In.TextureUV.xy)*lumiere.y+g_ObjectSpecular*lumiere.z);
-	else
-		Output.RGBColor.xyz = g_ObjectAmbient*lumiere.x+g_ObjectDiffuse*lumiere.y+g_ObjectSpecular*lumiere.z;
-
+	Output.RGBColor.xyz=Color;
 	Output.RGBColor.w=1.f;
+
 	return Output;
 }
 

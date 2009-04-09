@@ -14,7 +14,7 @@
 #include	"Objects/Skybox.h"
 #include	"Objects/Light.h"
 
-#include	"PostPorcesses/PostRenderer.h"
+#include	"PostProcesses/PostRenderer.h"
 
 //===========================================================================//
 

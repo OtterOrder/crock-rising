@@ -613,46 +613,54 @@
 			Name="PostProcesses"
 			>
 			<File
-				RelativePath=".\PostPorcesses\PostRenderer.cpp"
+				RelativePath=".\PostProcesses\PostRenderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PostPorcesses\PostRenderer.h"
+				RelativePath=".\PostProcesses\PostRenderer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PostPorcesses\RenderTarget.cpp"
+				RelativePath=".\PostProcesses\RenderTarget.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PostPorcesses\RenderTarget.h"
+				RelativePath=".\PostProcesses\RenderTarget.h"
 				>
 			</File>
 			<Filter
 				Name="PostEffects"
 				>
 				<File
-					RelativePath=".\PostPorcesses\MotionBlur.cpp"
+					RelativePath=".\PostProcesses\MotionBlur.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\PostPorcesses\MotionBlur.h"
+					RelativePath=".\PostProcesses\MotionBlur.h"
 					>
 				</File>
 				<File
-					RelativePath=".\PostPorcesses\PostEffect.cpp"
+					RelativePath=".\PostProcesses\PostEffect.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\PostPorcesses\PostEffect.h"
+					RelativePath=".\PostProcesses\PostEffect.h"
 					>
 				</File>
 				<File
-					RelativePath=".\PostPorcesses\VectorialBlur.cpp"
+					RelativePath=".\PostProcesses\PostEffectMaterial.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\PostPorcesses\VectorialBlur.h"
+					RelativePath=".\PostProcesses\PostEffectMaterial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PostProcesses\VectorialBlur.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PostProcesses\VectorialBlur.h"
 					>
 				</File>
 			</Filter>

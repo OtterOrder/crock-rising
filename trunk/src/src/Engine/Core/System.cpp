@@ -2,7 +2,7 @@
 
 #include	"Core/Inputs/InputManager.h"
 #include	"Renderer/Renderer.h"
-#include	"PostPorcesses/PostRenderer.h"
+#include	"PostProcesses/PostRenderer.h"
 #include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
 #include	"Physics/Physicalizer.h"

@@ -40,13 +40,11 @@ void PostRenderer::SetBackBuffer (LPDIRECT3DSURFACE9 _pBackBuffer)
 //----------------------------------------------------------------------------------------------
 void PostRenderer::RenderPostEffects ()
 {
-//*
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
-		if (m_pPostEffects[postEffect] && (m_PostEffects & (1<<postEffect) == 1<<postEffect))
+		if (m_pPostEffects[postEffect] && ((m_PostEffects & (1<<postEffect)) == 1<<postEffect))
 			m_pPostEffects[postEffect]->Apply(&SceneObject::RefList);
 	}
-//*/
 
 	if (! (m_pSceneRenderTarget && m_pBackBuffer))
 		return;

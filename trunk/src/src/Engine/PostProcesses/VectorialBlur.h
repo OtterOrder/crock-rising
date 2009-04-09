@@ -5,7 +5,7 @@
 #include	<D3D9.h>
 #include	"Objects/2D/Quad.h"
 
-#include	"PostPorcesses/PostRenderer.h"
+#include	"PostProcesses/PostRenderer.h"
 
 class VectorialBlur : public PostEffect, public Singleton< VectorialBlur >
 {

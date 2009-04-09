@@ -79,7 +79,7 @@ public:
 	NxPhysicsSDK*		getPhysicsSDK()		{ return m_PhysicsSDK;		}	
 	NxScene*			getScene()			{ return m_Scene;			}	
 	Vector3f			getGravity()		{ return m_Gravity;			}	
-	AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }	
+	AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }
 
 	///////////////////////////////////////////////////////////////////////////
 	// Modificateurs															 //
@@ -108,5 +108,7 @@ protected:
 	HINSTANCE		m_Instance;			// Instance de l'application
 };
 
+
 //******************************************************************
+
 #endif		// _Physicalizer_H

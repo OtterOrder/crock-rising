@@ -15,14 +15,12 @@
 #include	"BoundingBox.h"
 
 
+
 enum PhysXResult
 {
 	PHYSX_SUCCEED,
 	PHYSX_FAILED
 };
-
-
-
 
 //Structure qui contiendra tous les paramètres de l'instance physX qui ne seront pas indispensable
 //afin d'avoir une utilisation plus intuitive de la classe. 

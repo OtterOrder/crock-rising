@@ -23,43 +23,15 @@ enum UserDataFlag
 	UD_RENDER_USING_LIGHT1			= (1<<8),
 };
 
-
-void AddUserDataToActors(NxScene* scene);
-void AddUserDataToShapes(NxActor* actor);
-
-void ReleaseUserDataFromActors(NxScene* scene);
-void ReleaseUserDataFromShapes(NxActor* actor);
-void AddUserData( NxActorDesc* actorDesc, void (*Func)());
-
-class ActorUserData
+// structure qui permet de passer des informations dans le userdata d'un nxActor
+struct ActorUserData
 {
-public:
 	NxU32 id;
 	void (*OnEnterFunc)(); 
 	void (*OnLeaveFunc)(); 
 	void (*OnStayFunc)(); 
 
 	ActorUserData();
-};
-
-class ShapeUserData
-{
-public:
-	NxU32 id;
-	void* mesh;
-    void* model;
-
-	NxReal wheelShapeRollAngle;
-	NxMat34 wheelShapePose;
-
-	ShapeUserData()
-	{
-		id = 0;
-		mesh = NULL;
-        model = NULL;
-		wheelShapeRollAngle = 0;
-//		wheelShapePose = 0;
-	}
 };
 
 #endif  // USERDATA_H

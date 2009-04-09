@@ -1,6 +1,5 @@
 #include "BoundingBox.h"
 #include "Physicalizer.h"
-//#include "Trigger/Trigger.h"
 
 //===========================================================================//
 //Testera si il y a collision avec l'objet po                                //
@@ -62,7 +61,7 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 
 			actorDesc.shapes.push_back(&boxDesc);
 			actorDesc.density		= (NxReal)bd->m_density;	
-			actorDesc.globalPose.t	= VecToNxVec(bd->m_pos);
+			actorDesc.globalPose.t	= VecToNxVec(bd->m_pos) + NxVec3( 0.f, bd->m_dimension.y/2, 0.f );
 		}
 		break;
 
@@ -76,7 +75,7 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 
 			actorDesc.shapes.push_back(&sphereDesc);
 			actorDesc.density		= (NxReal)sd->m_density;	
-			actorDesc.globalPose.t	= VecToNxVec(sd->m_pos);
+			actorDesc.globalPose.t	= VecToNxVec(sd->m_pos) + NxVec3( 0.f, sd->m_radius/2, 0.f );
 		}
 		break;
 	case CAPSULE:
@@ -108,11 +107,10 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 			assert(actorDesc.isValid());
 
 			//Remplissage du userdata => on lui donne ses fonctions
-			ActorUserData * userdata = new ActorUserData;
-			userdata->OnEnterFunc = td->m_OnEnterFunc;
-			userdata->OnLeaveFunc = NULL;//td->OnLeaveFunc;
-			userdata->OnStayFunc = NULL;//td->OnStayFunc;
-			actorDesc.userData = userdata;
+			actorDesc.userData = new ActorUserData;
+			((ActorUserData*)(actorDesc.userData))->OnEnterFunc = td->m_OnEnterFunc  ;
+			((ActorUserData*)(actorDesc.userData))->OnLeaveFunc = td->m_OnLeaveFunc  ;
+			((ActorUserData*)(actorDesc.userData))->OnStayFunc  = td->m_OnStayFunc   ;
 		}
 	}
 
@@ -134,30 +132,29 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 ////////////////////////////////////////////////////////////////////////
 //////////////////////////// FUCKING MANUAL ////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-/*
-//Création Cube
-	SceneObject* aCube = NULL;
 
-	aCube = new SceneObject("Cube.DAE", D3DXVECTOR3(0.f,0.f,0.f));
-	aCube->InitObject();
-	aCube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
-	aCube->SetShader("blinn.fx");
-	BoxDescription desc(Vector3f(demiSize, demiSize, demiSize), density, 1.0f, Pos);
-	desc.linearVelocity = initialVel;
-	BoundingBox bb = BoundingBox(&desc, BOX);
-
-	Physicalizer::GetInstance()->SetPhysicable(aCube, &bb);
-
-//Création Trigger
-
-	SceneObject* Cube = new SceneObject("Cube.DAE", Vector3f(0.f, 0.f, 0.f));
-
-	Cube->InitObject();
-	Cube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
-	Cube->SetShader("blinn.fx");
-	TriggerDescription td;
-	td.OnEnterFunc = test;
-	BoundingBox bb(&td, TRIGGER);
-
-	Physicalizer::GetInstance()->SetPhysicable(Cube, &bb);//&BoundingBox(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0.f, 1.f, 0.f )));
-*/
+////Création Cube
+//	SceneObject* aCube = NULL;
+//
+//	aCube = new SceneObject("Cube.DAE", D3DXVECTOR3(0.f,0.f,0.f));
+//	aCube->InitObject();
+//	aCube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
+//	aCube->SetShader("blinn.fx");
+//	BoxDescription desc(Vector3f(demiSize, demiSize, demiSize), density, 1.0f, Pos);
+//	desc.linearVelocity = initialVel;
+//	BoundingBox bb = BoundingBox(&desc);
+//
+//	Physicalizer::GetInstance()->SetPhysicable(aCube, &bb);
+//
+////Création Trigger
+//
+//	SceneObject* Cube = new SceneObject("Cube.DAE", Vector3f(0.f, 0.f, 0.f));
+//
+//	Cube->InitObject();
+//	Cube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
+//	Cube->SetShader("blinn.fx");
+//	TriggerDescription td;
+//	td.m_OnEnterFunc = test;
+//	BoundingBox bb(&td);
+//
+//	Physicalizer::GetInstance()->SetPhysicable(Cube, &bb);//&BoundingBox(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0.f, 1.f, 0.f )));

@@ -19,7 +19,7 @@ NxVec3 VecToNxVec(const Vector3f V);
 void Normalize(Vector3f &V);
 float Norme(Vector3f V);
 
-
+//Classe mere contenant les variables communes à toutes les descriptions
 struct ShapeDescription
 {
 	ShapeDescription(){}

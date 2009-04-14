@@ -677,6 +677,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Sound"
+			>
+			<File
+				RelativePath=".\Sound\SoundSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Sound\SoundSystem.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

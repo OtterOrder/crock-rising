@@ -27,13 +27,13 @@ public:
 	void			DeleteData();
 	void			UpdateAnimation();
 	void			SetShader(const std::string &strShader);
-	//Material*		GetMaterial() {return m_pMaterial;}
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
 
 	virtual void	SetVisible(bool value);
 	virtual bool	GetVisible();
 
+	void			SetAnim(const std::string& anim);
 	void			StartAnim();
 	void			PauseAnim();
 	void			StopAnim();

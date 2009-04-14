@@ -19,7 +19,7 @@ ResourceManager::ResourceManager()
 ResourceManager::~ResourceManager()
 {
 	// Destruction de toutes les ressources restantes
-	//Clear();
+	Clear();
 }
 
 //===========================================================================//

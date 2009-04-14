@@ -66,6 +66,8 @@ public:
 	virtual void	Draw();
 	virtual void	DeleteDeviceData();
 	virtual void	DeleteData();
+
+	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
 	
 	TEmpList* getEmpList(){ return m_EmpList; }
 	void setEmpList(TEmpList* L){ m_EmpList = L; }

@@ -25,8 +25,8 @@ public:
 		Vector3f	position;		// Position
 		Vector3f	velocity;		// Vitesse de déplacement
 		Vector3f	direction;		// Direction
-		Vector3f	up;				// Up
-		float		maxDistance;	// Distance max de propagation du son (en mètres)
+		Vector3f	up;				// Vecteur up
+		float		distance;		// Distance max des sons perçus (en mètres)
 		float		rolloffFactor;	// Facteur d'atténuation en fonction de la distance
 		float		dopplerFactor;	// Facteur d'effet Doppler
 
@@ -40,12 +40,10 @@ public:
 
 	// Paramètres du listener
 	void SetListenerToDefault();
-	void SetListenerPosition( const Vector3f &position );
-	void SetListenerVelocity( const Vector3f &velocity );
-	void SetListenerOrientation( const Vector3f &direction, const Vector3f &up );
+	void SetListenerDesc( const ListenerDesc &desc );
 	ListenerDesc GetListenerDesc() const;
 
-	//..
+	// Musique
 
 protected:
 

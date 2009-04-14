@@ -32,7 +32,7 @@ public:
 	virtual void SetTransform(const D3DXMATRIX* world, const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos) {}
 	virtual void SetTransform(const D3DXMATRIX* world) {}
 
-	Vector3f GetPosition() { return m_vPosition; }
+	Vector3f GetPosition() const { return m_vPosition; }
 	void SetTranslation( float x, float y, float z );
 	void SetRotation( int angleX, int angleY, int angleZ );
 	

@@ -11,7 +11,6 @@ SoundSystem::SoundSystem()
 {
 	m_pDevice	= NULL;
 	m_pListener	= NULL;
-
 	SetListenerToDefault();
 }
 
@@ -91,42 +90,34 @@ void SoundSystem::Release()
 //**********************************************************
 void SoundSystem::SetListenerToDefault()
 {
-	m_ListenerDesc.position			= Vector3f( 0.f, 0.f, 0.f );
-	m_ListenerDesc.velocity			= Vector3f( 0.f, 0.f, 0.f );
-	m_ListenerDesc.direction		= Vector3f( 0.f, 0.f, 1.f );
-	m_ListenerDesc.up				= Vector3f( 0.f, 1.f, 0.f );
-	m_ListenerDesc.maxDistance		= 100.f;
-	m_ListenerDesc.rolloffFactor	= 0.1f;
-	m_ListenerDesc.dopplerFactor	= 0.3f;
+	ListenerDesc defaultDesc;
+	
+	defaultDesc.position		= Vector3f( 0.f, 0.f, 0.f );
+	defaultDesc.velocity		= Vector3f( 0.f, 0.f, 0.f );
+	defaultDesc.direction		= Vector3f( 0.f, 0.f, 1.f );
+	defaultDesc.up				= Vector3f( 0.f, 1.f, 0.f );
+	defaultDesc.distance		= 100.f;
+	defaultDesc.rolloffFactor	= 0.1f;
+	defaultDesc.dopplerFactor	= 0.3f;
+	
+	SetListenerDesc( defaultDesc );
 }
 
 //**********************************************************
-// Change la position du listener.
-// @param[in]	position : position dans l'espace
+// Change tous les paramètres du listener.
+// @param[in]	desc : structure de paramètres
 //**********************************************************
-void SoundSystem::SetListenerPosition( const Vector3f &position )
+void SoundSystem::SetListenerDesc( const ListenerDesc &desc )
 {
-	m_ListenerDesc.position = position;
-}
+	m_ListenerDesc = desc;
 
-//**********************************************************
-// Change la vitesse de déplacement du listener.
-// @param[in]	velocity : vitesse
-//**********************************************************
-void SoundSystem::SetListenerVelocity( const Vector3f &velocity )
-{
-	m_ListenerDesc.velocity = velocity;
-}
-
-//**********************************************************
-// Change l'orientation du listener.
-// @param[in]	direction : vecteur direction
-// @param[in]	up : vecteur up
-//**********************************************************
-void SoundSystem::SetListenerOrientation( const Vector3f &direction, const Vector3f &up )
-{
-	m_ListenerDesc.direction	= direction;
-	m_ListenerDesc.up			= up;
+	if( m_pListener )
+	{
+		m_pListener->SetAllParameters(
+			(DS3DLISTENER*)&m_ListenerDesc,
+			DS3D_DEFERRED // Mise à jour en différé..
+		);
+	}
 }
 
 //**********************************************************
@@ -142,14 +133,16 @@ SoundSystem::ListenerDesc SoundSystem::GetListenerDesc() const
 //**********************************************************
 SoundSystem::ListenerDesc::operator DS3DLISTENER()
 {
-	DS3DLISTENER ds3dListener;
-	ds3dListener.dwSize				= sizeof(DS3DLISTENER);
-	ds3dListener.vPosition			= position;
-	ds3dListener.vVelocity			= velocity;
-	ds3dListener.vOrientFront		= direction;
-	ds3dListener.vOrientTop			= up;
-	ds3dListener.flDistanceFactor	= maxDistance;
-	ds3dListener.flRolloffFactor	= rolloffFactor;
-	ds3dListener.flDopplerFactor	= dopplerFactor;
-	return ds3dListener;
+	DS3DLISTENER ds3dDesc;
+	
+	ds3dDesc.dwSize				= sizeof(DS3DLISTENER);
+	ds3dDesc.vPosition			= position;
+	ds3dDesc.vVelocity			= velocity;
+	ds3dDesc.vOrientFront		= direction;
+	ds3dDesc.vOrientTop			= up;
+	ds3dDesc.flDistanceFactor	= distance;
+	ds3dDesc.flRolloffFactor	= rolloffFactor;
+	ds3dDesc.flDopplerFactor	= dopplerFactor;
+	
+	return ds3dDesc;
 }

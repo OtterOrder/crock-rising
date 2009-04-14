@@ -258,6 +258,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Characters"
+			>
+			<File
+				RelativePath=".\Characters\Enemy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\Enemy.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\Hero.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\Hero.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
 			>

@@ -261,4 +261,9 @@ void SceneObjectAnimated::SetAnimFPS(float fps)
 	m_fAnimFPS=fps;
 }
 
+void SceneObjectAnimated::SetAnim(const std::string& anim)
+{
+	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_strAnim);
+}
+
 

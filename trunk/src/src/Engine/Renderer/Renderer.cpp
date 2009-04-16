@@ -2,7 +2,7 @@
 // Include                                                                   //
 //===========================================================================//
 #define		NOMINMAX
-#define		DEVCAMERA
+//#define		DEVCAMERA
 
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"
@@ -240,7 +240,7 @@ HRESULT Renderer::Render()
 		#ifdef DEVCAMERA
 		m_Skybox->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
 		#else
-		m_Skybox->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition());
+		m_Skybox->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition() );
 		#endif
 		m_Skybox->Draw();
 	}
@@ -253,7 +253,7 @@ HRESULT Renderer::Render()
 		#ifdef DEVCAMERA
 		(*scobj)->SetTransform(m_DevCamera.GetViewMatrix(), m_DevCamera.GetProjMatrix(), *m_DevCamera.GetEyePt());
 		#else
-		(*scobj)->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix());
+		(*scobj)->SetTransform(&m_Camera->GetViewMatrix(), &m_Camera->GetProjMatrix(), m_Camera->GetPosition() );
 		#endif
 		(*scobj)->Draw();
 		++scobj;
@@ -469,8 +469,8 @@ D3DXMATRIX Renderer::GetViewProjMatrix ()
 	View = (D3DXMATRIX*)m_DevCamera.GetViewMatrix();
 	Proj = (D3DXMATRIX*)m_DevCamera.GetProjMatrix();
 	#else
-	View = m_Camera->GetViewMatrix();
-	Proj = m_Camera->GetProjMatrix();
+	View = &(m_Camera->GetViewMatrix());
+	Proj = &(m_Camera->GetProjMatrix());
 	#endif
 
 	D3DXMatrixMultiply(&ViewProjMatrix, View, Proj);

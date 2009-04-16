@@ -7,10 +7,11 @@
 #define NOMINMAX
 #include	<windows.h>
 #include	<stdio.h>
-
+#include	<crtdbg.h>
+#include	"NxUserAllocatorDefault.h"
 #include	"NxPhysics.h"
 #include	"NxControllerManager.h"
-#include	"NxUserAllocatorDefault.h"
+
 
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"

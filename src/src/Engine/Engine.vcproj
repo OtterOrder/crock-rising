@@ -58,7 +58,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="PhysXLoader.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 			/>
 			<Tool
@@ -121,7 +120,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="PhysXLoader.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 			/>
 			<Tool

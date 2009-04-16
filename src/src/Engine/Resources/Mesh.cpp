@@ -23,10 +23,10 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 	ReleaseD3DBuffers ();
-
+/*
 	if ( m_VertexBuffer )
 		delete [] m_VertexBuffer;
-
+*/
 	if ( m_IndexBuffer )
 		delete [] m_IndexBuffer;
 
@@ -46,7 +46,7 @@ ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_SVertexBuffer, m_IndexBuffer, m_iNbVertices, m_iNbIndex, m_decl, m_Skinned) == RES_SUCCEED)
+	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbIndex, m_decl) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 			return RES_SUCCEED;
@@ -59,38 +59,35 @@ ResourceResult	Mesh::FillD3DBuffers ()
 {
 	ReleaseD3DBuffers ();
 
-	if ((m_VertexBuffer || m_SVertexBuffer) && m_IndexBuffer)
+	if (m_VertexBuffer.m_Datas && m_IndexBuffer)
 	{
 		LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
-
+/*
 		UINT BufferSize;
 		if (!m_Skinned)
 			BufferSize = sizeof(Vertex)*m_iNbVertices;
 		else
 			BufferSize = sizeof(SkinnedVertex)*m_iNbVertices;
-	
-		pDevice->CreateVertexBuffer (	BufferSize, 
+*/
+		pDevice->CreateVertexBuffer (	m_VertexBuffer.m_Size, 
 										NULL, 
 										0, 
 										D3DPOOL_DEFAULT, 
 										&m_pVB, 
 										NULL);
 
-		void * pVertexBuffer;
+		void* pVertexBuffer;
 
-		if(FAILED(m_pVB->Lock(0, BufferSize, (void **)&pVertexBuffer, 0)))
+		if(FAILED(m_pVB->Lock(0, m_VertexBuffer.m_Size, (void **)&pVertexBuffer, 0)))
 			return RES_FAILED;
 
-		if (!m_Skinned)
-			memcpy(pVertexBuffer, m_VertexBuffer, BufferSize);
-		else
-			memcpy(pVertexBuffer, m_SVertexBuffer, BufferSize);
+		memcpy(pVertexBuffer, m_VertexBuffer.m_Datas, m_VertexBuffer.m_Size);
 
 		m_pVB->Unlock();
 
 
 		
-		BufferSize = sizeof(int)*m_iNbIndex;
+		u32 BufferSize = sizeof(int)*m_iNbIndex;
 
 		pDevice->CreateIndexBuffer (	BufferSize,
 										D3DUSAGE_WRITEONLY,
@@ -118,14 +115,16 @@ ResourceResult	Mesh::FillD3DBuffers ()
 void Mesh::OrderIndices(int * ArrayOrder)
 {
 	// On met les indices dans l'ordre hiérarchique
+	SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)m_VertexBuffer.m_Datas;
+
 	if(!m_bOrdered)
 	{
 		for(int i=0; i<m_iNbVertices; i++)
 		{
-			m_SVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.x];
-			m_SVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.y];
-			m_SVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.z];
-			m_SVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)m_SVertexBuffer[i].m_Bones.w];
+			pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
+			pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];
+			pSVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.z];
+			pSVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.w];
 		}
 		m_bOrdered=true;
 	}

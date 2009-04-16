@@ -9,8 +9,6 @@
 
 //******************************************************************
 
-class Object;
-
 class SoundSystem : public Singleton< SoundSystem >
 {
 	// Indispensable car Singleton doit pouvoir accéder aux
@@ -23,25 +21,29 @@ public:
 	struct ListenerDesc
 	{
 		Vector3f	position;		// Position
-		Vector3f	velocity;		// Vitesse de déplacement
+		Vector3f	velocity;		// Vitesse de déplacement (vecteur unitaire / seconde)
 		Vector3f	direction;		// Direction
 		Vector3f	up;				// Vecteur up
-		float		distance;		// Distance max des sons perçus (en mètres)
-		float		rolloffFactor;	// Facteur d'atténuation en fonction de la distance
-		float		dopplerFactor;	// Facteur d'effet Doppler
+		float		distanceFactor;	// Longueur (en mètres) d'un vecteur unitaire
+		float		rolloffFactor;	// Facteur d'atténuation en fonction de la distance (0->10)
+		float		dopplerFactor;	// Facteur d'effet Doppler (0->10)
 
 		operator DS3DLISTENER();	// Opérateur de cast
 	};
 
 	// Général
 	void Initialize();		// Initialise le moteur son
-	bool IsInitialized();	// Vérifie si le moteur son est initialisé
+	void Update();			// Update
 	void Release();			// Détruit le moteur son
 
 	// Paramètres du listener
 	void SetListenerToDefault();
 	void SetListenerDesc( const ListenerDesc &desc );
 	ListenerDesc GetListenerDesc() const;
+
+	// Déplace la listener
+	void MoveListener( const Vector3f &position, const Vector3f &velocity,
+		const Vector3f &direction, const Vector3f &up );
 
 	// Musique
 
@@ -57,6 +59,17 @@ protected:
 
 	SoundSystem();
 	~SoundSystem();
+
+	// Donne la description à l'entité DirectSound du listener
+	inline void SetListenerParam( const ListenerDesc &desc )
+	{
+		if( m_pListener ){
+			m_pListener->SetAllParameters(
+				(DS3DLISTENER*)&desc,
+				DS3D_DEFERRED // Mise à jour en différé..
+			);
+		}
+	}
 
 };
 

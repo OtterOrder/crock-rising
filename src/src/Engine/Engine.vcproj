@@ -604,6 +604,14 @@
 				RelativePath=".\Physics\Physicalizer.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Physics\Stream.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Physics\Stream.h"
+				>
+			</File>
 			<Filter
 				Name="Trigger"
 				>

@@ -69,8 +69,6 @@ void Camera::SetDefaultProjection()
 
 void  Camera::SetPosition( Vector3f pos )
 { 
-
-
 	m_WorldMatrix._41 = pos.x;
 	m_WorldMatrix._42 = pos.y;
 	m_WorldMatrix._43 = pos.z;

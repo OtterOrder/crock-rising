@@ -1,6 +1,9 @@
 #include "BoundingBox.h"
 #include "Physicalizer.h"
 
+
+ControllerHitReport* gTest = new ControllerHitReport;
+
 //===========================================================================//
 //Testera si il y a collision avec l'objet po                                //
 //===========================================================================//
@@ -56,13 +59,21 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 			BoxDescription* bd = (BoxDescription*)Desc;
 
 			boxDesc.dimensions = VecToNxVec( bd->m_dimension);
+			boxDesc.group = Physicalizer::GROUP_DYNAMIQUE;
 			boxDesc.mass = bd->m_mass;
 			boxDesc.localPose.t = NxVec3( 0,0, 0.5 );
+
+
+			//boxDesc.localPose.t = NxVec3( 0.0f, 0.5f, 0.0f );
+
+			//boxDesc.group = Physicalizer::GROUP_DYNAMIQUE;
+			//boxDesc.dimensions = VecToNxVec( Desc->dimension);
+			//boxDesc.mass = Desc->mass;
 
 			actorDesc.shapes.push_back(&boxDesc);
 			actorDesc.density		= (NxReal)bd->m_density;	
 			actorDesc.globalPose.t	= VecToNxVec(bd->m_pos) + NxVec3( 0.f, bd->m_dimension.y/2, 0.f );
-		}
+		} 
 		break;
 
 	case SPHERE:
@@ -76,8 +87,9 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 			actorDesc.shapes.push_back(&sphereDesc);
 			actorDesc.density		= (NxReal)sd->m_density;	
 			actorDesc.globalPose.t	= VecToNxVec(sd->m_pos) + NxVec3( 0.f, sd->m_radius/2, 0.f );
-		}
+		} 
 		break;
+
 	case CAPSULE:
 		{
 			NxCapsuleShapeDesc capsuleDesc;
@@ -126,6 +138,7 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 	NxActor* pActor = scene->createActor( actorDesc );
 	assert(pActor);
 
+	//int test = scene->getNbActors();
 	m_iEmplacement = scene->getNbActors() - 1;
 }
 
@@ -133,28 +146,173 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 //////////////////////////// FUCKING MANUAL ////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-////Création Cube
-//	SceneObject* aCube = NULL;
+//////////////////////////////////////////////////////////////////////////
+//SPHERE
+//BoundingBox::BoundingBox(float aradius, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, MaterialPhysics aMat)
+//{
+//	BoundingDescription sd(aradius, aglobalpos, adenstity);
+//	sd.initialvelocity = InitVelocity;
+//	*this = BoundingBoxInit(&sd, SPHERE, aMat);
+//}
 //
-//	aCube = new SceneObject("Cube.DAE", D3DXVECTOR3(0.f,0.f,0.f));
-//	aCube->InitObject();
-//	aCube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
-//	aCube->SetShader("blinn.fx");
-//	BoxDescription desc(Vector3f(demiSize, demiSize, demiSize), density, 1.0f, Pos);
-//	desc.linearVelocity = initialVel;
-//	BoundingBox bb = BoundingBox(&desc);
+////////////////////////////////////////////////////////////////////////////
+////CAPS
+//BoundingBox::BoundingBox(float aradius, float aheight, Vector3f aglobalpos, float adenstity, Vector3f InitVelocity, MaterialPhysics aMat)
+//{
+//	BoundingDescription cd(aradius, aheight, aglobalpos, adenstity);
+//	cd.initialvelocity = InitVelocity;
+//	*this = BoundingBoxInit(&cd, CAPSULE, aMat);
+//}
 //
-//	Physicalizer::GetInstance()->SetPhysicable(aCube, &bb);
+////////////////////////////////////////////////////////////////////////////
+////SOL
+//BoundingBox::BoundingBox(Vector2f asurface, float Hauteur, MaterialPhysics aMat)
+//{
+//	BoundingDescription gd(asurface, Vector3f(0.f, Hauteur, 0.f));
+//	*this = BoundingBoxInit(&gd, PLAN, aMat);
+//}
+
+//BoundingBox& BoundingBox::operator=( const BoundingBox& bb )
+//{
+//	m_bDebugMode = bb.getDebugMode();
+// 	m_Mat= bb.getMat();
+//	m_iEmplacement = bb.getEmplacement();
+//	return *this;
+//}
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+//NxVec3 VecToNxVec(const Vector3f V)
+//{
+//	return NxVec3(V.x, V.y, V.z);
+//}
 //
-////Création Trigger
+//void Normalize( Vector3f &V )
+//{
+//	V = V/Norme(V);
+//}
 //
-//	SceneObject* Cube = new SceneObject("Cube.DAE", Vector3f(0.f, 0.f, 0.f));
-//
-//	Cube->InitObject();
-//	Cube->GetMaterial()->SetTexture("default.jpg", Texture::DIFFUSE);
-//	Cube->SetShader("blinn.fx");
-//	TriggerDescription td;
-//	td.m_OnEnterFunc = test;
-//	BoundingBox bb(&td);
-//
-//	Physicalizer::GetInstance()->SetPhysicable(Cube, &bb);//&BoundingBox(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0.f, 1.f, 0.f )));
+//float Norme( Vector3f V )
+//{
+//	float norme = sqrt(V.x*V.x + V.y*V.y + V.z*V.z);
+//	return norme > 0 ? norme : 1;
+//}
+
+
+
+
+
+ControledBB::ControledBB( Vector3f pos, ShapeType type )
+{
+	Physicalizer* physXInstance = Physicalizer::GetInstance();
+
+	empControlerList = 0;
+
+	//if( type==BOX )
+	//{
+	//	NxBoxControllerDesc desc;
+	//	desc.position.x		= pos.x, desc.position.y = pos.y, desc.position.z = pos.z;
+	//	//desc.extents		= gInitialExtents * scale;
+	//	desc.upDirection	= NX_Y;
+	//	desc.slopeLimit		= 0;
+	////	desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
+	//	desc.skinWidth		= 0.2f;
+	//	desc.stepOffset		= 0.5;
+	//	//	desc.stepOffset	= 0.01f;
+	//	//		desc.stepOffset		= 0;
+	//	//		desc.stepOffset		= 10;
+	//	//desc.callback		= &gControllerHitReport;
+	//	//gManager->createController(&scene, desc);
+	//	physXInstance->m_ControllerManager->createController( physXInstance->getScene(), desc );
+	//	empControlerList	= physXInstance->m_ControllerManager->getNbControllers() - 1;
+	//	empActorList		= physXInstance->getScene()->getNbActors() - 1;
+
+	//}
+	//else
+	{
+		if( type==CAPSULE )
+		{
+			NxCapsuleControllerDesc desc;
+			desc.radius			= 1.0f; //4.5f;//gInitialRadius * scale;
+			desc.height			= 1.5f; //15.f;//gInitialHeight * scale;
+
+			desc.position.x = pos.x ,//- 0.7538f , 
+			desc.position.y = pos.y + desc.height/2.0f + desc.radius,//- 3.822f, 
+			desc.position.z = pos.z ;//+ 25.4295f;
+
+			desc.upDirection	= NX_Y;
+			//		desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
+			desc.slopeLimit		= 0.707f;
+			desc.skinWidth		= 0.01f;
+			desc.stepOffset		= 0.5f;
+			//desc.stepOffset		= gInitialRadius * 0.5 * scale;
+			//	desc.stepOffset	= 0.01f;
+			//		desc.stepOffset		= 0;	// Fixes some issues
+			//		desc.stepOffset		= 10;
+
+			desc.callback		= gTest;
+
+			physXInstance->m_ControllerManager->createController( physXInstance->getScene(), desc );
+			empControlerList	= physXInstance->m_ControllerManager->getNbControllers() - 1;
+			empActorList		= physXInstance->getScene()->getNbActors() - 1;
+		}
+	}
+
+}
+
+void ControledBB::moveTo( float dispX, float dispY, float dispZ )
+{
+	Physicalizer* physXInstance = Physicalizer::GetInstance();
+	NxController* pControler = physXInstance->m_ControllerManager->getController( empControlerList );
+
+	NxU32 collisionFlags;
+	NxF32 minDistance = 0.001f;
+	pControler->move( NxVec3( dispX, dispY, dispZ ), Physicalizer::MASK_OTHER, 
+					  minDistance, collisionFlags );
+
+	//Collision par un coté
+	//if( !(collisionFlags & NXCC_COLLISION_DOWN) )
+	/*{
+		NxExtendedVec3 pos = pControler->getPosition();
+		pos.y -= 0.01f;
+		pControler->setPosition( pos );	
+	}*/
+	/*else 
+	{
+		if( collisionFlags & NXCC_COLLISION_UP )
+		{
+			collisionFlags=0;	
+		}
+	}*/
+
+
+}
+
+NxController* ControledBB::getBBController()
+{
+	Physicalizer* physXInstance = Physicalizer::GetInstance();
+	physXInstance->m_ControllerManager->updateControllers();
+	return physXInstance->m_ControllerManager->getController( empControlerList );
+}
+
+void ControledPhysicsCharacter::updateControlledPosition( void )
+{
+	NxController* pControler = getBBController();
+	NxExtendedVec3 pos = pControler->getPosition();
+	m_vPosition = Vector3f( (float)pos.x , 
+							(float)pos.y /*- 1.f*/,
+							(float)pos.z );
+}
+
+SceneObjetPhysics::SceneObjetPhysics(const std::string& mesh, const D3DXVECTOR3& Position)
+	:SceneObject( mesh, Position ), BoundingBox( &BoxDescription(Vector3f(0.5f, 0.5f, 0.5f), 1, 1, Vector3f(Position.x, Position.y, Position.z)) )
+{
+
+	getEmpList()->push_front( getEmplacement() );
+
+//	BoundingBox bb( Vector3f(0.5f, 0.5f, 0.5f),  Vector3f(Position.x, Position.y, Position.z), 10.f );
+	
+//	Physicalizer* physInstance = Physicalizer::GetInstance();
+//	physInstance->SetPhysicable( this, &bb );	
+
+}

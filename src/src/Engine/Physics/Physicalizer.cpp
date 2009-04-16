@@ -14,25 +14,36 @@ bool Physicalizer::InitPhysX()
 	m_DeltaTime	 = (NxReal)(1.0 / 60.0);
 	m_Gravity	 = Vector3f( 0.f, -9.8f, 0.f );
 
+	m_Allocator = new NxUserAllocatorDefault();
+	m_ControllerManager = NxCreateControllerManager( m_Allocator );
+
 	// Initialize PhysicsSDK
-	//NxSDKCreateError errorCode = NXCE_NO_ERROR;
-	m_PhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
+	m_PhysicsSDK = NxCreatePhysicsSDK( NX_PHYSICS_SDK_VERSION );
 
 	// Initialiser le sdk
-	if(m_PhysicsSDK == NULL) return false;
+	if(m_PhysicsSDK == NULL)
+	{
+		assert( m_PhysicsSDK );
+		return false;
+	}
 
 	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH,				  m_AdvancedParam.SkinWidth);
-	m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE,		  m_AdvancedParam.VisualisationScale);
-	m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,		  m_AdvancedParam.VisualizeActorAxe);
-	m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, m_AdvancedParam.VisualizeCollisionShape);
-	//	m_PhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_SLEEP,	  m_AdvancedParam.VisualizeClothSleep);
-	m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_FNORMALS, 1);
+	//m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE,		  m_AdvancedParam.VisualisationScale);
+	//m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,		  m_AdvancedParam.VisualizeActorAxe);
+	//m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, m_AdvancedParam.VisualizeCollisionShape);
+	//m_PhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_SLEEP,	  m_AdvancedParam.VisualizeClothSleep);
 
 
-	// Create a scene
+	m_Cooking = NxGetCookingLib( NX_PHYSICS_SDK_VERSION );
+	if( m_Cooking == NULL )
+	{
+		assert( m_Cooking );
+		return false;
+	}
+
     NxSceneDesc sceneDesc;
-	sceneDesc.gravity               = NxVec3(m_Gravity.x, m_Gravity.y, m_Gravity.z);
- 	sceneDesc.simType				= NX_SIMULATION_HW;
+ 	sceneDesc.simType				= NX_SIMULATION_HW; //avec carte accé PhysX
+	sceneDesc.gravity               = NxVec3(m_Gravity.x, m_Gravity.y, m_Gravity.z) ;
     m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 
 	if(!m_Scene)
@@ -40,14 +51,9 @@ bool Physicalizer::InitPhysX()
 		sceneDesc.simType = NX_SIMULATION_SW; 
 		m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 		assert( m_Scene );
-	}
-
-	//Créer une scene (gScene)
-	if(m_Scene == NULL) 
-	{
-		printf("\nError: Unable to create a PhysX scene, exiting the sample.\n\n");
 		return false;
 	}
+	
 
 	//Création du manager des objets trigger 
 	m_Scene->setUserTriggerReport(&gTriggerReport);
@@ -59,8 +65,9 @@ bool Physicalizer::InitPhysX()
 	defaultMaterial->setStaticFriction(0.5f);
 	defaultMaterial->setDynamicFriction(0.5f);
 
-
 	NxPlaneShapeDesc planeDesc;
+	planeDesc.group = GROUP_STATIC;
+	//planeDesc.d = -25.f;
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&planeDesc);
 	m_Scene->createActor(actorDesc);
@@ -96,9 +103,13 @@ void Physicalizer::StartPhysics()
 	// Update the time step
 	//m_DeltaTime = UpdateTime();
 
+	//if( m_ControllerManager )
+	//	m_ControllerManager->updateControllers();
+
 	// Start collision and dynamics for delta time since the last frame
 	m_Scene->simulate( NxReal(0.01667) );//m_DeltaTime
 	m_Scene->flushStream();
+	
 }
 
 void Physicalizer::GetPhysicsResults()
@@ -138,25 +149,7 @@ PhysXResult Physicalizer::DoTransform()
 
 			D3DXMATRIX WorldMat;
 			pac->getGlobalPose().getColumnMajor44( WorldMat );
-
-			D3DXMATRIX tmp;
-		/*	tmp._11 = WorldMat._11, tmp._12 = WorldMat._21, tmp._13 = WorldMat._31;
-			tmp._21 = WorldMat._12, tmp._22 = WorldMat._22, tmp._23 = WorldMat._32;
-			tmp._31 = WorldMat._13, tmp._32 = WorldMat._23, tmp._33 = WorldMat._33;*/
-
-			tmp._11 = WorldMat._11, tmp._12 = WorldMat._12, tmp._13 = WorldMat._13;
-			tmp._21 = WorldMat._21, tmp._22 = WorldMat._22, tmp._23 = WorldMat._23;
-			tmp._31 = WorldMat._31, tmp._32 = WorldMat._32, tmp._33 = WorldMat._33;
-
-			tmp._41 = WorldMat._41;
-			tmp._42 = WorldMat._42;
-			tmp._43 = WorldMat._43;
-
-			tmp._14 = tmp._24 = tmp._34 = 0.0f;
-			tmp._44 = 1.0f;
-
-
-			aSObj->ApplyTransform( &tmp );
+			aSObj->ApplyTransform( &WorldMat ); //??
 			//aSObj->SetTransform( &WorldMat );
 		}
 		++it;

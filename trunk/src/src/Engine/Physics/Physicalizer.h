@@ -9,6 +9,9 @@
 #include	<stdio.h>
 
 #include	"NxPhysics.h"
+#include	"NxControllerManager.h"
+#include	"NxUserAllocatorDefault.h"
+
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"
 #include	"../Objects/SceneObject.h"
@@ -51,6 +54,9 @@ struct AdvancedPhysXParam
 class Physicalizer : public Singleton< Physicalizer >
 {
 	friend class Singleton< Physicalizer >;
+	friend class BoundingBox;
+	friend class ControledBB;
+	friend class PhysicsMesh;
 
 	NxPhysicsSDK*		m_PhysicsSDK	;	
 	NxScene*			m_Scene			;
@@ -58,7 +64,24 @@ class Physicalizer : public Singleton< Physicalizer >
 	AdvancedPhysXParam	m_AdvancedParam ;
 	NxReal				m_DeltaTime		;
 
+	NxControllerManager*		m_ControllerManager;
+	NxCookingInterface*			m_Cooking;
+	NxUserAllocatorDefault*		m_Allocator;
+
+
 public:
+	enum GroupCollision
+	{
+		GROUP_STATIC = 0,
+		GROUP_DYNAMIQUE = 1,
+
+		MASK_STATIC			= 1 << GROUP_STATIC,
+		MASK_DYNAMIQUE		= 1 << GROUP_DYNAMIQUE,
+
+		MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE
+
+	};
+
 
 	bool InitPhysX();
 	void ExitPhysX();
@@ -74,15 +97,15 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //
 	///////////////////////////////////////////////////////////////////////////
-	NxPhysicsSDK*		getPhysicsSDK()		{ return m_PhysicsSDK;		}	
-	NxScene*			getScene()			{ return m_Scene;			}	
-	Vector3f			getGravity()		{ return m_Gravity;			}	
-	AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }
+	//NxPhysicsSDK*		getPhysicsSDK()		{ return m_PhysicsSDK;		}	
+	inline NxScene*			getScene()			{ return m_Scene;			}	
+	inline Vector3f			getGravity()		{ return m_Gravity;			}	
+	inline AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }
 
 	///////////////////////////////////////////////////////////////////////////
 	// Modificateurs															 //
 	///////////////////////////////////////////////////////////////////////////
-	void setPhysicsSDK	  (NxPhysicsSDK* aSDK)			{ m_PhysicsSDK = aSDK;		}	
+	//void setPhysicsSDK	  (NxPhysicsSDK* aSDK)			{ m_PhysicsSDK = aSDK;		}	
 	void setScene		  (NxScene*		aScene)			{ m_Scene = aScene;			}	
 	void setGravity		  (Vector3f		aGravity)		{ m_Gravity = aGravity;		}	
 	void setAdvancedParam (AdvancedPhysXParam aParam)	{ m_AdvancedParam = aParam; }	

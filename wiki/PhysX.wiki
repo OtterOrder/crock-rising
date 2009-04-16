@@ -20,6 +20,8 @@ Include files :
  * (SDK DIR)\SDKs\Physics\include
  * (SDK DIR)\SDKs\PhysXLoader\include
  * (SDK DIR)\SDKs\Foundation\include
+ * (SDK DIR)\SDKs\NxCharacter\include
+ * (SDK DIR)\SDKs\Cooking\include
 
 Library files :
  * (SDK DIR)\SDKs\lib\Win32

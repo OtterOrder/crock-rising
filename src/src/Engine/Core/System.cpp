@@ -6,6 +6,7 @@
 #include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
 #include	"Physics/Physicalizer.h"
+#include	"Sound/SoundSystem.h"
 #include	"Time.h"
 
 #define FPS_MAX 80
@@ -39,6 +40,7 @@ int System::MainLoop( void )
 	PostRenderer	*postRenderer;
 	Game			*game;
 	Physicalizer	*physX;
+	SoundSystem		*soundSystem;
 
 	bool			bGotMsg;
 	MSG				msg;
@@ -49,6 +51,7 @@ int System::MainLoop( void )
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
+	soundSystem		= SoundSystem::GetInstance();
 	game			= Game::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	
@@ -86,6 +89,9 @@ int System::MainLoop( void )
 			// Update des inputs
 			inputManager->Update();
 
+			// Update du son
+			soundSystem->Update();
+
 			//Update de physX				
 			if (time->getDeltaTimeF() >= nbFps) 
 			{
@@ -99,6 +105,7 @@ int System::MainLoop( void )
 	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
 	postRenderer->Destroy();
+	soundSystem->Destroy();
 	inputManager->Destroy();
 	resourceManager->Destroy();
 

@@ -20,9 +20,6 @@ public:
 
 protected:
 	int			 m_iLife;
-	D3DXVECTOR3  m_direction;
-
-
 	SceneObjectAnimated*  m_pAnimated;
 
 };

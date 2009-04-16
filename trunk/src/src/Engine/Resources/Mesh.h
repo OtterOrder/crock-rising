@@ -41,8 +41,7 @@ public:
 
 
 	bool			m_Skinned;
-	Vertex			*m_VertexBuffer;					// Tableau de vertex
-	SkinnedVertex	*m_SVertexBuffer;					// Tableau de vertex skinnés
+	VertexBuffer	m_VertexBuffer;						// Tableau de vertex
 	int				*m_IndexBuffer;						// Tableau d'indexation des faces
 	bool			m_bOrdered;							// Pour savoir si l'index buffer a été trié
 };

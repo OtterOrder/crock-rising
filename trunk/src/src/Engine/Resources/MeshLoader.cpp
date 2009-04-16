@@ -1,6 +1,25 @@
 #include "MeshLoader.h"
 #include "../Renderer/Renderer.h"
 
+
+//******************************************************************
+
+VertexBuffer::VertexBuffer()
+{
+	m_VertexType = None;
+	m_NbVertices = 0;
+	m_Size		 = 0;
+	m_Datas		 = NULL;
+}
+
+VertexBuffer::~VertexBuffer()
+{
+	if (m_Datas)
+		delete [] m_Datas;
+}
+
+//******************************************************************
+
 //===========================================================================//
 // Constructeur MeshLoader                                                   //
 //===========================================================================//
@@ -67,7 +86,7 @@ MeshLoader::~MeshLoader()
 //===========================================================================//
 // Chargement de la ressource                                                //
 //===========================================================================//
-ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, bool& bSkinned)
+ResourceResult MeshLoader::Load(const char *sMeshPath,  VertexBuffer& _VertexBuffer, int *&IndexBuffer, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl)
 {
 	TiXmlDocument meshFile( sMeshPath );
 	if (!meshFile.LoadFile ())
@@ -78,21 +97,34 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, S
 		return RES_FAILED;
 	}
 
-	VertexBuffer  = NULL;
-	SVertexBuffer = NULL;
+	_VertexBuffer.m_Datas		= NULL;
+	_VertexBuffer.m_VertexType	= VertexBuffer::Default;
 
 	TiXmlNode* rootNode;
 
 	rootNode =  meshFile.FirstChild( "COLLADA" );  // Get Root Node
 
-	FillArrays (rootNode, VertexBuffer, SVertexBuffer, IndexBuffer);
+	FillArrays (rootNode, _VertexBuffer, IndexBuffer);
 
-	iNbVertices	= m_iNbVertices;
+	_VertexBuffer.m_NbVertices	= m_iNbVertices;
+
+	u32 vertexSize = 0;
+	switch (_VertexBuffer.m_VertexType)
+	{
+		case VertexBuffer::Default:
+			vertexSize = sizeof(Vertex);
+			break;
+
+		case VertexBuffer::Skinned:
+			vertexSize = sizeof(SkinnedVertex);
+			break;
+	}
+
+	_VertexBuffer.m_Size = _VertexBuffer.m_NbVertices*vertexSize;
+
 	iNbIndex	= m_iNbFaces*NbFaceVertices;
 
 	Renderer::GetInstance()->m_pd3dDevice->CreateVertexDeclaration(&DxElements[0], &vertdecl);
-
-	bSkinned = m_Skinned;
 
 	return RES_SUCCEED;
 }
@@ -100,7 +132,7 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  Vertex *&VertexBuffer, S
 //===========================================================================//
 // Rempli les tableaux de données                                            //
 //===========================================================================//
-ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer)
+ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _VertexBuffer, int *&IndexBuffer)
 {
 	TiXmlNode* node;
 	TiXmlNode* MeshNode;
@@ -144,6 +176,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 						FillSkinArray (node);
 
 					m_Skinned = true;
+					_VertexBuffer.m_VertexType = VertexBuffer::Skinned;
 				}
 			}
 		}
@@ -236,7 +269,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  Vertex *&VertexBuff
 
 					node =  node->FirstChild( "triangles");
 					if (node)
-						FillVBArray (node, VertexBuffer, SVertexBuffer, IndexBuffer);
+						FillVBArray (node, _VertexBuffer, IndexBuffer);
 
 				}
 			}
@@ -389,7 +422,7 @@ ResourceResult	 MeshLoader::ConvertTextToArray (const char* ArrayText, int*  Arr
 //===========================================================================//
 // Remplit vertex buffer et index buffer                                     //
 //===========================================================================//
-ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer)
+ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  VertexBuffer& _VertexBuffer, int *&IndexBuffer)
 {
 	TiXmlNode* node = TrianglesNode;			// Enregistrement de la balise triangles
 
@@ -417,9 +450,9 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Vert
 	m_iNbVertices=nbvert;
 
 	if (!m_Skinned)
-		VertexBuffer  = new Vertex [m_iNbVertices];
+		_VertexBuffer.m_Datas = new Vertex [m_iNbVertices];
 	else
-		SVertexBuffer = new SkinnedVertex [m_iNbVertices];
+		_VertexBuffer.m_Datas = new SkinnedVertex [m_iNbVertices];
 
 	int vertexCount=0;
 
@@ -436,7 +469,7 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  Vertex *&Vert
 		else
 		{
 			IndexBuffer[i] = vertexCount;
-			FillVertex(vertexCount, i, VertexBuffer, SVertexBuffer, IndexBuffer);
+			FillVertex(vertexCount, i, _VertexBuffer, IndexBuffer);
 			vertexCount++;
 		}
 	}
@@ -528,7 +561,7 @@ ResourceResult	MeshLoader::FillSkinArray (TiXmlNode* VertexWeightsNode)
 //===========================================================================//
 // Remplit vertex buffer				                                     //
 //===========================================================================//
-void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer)
+void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _VertexBuffer, int *&IndexBuffer)
 {
 	Vector3f VectPosition	(0.f, 0.f, 0.f);
 	Vector3f VectNormal		(0.f, 0.f, 0.f);
@@ -555,35 +588,22 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  Vertex *&VertexBuff
 
 	if (!m_Skinned)
 	{
-		VertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
-		VertexBuffer[VertexIndex].m_Normal		= VectNormal;
-		VertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
+		Vertex* pDVertexBuffer = (Vertex*)_VertexBuffer.m_Datas;
+
+		pDVertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
+		pDVertexBuffer[VertexIndex].m_Normal	= VectNormal;
+		pDVertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
 	}
 	else
 	{
-		SVertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
-		SVertexBuffer[VertexIndex].m_Normal		= VectNormal;
-		SVertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
+		SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)_VertexBuffer.m_Datas;
 
-		//SkinnedVertex* l_VertexBuffer = (SkinnedVertex*)VertexBuffer;
-		/*
-		l_VertexBuffer[VertexIndex].m_Bones.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[0];
-		l_VertexBuffer[VertexIndex].m_Bones.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[1];
-		l_VertexBuffer[VertexIndex].m_Bones.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[2];
-		l_VertexBuffer[VertexIndex].m_Bones.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint[3];
-		//*/
-		//l_VertexBuffer[VertexIndex].m_Bones	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
+		pSVertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
+		pSVertexBuffer[VertexIndex].m_Normal	= VectNormal;
+		pSVertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
 		
-		/*
-		l_VertexBuffer[VertexIndex].m_Weights.x	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[0];
-		l_VertexBuffer[VertexIndex].m_Weights.y	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[1];
-		l_VertexBuffer[VertexIndex].m_Weights.z	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[2];
-		l_VertexBuffer[VertexIndex].m_Weights.w	= (float) m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight[3];
-		/*/
-		//l_VertexBuffer[VertexIndex].m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
-		
-		SVertexBuffer[VertexIndex].m_Bones	 = m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
-		SVertexBuffer[VertexIndex].m_Weights = m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
+		pSVertexBuffer[VertexIndex].m_Bones		= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
+		pSVertexBuffer[VertexIndex].m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
 	}
 }
 

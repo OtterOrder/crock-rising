@@ -23,10 +23,33 @@ struct Vertex
 	Vector2f m_TexCoord;
 };
 
-struct SkinnedVertex : public Vertex
+struct SkinnedVertex
 {
+	Vector4f m_Position;
+	Vector3f m_Normal;
+	Vector2f m_TexCoord;
+
 	Vector4f m_Bones;
 	Vector4f m_Weights;
+};
+
+struct VertexBuffer
+{
+	static enum VertexType
+	{
+		None,
+		Default,
+		Skinned
+	};
+
+	VertexType	m_VertexType;
+	u32			m_NbVertices;
+	u32			m_Size;
+
+	void*		m_Datas;
+
+	VertexBuffer ();
+	~VertexBuffer();
 };
 
 struct FaceVertex
@@ -45,7 +68,7 @@ struct VertexSkinning
 	float	m_Weight[NbWeightsMax];
 };
 
-//------------------------------------------------------------------
+//******************************************************************
 
 class MeshLoader
 {
@@ -76,15 +99,15 @@ public:
 	MeshLoader(void);
 	virtual	~MeshLoader(void);
 
-	ResourceResult	Load						(const char *sMeshPath,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer, int &iNbVertices, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl, bool& bSkinned);
-	ResourceResult	FillArrays					(TiXmlNode* rootNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
+	ResourceResult	Load						(const char *sMeshPath,  VertexBuffer& _VertexBuffer, int *&IndexBuffer, int &iNbIndex, IDirect3DVertexDeclaration9* &vertdecl);
+	ResourceResult	FillArrays					(TiXmlNode* rootNode,  VertexBuffer& _VertexBuffer, int *&IndexBuffer);				// Remplit les tableaux de données
 	ResourceResult	ExtractArrayDatas			(TiXmlNode* sourceNode, float** &Array, int &iNbElements, int &iNbMaxElements);	// Extrait les données d'une balise
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float** Array, int iCount, int iStride);				// Remplit un double tableau de float à l'aide d'un texte
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, float*  Array, int iCount);								// Remplit un tableau de float à l'aide d'un texte
 	ResourceResult	ConvertTextToArray			(const char* ArrayText, int*    Array, int iCount);								// Remplit un tableau de int à l'aide d'un texte
 
-	ResourceResult	FillVBArray					(TiXmlNode* TrianglesNode,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);			// Remplit le tableau de vertex
-	void			FillVertex					(int VertexIndex, int FaceIndex,  Vertex *&VertexBuffer, SkinnedVertex*& SVertexBuffer, int *&IndexBuffer);
+	ResourceResult	FillVBArray					(TiXmlNode* TrianglesNode,  VertexBuffer& _VertexBuffer, int *&IndexBuffer);			// Remplit le tableau de vertex
+	void			FillVertex					(int VertexIndex, int FaceIndex,  VertexBuffer& _VertexBuffer, int *&IndexBuffer);
 
 	ResourceResult	FillSkinArray				(TiXmlNode* VertexWeightsNode);													// Remplit le tableau de skinning
 

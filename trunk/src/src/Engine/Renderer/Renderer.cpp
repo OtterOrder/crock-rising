@@ -89,9 +89,10 @@ HRESULT Renderer::OnCreateDevice()
 	//Light * DefaultLight2=new PointLight();
 	//Light * DefaultLight2=new SpotLight();
 	//DefaultLight2->SetLightAngle(0.8f);
-	
-	return S_OK;
 
+	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( Color4f(0.f,0.f,0.f,1.f) ), 1.0f, 0);
+
+	return S_OK;
 }
 
 //===========================================================================//

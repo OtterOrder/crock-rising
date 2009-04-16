@@ -6,15 +6,18 @@
 Hero::Hero()
 {
 	m_iLife = 100 ;
-	m_position = D3DXVECTOR3(0.f,-17.f,0.f);
 
-	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",m_position);
+	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,-17.f,0.f));
+	m_pAnimated->SetRotation(0,-90,0);
 	m_pAnimated->InitObject();
 	m_pAnimated->InitDeviceData();
 
 	m_pInputManager = InputManager::GetInstance();
+	m_pInputManager->HoldMouseAtCenter(true);
 
 	m_inventory.reserve(10);
+	m_currentState = WALK;
+
 }
 
 /***********************************************************
@@ -25,14 +28,6 @@ Hero::~Hero()
 	delete m_pAnimated;
 
 	m_inventory.clear();
-}
-
-/***********************************************************
-* Contient les évènements claviers pour contrôler le héros  
-**********************************************************/
-void Hero::control( )
-{
-	//if ( m_pInputManager->IsKeyPressed('N') ){}
 }
 
 /***********************************************************
@@ -64,4 +59,123 @@ void Hero::removeWeapon( std::string strMesh )
 		if ( (*it)->getStringMesh() == strMesh )
 			m_inventory.erase(it);
 	}
+}
+
+
+ResourceResult Hero::control( Camera *pCamera )
+{
+	if ( m_pInputManager->IsKeyPressed(' '))
+		changeState(ATTACK);
+	if ( m_pInputManager->IsKeyPressed('X'))
+		changeState(STATIC);
+	if ( m_pInputManager->IsKeyPressed('V'))
+		changeState(BOREDOM);
+	if ( m_pInputManager->IsKeyPressed('B'))
+		changeState(BONUS);
+
+	if ( m_pInputManager->IsKeyPressed('Z'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = 0.1f;
+		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
+		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	if ( m_pInputManager->IsKeyPressed('Q'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = 0.1f;
+		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	if ( m_pInputManager->IsKeyPressed('S'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = 0.1f;
+		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	if ( m_pInputManager->IsKeyPressed('D'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = 0.1f;
+		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	if ( m_pInputManager->IsKeyPressed('F'))
+	{
+		int angleY = int(pCamera->GetOrientationYRad() + 1.f);
+		pCamera->SetOrientationY(angleY);
+	}
+	if ( m_pInputManager->IsKeyPressed('G'))
+	{
+		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
+		pCamera->SetOrientationY(angleY);
+	}
+
+
+	Point2f point = m_pInputManager->GetMouseVector();
+	const int sensibiliteSouris = 10;
+	//Mouvement de la souris = mouvement camera
+	if( point.x != 0 ) 
+	{
+		int offsetCursor = (int)point.x%sensibiliteSouris; 
+		pCamera->SetOrientationY( -offsetCursor );
+
+		m_pAnimated->SetRotation( 0, offsetCursor, 0);
+	}
+	if( point.y != 0 ) 
+	{
+		int offsetCursor = (int)point.y%sensibiliteSouris; 
+	    pCamera->SetOrientationX( offsetCursor );
+	}
+
+	return RES_SUCCEED;
+}
+
+
+void Hero::update( Camera* pCamera )
+{
+	control( pCamera );
+	pCamera->SetTarget(m_pAnimated->GetPosition());
+
+	switch ( m_currentState )
+	{
+	case WALK : 
+		m_pAnimated->StartAnim();
+		m_pAnimated->SetAnim("Alien_Anim.DAE");
+		m_pAnimated->SetAnimFPS(50.f);
+		break;
+	case RUN :
+		break;
+	case ATTACK : 
+		m_pAnimated->StartAnim();
+		m_pAnimated->SetAnim("AnimFrappeDroite.DAE");
+		m_pAnimated->SetAnimFPS(20.f);
+		break;
+	case BOREDOM :
+		m_pAnimated->StartAnim();
+		m_pAnimated->SetAnim("animBoredom.DAE");
+		m_pAnimated->SetAnimFPS(20.f);
+		break;
+	case BONUS : 
+		m_pAnimated->StartAnim();
+		m_pAnimated->SetAnim("animBonus.DAE");
+		m_pAnimated->SetAnimFPS(20.f);
+		break;
+	case FLIGHT : 
+		break;
+	case STATIC :
+		m_pAnimated->StopAnim();
+		break;
+	}
+
+	
 }

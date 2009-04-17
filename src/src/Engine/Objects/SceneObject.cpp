@@ -137,7 +137,7 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 	m_matrixStack->Push();
     {
         m_matrixStack->MultMatrixLocal( world );
-
+		m_WorldMatrix=*m_matrixStack->GetTop();
     }
     m_matrixStack->Pop();
 }

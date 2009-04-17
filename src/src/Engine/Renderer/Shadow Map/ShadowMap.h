@@ -32,4 +32,6 @@ protected:
 	std::list< SceneObject* >	*m_ScObjList;			// Liste des objets de scène
 	Light						*m_ShadowLight;			// Lumière qui ombre la scène
 	D3DXMATRIX					 m_mLightViewProj;      // Matrice de la lumière
+
+
 };

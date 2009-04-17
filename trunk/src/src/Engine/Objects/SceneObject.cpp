@@ -93,6 +93,9 @@ void SceneObject::InitObject()
 	// On assigne le shader au matériau
 	m_pMaterial->SetShader(m_pShader);
 
+	// On crée le stack de matrices
+	D3DXCreateMatrixStack( 0, &m_matrixStack );
+
 	D3DXMATRIX trans;
 	D3DXMatrixTranslation(&trans, m_Offset.x, m_Offset.y, m_Offset.z);
 	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &trans);
@@ -127,6 +130,18 @@ void SceneObject::SetTransform(const D3DXMATRIX* world)
 	D3DXMatrixMultiply(&m_WorldMatrix, world, &m_WorldMatrix);
 }
 
+void SceneObject::ApplyTransform(const D3DXMATRIX *world)
+{
+	m_matrixStack->LoadIdentity();
+    m_matrixStack->LoadMatrix( &m_WorldMatrix );
+	m_matrixStack->Push();
+    {
+        m_matrixStack->MultMatrixLocal( world );
+
+    }
+    m_matrixStack->Pop();
+}
+
 //===========================================================================//
 // Gestion de l'objet						                                 //
 //===========================================================================//
@@ -134,11 +149,6 @@ void SceneObject::InitDeviceData()
 {
 	m_pMesh->FillD3DBuffers();
 	m_pShader->m_pEffect->OnResetDevice();
-}
-
-void SceneObject::FrameMove(float fElapsedTime)
-{
-
 }
 
 void SceneObject::Draw()
@@ -178,6 +188,9 @@ void SceneObject::DeleteData()
 {
 	ResourceManager::GetInstance()->Remove<Mesh>(m_strMesh);
 	ResourceManager::GetInstance()->Remove<Shader>(m_strShader);
+
+	if( m_matrixStack != NULL )
+        m_matrixStack->Release();
 
 	m_pMaterial->DeleteData();
 }

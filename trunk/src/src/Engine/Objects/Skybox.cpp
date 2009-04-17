@@ -25,7 +25,6 @@ Skybox::Skybox()
 Skybox::~Skybox()
 {
 	delete m_pSkyShader;
-
 }
 
 HRESULT Skybox::Init()

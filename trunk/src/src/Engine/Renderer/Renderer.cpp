@@ -2,7 +2,7 @@
 // Include                                                                   //
 //===========================================================================//
 #define		NOMINMAX
-//#define		DEVCAMERA
+#define		DEVCAMERA
 
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"
@@ -15,6 +15,7 @@
 #include	"Objects/Light.h"
 
 #include	"PostProcesses/PostRenderer.h"
+#include	"Shadow Map/ShadowMap.h"
 
 //===========================================================================//
 
@@ -41,6 +42,7 @@ Renderer::Renderer()
 	m_ScObjList	= &SceneObject::RefList;
 	m_Obj2DList	= &Object2D::RefList;
 	m_LightList	= &Light::RefList;
+	m_UseShadowMap = false;
 }
 
 //===========================================================================//
@@ -52,6 +54,7 @@ HRESULT Renderer::BeforeCreateDevice()
     if( m_pStatsFont == NULL )
         return E_FAIL;
 
+	//m_DevCamera.SetViewParams(&D3DXVECTOR3(0.f, -100.f, 0.f), &D3DXVECTOR3(0.f, 0.f, 0.f));
 	return S_OK;
 
 }
@@ -196,21 +199,6 @@ HRESULT Renderer::OnResetDevice()
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
 //*/
 	return S_OK;
-}
-
-//===========================================================================//
-// Callback animation						                                 //
-//===========================================================================//
-HRESULT Renderer::FrameMove(float fElapsedTime)
-{
-	SceneObject::ScObjIt scobj = m_ScObjList->begin();
-	while( scobj != m_ScObjList->end() )
-	{
-		(*scobj)->FrameMove(fElapsedTime);
-		++scobj;
-	}
-	return S_OK;
-
 }
 
 //===========================================================================//
@@ -380,6 +368,9 @@ HRESULT Renderer::OnDestroyDevice()
 		++obj2d;
 	}
 
+	if(m_UseShadowMap)
+		ShadowMap::GetInstance()->Release();
+
 	PostRenderer::GetInstance()->Destroy();
 
 	return S_OK;
@@ -423,6 +414,15 @@ void Renderer::SetSkybox(Skybox *skybox)
 {
 	m_Skybox = skybox;
 
+}
+
+void Renderer::SetShadowMap(Light *ShadowLight)
+{
+	if(!ShadowLight)
+		return;
+
+	m_UseShadowMap=true;
+	ShadowMap::GetInstance()->SetShadowMap(ShadowLight);
 }
 
 //**********************************************************

@@ -60,9 +60,8 @@ public:
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj);
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
-	virtual void	ApplyTransform(const D3DXMATRIX* world) {m_WorldMatrix = *world;}
+	virtual void	ApplyTransform(const D3DXMATRIX* world);
 	virtual void	InitDeviceData();
-	void	FrameMove(float fElapsedTime);
 	virtual void	Draw();
 	virtual void	DeleteDeviceData();
 	virtual void	DeleteData();
@@ -85,6 +84,7 @@ protected:
 	Mesh*							m_pMesh;		// Mesh de l'objet
 	Shader*							m_pShader;		// Shader de l'objet
 	bool							m_bVisible;		// Visibilité de l'objet
+	LPD3DXMATRIXSTACK				m_matrixStack;  // Stack de matrice de l'objet
 	TEmpList*						m_EmpList;
 
 	

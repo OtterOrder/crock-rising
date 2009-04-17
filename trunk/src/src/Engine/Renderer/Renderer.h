@@ -31,7 +31,6 @@ public:
 	HRESULT BeforeCreateDevice();
 	HRESULT OnCreateDevice();
 	HRESULT OnResetDevice();
-	HRESULT FrameMove(float fElapsedTime);
 	HRESULT Render();
 	HRESULT OnLostDevice();
 	HRESULT OnDestroyDevice();
@@ -39,6 +38,7 @@ public:
 
 	void SetCamera( Camera* cam );
 	void SetSkybox( Skybox* skybox);
+	void SetShadowMap( Light * ShadowLight);
 
 	// Infos sur la fenêtre
 	int	GetWindowWidth() const;
@@ -63,5 +63,6 @@ protected:
 	Skybox	*m_Skybox;
 	
 	Color4f	m_ClearColor;	// Couleur de fond
+	bool	m_UseShadowMap; // Activation du shadow mapping
 
 };

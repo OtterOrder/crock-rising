@@ -127,7 +127,7 @@ void SceneObject::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, c
 
 void SceneObject::SetTransform(const D3DXMATRIX* world)
 {
-	D3DXMatrixMultiply(&m_WorldMatrix, world, &m_WorldMatrix);
+	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, world);
 }
 
 void SceneObject::ApplyTransform(const D3DXMATRIX *world)

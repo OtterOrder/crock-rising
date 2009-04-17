@@ -537,6 +537,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\data\shader\depth.fx"
+						>
+					</File>
+					<File
 						RelativePath="..\..\data\shader\motionBlurVelocity.fx"
 						>
 					</File>

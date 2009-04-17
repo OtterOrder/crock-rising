@@ -62,12 +62,12 @@ void Object::Update()
 
 	// Si on met la matrice à identité ici on reset n'importe quelle transformation qui n'est pas effectuée avec
 	// rotX, rotY, rotZ, vPosition etc...
-	D3DXMatrixIdentity( &m_WorldMatrix );
+	/*D3DXMatrixIdentity( &m_WorldMatrix );
 	
 	m_WorldMatrix._22 = 0.f;  m_WorldMatrix._23 = 1.f;
 	m_WorldMatrix._32 = 1.f;  m_WorldMatrix._33 = 0.f;
 
-	m_WorldMatrix *= (rotY * translation);
+	m_WorldMatrix *= (rotY * translation);*/
 	
 }
 

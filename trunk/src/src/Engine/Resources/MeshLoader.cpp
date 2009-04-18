@@ -216,6 +216,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								CurrentElement.Type = D3DDECLTYPE_FLOAT4;
 
 								VertexDeclarationOffset += 4*4;
+								DxElements.push_back(CurrentElement);
 							}
 							else if (sId.compare( SpliterPlace, sNormalsId.length(), sNormalsId) == 0)
 							{
@@ -226,6 +227,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
 
 								VertexDeclarationOffset += 3*4;
+								DxElements.push_back(CurrentElement);
 							}
 							else if (sId.compare( SpliterPlace, sTexCoordsId.length(), sTexCoordsId) == 0)
 							{
@@ -236,9 +238,8 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								CurrentElement.Type = D3DDECLTYPE_FLOAT2;
 
 								VertexDeclarationOffset += 2*4;
+								DxElements.push_back(CurrentElement);
 							}
-
-							DxElements.push_back(CurrentElement);
 						}
 
 						node = node->NextSibling( "source" );
@@ -612,7 +613,7 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _Vert
 //===========================================================================//
 ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 {
-	int iNbSemantics = 3;
+	int iNbSemantics = 0;
 
 	int iPositionOffset = -1,
 		iNormalOffset   = -1,
@@ -641,6 +642,7 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 			node->ToElement()->Attribute("offset", &iTexCoordOffset);
 
 		node = node->NextSiblingElement("input");
+		iNbSemantics ++;
 	}
 
 	if ( m_iNbFaces )

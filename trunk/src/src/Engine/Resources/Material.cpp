@@ -28,9 +28,13 @@ void Material::SetTexture(const std::string& strTex, Texture::Type Type)
 {
 	switch(Type)
 	{
-	case Texture::DIFFUSE:
-		m_Maps[Texture::DIFFUSE]=ResourceManager::GetInstance()->Load<Texture>(strTex);
-		break;
+		case Texture::DIFFUSE:
+			m_Maps[Texture::DIFFUSE]=ResourceManager::GetInstance()->Load<Texture>(strTex);
+			break;
+
+		case Texture::NORMALMAP:
+			m_Maps[Texture::NORMALMAP]=ResourceManager::GetInstance()->Load<Texture>(strTex);
+			break;
 	}
 
 }
@@ -39,10 +43,15 @@ void Material::SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type)
 {
 	switch(Type)
 	{
-	case Texture::DIFFUSE:
-		m_Maps[Texture::DIFFUSE]=new Texture();
-		m_Maps[Texture::DIFFUSE]->m_pTex=Tex;
-		break;
+		case Texture::DIFFUSE:
+			m_Maps[Texture::DIFFUSE]=new Texture();
+			m_Maps[Texture::DIFFUSE]->m_pTex=Tex;
+			break;
+
+		case Texture::NORMALMAP:
+			m_Maps[Texture::NORMALMAP]=new Texture();
+			m_Maps[Texture::NORMALMAP]->m_pTex=Tex;
+			break;
 	}
 
 }
@@ -55,6 +64,12 @@ void Material::SetGraphicalData()
 	{
 		m_pShader->m_pEffect->SetBool("g_UseTex", true);
 		m_pShader->m_pEffect->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->m_pTex);
+
+		if (m_Maps[Texture::NORMALMAP])
+		{
+			m_pShader->m_pEffect->SetBool("g_UseNormalMap", true);
+			m_pShader->m_pEffect->SetTexture("NormalMapSampler", m_Maps[Texture::NORMALMAP]->m_pTex);
+		}
 	}
 	else
 		m_pShader->m_pEffect->SetBool("g_UseTex", false);

@@ -33,13 +33,24 @@ struct SkinnedVertex
 	Vector4f m_Weights;
 };
 
+struct NormalMappedVertex
+{
+	Vector4f m_Position;
+	Vector3f m_Normal;
+	Vector2f m_TexCoord;
+
+	Vector3f m_Tangent;
+	Vector3f m_Binormal;
+};
+
 struct VertexBuffer
 {
 	static enum VertexType
 	{
 		None,
 		Default,
-		Skinned
+		Skinned,
+		NormalMapped
 	};
 
 	VertexType	m_VertexType;
@@ -58,7 +69,13 @@ struct FaceVertex
 	int m_Normal;
 	int m_TexCoord;
 
-	bool operator == (const FaceVertex &faceVertex)	{ return ( m_Position == faceVertex.m_Position && m_Normal == faceVertex.m_Normal && m_TexCoord == faceVertex.m_TexCoord ); }
+	int m_Tangent;
+	int m_Binormal;
+
+	bool operator == (const FaceVertex &faceVertex)	{ return (	m_Position	== faceVertex.m_Position	&&
+																m_Normal	== faceVertex.m_Normal		&&
+																m_TexCoord	== faceVertex.m_TexCoord
+															 ); }
 	bool operator != (const FaceVertex &faceVertex)	{ return ! (*this == faceVertex); }
 };
 
@@ -76,6 +93,7 @@ class MeshLoader
 		m_iNbFaces,
 		m_iNbSkinnedVertices;
 
+	// Vertex
 	float**		m_Positions,
 		 **		m_Normals,
 		 **		m_TexCoords;
@@ -84,14 +102,20 @@ class MeshLoader
 				m_iNbNormals,
 				m_iNbTexCoords;
 
-	bool		m_Skinned;
+	// Skinning
 	int			m_iNbWeights;
 	float**		m_Weights;
+	VertexSkinning*	m_SkinnedVertices;
 
+	// Normal Mapping
+	int			m_iNbTangents;
+	float**		m_Tangents;
+	int			m_iNbBinormals;
+	float**		m_Binormals;
+
+	// Faces
 	FaceVertex	*m_Faces;
 	std::vector<D3DVERTEXELEMENT9>	 DxElements; // Vecteur d'éléments du vertex
-
-	VertexSkinning*	m_SkinnedVertices;
 
 
 public:

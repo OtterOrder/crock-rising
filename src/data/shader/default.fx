@@ -10,11 +10,13 @@ matrix	 g_mWorldView;				// World * View matrix
 matrix	 g_mView;					// View matrix
 
 texture g_MeshTexture;              // Texture du mesh
+bool    g_UseTex = false;
+texture g_NormalMap;				// Texture de normal map
+bool    g_UseNormalMap = false;
     
 float4 g_ObjectAmbient;				// Propriétés de l'objet
 float4 g_ObjectDiffuse;
 float4 g_ObjectSpecular;
-bool   g_UseTex=false;
 float  g_Glossiness;
 
 static const int g_NumLights=1;				// Propriétés des lumières		   
@@ -41,6 +43,17 @@ sampler_state
     MagFilter = LINEAR;
 };
 
+sampler NormalMapSampler = 
+sampler_state
+{
+    Texture = <g_MeshTexture>;
+    AddressU  = WRAP;        
+	AddressV  = WRAP;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
 //===========================================================================//
 // Sortie vertex shader                                                      //
 //===========================================================================//
@@ -50,6 +63,8 @@ struct VS_OUTPUT
     float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
     float3 Normal	  : TEXCOORD1;
     float4 oPosition  : TEXCOORD2;
+	float3 Tangent	  : TEXCOORD3;
+	float3 Binormal	  : TEXCOORD4;
 };
 
 //===========================================================================//
@@ -57,17 +72,44 @@ struct VS_OUTPUT
 //===========================================================================//
 VS_OUTPUT RenderSceneVS( float4 vPos : POSITION, 
                          float3 vNormal : NORMAL,
-                         float2 vTexCoord0 : TEXCOORD0)
+                         float2 vTexCoord0 : TEXCOORD0,
+                         float3 vTangent : TANGENT,
+                         float3 vBinormal : BINORMAL
+                       )
 {
     VS_OUTPUT Output;
-    
+
     Output.Position = mul(vPos, g_mWorldViewProjection);
     Output.oPosition = mul(vPos, g_mWorld);
     Output.Normal = mul( vNormal, g_mWorld);
-    
+
     Output.TextureUV = vTexCoord0;
-    
+
+    Output.Tangent = vTangent;
+    Output.Binormal = vBinormal;
+
     return Output;    
+}
+
+
+//===========================================================================//
+// Normal mapping                                                            //
+//===========================================================================//
+
+float3 GetBumpedNormal (float3 _Normal, float3 _Tangent, float3 Binormal, float2 _UV)
+{
+	float3 bumpedNormal;
+	
+	bumpedNormal = _Normal;	////
+
+	float2 p = tex2D(NormalMapSampler, _UV);
+	float px = tex2D(NormalMapSampler, _UV+float2(1.0f/256.0f, 0.0f)).x;
+	float py = tex2D(NormalMapSampler, _UV+float2(0.0f, 1.0f/256.0f)).x;
+
+	float2 bumps = 2.0f*float2(p.x-px, p.y-py);
+	bumpedNormal = normalize( normalize(_Normal) + (bumps.x*_Tangent + bumps.y*Binormal));
+
+	return bumpedNormal;
 }
 
 
@@ -96,7 +138,9 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In )
 		DiffuseColor=g_ObjectDiffuse;
 		
 	float3 V=normalize(g_vCamPos-pos);
-	float3 N=normalize(In.Normal.xyz);
+
+	float3 N = g_UseNormalMap? normalize( GetBumpedNormal(In.Normal, normalize(In.Tangent), normalize(In.Binormal), In.TextureUV) ) : normalize(In.Normal);
+
 	float att;
 	float4 lumiere=float4(0.f, 0.f, 0.f, 0.f);
 	float3 Color=float3(0.f, 0.f, 0.f);

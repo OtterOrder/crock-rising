@@ -37,13 +37,16 @@ MeshLoader::MeshLoader()
 	m_iNbNormals	= 0;
 	m_iNbTexCoords	= 0;
 
-	m_Skinned		= false;
-	m_iNbWeights	= 0;
-	m_Weights		= NULL;
+	m_iNbWeights		= 0;
+	m_Weights			= NULL;
+	m_SkinnedVertices	= NULL;
+
+	m_iNbTangents		= 0;
+	m_Tangents			= NULL;
+	m_iNbBinormals		= 0;
+	m_Binormals			= NULL;
 
 	m_Faces		= NULL;
-
-	m_SkinnedVertices	= NULL;
 }
 
 //===========================================================================//
@@ -51,6 +54,7 @@ MeshLoader::MeshLoader()
 //===========================================================================//
 MeshLoader::~MeshLoader()
 {
+	// Vertex
 	if (m_Positions)
 	{
 		for (int i = 0 ; i < m_iNbPositions ; i++)
@@ -72,15 +76,34 @@ MeshLoader::~MeshLoader()
 		delete [] m_TexCoords;
 	}
 
+	// Skinning
 	if (m_Weights)
+	{
+		for (int i = 0 ; i < m_iNbWeights ; i++)
+			delete m_Weights[i];
 		delete [] m_Weights;
-
-
-	if (m_Faces)
-		delete [] m_Faces;
+	}
 
 	if (m_SkinnedVertices)
 		delete [] m_SkinnedVertices;
+
+	// Normal Mapping
+	if (m_Tangents)
+	{
+		for (int i = 0 ; i < m_iNbTangents ; i++)
+			delete m_Tangents[i];
+		delete [] m_Tangents;
+	}
+	if (m_Binormals)
+	{
+		for (int i = 0 ; i < m_iNbBinormals ; i++)
+			delete m_Binormals[i];
+		delete [] m_Binormals;
+	}
+
+	// Faces
+	if (m_Faces)
+		delete [] m_Faces;
 }
 
 //===========================================================================//
@@ -98,7 +121,7 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  VertexBuffer& _VertexBuf
 	}
 
 	_VertexBuffer.m_Datas		= NULL;
-	_VertexBuffer.m_VertexType	= VertexBuffer::Default;
+	_VertexBuffer.m_VertexType	= VertexBuffer::None;
 
 	TiXmlNode* rootNode;
 
@@ -117,6 +140,10 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  VertexBuffer& _VertexBuf
 
 		case VertexBuffer::Skinned:
 			vertexSize = sizeof(SkinnedVertex);
+			break;
+
+		case VertexBuffer::NormalMapped:
+			vertexSize = sizeof(NormalMappedVertex);
 			break;
 	}
 
@@ -143,6 +170,10 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 	string sTexCoordsId ("channel1");
 
 	string sWeightsId	("weights");
+
+	string sTangentsId	("tangents");
+	string sBinormalsId	("binormals");
+
 	std::vector<int> Offset(4, 0);
 
 	int VertexDeclarationOffset = 0;
@@ -175,7 +206,6 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 					if (node)
 						FillSkinArray (node);
 
-					m_Skinned = true;
 					_VertexBuffer.m_VertexType = VertexBuffer::Skinned;
 				}
 			}
@@ -195,6 +225,9 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 					node =  node->FirstChild( "source" );		// Recherche la première balise "source"
 
 					D3DVERTEXELEMENT9 CurrentElement;
+
+					if (_VertexBuffer.m_VertexType	== VertexBuffer::None)
+						_VertexBuffer.m_VertexType	= VertexBuffer::Default;
 
 					while (node)
 					{
@@ -240,12 +273,42 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								VertexDeclarationOffset += 2*4;
 								DxElements.push_back(CurrentElement);
 							}
+							// Normal Mapping
+							else if (sId.compare( SpliterPlace, sTangentsId.length(), sTangentsId) == 0)
+							{
+								
+								ExtractArrayDatas (node, m_Tangents, m_iNbTangents, m_iNbVertices);
+								CurrentElement.Offset = VertexDeclarationOffset;
+								CurrentElement.Usage = D3DDECLUSAGE_TANGENT;
+								CurrentElement.UsageIndex = 0;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+
+								VertexDeclarationOffset += 3*4;
+								DxElements.push_back(CurrentElement);
+
+								//if (_VertexBuffer.m_VertexType	== VertexBuffer::Default)
+									_VertexBuffer.m_VertexType	= VertexBuffer::NormalMapped;
+							}
+							else if (sId.compare( SpliterPlace, sBinormalsId.length(), sBinormalsId) == 0)
+							{
+								
+								ExtractArrayDatas (node, m_Binormals, m_iNbBinormals, m_iNbVertices);
+								CurrentElement.Offset = VertexDeclarationOffset;
+								CurrentElement.Usage = D3DDECLUSAGE_BINORMAL;
+								CurrentElement.UsageIndex = 0;
+								CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+
+								VertexDeclarationOffset += 3*4;
+								DxElements.push_back(CurrentElement);
+
+								_VertexBuffer.m_VertexType	= VertexBuffer::NormalMapped;
+							}
 						}
 
 						node = node->NextSibling( "source" );
 					}
 
-					if (m_Skinned)
+					if (_VertexBuffer.m_VertexType == VertexBuffer::Skinned)
 					{
 						CurrentElement.Offset = VertexDeclarationOffset;
 						CurrentElement.Usage = D3DDECLUSAGE_BLENDINDICES;
@@ -450,10 +513,20 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  VertexBuffer&
 	}
 	m_iNbVertices=nbvert;
 
-	if (!m_Skinned)
-		_VertexBuffer.m_Datas = new Vertex [m_iNbVertices];
-	else
-		_VertexBuffer.m_Datas = new SkinnedVertex [m_iNbVertices];
+	switch (_VertexBuffer.m_VertexType)
+	{
+		case VertexBuffer::Default:
+			_VertexBuffer.m_Datas = new Vertex [m_iNbVertices];
+			break;
+
+		case VertexBuffer::Skinned:
+			_VertexBuffer.m_Datas = new SkinnedVertex [m_iNbVertices];
+			break;
+
+		case VertexBuffer::NormalMapped:
+			_VertexBuffer.m_Datas = new NormalMappedVertex [m_iNbVertices];
+			break;
+	}
 
 	int vertexCount=0;
 
@@ -572,13 +645,13 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _Vert
 	if ( m_Positions )
 	{
 		float*  Position = m_Positions[m_Faces[FaceIndex].m_Position];
-		VectPosition = Vector3f(Position[0], Position[1], Position[2] );
+		VectPosition = Vector3f(Position[0], Position[1], Position[2]);
 	}
 
 	if ( m_Normals )
 	{
 		float*  Normal = m_Normals[m_Faces[FaceIndex].m_Normal];
-		VectNormal = Vector3f (Normal[0], Normal[1], Normal[2] );
+		VectNormal = Vector3f (Normal[0], Normal[1], Normal[2]);
 	}
 
 	if ( m_TexCoords )
@@ -587,24 +660,47 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _Vert
 		VectTexCoord = Vector2f (TexCoord[0], TexCoord[1]);
 	}
 
-	if (!m_Skinned)
+	u32 vertexSize = 0;
+	switch (_VertexBuffer.m_VertexType)
 	{
-		Vertex* pDVertexBuffer = (Vertex*)_VertexBuffer.m_Datas;
+	case VertexBuffer::Default:
+		vertexSize = sizeof(Vertex);
+		break;
 
-		pDVertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
-		pDVertexBuffer[VertexIndex].m_Normal	= VectNormal;
-		pDVertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
+	case VertexBuffer::Skinned:
+		vertexSize = sizeof(SkinnedVertex);
+		break;
+
+	case VertexBuffer::NormalMapped:
+		vertexSize = sizeof(NormalMappedVertex);
+		break;
+	}
+
+	Vertex* pDVertexBuffer = (Vertex*)((u8*)_VertexBuffer.m_Datas + VertexIndex*vertexSize);
+
+	pDVertexBuffer->m_Position	= Vector4f( VectPosition, 1.f);
+	pDVertexBuffer->m_Normal	= VectNormal;
+	pDVertexBuffer->m_TexCoord	= VectTexCoord;
+
+	if (_VertexBuffer.m_VertexType == VertexBuffer::Skinned)
+	{
+		SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)pDVertexBuffer;
+
+		pSVertexBuffer->m_Bones		= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
+		pSVertexBuffer->m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
 	}
 	else
+	if (_VertexBuffer.m_VertexType == VertexBuffer::NormalMapped)
 	{
-		SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)_VertexBuffer.m_Datas;
+		Vector3f float3	(0.f, 0.f, 0.f);
 
-		pSVertexBuffer[VertexIndex].m_Position	= Vector4f( VectPosition, 1.f);
-		pSVertexBuffer[VertexIndex].m_Normal	= VectNormal;
-		pSVertexBuffer[VertexIndex].m_TexCoord	= VectTexCoord;
-		
-		pSVertexBuffer[VertexIndex].m_Bones		= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
-		pSVertexBuffer[VertexIndex].m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
+		NormalMappedVertex* pSVertexBuffer = (NormalMappedVertex*)pDVertexBuffer;
+
+		float*  Tangeant = m_Tangents[m_Faces[FaceIndex].m_Tangent];
+		pSVertexBuffer->m_Tangent	= Vector3f (Tangeant[0], Tangeant[1], Tangeant[2]);
+
+		float*  Binormal = m_Binormals[m_Faces[FaceIndex].m_Binormal];
+		pSVertexBuffer->m_Binormal	= Vector3f (Binormal[0], Binormal[1], Binormal[2]);
 	}
 }
 
@@ -617,11 +713,15 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 
 	int iPositionOffset = -1,
 		iNormalOffset   = -1,
-		iTexCoordOffset = -1;
+		iTexCoordOffset = -1,
+		iTangentOffset	= -1,
+		iBinormalOffset	= -1;
 
-	int iPositionIndex = -1,
-		iNormalIndex   = -1,
-		iTexCoordIndex = -1;
+	int iPositionIndex	= -1,
+		iNormalIndex	= -1,
+		iTexCoordIndex	= -1,
+		iTangentIndex	= -1,
+		iBinormalIndex	= -1;
 
 	int iStartData	= 0,
 		iDataSize	= 0;
@@ -640,6 +740,10 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 			node->ToElement()->Attribute("offset", &iNormalOffset);
 		else if ( strcmp(sSemantic.c_str() , "TEXCOORD") == 0 )
 			node->ToElement()->Attribute("offset", &iTexCoordOffset);
+		else if ( strcmp(sSemantic.c_str() , "TEXTANGENT") == 0 )
+			node->ToElement()->Attribute("offset", &iTangentOffset);
+		else if ( strcmp(sSemantic.c_str() , "TEXBINORMAL") == 0 )
+			node->ToElement()->Attribute("offset", &iBinormalOffset);
 
 		node = node->NextSiblingElement("input");
 		iNbSemantics ++;
@@ -665,6 +769,10 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 					iNormalIndex = atoi(&TrianglesText[i+j*2]);
 				else if ( j == iTexCoordOffset	&& iTexCoordOffset >= 0)
 					iTexCoordIndex = atoi(&TrianglesText[i+j*2]);
+				else if ( j == iTangentOffset	&& iTangentOffset >= 0)
+					iTangentIndex = atoi(&TrianglesText[i+j*2]);
+				else if ( j == iBinormalOffset	&& iBinormalOffset >= 0)
+					iBinormalIndex = atoi(&TrianglesText[i+j*2]);
 			}
 		}
 
@@ -687,14 +795,20 @@ ResourceResult MeshLoader::FillFacesArray(TiXmlNode* TrianglesNode)
 					iNormalIndex = atoi(cData);
 				else if ( j == iTexCoordOffset	&& iTexCoordOffset >= 0)
 					iTexCoordIndex = atoi(cData);
+				else if ( j == iTangentOffset	&& iTangentOffset >= 0)
+					iTangentIndex =  atoi(cData);
+				else if ( j == iBinormalOffset	&& iBinormalOffset >= 0)
+					iBinormalIndex =  atoi(cData);
 
 				iStartData += iDataSize+1;
 			}
 
-			m_Faces [i].m_Position = iPositionIndex;
-			m_Faces [i].m_Normal   = iNormalIndex;
-			m_Faces [i].m_TexCoord = iTexCoordIndex;
+			m_Faces[i].m_Position	= iPositionIndex;
+			m_Faces[i].m_Normal		= iNormalIndex;
+			m_Faces[i].m_TexCoord	= iTexCoordIndex;
 
+			m_Faces[i].m_Tangent	= iTangentIndex;
+			m_Faces[i].m_Binormal	= iBinormalIndex;
 		}
 	}
 	else	return RES_FAILED;

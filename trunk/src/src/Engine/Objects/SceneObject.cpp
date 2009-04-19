@@ -108,7 +108,12 @@ void SceneObject::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj)
 {
 	D3DXMATRIX MatWorldView;
 	D3DXMATRIX mWorldViewProjection;
-	D3DXMatrixIdentity(&MatWorldView);
+	D3DXMATRIX LocalWorld;
+	D3DXMatrixIdentity(&LocalWorld);
+	LocalWorld._22=0; LocalWorld._23=1;
+	LocalWorld._32=1; LocalWorld._33=0;
+
+	D3DXMatrixMultiply(&LocalWorld, &LocalWorld, &m_WorldMatrix);
 	D3DXMatrixMultiply(&MatWorldView, &m_WorldMatrix, view);
 	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
 
@@ -132,11 +137,11 @@ void SceneObject::SetTransform(const D3DXMATRIX* world)
 
 void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 {
-	m_matrixStack->LoadIdentity();
+	//m_matrixStack->LoadIdentity();
     m_matrixStack->LoadMatrix( &m_WorldMatrix );
 	m_matrixStack->Push();
     {
-        m_matrixStack->MultMatrixLocal( world );
+        m_matrixStack->MultMatrix( world );
 		m_WorldMatrix=*m_matrixStack->GetTop();
     }
     m_matrixStack->Pop();
@@ -176,6 +181,18 @@ void SceneObject::Draw()
 
 	m_pShader->m_pEffect->End();
 
+}
+
+void SceneObject::DrawShadow()
+{
+	if (m_pMesh->m_pVB)
+	{
+			m_pDevice->SetStreamSource(0, m_pMesh->m_pVB, 0, D3DXGetDeclVertexSize(m_pMesh->m_VBdecl, 0));
+
+			m_pDevice->SetIndices ( m_pMesh->m_pIB );
+
+			m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3); 
+	}
 }
 
 void SceneObject::DeleteDeviceData()

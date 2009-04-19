@@ -13,6 +13,7 @@ class Camera;
 class Object2D;
 class Light;
 class Skybox;
+class ShadowMap;
 
 //===========================================================================//
 // Classe de base pour créer une application DX                              //
@@ -59,8 +60,9 @@ protected:
 	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
 	std::list< Light* >			*m_LightList; // Liste des lumières
 
-	Camera	*m_Camera;		// Pointeur sur la camera
-	Skybox	*m_Skybox;
+	Camera	    *m_Camera;		// Pointeur sur la camera
+	Skybox		*m_Skybox;
+	ShadowMap   *m_ShadowMap;
 	
 	Color4f	m_ClearColor;	// Couleur de fond
 	bool	m_UseShadowMap; // Activation du shadow mapping

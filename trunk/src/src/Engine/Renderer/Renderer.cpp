@@ -87,12 +87,6 @@ HRESULT Renderer::OnCreateDevice()
 		++obj2d;
 	}
 
-	// Lumière par défaut : lumière directionnelle
-	//Light * DefaultLight=new DirectionalLight();
-	//Light * DefaultLight2=new PointLight();
-	//Light * DefaultLight2=new SpotLight();
-	//DefaultLight2->SetLightAngle(0.8f);
-
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( Color4f(0.f,0.f,0.f,1.f) ), 1.0f, 0);
 
 	return S_OK;
@@ -191,13 +185,16 @@ HRESULT Renderer::OnResetDevice()
 
 	if(m_Skybox)
 		m_Skybox->Init();
-//*
+
+	if(m_UseShadowMap)
+		m_ShadowMap->ResetDevice();
+
 	//-- Post Processes
 	LPDIRECT3DSURFACE9 pBackBuffer;
 	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
 	PostRenderer::GetInstance()->Create(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
-//*/
+
 	return S_OK;
 }
 
@@ -206,6 +203,7 @@ HRESULT Renderer::OnResetDevice()
 //===========================================================================//
 HRESULT Renderer::Render()
 {
+
 	m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
 
 	SceneObject::ScObjIt scobj;
@@ -218,6 +216,9 @@ HRESULT Renderer::Render()
 
 
 	m_pd3dDevice->BeginScene();
+
+	if(m_UseShadowMap)
+		m_ShadowMap->Render();
 
 	D3DXMATRIX MatWorld;
 	D3DXMatrixIdentity(&MatWorld);
@@ -275,17 +276,17 @@ HRESULT Renderer::Render()
 	//-- ?
 	
 	// Affichage grille (Pipe line par défaut)
-	m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
+	//m_pd3dDevice->SetTransform(D3DTS_WORLD, &MatWorld);
 	//m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	//m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
 
-	#ifdef DEVCAMERA
+	/*#ifdef DEVCAMERA
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, m_DevCamera.GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, m_DevCamera.GetProjMatrix() );
 	#else
 	m_pd3dDevice->SetTransform(D3DTS_VIEW, &m_Camera->GetViewMatrix());
 	m_pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_Camera->GetProjMatrix() );
-	#endif
+	#endif*/
 
 	/*m_pd3dDevice->SetFVF(DEFAULT_FVF);
 
@@ -315,6 +316,11 @@ HRESULT Renderer::OnLostDevice()
 	if(m_Skybox)
 	{
 		m_Skybox->LostDevice();
+	}
+
+	if(m_UseShadowMap)
+	{
+		m_ShadowMap->LostDevice();
 	}
 
 	//-- Objets 3D
@@ -369,7 +375,10 @@ HRESULT Renderer::OnDestroyDevice()
 	}
 
 	if(m_UseShadowMap)
-		ShadowMap::GetInstance()->Release();
+	{
+		m_ShadowMap->Release();
+		delete m_ShadowMap;
+	}
 
 	PostRenderer::GetInstance()->Destroy();
 
@@ -422,7 +431,8 @@ void Renderer::SetShadowMap(Light *ShadowLight)
 		return;
 
 	m_UseShadowMap=true;
-	ShadowMap::GetInstance()->SetShadowMap(ShadowLight);
+	m_ShadowMap=ShadowMap::GetInstance();
+	m_ShadowMap->SetShadowMap(ShadowLight);
 }
 
 //**********************************************************

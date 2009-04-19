@@ -65,6 +65,7 @@ void Material::SetGraphicalData()
 		m_pShader->m_pEffect->SetBool("g_UseTex", true);
 		m_pShader->m_pEffect->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->m_pTex);
 
+		m_pShader->m_pEffect->SetBool("g_UseNormalMap", false);
 		if (m_Maps[Texture::NORMALMAP])
 		{
 			m_pShader->m_pEffect->SetBool("g_UseNormalMap", true);

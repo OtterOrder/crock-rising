@@ -5,6 +5,38 @@ float4x4 g_mWorldViewProjection;    // World * View * Projection matrix
 float4x4 g_mWorldViewProjLast;		// Last WorldViewProjection matrix
 
 //===========================================================================//
+// Sortie vertex shader                                                      //
+//===========================================================================//
+struct VS_OUTPUT
+{
+    float4 Position   : POSITION;   // vertex position
+    float4 oPosition  : TEXCOORD0;  // vertex in
+};
+
+//===========================================================================//
+// Ce shader calcule les transformations et éclairages standard              //
+//===========================================================================//
+VS_OUTPUT VSVelocity( float4 vPos : POSITION )
+{
+    VS_OUTPUT Output;
+
+    Output.Position = mul(vPos, g_mWorldViewProjection);
+
+    Output.oPosition = vPos;
+
+    return Output;    
+}
+
+
+//===========================================================================//
+// Sortie pixel shader                                                       //
+//===========================================================================//
+struct PS_OUTPUT
+{
+    float4 RGBColor : COLOR0;  // Pixel color    
+};
+
+//===========================================================================//
 // Velocity				                                                     //
 //===========================================================================//
 float2 ComputeVelocity (float4 _position)
@@ -24,47 +56,14 @@ float2 ComputeVelocity (float4 _position)
 	return velocity;
 }
 
-//===========================================================================//
-// Sortie vertex shader                                                      //
-//===========================================================================//
-struct VS_OUTPUT
-{
-    float4 Position   : POSITION;   // vertex position
-    float2 Velocity   : TEXCOORD0;  // vertex in
-};
-
-//===========================================================================//
-// Ce shader calcule les transformations et éclairages standard              //
-//===========================================================================//
-VS_OUTPUT VSVelocity( float4 vPos : POSITION )
-{
-    VS_OUTPUT Output;
-
-    Output.Position = mul(vPos, g_mWorldViewProjection);
-
-    Output.Velocity = ComputeVelocity(vPos);
-
-    return Output;    
-}
-
-
-//===========================================================================//
-// Sortie pixel shader                                                       //
-//===========================================================================//
-struct PS_OUTPUT
-{
-    float4 RGBColor : COLOR0;  // Pixel color    
-};
-
 PS_OUTPUT PSVelocity( VS_OUTPUT In ) 
 {
     PS_OUTPUT Output;
 
-	//Output.RGBColor = float4( (ComputeVelocity(In.oPosition) +1.f)/2.f, 0.f, 1.f);
-	In.Velocity;
-	Output.RGBColor.z = In.Velocity.x >= 0.f ? 1.f : 0.f;
-	Output.RGBColor.w = In.Velocity.y >= 0.f ? 1.f : 0.f;
-	Output.RGBColor.xy = abs(In.Velocity);
+	float2 velocity = ComputeVelocity(In.oPosition);
+	Output.RGBColor.z = velocity.x >= 0.f ? 1.f : 0.f;
+	Output.RGBColor.w = velocity.y >= 0.f ? 1.f : 0.f;
+	Output.RGBColor.xy = abs(velocity);
 
 	return Output;
 }

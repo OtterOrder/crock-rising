@@ -49,7 +49,6 @@ PS_OUTPUT PSVectorialBlur( float2 UV: TEXCOORD0 )
 	float2 Vector;
 	 
 	float4 pixelVector = tex2D(VectorsTexture, UV);
-	//pixelVector = pixelVector*2.f -1.f;
 
 	Vector.x =  pixelVector.r * g_BlurFactor * (pixelVector.z*2.f -1.f);
 	Vector.y = -pixelVector.g * g_BlurFactor * (pixelVector.w*2.f -1.f);
@@ -78,9 +77,6 @@ PS_OUTPUT PSVectorialBlur( float2 UV: TEXCOORD0 )
     
     // Return the average color of all the samples
     Output.RGBColor = float4(Blurred / (NbSamples*2.f), 1.0f);
-    
-    //// Delete Me !!!!
-    //Output.RGBColor = pixelVector;//tex2D(VectorsTexture, UV);
 
 	return Output;
 }

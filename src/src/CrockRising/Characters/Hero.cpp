@@ -7,13 +7,14 @@ Hero::Hero()
 {
 	m_iLife = 100 ;
 
+	//m_pAnimated = new SceneObjectAnimated("Robot_Mesh.DAE","Robot_Marche.DAE",D3DXVECTOR3(0.f,0.f,0.f));
 	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,-17.f,0.f));
 	m_pAnimated->SetRotation(0,-90,0);
 	m_pAnimated->InitObject();
 	m_pAnimated->InitDeviceData();
 
 	m_pInputManager = InputManager::GetInstance();
-	m_pInputManager->HoldMouseAtCenter(true);
+	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_inventory.reserve(10);
 	m_currentState = WALK;
@@ -77,7 +78,7 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.1f;
+		float sensibilityTranslation = 0.5f;
 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -86,7 +87,7 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.1f;
+		float sensibilityTranslation = 0.5f;
 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -95,7 +96,7 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.1f;
+		float sensibilityTranslation = 0.5f;
 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -104,7 +105,7 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.1f;
+		float sensibilityTranslation = 0.5f;
 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -134,7 +135,7 @@ ResourceResult Hero::control( Camera *pCamera )
 	if( point.y != 0 ) 
 	{
 		int offsetCursor = (int)point.y%sensibiliteSouris; 
-	    pCamera->SetOrientationX( offsetCursor );
+		pCamera->SetOrientationX( offsetCursor );
 	}
 
 	return RES_SUCCEED;
@@ -150,6 +151,7 @@ void Hero::update( Camera* pCamera )
 	{
 	case WALK : 
 		m_pAnimated->StartAnim();
+		//m_pAnimated->SetAnim("Robot_Marche.DAE");
 		m_pAnimated->SetAnim("Alien_Anim.DAE");
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
@@ -177,5 +179,5 @@ void Hero::update( Camera* pCamera )
 		break;
 	}
 
-	
+
 }

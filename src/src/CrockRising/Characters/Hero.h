@@ -34,7 +34,7 @@ public:
 	void			  setLife ( const int life ) { m_iLife += life; }   // La variable life représentant un bonus ou malus 
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
-	 
+
 	//Méthodes pour gérer l'état courant du Héros
 	void			  update( Camera* pCamera ); 
 	void		      changeState( HeroState newState ) { m_currentState = newState; }

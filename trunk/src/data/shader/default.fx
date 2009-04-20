@@ -96,7 +96,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
 // Normal mapping                                                            //
 //===========================================================================//
 
-float3 GetBumpedNormal (float3 _Normal, float3 _Tangent, float3 Binormal, float2 _UV)
+float3 GetBumpedNormal (float3 _Normal, float3 _Tangent, float3 _Binormal, float2 _UV)
 {
 	float3 bumpedNormal;
 	
@@ -107,7 +107,7 @@ float3 GetBumpedNormal (float3 _Normal, float3 _Tangent, float3 Binormal, float2
 	float py = tex2D(NormalMapSampler, _UV+float2(0.0f, 1.0f/256.0f)).x;
 
 	float2 bumps = 2.0f*float2(p.x-px, p.y-py);
-	bumpedNormal = normalize( normalize(_Normal) + (bumps.x*_Tangent + bumps.y*Binormal));
+	bumpedNormal = normalize( normalize(_Normal) + (bumps.x*_Tangent + bumps.y*_Binormal));
 
 	return bumpedNormal;
 }

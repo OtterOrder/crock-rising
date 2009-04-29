@@ -9,7 +9,7 @@ Tout ce dont vous avez besoin est disponible sur [http://connect.creativelabs.co
 Téléchargez :
  * OpenAL SDK for Windows (OpenAL11CoreSDK.zip)
 
-A déziper et installer où bon vous semble..
+A déziper et installer où bon vous semble (y compris le pack redistribuable qu'il vous propose à la fin)..
 
 == Ce qu'il faut rajouter dans Visual Studio ==
 

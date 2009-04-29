@@ -35,6 +35,12 @@ Nomenclature : {{{MyFunction}}}.
 
 Nomenclature : {{{MyClass}}}, {{{MyStruct}}}, {{{MyType}}}.
 
+== Les macros (define) ==
+
+En principe, les macros doivent être en majuscules. On peut tolérer des exceptions dans certains cas, notamment les macros avec paramètre(s), pour lesquelles on pourra adopter la nomenclature des fonctions : {{{MyMacro( myParameter )}}}.
+
+Une macro devrait toujours être préfixée de 2 à 4 lettres indiquant dans quel contexte elle est utile. Par exemple, les macros ayant un rapport avec les textures sont préfixées {{{TEX_}}}. Cette règle est particulièrement importante pour les macros définies dans un fichier .h, puisqu'elles seront visibles dans tous les fichiers incluant le .h en question.
+
 == Les commentaires ==
 
 Il en faut plein, des clairs et concis...

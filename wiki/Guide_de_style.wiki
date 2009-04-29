@@ -21,11 +21,13 @@ Les variables locales n'ont pas d'indicateur de portée (du coup c'est pas la pe
 === Types ===
 
 || p || pointeur ||
-|| c || caractère (char) ||
-|| i || entier signé (int) ||
-|| u || entier non signé (unsigned int) ||
-|| f || flottant (float) ||
-|| s || chaîne de caractère (string) ||
+|| c || ~~caractère (char)~~ ||
+|| i || ~~entier signé (int)~~ ||
+|| u || ~~entier non signé (unsigned int)~~ ||
+|| f || ~~flottant (float)~~ ||
+|| s || ~~chaîne de caractère (string)~~ ||
+
+Note : finalement seul le pointeur est vraiment utile..
 
 == Les fonctions et méthodes ==
 

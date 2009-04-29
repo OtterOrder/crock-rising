@@ -1,0 +1,22 @@
+#summary Comment compiler le projet avec OpenAL?
+
+= Comment compiler le projet avec OpenAL? =
+
+== Ce qu'il faut installer ==
+
+Tout ce dont vous avez besoin est disponible sur [http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx cette page].
+
+Téléchargez :
+ * OpenAL SDK for Windows (OpenAL11CoreSDK.zip)
+
+A déziper et installer où bon vous semble..
+
+== Ce qu'il faut rajouter dans Visual Studio ==
+
+Dans Tools > Options > VC++ Directories..
+
+Include files :
+ * (SDK DIR)\include
+
+Library files :
+ * (SDK DIR)\libs\Win32

@@ -566,6 +566,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Sound"
+				>
+				<File
+					RelativePath=".\Resources\Sound.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Resources\Sound.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Game"

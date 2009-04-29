@@ -90,7 +90,7 @@ int System::MainLoop( void )
 			inputManager->Update();
 
 			// Update du son
-			soundSystem->Update();
+			//soundSystem->Update();
 
 			//Update de physX				
 			if (time->getDeltaTimeF() >= nbFps) 

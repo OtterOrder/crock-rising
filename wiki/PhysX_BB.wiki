@@ -21,4 +21,5 @@ L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc l
 == Dans le code ==
 
 SceneObjetPhysics Objet = new SceneObjetPhysics( "Objet_Mesh.DAE", "Objet_Physic.DAE", Vector3f(0.0f, 0.0f, 0.0f));
+
 (C'est un pointeur mais j'arrive pas a mettre l'étoile, c'est pour le gras !)

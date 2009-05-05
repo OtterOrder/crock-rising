@@ -1,5 +1,7 @@
 #summary Comment créer les bonnes boundings box ?
 
+En attente de commit, le temps que je fasse ca bien.
+
 = Comment créer les bonnes boundings box ? =
 
 L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc lui fournir le mesh dans un autre .dae

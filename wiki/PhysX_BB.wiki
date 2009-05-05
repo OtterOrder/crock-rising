@@ -1,0 +1,23 @@
+#summary Comment créer les bonnes boundings box ?
+
+= Comment créer les bonnes boundings box ? =
+
+L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc lui fournir le mesh dans un autre .dae
+
+== Le mesh ==
+
+* A placer au centre. Le pivot va poser des problèmes, je regarde comment faire en ce moment, à venir donc.
+* Exporter la sélection.
+
+== La Bounding Box ==
+
+* Créer un cube, une sphère ou une capsule.
+* Ajuster la taille (attention, pas de scale sans passer par le modificateur !)
+* Onglet des outils, cliquer sur le marteaux.
+* Dans la sous partie PhysX Utility, cliquer sur PhysX Control Panel.
+* Régler les paramètres.
+* Export to collada.
+
+== Dans le code ==
+
+SceneObjetPhysics* Objet = new SceneObjetPhysics( "Objet_Mesh.DAE", "Objet_Physic.DAE", Vector3f(0.0f, 0.0f, 0.0f));

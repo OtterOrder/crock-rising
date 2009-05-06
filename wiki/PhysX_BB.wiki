@@ -1,24 +1,31 @@
 #summary Comment créer les bonnes boundings box ?
 
 En attente de commit, le temps que je fasse ca bien.
+First at all, télécharger le plugin ici :
+http://developer.nvidia.com/object/physx_dcc_plugins.html
 
 = Comment créer les bonnes boundings box ? =
 
 L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc lui fournir le mesh dans un autre .dae
 
-== Le mesh ==
+== Dans 3DS ==
+ === Le mesh ===
 
- * A placer au centre. Le pivot va poser des problèmes, je regarde comment faire en ce  moment, à venir donc.
- * Exporter la sélection.
+  * A placer au centre. Le pivot va poser des problèmes, je regarde comment faire en ce   moment, à venir donc.
+  * Exporter la sélection.
 
-== La Bounding Box ==
+ === La Bounding Box ===
 
- * Créer un cube, une sphère ou une capsule.
- * Ajuster la taille (attention, pas de scale sans passer par le modificateur !)
- * Onglet des outils, cliquer sur le marteaux.
- * Dans la sous partie PhysX Utility, cliquer sur PhysX Control Panel.
- * Régler les paramètres.
- * Export to collada.
+  * Créer un cube, une sphère ou une capsule.
+  * Ajuster la taille (attention, pas de scale sans passer par le modificateur !)
+  * Onglet des outils, cliquer sur le marteaux.
+  * Dans la sous partie PhysX Utility, cliquer sur PhysX Control Panel.
+  * Régler les paramètres.
+  * Export to collada.
+
+  === What about pivot ?! ===
+
+Apparement, il faut à chaque export du mesh, mettre son pivot au centre de l'objet et ce dernier lui même au centre de la scène.
 
 == Dans le code ==
 

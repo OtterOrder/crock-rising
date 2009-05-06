@@ -398,7 +398,7 @@ void Object2D::Vertex::GenDeclaration( vector<D3DVERTEXELEMENT9> *vElements )
 	// POSITION (xyzrhw)
 	element.Offset	= offset;
 	element.Type	= D3DDECLTYPE_FLOAT4;
-	element.Usage	= D3DDECLUSAGE_POSITION;
+	element.Usage	= D3DDECLUSAGE_POSITIONT;
 	offset			+= sizeof(Vector4f);
 	vElements		->push_back( element );
 

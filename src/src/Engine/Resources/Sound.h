@@ -12,11 +12,11 @@ class Sound : public Resource
 {
 public:
 
-	enum Encoding	// Encodage du fichier source
+	/*enum Encoding	// Encodage du fichier source
 	{
-		//WAVE,
+		WAVE,
 		OGG,
-	};
+	};*/
 	
 	Sound();
 	virtual ~Sound();
@@ -24,6 +24,7 @@ public:
 	virtual ResourceResult Load( std::string resource, ResourceParam param );
 
 	// Accesseurs
+	inline ALuint GetBufferID() const	{ return m_BufferID; }
 	//inline int GetBufferSize() const	{ return m_BufferSize; }
 	inline int GetFrequency() const		{ return m_Frequency; }
 	inline int GetChannels() const		{ return m_Channels; }
@@ -31,11 +32,16 @@ public:
 
 protected:
 
-	ALuint	m_BufferId;		// Id du buffer openAL
+	ALuint	m_BufferID;		// ID du buffer openAL
 	int		m_BufferSize;	// Taille du buffer (octets)
 	int		m_Frequency;	// Fréquence du sample (Hz)
 	int		m_Channels;		// Nombre de canaux utilisés
 	int		m_Bits;			// Nombre de bits par sample (?)
+
+	//-- Méthodes protégées
+
+	//ResourceResult LoadFromWave( std::string path );
+	ResourceResult LoadFromOgg( std::string path );
 
 };
 

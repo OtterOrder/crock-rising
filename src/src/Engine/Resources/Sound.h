@@ -36,12 +36,12 @@ protected:
 	int		m_BufferSize;	// Taille du buffer (octets)
 	int		m_Frequency;	// Fréquence du sample (Hz)
 	int		m_Channels;		// Nombre de canaux utilisés
-	int		m_Bits;			// Nombre de bits par sample (?)
+	int		m_Bits;			// Nombre de bits par sample (16 en principe)
 
 	//-- Méthodes protégées
 
-	//ResourceResult LoadFromWave( std::string path );
-	ResourceResult LoadFromOgg( std::string path );
+	bool LoadFromWave( std::string path );
+	bool LoadFromOgg( std::string path );
 
 };
 

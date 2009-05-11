@@ -1,5 +1,5 @@
-#ifndef		_Math_H_CrockEngine
-#define		_Math_H_CrockEngine
+#ifndef		_CROCKENGINE_MATH_H_
+#define		_CROCKENGINE_MATH_H_
 
 //******************************************************************
 
@@ -21,7 +21,11 @@
 // Merci de respecter la même syntaxe pour les macros et
 // fonctions de math, à savoir : MATH_MyFunction().
 
-#define MATH_Clamp( x, min, max )	(((x)<(min))?(min):(((x)>(max))?(max):(x)))
+template< typename T >
+inline const T& MATH_Clamp( const T& x, const T& min, const T& max )
+{
+	return ( x < min ) ? min : ( x > max ) ? max : x;
+}
 
 //******************************************************************
 
@@ -41,4 +45,4 @@
 #define FLAG_IsSet( field, flag )	(((field)&(flag))==(flag))
 
 //******************************************************************
-#endif		//_Math_H_CrockEngine
+#endif		//_CROCKENGINE_MATH_H_

@@ -11,7 +11,8 @@ L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc l
 == Dans 3DS ==
  === Le mesh ===
 
-  * A placer au centre. Le pivot va poser des problèmes, je regarde comment faire en ce   moment, à venir donc.
+  * Mettre le pivot au centre de l'objet (onglet Hierarchy, affect pivot only, center to object) puis mettre le tout à (0 0 0).
+  * Si besoin d'une rotation ou d'un scale, faire en EDIT POLY et pas la peine d'écraser à la fin.
   * Exporter la sélection.
 
  === La Bounding Box ===
@@ -21,11 +22,8 @@ L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc l
   * Onglet des outils, cliquer sur le marteaux.
   * Dans la sous partie PhysX Utility, cliquer sur PhysX Control Panel.
   * Régler les paramètres.
+  * Virer tous les objets non concernés.
   * Export to collada.
-
-  === What about pivot ?! ===
-
-Apparement, il faut à chaque export du mesh, mettre son pivot au centre de l'objet et ce dernier lui même au centre de la scène.
 
 == Dans le code ==
 

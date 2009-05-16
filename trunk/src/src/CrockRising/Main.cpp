@@ -35,7 +35,7 @@ int WINAPI WinMain(
 	Game::GetInstance()->StoreBackup( pBackup );
 	
 	// On indique le niveau de démarrage
-	Game::GetInstance()->ChangeLevel( LEVEL_alafraise );
+	Game::GetInstance()->SetStartLevel( LEVEL_alafraise );
 
 	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();

@@ -35,11 +35,13 @@ public:
 
 	//-- Méthodes publiques
 
+	void	Start			( void );			// Lance le niveau de départ
 	void	Update			( void );			// Update du jeu
 
 	void	StoreBackup		( Backup *pBackup );
 	Backup*	GetBackup		( void ) const;
 	
+	void	SetStartLevel	( crc32 levelID );	// Positionne le niveau de départ
 	void	ChangeLevel		( crc32 levelID );	// Change de niveau
 	crc32	GetLevelID		( void ) const;		// Donne l'ID du niveau courant
 	crc32	GetPrevLevelID	( void ) const;		// Donne l'ID du niveau précédent
@@ -56,6 +58,7 @@ protected:
 	
 	Level					*m_CurrentLevel;	// Niveau courant
 	crc32					m_PrevLevelID;		// ID du niveau précédent
+	crc32					m_StartLevelID;		// ID du niveau de départ
 
 	std::list< Object* >	*m_ObjList;			// Liste des objets 3d
 

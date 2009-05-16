@@ -60,7 +60,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="dxguid.lib d3dx9.lib d3d9.lib OpenAL32.lib Engine.lib Winmm.lib tinyxml.lib AIToolkit.lib PhysXLoader.lib NxCooking.lib NxCharacter.lib"
+				AdditionalDependencies="dxguid.lib d3dx9.lib d3d9.lib OpenAL32.lib ogg.lib vorbis.lib vorbisfile.lib Engine.lib Winmm.lib tinyxml.lib AIToolkit.lib PhysXLoader.lib NxCooking.lib NxCharacter.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\debug&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -134,7 +134,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib OpenAL32.lib Winmm.lib tinyxml.lib AIToolkit.lib PhysXLoader.lib NxCooking.lib NxCharacter.lib"
+				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib OpenAL32.lib ogg.lib vorbis.lib vorbisfile.lib Winmm.lib tinyxml.lib AIToolkit.lib PhysXLoader.lib NxCooking.lib NxCharacter.lib"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

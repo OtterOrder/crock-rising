@@ -28,10 +28,9 @@ int WINAPI WinMain(
 
 	// Création du System
 	System::GetInstance();
-	Physicalizer::GetInstance();
 	
 	// On indique le niveau de démarrage
-	Game::GetInstance()->ChangeLevel( LEVEL_start );
+	Game::GetInstance()->SetStartLevel( LEVEL_start );
 
 	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();

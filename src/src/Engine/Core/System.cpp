@@ -52,8 +52,11 @@ int System::MainLoop( void )
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
 	soundSystem		= SoundSystem::GetInstance();
-	game			= Game::GetInstance();
 	physX			= Physicalizer::GetInstance();
+	game			= Game::GetInstance();
+
+	// Tous les modules sont initialisés, on lance le jeu..
+	game->Start();
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );

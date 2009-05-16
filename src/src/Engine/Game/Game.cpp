@@ -18,6 +18,7 @@ Game::Game( void )
 	m_Backup		= NULL;
 	m_CurrentLevel	= NULL;
 	m_PrevLevelID	= CRC32_NULL;
+	m_StartLevelID	= CRC32_NULL;
 	m_ObjList		= &Object::RefList;
 }
 
@@ -31,6 +32,14 @@ Game::~Game( void )
 	
 	if( m_CurrentLevel )
 		delete m_CurrentLevel;
+}
+
+//**********************************************************
+// Lance le niveau de départ (renseigné par SetStartLevel).
+//**********************************************************
+void Game::Start( void )
+{
+	ChangeLevel( m_StartLevelID );
 }
 
 //**********************************************************
@@ -83,7 +92,21 @@ Game::Backup* Game::GetBackup( void ) const
 }
 
 //**********************************************************
-// Change de niveau.
+// Positionne le niveau de départ. Cette méthode enregistre
+// sur quel niveau le jeu devra démarrer une fois que tous
+// les modules du moteur seront initialisés.
+// @param[in]	levelID	: ID du niveau de départ
+//**********************************************************
+void Game::SetStartLevel( crc32 levelID )
+{
+	m_StartLevelID = levelID;
+}
+
+//**********************************************************
+// Change de niveau. Attention, cette méthode appelle l'Init
+// du niveau, tous les modules du moteur doivent avoir été
+// initialisés avant. Pour le premier niveau, utilisez
+// SetStartLevel.
 // @param[in]	levelID	: ID du prochain niveau
 //**********************************************************
 void Game::ChangeLevel( crc32 levelID )
@@ -91,7 +114,10 @@ void Game::ChangeLevel( crc32 levelID )
 	m_PrevLevelID = GetLevelID();
 	
 	if( m_CurrentLevel )
+	{
 		delete m_CurrentLevel;
+		m_CurrentLevel = NULL;
+	}
 
 	// Ici il faudra peut-être gérer un temps de déchargement/chargement..
 

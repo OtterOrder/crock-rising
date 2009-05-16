@@ -703,6 +703,14 @@
 			Name="Sound"
 			>
 			<File
+				RelativePath=".\Sound\SoundObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Sound\SoundObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Sound\SoundSystem.cpp"
 				>
 			</File>

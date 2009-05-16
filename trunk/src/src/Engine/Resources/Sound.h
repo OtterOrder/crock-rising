@@ -21,7 +21,7 @@ public:
 	Sound();
 	virtual ~Sound();
 
-	virtual ResourceResult Load( std::string resource, ResourceParam param );
+	virtual ResourceResult Load( std::string resourceName, ResourceParam param );
 
 	// Accesseurs
 	inline ALuint GetBufferID() const	{ return m_BufferID; }
@@ -40,8 +40,8 @@ protected:
 
 	//-- Méthodes protégées
 
-	bool LoadFromWave( std::string path );
-	bool LoadFromOgg( std::string path );
+	bool LoadFromWave( const std::string &path );
+	bool LoadFromOgg( const std::string &path );
 
 };
 

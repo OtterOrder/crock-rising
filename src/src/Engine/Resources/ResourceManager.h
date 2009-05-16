@@ -22,25 +22,31 @@ public:
 	// Charge une resource					                                 //
 	//=======================================================================//
 	template< class T >
-	T* Load( const std::string &resource, ResourceParam param = NULL )
+	T* Load( const std::string &resourceName, ResourceParam param = NULL )
 	{
 		// Recherche de la ressource
-		TResourcesMap::const_iterator It = m_Resources.find(resource);
+		TResourcesMap::const_iterator It = m_Resources.find( resourceName );
 
 		// Si on l'a trouvé on la renvoie, sinon on l'alloue
-		if (It != m_Resources.end())
+		if( It != m_Resources.end() )
 		{
 			It->second->AddRef();
-			return static_cast<T*>(It->second);
+			return static_cast<T*>( It->second );
 		}
 		else
 		{
-			T* Res=new T();
-			Resource * Ptr=dynamic_cast<Resource*>( Res );
-			Add( resource, Ptr );
-			Ptr->Load( resource, param );
-			Ptr->AddRef();
-			return Res;
+			T *pResource	= new T();
+			// pMom : pointeur de type de la classe mère :p
+			Resource *pMom	= dynamic_cast<Resource*>( pResource );
+			Add( resourceName, pMom );
+
+			if( pMom->Load( resourceName, param ) != RES_SUCCEED )
+			{
+				// D'oh ! Faudrait ptêtre gérer ce cas ?
+				// -> Echec du chargement de la ressource
+			}
+			pMom->AddRef();
+			return pResource;
 		}
 	}
 	
@@ -48,10 +54,10 @@ public:
 	// Retire une resource									                 //
 	//=======================================================================//
 	template< class T >
-	void Remove( const std::string& resource )
+	void Remove( const std::string& resourceName )
 	{
 		// Recherche de la ressource dans la table
-		TResourcesMap::iterator It = m_Resources.find(resource);
+		TResourcesMap::iterator It = m_Resources.find(resourceName);
 
 		// Si la ressource a été chargée
 		if (It != m_Resources.end())

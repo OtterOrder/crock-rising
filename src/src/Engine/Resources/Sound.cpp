@@ -38,10 +38,10 @@ Sound::~Sound()
 
 //**********************************************************
 // Charge le son dans un buffer openAL.
-// @param[in]	resource	: nom de la ressource
-// @param[in]	param		: encodage du fichier (osef)
+// @param[in]	resourceName	: nom de la ressource
+// @param[in]	param			: ne sert à rien
 //**********************************************************
-ResourceResult Sound::Load( string resource, ResourceParam param )
+ResourceResult Sound::Load( string resourceName, ResourceParam param )
 {
 	// Création du buffer openAL..
 	alGenBuffers( 1, &m_BufferID );
@@ -53,10 +53,10 @@ ResourceResult Sound::Load( string resource, ResourceParam param )
 
 	// Chargement des données sonores..
 	// TEMP: seulement du ogg pour le moment !
-	if( !LoadFromOgg( "../../data/sound/" + resource ) )
+	if( !LoadFromOgg( "../../data/sound/" + resourceName ) )
 	{
-		// D'oh !
-		assert( false );
+		//assert( false );
+		//return RES_FAILED;
 	}
 
 	// Récupérations des propriétés des données..
@@ -73,7 +73,7 @@ ResourceResult Sound::Load( string resource, ResourceParam param )
 // @param[in]	path : chemin vers le fichier
 // @return	vrai si le chargement est réussit
 //**********************************************************
-bool Sound::LoadFromWave( std::string path )
+bool Sound::LoadFromWave( const string &path )
 {
 	//TODO
 	
@@ -85,39 +85,40 @@ bool Sound::LoadFromWave( std::string path )
 // @param[in]	path : chemin vers le fichier
 // @return	vrai si le chargement est réussit
 //**********************************************************
-bool Sound::LoadFromOgg( string path )
+bool Sound::LoadFromOgg( const string &path )
 {
 	FILE			*pFile;
 	vorbis_info		*pInfo;
-	OggVorbis_File	oggFile;
+	OggVorbis_File	ovFile;
 	vector<char>	data;
 	char			buffer[OGG_BUFFER_SIZE];
-	int				bitStream;	// Ne sert à rien
+	int				bitStream; // Ne sert à rien
 	long			bytes;
 	ALenum			format;
 	ALsizei			freq;
 
 	pFile = fopen( path.c_str(), "rb" );
-	ov_open( pFile, &oggFile, NULL, 0 );
+	// On n'utilise pas ov_open ! Cf. la doc de vorbisfile
+	ov_open_callbacks( pFile, &ovFile, NULL, 0, OV_CALLBACKS_DEFAULT );
 
 	// On récupère les infos sur le son
-	pInfo	= ov_info( &oggFile, -1 );
+	pInfo	= ov_info( &ovFile, -1 );
 	format	= ( pInfo->channels == 1 ) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 	freq	= pInfo->rate;
 
 	do
 	{
 		// On lit les données du fichier par bloc de 32kb..
-		bytes = ov_read( &oggFile, buffer, OGG_BUFFER_SIZE, OGG_ENDIAN, OGG_BITS>>3, OGG_SIGNED, &bitStream );
+		bytes = ov_read( &ovFile, buffer, OGG_BUFFER_SIZE, OGG_ENDIAN, OGG_BITS>>3, OGG_SIGNED, &bitStream );
 		data.insert( data.end(), buffer, buffer + bytes );
 	}
 	while( bytes > 0 ); // bytes = nombre d'octets lus
 
-	ov_clear( &oggFile );
-	fclose( pFile );
+	ov_clear( &ovFile );
+	//fclose( pFile ); // Fait par ov_clear
 
 	// On copie les données dans le buffer openAL..
-	alBufferData( m_BufferID, format, (ALvoid*)data[0], (ALsizei)data.size(), freq );
+	alBufferData( m_BufferID, format, static_cast<ALvoid*>(&data[0]), (ALsizei)data.size(), freq );
 
 	return true;
 }

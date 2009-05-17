@@ -46,8 +46,10 @@ protected:
 	std::string		m_SoundName;	// Nom de la ressource son
 	Properties		m_Properties;	// Propriétés de l'objet
 
-	bool Init();
-	void SetPropFromSource();		// Récupère les propriétés de l'objet à partir de la source
+	//-- Méthodes protégées
+
+	bool Init();					// Initialise l'objet
+	void SetPropertiesFromAPI();	// Récupère les propriétés de l'objet à partir d'openAL
 
 };
 

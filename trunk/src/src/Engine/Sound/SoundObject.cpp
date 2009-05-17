@@ -138,7 +138,7 @@ bool SoundObject::Init()
 	alGenSources( 1, &m_SourceID );
 
 	// On récupère les valeurs par défaut..
-	SetPropFromSource();
+	SetPropertiesFromAPI();
 	
 	// On charge la ressource sonore et on associe son buffer à la source..
 	Sound *sound = ResourceManager::GetInstance()->Load<Sound>( m_SoundName );
@@ -148,9 +148,9 @@ bool SoundObject::Init()
 }
 
 //**********************************************************
-// Récupère les propriétés de l'objet à partir de la source.
+// Récupère les propriétés de l'objet à partir d'openAL.
 //**********************************************************
-void SoundObject::SetPropFromSource()
+void SoundObject::SetPropertiesFromAPI()
 {
 	alGetSourcef( m_SourceID, AL_GAIN, (ALfloat*)&m_Properties.gain );
 	alGetSourcef( m_SourceID, AL_PITCH, (ALfloat*)&m_Properties.pitch );

@@ -23,16 +23,7 @@ SoundObject::SoundObject( const std::string &soundName )
 //**********************************************************
 SoundObject::~SoundObject()
 {
-	if( m_SourceID != AL_NONE )
-	{
-		Stop();
-		alSourcei( m_SourceID, AL_BUFFER, AL_NONE ); // Il faut liberer le buffer avant de suppimer la source !
-		alDeleteSources( 1, &m_SourceID );
-		m_SourceID = AL_NONE;
-	}
-
-	// On supprime la ressource..
-	ResourceManager::GetInstance()->Remove<Sound>( m_SoundName );
+	Release();
 }
 
 //**********************************************************
@@ -70,6 +61,20 @@ bool SoundObject::IsPlaying() const
 	alGetSourcei( m_SourceID, AL_SOURCE_STATE, &state );
 	return state == AL_PLAYING;
 }
+
+//**********************************************************
+// Change le son.
+// @param[in]	soundName : nom de la ressource son
+//**********************************************************
+/*void SoundObject::SetSound( const std::string &soundName )
+{
+	Release();
+	m_SoundName = soundName;
+	if( !Init() )
+	{
+		// D'oh!
+	}
+}*/
 
 //**********************************************************
 // Change le gain du son.
@@ -143,8 +148,28 @@ bool SoundObject::Init()
 	// On charge la ressource sonore et on associe son buffer à la source..
 	Sound *sound = ResourceManager::GetInstance()->Load<Sound>( m_SoundName );
 	alSourcei( m_SourceID, AL_BUFFER, sound->GetBufferID() );
+	
+	// On récupère les propriétés dépendantes de la ressource
+	m_Properties.spatializable = ( sound->GetChannels() == 1 );
 
 	return true;
+}
+
+//**********************************************************
+// Détruit l'objet.
+//**********************************************************
+void SoundObject::Release()
+{
+	if( m_SourceID != AL_NONE )
+	{
+		Stop();
+		alSourcei( m_SourceID, AL_BUFFER, AL_NONE ); // Il faut liberer le buffer avant de suppimer la source !
+		alDeleteSources( 1, &m_SourceID );
+		m_SourceID = AL_NONE;
+	}
+
+	// On supprime la ressource..
+	ResourceManager::GetInstance()->Remove<Sound>( m_SoundName );
 }
 
 //**********************************************************

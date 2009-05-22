@@ -3,9 +3,8 @@
 
 //******************************************************************
 
-#include	<list>
+#include	<string>
 #include	<alc.h>
-#include	<al.h>
 
 #include	"Core/Math.h"
 #include	"Core/Singleton.h"
@@ -22,16 +21,25 @@ class SoundSystem : public Singleton< SoundSystem >
 
 public:
 
-	struct ListenerDesc
+	//-- Structures publiques
+	
+	struct ListenerProperties
 	{
-		float		gain;
-		Vector3f	position;
-		Vector3f	velocity;
-		Vector3f	direction;
-		Vector3f	up;
+		float		gain;			// 0->1
+		Vector3f	position;		// Position
+		Vector3f	velocity;		// Vecteur vitesse
+		Vector3f	direction;		// Vecteur direction
+		Vector3f	up;				// Vecteur up
 	};
 
-	// Général
+	struct MusicProperties
+	{
+		float		gain;			// 0->1
+		float		pitch;			// 0.1->..
+	};
+
+	//-- Méthodes publiques
+
 	bool Init();		// Initialise le moteur son
 	void Release();		// Détruit le moteur son
 	//void Update();		// Update
@@ -43,22 +51,47 @@ public:
 	void SetListenerOrientation( const Vector3f &direction, const Vector3f &up );
 
 	// Donne toutes les propriétés du listener
-	inline const ListenerDesc& GetListenerDesc() const { return m_ListenerDesc; }
+	inline const ListenerProperties& GetListenerProperties() const { return m_ListenerProperties; }
+
+	// Global
+	//void PauseAll();
+	//void ResumeAll();
+	//void StopAll();
+
+	// Musique
+	void PlayMusic();
+	void PauseMusic();
+	void StopMusic();
+	bool IsMusicPlaying() const;
+	
+	void SetMusic( const std::string &musicName );
+	void SetMusicGain( float gain );
+	void SetMusicPitch( float pitch );
+
+	// Donne toutes les propriétés de la musique
+	inline const MusicProperties& GetMusicProperties() const { return m_MusicProperties; }
+
 
 protected:
 
+	//typedef void (SoundSystem::*UpdateCallback)( void );
+
 	//-- Données protégées
 
-	ALCdevice		*m_pDevice;			// Device audio
-	ALCcontext		*m_pContext;		// Contexte
-	ListenerDesc	m_ListenerDesc;		// Propriétés du listener
+	ALCdevice			*m_pDevice;				// Device audio
+	ALCcontext			*m_pContext;			// Contexte
+	ListenerProperties	m_ListenerProperties;	// Propriétés du listener
+	
+	SoundObject			*m_pMusic;				// Musique
+	MusicProperties		m_MusicProperties;		// Propriétés de la musique
 
 	//-- Méthodes protégées
 
 	SoundSystem();
 	~SoundSystem();
 
-	void SetListenerDescFromAPI();		// Récupère les propriétés du listener à partir d'openAL
+	void SetListenerPropertiesFromAPI();	// Récupère les propriétés du listener à partir d'openAL
+	void ReleaseMusic();					// Supprime la musique
 
 };
 

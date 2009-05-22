@@ -14,14 +14,21 @@ class SoundObject
 {
 public:
 
+	//-- Structures publiques
+
 	struct Properties
 	{
-		float		gain;
-		float		pitch;
-		bool		looping;
-		bool		relative;
-		Vector3f	position;
+		float		gain;			// 0->1
+		float		pitch;			// 0.1->..
+		bool		looping;		// Bouclant
+		bool		relative;		// Position relative au listener
+		Vector3f	position;		// Position
+
+		// Propriétés en lecture seule
+		bool		spatializable;	// Spatialisable en 3D (= son mono)
 	};
+
+	//-- Méthodes publiques
 	
 	SoundObject( const std::string &soundName );
 	virtual ~SoundObject();
@@ -36,9 +43,11 @@ public:
 	void SetLooping( bool looping );
 	void SetRelative( bool relative );
 	void SetPosition( const Vector3f &position );
+	//void SetSound( const std::string &soundName );
 
 	// Donne toutes les propriétés de l'objet
 	inline const Properties& GetProperties() const { return m_Properties; }
+	inline const std::string& GetSound() const { return m_SoundName; }
 
 protected:
 
@@ -49,6 +58,7 @@ protected:
 	//-- Méthodes protégées
 
 	bool Init();					// Initialise l'objet
+	void Release();					// Détruit l'objet
 	void SetPropertiesFromAPI();	// Récupère les propriétés de l'objet à partir d'openAL
 
 };

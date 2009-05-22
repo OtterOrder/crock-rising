@@ -45,8 +45,7 @@ int System::MainLoop( void )
 	bool			bGotMsg;
 	MSG				msg;
 
-	// On initialise les singletons ici pour
-	// ne pas avoir à le faire dans la boucle
+	// On initialise les modules..
 	resourceManager	= ResourceManager::GetInstance();
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();

@@ -1,5 +1,6 @@
 #include "MeshLoader.h"
 #include "../Renderer/Renderer.h"
+#include "AnimLoader.h"
 
 
 //******************************************************************
@@ -339,6 +340,44 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 			}
 		}
 
+		//--------------------------------------------------------------------------------//
+
+		//----------------------------------- Physic ----------------------------------//
+		node =  rootNode->FirstChild( "library_visual_scenes" );
+		if(node) 
+		{
+			node =  node->FirstChild( "visual_scene" );
+			if(node) 
+			{
+				node =  node->FirstChild( "node" ); // id = "Object-node"
+				string sId1 (node->ToElement()->Attribute("id"));		// vérification de l'id
+				string sId2;
+				if(node) 
+				{
+					node =  node->FirstChild( "node" );	//id = "Object-node_PIVOT"
+					if(node)
+					{
+						sId2 = string (node->ToElement()->Attribute("id"));
+						if(sId1 + "_PIVOT" == sId2) 
+						{
+							node =  node->FirstChild( "matrix" );	
+							if(node)
+							{
+								const char* pValues = node->ToElement()->GetText();
+								float* pfValues = new float[16];
+
+								pValues = node->ToElement()->GetText();
+								ConvertStringToFloatArray(pValues,pfValues,16);
+								m_ReglagePivot = D3DXVECTOR3(-pfValues[3], -pfValues[7], -pfValues[11]);
+							}
+						}
+					}
+
+				}
+			}
+		}
+
+
 	}
 	//--------------------------------------------------------------------------------//
 
@@ -500,7 +539,7 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  VertexBuffer&
 	int FaceIndex;
 	int nbvert=0;
 
-	for (int i = 0 ; i < m_iNbFaces*NbFaceVertices ; i ++)
+ 	for (int i = 0 ; i < m_iNbFaces*NbFaceVertices ; i ++)
 	{
 		FaceIndex = 0;
 		while (FaceIndex < i && m_Faces[FaceIndex] != m_Faces[i] )
@@ -528,7 +567,7 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  VertexBuffer&
 			break;
 	}
 
-	int vertexCount=0;
+	int vertexCount = 0;
 
 	for (int i = 0 ; i < m_iNbFaces*NbFaceVertices ; i ++)
 	{

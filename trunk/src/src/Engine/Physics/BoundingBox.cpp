@@ -60,20 +60,13 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 
 			boxDesc.dimensions = VecToNxVec( bd->m_dimension);
 			boxDesc.group = Physicalizer::GROUP_DYNAMIQUE;
-			boxDesc.mass = bd->m_mass;
-			boxDesc.localPose.t = NxVec3( 0,0, 0.5 );
-
-
-			//boxDesc.localPose.t = NxVec3( 0.0f, 0.5f, 0.0f );
-
-			//boxDesc.group = Physicalizer::GROUP_DYNAMIQUE;
-			//boxDesc.dimensions = VecToNxVec( Desc->dimension);
-			//boxDesc.mass = Desc->mass;
+			boxDesc.mass = 0.0;//bd->m_mass;
+			boxDesc.localPose.t = VecToNxVec( bd->m_ReglagePivot );
 
 			actorDesc.shapes.push_back(&boxDesc);
-			actorDesc.density		= (NxReal)bd->m_density;	
+			actorDesc.density		= (NxReal)bd->m_density;
 			actorDesc.globalPose.t	= VecToNxVec(bd->m_pos) + NxVec3( 0.f, bd->m_dimension.y/2, 0.f );
-		} 
+		}
 		break;
 
 	case SPHERE:
@@ -83,6 +76,7 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 
 			sphereDesc.radius = (NxReal)sd->m_radius ;
 			sphereDesc.mass = sd->m_mass;
+			sphereDesc.localPose.t = VecToNxVec( sd->m_ReglagePivot );
 
 			actorDesc.shapes.push_back(&sphereDesc);
 			actorDesc.density		= (NxReal)sd->m_density;	
@@ -98,6 +92,7 @@ BoundingBox::BoundingBox(ShapeDescription* Desc)
 			capsuleDesc.radius =(NxReal)cd->m_radius ;
 			capsuleDesc.height =(NxReal)cd->m_height ;
 			capsuleDesc.mass = cd->m_mass;
+			capsuleDesc.localPose.t = VecToNxVec( cd->m_ReglagePivot );
 
 			actorDesc.shapes.push_back(&capsuleDesc);
 			actorDesc.density		= (NxReal)cd->m_density;	
@@ -304,15 +299,66 @@ void ControledPhysicsCharacter::updateControlledPosition( void )
 							(float)pos.z );
 }
 
-SceneObjetPhysics::SceneObjetPhysics(const std::string& mesh, const D3DXVECTOR3& Position)
-	:SceneObject( mesh, Position ), BoundingBox( &BoxDescription(Vector3f(0.5f, 0.5f, 0.5f), 1, 1, Vector3f(Position.x, Position.y, Position.z)) )
+SceneObjectPhysics::SceneObjectPhysics(const std::string& mesh, const D3DXVECTOR3& Position)
+	:SceneObject( mesh, Position ) 
 {
+	BoundingBox Boite = BoundingBox( &SphereDescription(0.5, 1.0, 1.0, Vector3f(0.0, 5.0, 0.0)) );
+	Physicalizer* physInstance = Physicalizer::GetInstance();
+	physInstance->SetPhysicable( this, &Boite );	
+}
 
-	getEmpList()->push_front( getEmplacement() );
+SceneObjectPhysics::SceneObjectPhysics(const std::string& mesh, const std::string& physic, const D3DXVECTOR3& Position)
+	:SceneObject( mesh, Vector3f(0.f, 0.f, 0.f) ) 
+{
+	m_PhysicPath = physic;
+	m_PhysicPosition = Position;
+}
 
-//	BoundingBox bb( Vector3f(0.5f, 0.5f, 0.5f),  Vector3f(Position.x, Position.y, Position.z), 10.f );
-	
-//	Physicalizer* physInstance = Physicalizer::GetInstance();
-//	physInstance->SetPhysicable( this, &bb );	
+void SceneObjectPhysics::InitObject()
+{
+	SceneObject::InitObject();
+	BoundingBoxLoader Loader;
+	std::vector<DynamicBody*> BB_List;
+	DynamicBody* BB; 
 
+	if( Loader.Load(m_PhysicPath) == RES_SUCCEED)
+	{
+		BB_List = Loader.getvDynamicBody();
+		BB = BB_List[0];
+		BoundingBox Boite;
+		switch(BB->type)
+		{
+			case BOX :
+				{		
+					BoxDescription SD = BoxDescription(BB->bodySize, 1.0, BB->fMass, BB->translate + m_PhysicPosition);
+					m_pMesh->m_ReglagePivot;
+					SD.m_ReglagePivot = m_pMesh->m_ReglagePivot;
+					Boite = BoundingBox( &SD );
+					break; 
+				}
+
+			case SPHERE :
+				{	
+					SphereDescription SD = SphereDescription(BB->bodySize.x, 1.0, BB->fMass, BB->translate + m_PhysicPosition);
+					m_pMesh->m_ReglagePivot;
+					SD.m_ReglagePivot = m_pMesh->m_ReglagePivot;
+					Boite = BoundingBox( &SD );
+					break;
+				}
+
+			case CAPSULE :
+				{	
+					CapsuleDescription SD = CapsuleDescription(BB->bodySize.x, BB->bodySize.y, 1.0, BB->fMass, BB->translate + m_PhysicPosition);
+					m_pMesh->m_ReglagePivot;
+					SD.m_ReglagePivot = m_pMesh->m_ReglagePivot;
+					Boite = BoundingBox( &SD );
+					break; 
+				}
+			case LOAD_ERROR :{ break; }
+
+			default:		break;
+		}
+		Physicalizer* physInstance = Physicalizer::GetInstance();
+		physInstance->SetPhysicable( this, &Boite );	
+	}	
 }

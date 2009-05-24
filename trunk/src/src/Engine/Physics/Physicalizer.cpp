@@ -138,7 +138,7 @@ PhysXResult Physicalizer::DoTransform()
 
 	while( it != List.end() )
 	{
-		SceneObject* aSObj = *it; 
+		SceneObjectPhysics* aSObj = (SceneObjectPhysics*)*it; 
 		if (IsPhysicable(aSObj))
 		{
 			int emp = (*aSObj->getEmpList()->begin());
@@ -149,8 +149,7 @@ PhysXResult Physicalizer::DoTransform()
 
 			D3DXMATRIX WorldMat;
 			pac->getGlobalPose().getColumnMajor44( WorldMat );
-			aSObj->ApplyTransform( &WorldMat ); //??
-			//aSObj->SetTransform( &WorldMat );
+			aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
 		}
 		++it;
 	}

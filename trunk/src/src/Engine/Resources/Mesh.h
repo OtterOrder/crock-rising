@@ -44,6 +44,9 @@ public:
 	VertexBuffer	m_VertexBuffer;						// Tableau de vertex
 	int				*m_IndexBuffer;						// Tableau d'indexation des faces
 	bool			m_bOrdered;							// Pour savoir si l'index buffer a été trié
+
+
+	D3DXVECTOR3 m_ReglagePivot;		//Vecteur qui permet de réajuster le pivot dans la physique. 
 };
 
 //******************************************************************

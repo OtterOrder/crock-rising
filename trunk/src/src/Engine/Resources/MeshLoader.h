@@ -117,6 +117,9 @@ class MeshLoader
 	FaceVertex	*m_Faces;
 	std::vector<D3DVERTEXELEMENT9>	 DxElements; // Vecteur d'éléments du vertex
 
+	//Physic
+	D3DXVECTOR3 m_ReglagePivot;		//Vecteur qui permet de réajuster le pivot dans la physique. 
+
 
 public:
 
@@ -136,6 +139,8 @@ public:
 	ResourceResult	FillSkinArray				(TiXmlNode* VertexWeightsNode);													// Remplit le tableau de skinning
 
 	ResourceResult	FillFacesArray				(TiXmlNode* TrianglesNode);														// Remplit le tableau de faces
+
+	D3DXVECTOR3		GetReglagePivot				(){ return m_ReglagePivot; }
 };
 
 #endif	// _Mesh_Loader_H

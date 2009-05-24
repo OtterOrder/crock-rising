@@ -1,5 +1,6 @@
 #include "BoundingBoxLoader.h"
 
+D3DXVECTOR3 Position;
 
 ResourceResult BoundingBoxLoader::Load(const std::string resource)
 {
@@ -14,6 +15,31 @@ ResourceResult BoundingBoxLoader::Load(const std::string resource)
 	rootNode = physXFile.FirstChild("COLLADA");
 		
 	TiXmlNode *node = rootNode;
+	//Récupération préalable de la position.
+	node = node->FirstChildElement("library_visual_scenes");
+	if(node)
+	{
+		saveNode = node;
+		node = node->FirstChildElement("visual_scene");
+		if(node)
+		{
+			node = node->FirstChildElement("node");
+			if(node)
+			{
+				node = node->FirstChildElement("translate");
+				if(node)
+				{
+					const char* pValues = node->ToElement()->GetText();
+					float* pfValues = new float[3];
+					ConvertStringToFloatArray(pValues,pfValues,3);
+					Position = D3DXVECTOR3(pfValues[0],pfValues[2],pfValues[1]);
+					delete [] pfValues;
+				}
+
+			}
+		}
+	}
+	node = rootNode;
 	node = node->FirstChildElement("library_physics_models");
 	if(node)
 	{
@@ -79,22 +105,22 @@ ResourceResult BoundingBoxLoader::fillDynamicObject( TiXmlNode* node )
 		{
 			const char* pValues = node->ToElement()->GetText();
 			float* pfValues = new float[3];
-			ConvertStringToFloatArray(pValues,pfValues,3);
-			m_vDynamicBody.at(m_vDynamicBody.size()-1)->translate = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
+			//ConvertStringToFloatArray(pValues,pfValues,3);
+			m_vDynamicBody.at(m_vDynamicBody.size()-1)->translate = Position;//D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 			//Rotation
 			node = node->NextSibling("rotate");
 			if (node)
 			{
 				pValues = node->ToElement()->GetText();
-				ConvertStringToFloatArray(pValues,pfValues,3);
+				ConvertStringToFloatArrayV2(pValues,pfValues,3);
 				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 				node = node->NextSibling("mass");
 				if (node)
 				{
 					pValues = node->ToElement()->GetText();
-					ConvertStringToFloatArray(pValues,pfValues,1);
+					ConvertStringToFloatArrayV2(pValues,pfValues,1);
 					m_vDynamicBody.at(m_vDynamicBody.size()-1)->fMass = pfValues[0];
 					
 					//Type de la géométrie
@@ -115,8 +141,8 @@ ResourceResult BoundingBoxLoader::fillDynamicObject( TiXmlNode* node )
 								{ 
 									//Dimension(s) de la "box"
 									pValues = node->ToElement()->GetText();
-									ConvertStringToFloatArray(pValues,pfValues,3);
-									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
+									ConvertStringToFloatArrayV2(pValues,pfValues,3);
+									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0], pfValues[1], pfValues[2]);
 								}
 							}
 
@@ -129,22 +155,32 @@ ResourceResult BoundingBoxLoader::fillDynamicObject( TiXmlNode* node )
 									//Dimension de la sphère
 									//Attention ici sa dimension est son rayon. C'est bodySize.x qui contient sa valeur
 									pValues = node->ToElement()->GetText();
-									ConvertStringToFloatArray(pValues,pfValues,1);
-									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],0.f,0.f);
+									ConvertStringToFloatArrayV2(pValues,pfValues,1);
+									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0], 0.f, 0.f);
 								}
 							}
 
-							else
+							else if ( strcmp(pTypeShape,"capsule") == 0)
 							{
 								m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = CAPSULE;
 								node = node->FirstChild();
 								if (node)
 								{ 
 									//Dimension(s) de la capsule
+									float radius, height;
 									pValues = node->ToElement()->GetText();
-									ConvertStringToFloatArray(pValues,pfValues,3);
-									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
+									ConvertStringToFloatArrayV2(pValues,pfValues,3);
+									radius = pfValues[0];
+									node = node->NextSibling();
+									pValues = node->ToElement()->GetText();
+									ConvertStringToFloatArrayV2(pValues,pfValues,3);
+									height = pfValues[0];
+									m_vDynamicBody.at(m_vDynamicBody.size()-1)->bodySize = D3DXVECTOR3(radius, height, 0.0f);
 								}
+							}
+							else
+							{
+								m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = LOAD_ERROR;
 							}
 						}
 					}
@@ -171,14 +207,14 @@ ResourceResult BoundingBoxLoader::fillDynamicObject( TiXmlNode* node )
 					const char* pValues = node->ToElement()->GetText();
 					float pfValues;
 					pValues = node->ToElement()->GetText();
-					ConvertStringToFloatArray(pValues,&pfValues,1);
+					ConvertStringToFloatArrayV2(pValues,&pfValues,1);
 					m_vDynamicBody.at(m_vDynamicBody.size()-1)->fLinearDamping = pfValues;
 
 					node = node->NextSibling();
 					if (node)
 					{
 						pValues = node->ToElement()->GetText();
-						ConvertStringToFloatArray(pValues,&pfValues,1);
+						ConvertStringToFloatArrayV2(pValues,&pfValues,1);
 						m_vDynamicBody.at(m_vDynamicBody.size()-1)->fAngularDamping = pfValues;
 					}
 
@@ -209,7 +245,7 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 		 {
 			 const char* pValues = node->ToElement()->GetText();
 			 float* pfValues = new float[3];
-			 ConvertStringToFloatArray(pValues,pfValues,3);
+			 ConvertStringToFloatArrayV2(pValues,pfValues,3);
 			 m_vStaticBody.at(m_vStaticBody.size()-1)->translate = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 			 //Rotation
@@ -217,7 +253,7 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 			 if (node)
 			 {
 				pValues = node->ToElement()->GetText();
-				ConvertStringToFloatArray(pValues,pfValues,3);
+				ConvertStringToFloatArrayV2(pValues,pfValues,3);
 				m_vStaticBody.at(m_vStaticBody.size()-1)->rotate = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 				//Type de la géométrie
@@ -238,7 +274,7 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 							{ 
 								//Dimension(s) de la "box"
 								pValues = node->ToElement()->GetText();
-								ConvertStringToFloatArray(pValues,pfValues,3);
+								ConvertStringToFloatArrayV2(pValues,pfValues,3);
 								m_vStaticBody.at(m_vStaticBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 							}
 						}
@@ -252,7 +288,7 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 								//Dimension de la sphère
 								//Attention ici sa dimension est son rayon. C'est bodySize.x qui contient sa valeur
 								pValues = node->ToElement()->GetText();
-								ConvertStringToFloatArray(pValues,pfValues,1);
+								ConvertStringToFloatArrayV2(pValues,pfValues,1);
 								m_vStaticBody.at(m_vStaticBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],0.f,0.f);
 							}
 						}
@@ -265,7 +301,7 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 							{ 
 								//Dimension(s) de la capsule
 								pValues = node->ToElement()->GetText();
-								ConvertStringToFloatArray(pValues,pfValues,3);
+								ConvertStringToFloatArrayV2(pValues,pfValues,3);
 								m_vStaticBody.at(m_vStaticBody.size()-1)->bodySize = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 							}
 						}
@@ -294,4 +330,43 @@ ResourceResult BoundingBoxLoader::fillStaticObject( TiXmlNode *node )
 	}
 
 	return RES_SUCCEED;
+}
+
+//La fonction V1 dans AnimLoader a quelques soucis avec l'exporter du plugin PhysX de max
+void ConvertStringToFloatArrayV2(const char * Array, float * FloatArray, int iCount)
+{
+	int id=0;
+	int dec=0;
+
+	float result	= 0;
+	float signe		= 1;
+	float mantisse	= 0.1f;
+
+	for (int i = 0 ; i < iCount ; i++)
+	{
+		while(Array[id+dec] != ' ' && Array[id+dec] != '\0' && Array[id+dec+1] != 0)
+		{			
+			if(Array[id]!= '.')
+			{
+				if(Array[id]== '-')
+					signe=-1;	
+				else
+					result=Array[id]-'0'+result*10;	
+				id++;
+			}
+			else 
+			{	
+				dec++;	
+				result=((Array[id+dec]-'0')*mantisse)+result;
+				mantisse *= 0.1f;
+
+				if(Array[id+dec+1] == ' ')
+					dec++;
+			}
+		}
+		FloatArray[i]=result*signe;
+		id=id+dec+1;
+		dec=0, result=0, mantisse=0.1f, signe=1;
+	}
+
 }

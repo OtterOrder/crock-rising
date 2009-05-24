@@ -82,7 +82,7 @@ void SceneObject::SetShader(const std::string& strShader)
 
 void SceneObject::InitObject()
 {
-	m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
+ 	m_pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	m_pMesh=ResourceManager::GetInstance()->Load<Mesh>(m_strMesh);
 	m_pShader=ResourceManager::GetInstance()->Load<Shader>(m_strShader.c_str());
@@ -145,6 +145,12 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 		m_WorldMatrix=*m_matrixStack->GetTop();
     }
     m_matrixStack->Pop();
+}
+
+
+void SceneObject::BerSetTransform( const D3DXMATRIX* world )
+{
+	m_WorldMatrix = *world;
 }
 
 //===========================================================================//

@@ -4,20 +4,20 @@
     <contributor>
       <author>B%E9renger</author>
       <authoring_tool>3dsMax 9 - Feeling ColladaMax v3.05B.</authoring_tool>
-      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=0;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=0;ExportRelativePaths=1;AnimStart=0;AnimEnd=3.33333;</comments>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=3.33333;</comments>
     </contributor>
-    <created>2009-02-12T18:48:03Z</created>
-    <modified>2009-02-12T18:48:04Z</modified>
+    <created>2009-05-13T20:18:35Z</created>
+    <modified>2009-05-13T20:18:36Z</modified>
     <unit meter="0.0254" name="inch"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_materials>
-    <material id="ColorMaterial_E1C65700" name="ColorMaterial_E1C65700-fx">
-      <instance_effect url="#ColorMaterial_E1C65700-fx"/>
+    <material id="ColorMaterial_876E0800" name="ColorMaterial_876E0800">
+      <instance_effect url="#ColorMaterial_876E0800-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="ColorMaterial_E1C65700-fx" name="ColorMaterial_E1C65700-fx">
+    <effect id="ColorMaterial_876E0800-fx">
       <profile_COMMON>
         <technique sid="common">
           <phong>
@@ -25,10 +25,10 @@
               <color>0 0 0 1</color>
             </emission>
             <ambient>
-              <color>0.882353 0.776471 0.341176 1</color>
+              <color>0.529412 0.431373 0.031372 1</color>
             </ambient>
             <diffuse>
-              <color>0.882353 0.776471 0.341176 1</color>
+              <color>0.529412 0.431373 0.031372 1</color>
             </diffuse>
             <specular>
               <color>1 1 1 1</color>
@@ -58,14 +58,6 @@
           </extra>
         </technique>
       </profile_COMMON>
-      <extra>
-        <technique profile="MAX3D">
-          <faceted>0</faceted>
-          <double_sided>0</double_sided>
-          <wireframe>0</wireframe>
-          <face_map>0</face_map>
-        </technique>
-      </extra>
     </effect>
   </library_effects>
   <library_geometries>
@@ -104,7 +96,7 @@
         <vertices id="Box01-mesh-vertices">
           <input semantic="POSITION" source="#Box01-mesh-positions"/>
         </vertices>
-        <triangles material="ColorMaterial_E1C65700" count="12">
+        <triangles material="ColorMaterial" count="12">
           <input semantic="VERTEX" source="#Box01-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Box01-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#Box01-mesh-map-channel1" offset="2" set="1"/>
@@ -116,17 +108,37 @@
   <library_visual_scenes>
     <visual_scene id="unnamed_scene" name="unnamed_scene">
       <node id="Box01-node" name="Box01" type="NODE">
-        <translate>0 10.878 9.7417</translate>
+        <matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <node id="Box01-node_PIVOT" name="Box01_PIVOT" type="NODE">
-          <matrix>1 0 0 0 0 1 0 -10.878 0 0 1 -10.2417 0 0 0 1</matrix>
+          <matrix>1 0 0 0 0 1 0 0 0 0 1 -0.5 0 0 0 1</matrix>
           <instance_geometry url="#Box01-mesh">
             <bind_material>
               <technique_common>
-                <instance_material symbol="ColorMaterial_E1C65700" target="#ColorMaterial_E1C65700"/>
+                <instance_material symbol="ColorMaterial" target="#ColorMaterial_876E0800"/>
               </technique_common>
             </bind_material>
           </instance_geometry>
         </node>
+        <extra>
+          <technique profile="FCOLLADA">
+            <user_properties>PhysicsType = 1&#13;
+Mass = 1.0&#13;
+GeometryType = 1&#13;
+MaterialType = 2&#13;
+Friction = 0.3&#13;
+StaticFriction = 0.3&#13;
+Restitution = 0.5&#13;
+InitialVelocityX = 0.0&#13;
+InitialVelocityY = 0.0&#13;
+InitialVelocityZ = 0.0&#13;
+InitialSpinX = 0.0&#13;
+InitialSpinY = 0.0&#13;
+InitialSpinZ = 0.0&#13;
+PutToSleep = false&#13;
+EnableCCD = false&#13;
+</user_properties>
+          </technique>
+        </extra>
       </node>
       <extra>
         <technique profile="FCOLLADA">

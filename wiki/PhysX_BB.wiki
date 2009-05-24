@@ -12,7 +12,7 @@ L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc l
  === Le mesh ===
 
   * Mettre le pivot au centre de l'objet (onglet Hierarchy, affect pivot only, center to object) puis mettre le tout à (0 0 0).
-  * Si besoin d'une rotation ou d'un scale, faire en EDIT POLY et pas la peine d'écraser à la fin.
+  * Si besoin d'une rotation ou d'un scale, faire en EDIT POLY et pas la peine d'écraser à la fin. Orienter le mesh vers le Z
   * Exporter la sélection.
 
  === La Bounding Box ===
@@ -22,7 +22,7 @@ L'exporter du plugin max n'exporte que les paramètres physiques. Il faut donc l
   * Onglet des outils, cliquer sur le marteaux.
   * Dans la sous partie PhysX Utility, cliquer sur PhysX Control Panel.
   * Régler les paramètres.
-  * Virer tous les objets non concernés.
+  * Cliquer sur le bouton "Add Selected".
   * Export to collada.
 
 == Dans le code ==

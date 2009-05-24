@@ -10,16 +10,19 @@
 #include	<Resources/AnimLoader.h>  //Pour utiliser la fonction ConvertStringToFloatArray
 
 /***********************************************/
-enum typeShape
+enum ShapeType
 {
 	BOX,
 	SPHERE,
-	CAPSULE
+	CAPSULE,
+	PLAN,
+	TRIGGER,
+	LOAD_ERROR
 };
 
 struct StaticBody
 {
-	typeShape   type;
+	ShapeType   type;
 	D3DXVECTOR3 bodySize;
 	D3DXVECTOR3 translate;
 	D3DXVECTOR3 rotate;
@@ -28,16 +31,21 @@ struct StaticBody
 
 struct DynamicBody
 {
-	typeShape   type;
-	D3DXVECTOR3 bodySize;
+	ShapeType   type;
+	D3DXVECTOR3 bodySize; //BOX = largeur hauteur longueur
+						  //SPHERE = Rayon 0 0
+						  //CAPSULE = rayon, hauteur 0
+
 	D3DXVECTOR3 translate;
 	D3DXVECTOR3 rotate;
+	D3DXVECTOR3 ReglagePivot;
 	float		fMass;
 	float		fLinearDamping;
 	float		fAngularDamping;
 	bool		bDisableCollision;
 };
 
+void ConvertStringToFloatArrayV2(const char * Array, float * FloatArray, int iCount);
 
 /************************************************************************************/
 //Classe qui récupère les infos nécessaires aux données physique

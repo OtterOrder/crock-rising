@@ -49,7 +49,10 @@ ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbIndex, m_decl) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
+		{
+			m_ReglagePivot = meshLoader.GetReglagePivot();
 			return RES_SUCCEED;
+		}
 	}
 
 	return RES_FAILED;

@@ -14,8 +14,9 @@
 #include	"Trigger/UserData.h"
 #include	"Objects/SceneObject.h"
 #include	"Objects/SceneObjectAnimated.h"
+#include	"BoundingBoxLoader.h"
 
-
+/*
 enum ShapeType
 {
 	BOX,
@@ -23,7 +24,7 @@ enum ShapeType
 	CAPSULE,
 	PLAN,
 	TRIGGER
-};
+};*/
 
 NxVec3 VecToNxVec(const Vector3f V);
 void Normalize(Vector3f &V);
@@ -35,11 +36,12 @@ struct ShapeDescription
 	ShapeDescription(){}
 	ShapeDescription(float aDensity, float aMass, Vector3f aPos)
 		: m_density(aDensity), m_mass(aMass), m_pos(aPos)
-	{ m_linearVelocity = Vector3f(0.f, 0.f, 0.f); }
+	{ m_linearVelocity = m_ReglagePivot = Vector3f(0.f, 0.f, 0.f); }
 
 	float m_density, m_mass;
 	Vector3f m_pos;
 	Vector3f m_linearVelocity;
+	Vector3f m_ReglagePivot;
 	ShapeType m_type;
 };
 ////Les structures qui suivent sont particulières à chaque shapes
@@ -187,10 +189,15 @@ public:
 };
 
 
-class SceneObjetPhysics : public SceneObject, public BoundingBox
+class SceneObjectPhysics : public SceneObject, public BoundingBox
 {
+	std::string m_PhysicPath;
+	D3DXVECTOR3 m_PhysicPosition;
 public:
-	SceneObjetPhysics(const std::string& mesh, const D3DXVECTOR3& Position);
+	void	InitObject();
+
+	SceneObjectPhysics(const std::string& mesh, const D3DXVECTOR3& Position);
+	SceneObjectPhysics(const std::string& mesh, const std::string& physic, const D3DXVECTOR3& Position);
 };
 
 

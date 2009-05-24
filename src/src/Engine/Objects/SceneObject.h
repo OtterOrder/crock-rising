@@ -60,6 +60,7 @@ public:
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj);
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
+	virtual void	BerSetTransform(const D3DXMATRIX* world);
 	virtual void	ApplyTransform(const D3DXMATRIX* world);
 	virtual void	InitDeviceData();
 	virtual void	Draw();

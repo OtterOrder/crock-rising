@@ -1,7 +1,12 @@
 #include	"SoundObject.h"
 
+#include	"Core/Math.h"
 #include	"Resources/ResourceManager.h"
 #include	"Resources/Sound.h"
+
+//******************************************************************
+
+std::list< SoundObject* > SoundObject::RefList;
 
 //******************************************************************
 
@@ -10,12 +15,13 @@
 // @param[in]	soundName : nom de la ressource son
 //**********************************************************
 SoundObject::SoundObject( const std::string &soundName )
-: m_SourceID(AL_NONE), m_SoundName(soundName)
+: m_SourceID(AL_NONE), m_SoundName(soundName), m_Flags(0)
 {
 	if( !Init() )
 	{
 		// D'oh!
 	}
+	SoundObject::RefList.push_front( this );
 }
 
 //**********************************************************
@@ -23,6 +29,7 @@ SoundObject::SoundObject( const std::string &soundName )
 //**********************************************************
 SoundObject::~SoundObject()
 {
+	SoundObject::RefList.remove( this );
 	Release();
 }
 
@@ -33,14 +40,18 @@ SoundObject::~SoundObject()
 void SoundObject::Play()
 {
 	alSourcePlay( m_SourceID );
+	UnsetFlag( PAUSED_BY_SYSTEM );
 }
 
 //**********************************************************
 // Pause le son.
+// @param[in]	flag : flag optionel
 //**********************************************************
-void SoundObject::Pause()
+void SoundObject::Pause( u32 flag )
 {
 	alSourcePause( m_SourceID );
+	UnsetFlag( PAUSED_BY_SYSTEM );
+	SetFlag( flag );
 }
 
 //**********************************************************
@@ -49,6 +60,7 @@ void SoundObject::Pause()
 void SoundObject::Stop()
 {
 	alSourceStop( m_SourceID );
+	UnsetFlag( PAUSED_BY_SYSTEM );
 }
 
 //**********************************************************
@@ -134,6 +146,21 @@ void SoundObject::SetPosition( const Vector3f &position )
 }
 
 //**********************************************************
+// Change le vecteur vitesse du son.
+// @param[in]	velocity : vecteur vitesse (DirectX)
+//**********************************************************
+void SoundObject::SetVelocity( const Vector3f &velocity )
+{
+	m_Properties.velocity = velocity;
+	alSource3f(
+		m_SourceID, AL_VELOCITY,
+		(ALfloat)velocity.x,
+		(ALfloat)velocity.y,
+		(ALfloat)(-velocity.z)	// Passage en système OpenAL (=OpenGL)
+	);
+}
+
+//**********************************************************
 // Initialise l'objet.
 // @return	vrai si l'initialisation est réussit
 //**********************************************************
@@ -190,4 +217,41 @@ void SoundObject::SetPropertiesFromAPI()
 		(ALfloat*)&m_Properties.position.z
 	);
 	m_Properties.position.z = -m_Properties.position.z; // Passage en système DirectX
+
+	// Vecteur vitesse
+	alGetSource3f(
+		m_SourceID, AL_VELOCITY,
+		(ALfloat*)&m_Properties.velocity.x,
+		(ALfloat*)&m_Properties.velocity.y,
+		(ALfloat*)&m_Properties.velocity.z
+	);
+	m_Properties.velocity.z = -m_Properties.velocity.z;
+}
+
+//**********************************************************
+// Active le flag.
+// @param[in]	flag : flag à activer
+//**********************************************************
+void SoundObject::SetFlag( u32 flag )
+{
+	FLAG_Set( m_Flags, flag );
+}
+
+//**********************************************************
+// Désactive le flag.
+// @param[in]	flag : flag à désactiver
+//**********************************************************
+void SoundObject::UnsetFlag( u32 flag )
+{
+	FLAG_Unset( m_Flags, flag );
+}
+
+//**********************************************************
+// Vérifie si le flag est activé.
+// @param[in]	flag : flag à vérifier
+// @return	vrai si le flag est activé
+//**********************************************************
+bool SoundObject::IsFlagSet( u32 flag ) const
+{
+	return FLAG_IsSet( m_Flags, flag );
 }

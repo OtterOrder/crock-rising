@@ -54,9 +54,9 @@ public:
 	inline const ListenerProperties& GetListenerProperties() const { return m_ListenerProperties; }
 
 	// Global
-	//void PauseAll();
-	//void ResumeAll();
-	//void StopAll();
+	void PauseAll();
+	void ResumeAll();
+	void StopAll();
 
 	// Musique
 	void PlayMusic();

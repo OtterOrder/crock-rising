@@ -1,5 +1,6 @@
 #include	"SoundSystem.h"
 
+#include	<assert.h>
 #include	<al.h>
 #include	"SoundObject.h"
 
@@ -66,10 +67,11 @@ bool SoundSystem::Init()
 //**********************************************************
 void SoundSystem::Release()
 {
-	// Ici, il ne doit plus exister aucun buffer..
-
 	// Destruction de la musique
 	ReleaseMusic();
+	
+	// Il ne doit plus exister aucune entité openAL !
+	assert( SoundObject::RefList.empty() );
 	
 	// Désactivation et destruction du contexte
 	alcMakeContextCurrent( NULL );
@@ -182,6 +184,55 @@ void SoundSystem::SetListenerPropertiesFromAPI()
 	m_ListenerProperties.up.x = values[3];
 	m_ListenerProperties.up.y = values[4];
 	m_ListenerProperties.up.z = -values[5];
+}
+
+//**********************************************************
+// Pause tous les sons en cours de lecture.
+//**********************************************************
+void SoundSystem::PauseAll()
+{
+	std::list<SoundObject*>::iterator it = SoundObject::RefList.begin();
+	while( it != SoundObject::RefList.end() )
+	{
+		if( (*it)->IsPlaying() )
+		{
+			// Flag : la pause est déclenchée par le SoundSystem
+			(*it)->Pause( SoundObject::PAUSED_BY_SYSTEM );
+		}
+		++it;
+	}
+}
+
+//**********************************************************
+// Relance tous les sons dont la pause a été déclenchée
+// par PauseAll.
+//**********************************************************
+void SoundSystem::ResumeAll()
+{
+	std::list<SoundObject*>::iterator it = SoundObject::RefList.begin();
+	while( it != SoundObject::RefList.end() )
+	{
+		if( (*it)->IsFlagSet( SoundObject::PAUSED_BY_SYSTEM ) )
+		{
+			// On ne relance que les sons qui ont
+			// été pausés par le SoundSystem
+			(*it)->Play();
+		}
+		++it;
+	}
+}
+
+//**********************************************************
+// Stoppe tous les sons.
+//**********************************************************
+void SoundSystem::StopAll()
+{
+	std::list<SoundObject*>::iterator it = SoundObject::RefList.begin();
+	while( it != SoundObject::RefList.end() )
+	{
+		(*it)->Stop();
+		++it;
+	}
 }
 
 //**********************************************************

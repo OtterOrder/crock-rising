@@ -50,6 +50,12 @@ void SceneObjectAnimated::InitObject()
 
 }
 
+void SceneObjectAnimated::Init()
+{
+	InitObject();
+	InitDeviceData();
+}
+
 //===========================================================================//
 // Initialisation données liées au device                                    //
 //===========================================================================//

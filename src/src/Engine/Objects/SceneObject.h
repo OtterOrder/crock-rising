@@ -17,6 +17,8 @@ class Shader;
 class Mesh;
 class Material;
 class BoundingBox;
+class Renderer;
+class ShadowMap;
 typedef std::list< int > TEmpList;
 
 //===========================================================================//
@@ -24,11 +26,13 @@ typedef std::list< int > TEmpList;
 //===========================================================================//
 class SceneObject : public Object
 {
+	friend class Renderer;
+	friend class ShadowMap;
+
 public:
 
 	// Liste de références sur les objets de scène
 	static std::list< SceneObject* > RefList;
-
 	typedef std::list< SceneObject* >::iterator ScObjIt;
 
 	// Constructeurs & destructeur
@@ -48,25 +52,21 @@ public:
 	//===========================================================================//
 	virtual void	SetVisible(bool value);
 	virtual bool	GetVisible();
-
 	virtual Mesh*	GetMesh ()	{ return m_pMesh; };
+
 public:
 
 	//===========================================================================//
 	// Utilisation de l'objet													 //
 	//===========================================================================//
-	void	InitObject();
-	//void	Update();
+
+	void			Init();
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj);
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
 	virtual void	BerSetTransform(const D3DXMATRIX* world);
 	virtual void	ApplyTransform(const D3DXMATRIX* world);
-	virtual void	InitDeviceData();
-	virtual void	Draw();
-	virtual void	DeleteDeviceData();
-	virtual void	DeleteData();
-	virtual void	DrawShadow();
+	
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
 	
@@ -94,7 +94,13 @@ protected:
 	// Méthodes privées												             //
 	//===========================================================================//
 	
-	void CommonInit( void ); // Initialisation commune à tous les constructeurs
+	void			InitObject();
+	virtual void	InitDeviceData();
+	virtual void	Draw();
+	virtual void	DeleteDeviceData();
+	virtual void	DeleteData();
+	virtual void	DrawShadow();
+	void			CommonInit( void ); // Initialisation commune à tous les constructeurs
 	
 };
 

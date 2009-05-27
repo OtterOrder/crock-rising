@@ -15,6 +15,9 @@ Mesh::Mesh()
 
 	m_pVB = NULL;
 	m_pIB = NULL;
+
+	m_IndexBuffer  = NULL;
+	m_bOrdered = false;
 }
 
 /***********************************************************
@@ -22,15 +25,14 @@ Mesh::Mesh()
  **********************************************************/
 Mesh::~Mesh()
 {
+	Release();
 	ReleaseD3DBuffers ();
-/*
-	if ( m_VertexBuffer )
-		delete [] m_VertexBuffer;
-*/
+
 	if ( m_IndexBuffer )
 		delete [] m_IndexBuffer;
 
-	m_decl->Release();
+	if(m_decl)
+		m_decl->Release();
 }
 
 
@@ -61,17 +63,12 @@ ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 ResourceResult	Mesh::FillD3DBuffers ()
 {
 	ReleaseD3DBuffers ();
+	m_iNbVertices=m_VertexBuffer.m_NbVertices;
 
 	if (m_VertexBuffer.m_Datas && m_IndexBuffer)
 	{
 		LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
-/*
-		UINT BufferSize;
-		if (!m_Skinned)
-			BufferSize = sizeof(Vertex)*m_iNbVertices;
-		else
-			BufferSize = sizeof(SkinnedVertex)*m_iNbVertices;
-*/
+
 		pDevice->CreateVertexBuffer (	m_VertexBuffer.m_Size, 
 										NULL, 
 										0, 
@@ -118,23 +115,40 @@ ResourceResult	Mesh::FillD3DBuffers ()
 void Mesh::OrderIndices(int * ArrayOrder)
 {
 	// On met les indices dans l'ordre hiérarchique
-	SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)m_VertexBuffer.m_Datas;
-
 	if(!m_bOrdered)
 	{
-		for(int i=0; i<m_iNbVertices; i++)
+		if(m_VertexBuffer.m_VertexType==VertexBuffer::Skinned)
 		{
-			pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
-			pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];
-			pSVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.z];
-			pSVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.w];
+			SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)m_VertexBuffer.m_Datas;
+
+			for(int i=0; i<m_VertexBuffer.m_NbVertices; i++)
+			{
+				pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
+				pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];
+				pSVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.z];
+				pSVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.w];
+			}
 		}
-		m_bOrdered=true;
+		else if(m_VertexBuffer.m_VertexType==VertexBuffer::SkinNormalMapped)
+		{
+			SkinNormalMappedVertex* pSVertexBuffer = (SkinNormalMappedVertex*)m_VertexBuffer.m_Datas;
+
+			for(int i=0; i<m_VertexBuffer.m_NbVertices; i++)
+			{
+				pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
+				pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];
+				pSVertexBuffer[i].m_Bones.z=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.z];
+				pSVertexBuffer[i].m_Bones.w=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.w];
+			}
+
+		}
+
 	}
+	m_bOrdered=true;
 
 }
 
-void	Mesh::ReleaseD3DBuffers()
+void Mesh::ReleaseD3DBuffers()
 {
 	if ( m_pVB )
 		m_pVB->Release(),	m_pVB = NULL;

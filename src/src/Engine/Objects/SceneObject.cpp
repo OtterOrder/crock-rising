@@ -75,6 +75,7 @@ void SceneObject::SetShader(const std::string& strShader)
 	if(m_pShader)
 	{
 		ResourceManager::GetInstance()->Remove<Shader>(m_strShader);
+		m_strShader=strShader;
 		m_pShader=ResourceManager::GetInstance()->Load<Shader>(strShader.c_str());
 		m_pMaterial->SetShader(m_pShader);
 	}
@@ -99,6 +100,12 @@ void SceneObject::InitObject()
 	D3DXMATRIX trans;
 	D3DXMatrixTranslation(&trans, m_Offset.x, m_Offset.y, m_Offset.z);
 	D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &trans);
+	
+}
+
+void SceneObject::Init()
+{
+	InitObject();
 }
 
 //===========================================================================//
@@ -186,6 +193,8 @@ void SceneObject::Draw()
 	m_pShader->m_pEffect->EndPass();
 
 	m_pShader->m_pEffect->End();
+
+	m_pMaterial->StopGraphicalData();
 
 }
 

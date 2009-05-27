@@ -47,6 +47,7 @@ protected:
     bool              m_bIgnoreSizeChange;
     bool              m_bDeviceObjectsInited;
     bool              m_bDeviceObjectsRestored;
+	bool			  m_bShowFPS;
 
 	//===========================================================================//
     // Variables internes pour le timing									     //

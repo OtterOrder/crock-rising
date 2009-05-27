@@ -23,6 +23,7 @@ public:
 		NORMALMAP,
 		BUMPMAP,
 		DISPLACEMENTMAP,
+		ALPHAMAP,
 		
 		SPRITE
 	};

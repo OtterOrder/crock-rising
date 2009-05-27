@@ -10,8 +10,7 @@ Hero::Hero()
 	//m_pAnimated = new SceneObjectAnimated("Robot_Mesh.DAE","Robot_Marche.DAE",D3DXVECTOR3(0.f,0.f,0.f));
 	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,-17.f,0.f));
 	m_pAnimated->SetRotation(0,-90,0);
-	m_pAnimated->InitObject();
-	m_pAnimated->InitDeviceData();
+	m_pAnimated->Init();
 
 	m_pInputManager = InputManager::GetInstance();
 	//m_pInputManager->HoldMouseAtCenter(true);

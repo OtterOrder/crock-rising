@@ -101,6 +101,8 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
+	m_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 #ifdef DEVCAMERA
 	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.0f, 4000.f);
@@ -258,8 +260,8 @@ HRESULT Renderer::Render()
 	m_Obj2DList->sort( Object2D::ComparePriority );
 
 	// Filtre texture pour la 2D
-	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
-	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );
+	/*m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );*/
 
 	while( obj2d != lastObj2d )
 	{
@@ -270,9 +272,9 @@ HRESULT Renderer::Render()
 		++obj2d;
 	}
 
-	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_NONE );
+	/*m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_NONE );
 	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_NONE );
-	
+	*/
 	//-- ?
 	
 	// Affichage grille (Pipe line par défaut)
@@ -295,7 +297,8 @@ HRESULT Renderer::Render()
 	m_pd3dDevice->DrawPrimitive(D3DPT_LINELIST, 0, 13);*/
 	
 	//Affichage information frames
-	m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
+	if(m_bShowFPS)
+		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
 	
 	m_pd3dDevice->EndScene();
 

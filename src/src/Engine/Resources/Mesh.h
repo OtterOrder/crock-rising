@@ -30,10 +30,6 @@ public:
 	int		m_iNbVertices;
 	int		m_iNbIndex;
 
-	D3DXVECTOR3					m_Position;			// Position de départ
-	D3DXVECTOR4					m_Rotation;			// Rotation de départ
-	D3DXVECTOR3					m_Scale;			// Scale de départ
-
 	ResourceResult			FillD3DBuffers ();
 	void					ReleaseD3DBuffers();
 	void					OrderIndices(int * ArrayOrder);

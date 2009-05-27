@@ -18,14 +18,11 @@ class SceneObjectAnimated : public SceneObject
 {
 public:
 	SceneObjectAnimated();
-
 	SceneObjectAnimated(const std::string& mesh, const std::string& anim, const D3DXVECTOR3& Position);
+	virtual ~SceneObjectAnimated() {}
 
-	void			InitObject();
-	void			InitDeviceData();
-	void			Draw();
-	void			DeleteData();
-	void			UpdateAnimation();
+
+	void			Init();
 	void			SetShader(const std::string &strShader);
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
@@ -38,6 +35,14 @@ public:
 	void			PauseAnim();
 	void			StopAnim();
 	void			SetAnimFPS(float fps);
+
+protected:
+
+	void			InitObject();
+	void			InitDeviceData();
+	void			Draw();
+	void			DeleteData();
+	void			UpdateAnimation();
 
 private:
 	int				m_CurrentFrame;

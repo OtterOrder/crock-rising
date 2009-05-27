@@ -44,10 +44,12 @@ protected:
 	void			SetShader(Shader* shader);
 	void			SetGraphicalData();
 	void			SetTextureData();
+	void			StopGraphicalData();
 	void			DeleteData();
 
 	Shader*					m_pShader;
 	TTextureMap				m_Maps;
 	std::list< Light* >*	m_LightList; // Liste des lumières de la scène
+	LPDIRECT3DDEVICE9		m_pDevice;
 
 };

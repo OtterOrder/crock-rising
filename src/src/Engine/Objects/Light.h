@@ -33,6 +33,7 @@ protected:
 	static  D3DXVECTOR3		m_LightsDirection[MAX_LIGHTS];
 	static	float			m_LightsAngle[MAX_LIGHTS];
 	static  float			m_LightsAttenuation[MAX_LIGHTS];
+	static  float			m_LightsExponent[MAX_LIGHTS];
 
 
 	int				m_LightId;
@@ -56,7 +57,7 @@ protected:
 class DirectionalLight : public Light
 {
 public:
-	
+
 	DirectionalLight();
 	virtual ~DirectionalLight();
 };

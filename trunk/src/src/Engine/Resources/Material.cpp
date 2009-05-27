@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Objects/Light.h"
+#include "Renderer/Renderer.h"
 
 Material::Material()
 {
@@ -17,6 +18,7 @@ Material::Material()
 	m_Glossiness=30.f;
 	m_pShader=NULL;
 	m_LightList=&Light::RefList;
+	m_pDevice=Renderer::GetInstance()->m_pd3dDevice;
 }
 
 void Material::SetShader(Shader* shader)
@@ -34,6 +36,9 @@ void Material::SetTexture(const std::string& strTex, Texture::Type Type)
 
 		case Texture::NORMALMAP:
 			m_Maps[Texture::NORMALMAP]=ResourceManager::GetInstance()->Load<Texture>(strTex);
+			break;
+		case Texture::ALPHAMAP:
+			m_Maps[Texture::ALPHAMAP]=ResourceManager::GetInstance()->Load<Texture>(strTex);
 			break;
 	}
 
@@ -69,7 +74,7 @@ void Material::SetGraphicalData()
 		if (m_Maps[Texture::NORMALMAP])
 		{
 			m_pShader->m_pEffect->SetBool("g_UseNormalMap", true);
-			m_pShader->m_pEffect->SetTexture("NormalMapSampler", m_Maps[Texture::NORMALMAP]->m_pTex);
+			m_pShader->m_pEffect->SetTexture("g_NormalMapTexture", m_Maps[Texture::NORMALMAP]->m_pTex);
 		}
 	}
 	else
@@ -89,6 +94,22 @@ void Material::SetGraphicalData()
 		++it;
 	}
 
+	if(m_Opacity<1.f)
+	{
+		m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+		m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+		m_pShader->m_pEffect->SetValue("g_Opacity", (void*)&m_Opacity, sizeof(float));
+	}
+
+}
+
+void Material::StopGraphicalData()
+{
+	if(m_Opacity<1.f)
+	{
+		m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+		m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	}
 }
 
 void Material::SetTextureData()

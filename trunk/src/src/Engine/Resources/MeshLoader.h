@@ -1,5 +1,4 @@
-#ifndef		_Mesh_Loader_H
-#define		_Mesh_Loader_H
+#pragma once
 
 //******************************************************************
 #include	<string>
@@ -43,6 +42,20 @@ struct NormalMappedVertex
 	Vector3f m_Binormal;
 };
 
+struct SkinNormalMappedVertex
+{
+	Vector4f m_Position;
+	Vector3f m_Normal;
+	Vector2f m_TexCoord;
+
+	Vector3f m_Tangent;
+	Vector3f m_Binormal;
+
+	Vector4f m_Bones;
+	Vector4f m_Weights;
+
+};
+
 struct VertexBuffer
 {
 	static enum VertexType
@@ -50,7 +63,8 @@ struct VertexBuffer
 		None,
 		Default,
 		Skinned,
-		NormalMapped
+		NormalMapped,
+		SkinNormalMapped
 	};
 
 	VertexType	m_VertexType;
@@ -90,13 +104,13 @@ struct VertexSkinning
 class MeshLoader
 {
 	int			m_iNbVertices,
-		m_iNbFaces,
-		m_iNbSkinnedVertices;
+				m_iNbFaces,
+				m_iNbSkinnedVertices;
 
 	// Vertex
-	float**		m_Positions,
-		 **		m_Normals,
-		 **		m_TexCoords;
+	float		**m_Positions,
+				**m_Normals,
+				**m_TexCoords;
 
 	int			m_iNbPositions,
 				m_iNbNormals,
@@ -142,5 +156,3 @@ public:
 
 	D3DXVECTOR3		GetReglagePivot				(){ return m_ReglagePivot; }
 };
-
-#endif	// _Mesh_Loader_H

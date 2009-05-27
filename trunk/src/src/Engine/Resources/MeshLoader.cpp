@@ -146,6 +146,10 @@ ResourceResult MeshLoader::Load(const char *sMeshPath,  VertexBuffer& _VertexBuf
 		case VertexBuffer::NormalMapped:
 			vertexSize = sizeof(NormalMappedVertex);
 			break;
+
+		case VertexBuffer::SkinNormalMapped:
+			vertexSize = sizeof(SkinNormalMappedVertex);
+			break;
 	}
 
 	_VertexBuffer.m_Size = _VertexBuffer.m_NbVertices*vertexSize;
@@ -287,7 +291,9 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								VertexDeclarationOffset += 3*4;
 								DxElements.push_back(CurrentElement);
 
-								//if (_VertexBuffer.m_VertexType	== VertexBuffer::Default)
+								if (_VertexBuffer.m_VertexType	== VertexBuffer::Skinned)
+									_VertexBuffer.m_VertexType	= VertexBuffer::SkinNormalMapped;
+								else
 									_VertexBuffer.m_VertexType	= VertexBuffer::NormalMapped;
 							}
 							else if (sId.compare( SpliterPlace, sBinormalsId.length(), sBinormalsId) == 0)
@@ -302,14 +308,13 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								VertexDeclarationOffset += 3*4;
 								DxElements.push_back(CurrentElement);
 
-								_VertexBuffer.m_VertexType	= VertexBuffer::NormalMapped;
 							}
 						}
 
 						node = node->NextSibling( "source" );
 					}
 
-					if (_VertexBuffer.m_VertexType == VertexBuffer::Skinned)
+					if (_VertexBuffer.m_VertexType == VertexBuffer::Skinned || _VertexBuffer.m_VertexType == VertexBuffer::SkinNormalMapped )
 					{
 						CurrentElement.Offset = VertexDeclarationOffset;
 						CurrentElement.Usage = D3DDECLUSAGE_BLENDINDICES;
@@ -565,6 +570,10 @@ ResourceResult MeshLoader::FillVBArray	(TiXmlNode* TrianglesNode,  VertexBuffer&
 		case VertexBuffer::NormalMapped:
 			_VertexBuffer.m_Datas = new NormalMappedVertex [m_iNbVertices];
 			break;
+
+		case VertexBuffer::SkinNormalMapped:
+			_VertexBuffer.m_Datas = new SkinNormalMappedVertex [m_iNbVertices];
+			break;
 	}
 
 	int vertexCount = 0;
@@ -713,6 +722,10 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _Vert
 	case VertexBuffer::NormalMapped:
 		vertexSize = sizeof(NormalMappedVertex);
 		break;
+
+	case VertexBuffer::SkinNormalMapped:
+		vertexSize = sizeof(SkinNormalMappedVertex);
+		break;
 	}
 
 	Vertex* pDVertexBuffer = (Vertex*)((u8*)_VertexBuffer.m_Datas + VertexIndex*vertexSize);
@@ -740,6 +753,20 @@ void MeshLoader::FillVertex(int VertexIndex, int FaceIndex,  VertexBuffer& _Vert
 
 		float*  Binormal = m_Binormals[m_Faces[FaceIndex].m_Binormal];
 		pSVertexBuffer->m_Binormal	= Vector3f (Binormal[0], Binormal[1], Binormal[2]);
+	}
+	else
+	if (_VertexBuffer.m_VertexType == VertexBuffer::SkinNormalMapped)
+	{
+		SkinNormalMappedVertex* pSNVertexBuffer = (SkinNormalMappedVertex*)pDVertexBuffer;
+
+		pSNVertexBuffer->m_Bones	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Joint;
+		pSNVertexBuffer->m_Weights	= m_SkinnedVertices[m_Faces[FaceIndex].m_Position].m_Weight;
+
+		float*  Tangeant = m_Tangents[m_Faces[FaceIndex].m_Tangent];
+		pSNVertexBuffer->m_Tangent	= D3DXVECTOR3 (Tangeant[0], Tangeant[1], Tangeant[2]);
+
+		float*  Binormal = m_Binormals[m_Faces[FaceIndex].m_Binormal];
+		pSNVertexBuffer->m_Binormal	= D3DXVECTOR3 (Binormal[0], Binormal[1], Binormal[2]);
 	}
 }
 

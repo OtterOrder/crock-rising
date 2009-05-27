@@ -42,6 +42,7 @@ CD3DApplication::CD3DApplication()
     m_bIgnoreSizeChange = false;
     m_bDeviceObjectsInited = false;
     m_bDeviceObjectsRestored = false;
+	m_bShowFPS			= false;
     m_dwCreateFlags     = 0;
 
     m_bFrameMoving      = true;
@@ -591,6 +592,11 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
                         Pause(false);
                     }
 					break;
+				}
+				case 'F':
+				{
+						m_bShowFPS=!m_bShowFPS;
+						break;
 				}
             }
             break;

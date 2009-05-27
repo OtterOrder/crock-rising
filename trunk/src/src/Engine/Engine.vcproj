@@ -533,7 +533,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\data\shader\default_normalmap.fx"
+						>
+					</File>
+					<File
 						RelativePath="..\..\data\shader\default_skinning.fx"
+						>
+					</File>
+					<File
+						RelativePath="..\..\data\shader\default_skinnormalmap.fx"
 						>
 					</File>
 					<File

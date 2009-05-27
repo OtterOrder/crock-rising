@@ -121,7 +121,7 @@ void Mesh::OrderIndices(int * ArrayOrder)
 		{
 			SkinnedVertex* pSVertexBuffer = (SkinnedVertex*)m_VertexBuffer.m_Datas;
 
-			for(int i=0; i<m_VertexBuffer.m_NbVertices; i++)
+			for( u32 i = 0; i < m_VertexBuffer.m_NbVertices; i++ )
 			{
 				pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
 				pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];
@@ -133,7 +133,7 @@ void Mesh::OrderIndices(int * ArrayOrder)
 		{
 			SkinNormalMappedVertex* pSVertexBuffer = (SkinNormalMappedVertex*)m_VertexBuffer.m_Datas;
 
-			for(int i=0; i<m_VertexBuffer.m_NbVertices; i++)
+			for( u32 i = 0; i < m_VertexBuffer.m_NbVertices; i++ )
 			{
 				pSVertexBuffer[i].m_Bones.x=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.x];
 				pSVertexBuffer[i].m_Bones.y=(float)ArrayOrder[(int)pSVertexBuffer[i].m_Bones.y];

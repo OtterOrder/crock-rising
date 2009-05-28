@@ -33,12 +33,18 @@ bool VEC_AreAlmostEqual( const Vector4f &v1, const Vector4f &v2 );
 
 
 //******************************************************************
+// Vecteur 2i (utile en 2D)
 
-struct Coord
+struct Vector2i
 {
-	s32 x;
-	s32 y;
-	Coord (s32 _x =0, s32 _y =0) { x = _x; y = _y; };
+	s32 x, y;
+
+	Vector2i() {}
+	Vector2i( s32 _x, s32 _y );
+	Vector2i( const Vector2i &_v );
+
 };
 
+
+//******************************************************************
 #endif		// _Vector_H

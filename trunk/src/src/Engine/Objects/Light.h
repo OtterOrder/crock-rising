@@ -48,6 +48,7 @@ public:
 
 	D3DXVECTOR3  GetLightPosition() {return m_LightsPosition[m_LightId];}
 	D3DXVECTOR3  GetLightDirection() {return m_LightsDirection[m_LightId];}
+	float		 GetLightAngle() {return m_LightsAngle[m_LightId];}
 
 protected:
 	void CommonInit();

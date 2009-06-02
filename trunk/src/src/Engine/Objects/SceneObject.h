@@ -52,6 +52,8 @@ public:
 	//===========================================================================//
 	virtual void	SetVisible(bool value);
 	virtual bool	GetVisible();
+	void			SetCastShadow(bool value);
+	void			SetReceiveShadow(bool value);
 	virtual Mesh*	GetMesh ()	{ return m_pMesh; };
 
 public:
@@ -85,9 +87,13 @@ protected:
 	Material*						m_pMaterial;	// Matériau de l'objet
 	Mesh*							m_pMesh;		// Mesh de l'objet
 	Shader*							m_pShader;		// Shader de l'objet
+	Shader*							m_pShadowShader;
 	bool							m_bVisible;		// Visibilité de l'objet
+	bool							m_bCastShadow;
+	bool							m_bReceiveShadow;
 	LPD3DXMATRIXSTACK				m_matrixStack;  // Stack de matrice de l'objet
 	TEmpList*						m_EmpList;
+	
 
 	
 	//===========================================================================//

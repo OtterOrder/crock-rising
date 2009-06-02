@@ -1,7 +1,8 @@
 
 
+
 //===========================================================================//
-// Variables globales                                                        //
+// Variables uniformes                                                       //
 //===========================================================================//
 float4x4 g_mWorld;                  // World matrix
 float4x4 g_mWorldViewProjection;    // World * View * Projection matrix
@@ -10,12 +11,17 @@ matrix	 g_mView;					// View matrix
 matrix	 g_mViewProj;				// View * Projection matrix
 
 texture g_MeshTexture;              // Texture du mesh
+bool    g_UseTex=false;
+
+texture g_TexShadowMap;
+matrix  g_mTexProj;
+matrix  g_mLightViewProj;			// Données ShadowMap
 
 float4 g_ObjectAmbient;				// Propriétés de l'objet
 float4 g_ObjectDiffuse;
 float4 g_ObjectSpecular;
-bool   g_UseTex=false;
 float  g_Glossiness;
+float  g_Opacity;
 
 static const int g_NumLights=1;				// Propriétés des lumières		   
 float3 g_LightsPosition[4]; 
@@ -24,6 +30,7 @@ float4 g_LightsColor[4];
 float4 g_LightsSpecular[4]; 
 float  g_LightsAttenuation[4];
 float  g_LightsAngle[4];
+float  g_LightsExponent[4];
 
 float3 g_vCamPos;
 
@@ -42,6 +49,17 @@ sampler_state
     Texture = <g_MeshTexture>;
     AddressU  = WRAP;        
 	AddressV  = WRAP;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+};
+
+sampler ShadowTextureSampler = 
+sampler_state
+{
+    Texture = <g_TexShadowMap>;
+    AddressU  = BORDER;        
+	AddressV  = BORDER;
     MipFilter = LINEAR;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
@@ -68,10 +86,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
                          float4 vIndices : BLENDINDICES)
 {
     VS_OUTPUT Output;
-    
-    // Calculate skinning transformations
-    float3 skinnedPos  = (0.f).xxx;
-    float3 skinnedNorm = (0.f).xxx;
+
     
     if(!g_bShowBone)
     {
@@ -82,15 +97,12 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
 		skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
 		skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
 		skinningTransform += g_skinningMatrices[(int)vIndices[3]] * vWeights[3];
-
-		//vPos = mul (vPos, g_mWorld);
-		//vPos = mul (vPos, skinningTransform);
 		
 		vPos = mul(float4(vPos.xyz, 1.0f), skinningTransform);
 		Output.Normal = mul( vNormal, skinningTransform);
 		Output.Position =  mul(vPos, g_mViewProj);
 		
-		Output.oPosition = Output.Position;
+		Output.oPosition = vPos;
     
     }
     else
@@ -119,48 +131,46 @@ struct PS_OUTPUT
 //===========================================================================//
 PS_OUTPUT RenderScenePS( VS_OUTPUT In ) 
 {
-	 PS_OUTPUT Output;
-	 
-	float3 pos=In.oPosition.xyz/In.oPosition.w;
+    PS_OUTPUT Output;
     
+    float3 pos=In.oPosition.xyz/In.oPosition.w;
+    float att,D=0, S=0;
     float4 DiffuseColor;
     
     if(g_UseTex)
 		DiffuseColor=tex2D(MeshTextureSampler, In.TextureUV.xy);
     else
 		DiffuseColor=g_ObjectDiffuse;
-		
+  
 	float3 V=normalize(g_vCamPos-pos);
-	float3 N=normalize(In.Normal.xyz);
-	float att;
+	float3 N = normalize(In.Normal);
+	
 	float4 lumiere=float4(0.f, 0.f, 0.f, 0.f);
 	float3 Color=float3(0.f, 0.f, 0.f);
-	
-	Output.RGBColor.xyz=float3(0.f, 0.f, 0.f);
-		
-	for(int i=0; i<g_NumLights; i++)
-	{
-		float3 L=normalize(g_LightsPosition[i]-pos);
-		float3 dist = length(L);
-		float3 H=normalize(L+V);
-		
-		float spotEffect = dot(normalize(g_LightsDirection[i]-g_LightsPosition[i]), -L);
-		
-		if(spotEffect > g_LightsAngle[i])
-		{
-			lumiere=lit(dot(N, L),dot(N, H), g_Glossiness);
-			spotEffect = pow(spotEffect, 2);
-			att = spotEffect / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
-		}
-		else 
-			att=1.f / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
-		
-		Color += att*((g_ObjectAmbient+lumiere.y)*DiffuseColor+g_ObjectSpecular*lumiere.z);
-	}
-	
-	Output.RGBColor.xyz=Color;
-	Output.RGBColor.w=1.f;
+  
+	int i=0;
 
+	float3 L=normalize(g_LightsPosition[i]-pos);
+	float3 dist = length(L);
+	
+	float spotEffect = dot(normalize(g_LightsDirection[i]-g_LightsPosition[i]), -L);
+	
+	if(spotEffect > g_LightsAngle[i])
+	{
+		D = saturate(dot(N, L));
+		float3 R = normalize(2 * D * N - L);
+		S = min(pow(saturate(dot(R, V)), g_Glossiness), DiffuseColor.w);
+		spotEffect = pow(spotEffect, g_LightsExponent[i]);
+		att = spotEffect / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+	}
+	else 
+		att=1.f / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+	
+	Color += att*(g_ObjectAmbient+ D*(DiffuseColor+g_ObjectSpecular*S));
+
+	Output.RGBColor.xyz=Color;
+	Output.RGBColor.a=g_Opacity;
+	
 	return Output;
 }
 
@@ -174,5 +184,182 @@ technique RenderScene
     {          
         VertexShader = compile vs_3_0 RenderSceneVS();
         PixelShader  = compile ps_3_0 RenderScenePS();
+    }
+}
+
+
+
+
+
+//===========================================================================//
+//							SHADOW MAP                                       //
+//===========================================================================//
+
+
+
+
+
+
+//===========================================================================//
+// Sortie vertex shader                                                      //
+//===========================================================================//
+struct VS_OUTPUTS
+{
+    float4 Position   : POSITION;   // vertex position
+    float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
+    float3 Normal	  : TEXCOORD1;
+    float4 oPosition  : TEXCOORD2;
+    float4 ProjUV	  : TEXCOORD3;
+    float  fDepth     : TEXCOORD4;
+};
+
+//===========================================================================//
+// Ce shader calcule les transformations et éclairages standard              //
+//===========================================================================//
+VS_OUTPUTS RenderSceneShadowVS( float4 vPos : POSITION, 
+                         float3 vNormal : NORMAL,
+                         float2 vTexCoord0 : TEXCOORD0,
+                         float4 vWeights : BLENDWEIGHT,
+                         float4 vIndices : BLENDINDICES)
+{
+    VS_OUTPUTS Output;
+    
+    if(!g_bShowBone)
+    {
+	
+		vWeights.w = 1.f - (vWeights.x + vWeights.y + vWeights.z);
+				
+		float4x4 skinningTransform = g_skinningMatrices[(int)vIndices[0]] * vWeights[0];
+		skinningTransform += g_skinningMatrices[(int)vIndices[1]] * vWeights[1];
+		skinningTransform += g_skinningMatrices[(int)vIndices[2]] * vWeights[2];
+		skinningTransform += g_skinningMatrices[(int)vIndices[3]] * vWeights[3];
+
+		//vPos = mul (vPos, g_mWorld);
+		//vPos = mul (vPos, skinningTransform);
+		
+		vPos = mul(float4(vPos.xyz, 1.0f), skinningTransform);
+		Output.Normal = mul( vNormal, skinningTransform);
+		Output.Position =  mul(vPos, g_mViewProj);
+		
+		Output.oPosition = vPos;
+    
+    }
+    else
+    {
+		Output.Position = mul(vPos, g_mWorldViewProjection);
+		Output.Normal = vNormal;
+    }
+    
+    
+    Output.TextureUV = vTexCoord0;
+    
+    // Output the projective texture coordinates
+	Output.ProjUV = mul( vPos, g_mTexProj );
+	Output.fDepth = mul( vPos, g_mLightViewProj ).z;
+    
+    return Output;    
+}
+
+
+//===========================================================================//
+// Sortie pixel shader                                                       //
+//===========================================================================//
+struct PS_OUTPUTS
+{
+    float4 RGBColor : COLOR0;  // Pixel color    
+};
+
+//===========================================================================//
+// Illumination phong pixel shader                                           //
+//===========================================================================//
+PS_OUTPUTS RenderSceneShadowPS( VS_OUTPUTS In ) 
+{
+    PS_OUTPUTS Output;
+    
+    float3 pos=In.oPosition.xyz/In.oPosition.w;
+    float att,D=0, S=0;
+    float4 DiffuseColor;
+    
+    // On génère les 9 coordonnées de textures dans un kernel 3x3
+	float4 vTexCoords[9];
+	// Taille d'un texel
+	float fTexelSize = 1.0f / 512.0f;
+
+	// Génération des coordonnées de textures
+	// 4 3 5
+	// 1 0 2
+	// 7 6 8
+	vTexCoords[0] = In.ProjUV;
+	vTexCoords[1] = In.ProjUV + float4( -fTexelSize, 0.0f, 0.0f, 0.0f );
+	vTexCoords[2] = In.ProjUV + float4(  fTexelSize, 0.0f, 0.0f, 0.0f );
+	vTexCoords[3] = In.ProjUV + float4( 0.0f, -fTexelSize, 0.0f, 0.0f );
+	vTexCoords[6] = In.ProjUV + float4( 0.0f,  fTexelSize, 0.0f, 0.0f );
+	vTexCoords[4] = In.ProjUV + float4( -fTexelSize, -fTexelSize, 0.0f, 0.0f );
+	vTexCoords[5] = In.ProjUV + float4(  fTexelSize, -fTexelSize, 0.0f, 0.0f );
+	vTexCoords[7] = In.ProjUV + float4( -fTexelSize,  fTexelSize, 0.0f, 0.0f );
+	vTexCoords[8] = In.ProjUV + float4(  fTexelSize,  fTexelSize, 0.0f, 0.0f );
+	// Test pour savoir si le pixel est dans l'ombre
+	float fShadowTerms[9];
+	float fShadowTerm = 0.0f;
+	int i;
+	for(  i = 0; i < 9; i++ )
+	{
+		float A = tex2Dproj( ShadowTextureSampler, vTexCoords[i] ).r;
+		float B = (In.fDepth - 5.f);
+
+		// Le texel est ombré
+		fShadowTerms[i] = A < B ? 0.5f : 1.f;
+		fShadowTerm     += fShadowTerms[i];
+	}
+	// On fait la moyenne
+	fShadowTerm /= 9.0f;
+    
+    if(g_UseTex)
+		DiffuseColor=tex2D(MeshTextureSampler, In.TextureUV.xy);
+    else
+		DiffuseColor=g_ObjectDiffuse;
+  
+	float3 V=normalize(g_vCamPos-pos);
+	float3 N = normalize(In.Normal);
+	
+	float4 lumiere=float4(0.f, 0.f, 0.f, 0.f);
+	float3 Color=float3(0.f, 0.f, 0.f);
+  
+	i=0;
+
+	float3 L=normalize(g_LightsPosition[i]-pos);
+	float3 dist = length(L);
+	
+	float spotEffect = dot(normalize(g_LightsDirection[i]-g_LightsPosition[i]), -L);
+	
+	if(spotEffect > g_LightsAngle[i])
+	{
+		D = saturate(dot(N, L))*fShadowTerm;
+		float3 R = normalize(2 * D * N - L);
+		S = min(pow(saturate(dot(R, V)), g_Glossiness), DiffuseColor.w);
+		spotEffect = pow(spotEffect, g_LightsExponent[i]);
+		att = spotEffect / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+	}
+	else 
+		att=1.f / (g_LightsAttenuation[i] + 0.5f * dist + 0.5f * dist * dist);
+	
+	Color += att*(g_ObjectAmbient+ D*(DiffuseColor+g_ObjectSpecular*S));
+
+	Output.RGBColor.xyz=Color;
+	Output.RGBColor.a=g_Opacity;
+	
+	return Output;
+}
+
+//===========================================================================//
+// Techniques					                                             //
+//===========================================================================//
+
+technique RenderSceneShadow
+{
+    pass P0
+    {      
+        VertexShader = compile vs_3_0 RenderSceneShadowVS();
+        PixelShader  = compile ps_3_0 RenderSceneShadowPS();
     }
 }

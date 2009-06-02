@@ -40,6 +40,7 @@ public:
 	void SetCamera( Camera* cam );
 	void SetSkybox( Skybox* skybox);
 	void SetShadowMap( Light * ShadowLight);
+	ShadowMap* GetShadowMap(){return m_ShadowMap;}
 
 	// Infos sur la fenêtre
 	int	GetWindowWidth() const;

@@ -87,6 +87,7 @@ HRESULT Renderer::OnCreateDevice()
 		++obj2d;
 	}
 
+	m_DevCamera.SetViewParams(&D3DXVECTOR3(0.f, 200.f, 20.f), &D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( Color4f(0.f,0.f,0.f,1.f) ), 1.0f, 0);
 
 	return S_OK;
@@ -219,8 +220,10 @@ HRESULT Renderer::Render()
 
 	m_pd3dDevice->BeginScene();
 
+
 	if(m_UseShadowMap)
 		m_ShadowMap->Render();
+	
 
 	D3DXMATRIX MatWorld;
 	D3DXMatrixIdentity(&MatWorld);
@@ -299,7 +302,8 @@ HRESULT Renderer::Render()
 	//Affichage information frames
 	if(m_bShowFPS)
 		m_pStatsFont->DrawText( 2,  0, D3DCOLOR_ARGB(255,255,255,0), m_strFrameStats );
-	
+
+
 	m_pd3dDevice->EndScene();
 
 	return S_OK;

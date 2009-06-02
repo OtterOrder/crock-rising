@@ -41,6 +41,7 @@ protected:
 	void			InitObject();
 	void			InitDeviceData();
 	void			Draw();
+	void			DrawShadow();
 	void			DeleteData();
 	void			UpdateAnimation();
 

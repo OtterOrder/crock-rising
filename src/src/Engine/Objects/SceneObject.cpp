@@ -5,6 +5,7 @@
 #include "Resources/Shader.h"
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
+#include "Renderer/Shadow Map/ShadowMap.h"
 #include "../Physics/BoundingBox.h"
 
 using namespace std;
@@ -50,6 +51,9 @@ SceneObject::SceneObject(const std::string& mesh,
 	m_WorldMatrix._32=1; m_WorldMatrix._33=0;
 
 	m_EmpList = new TEmpList;
+
+	m_bCastShadow = false;
+	m_bReceiveShadow = false;
 }
 
 SceneObject::~SceneObject()
@@ -144,11 +148,11 @@ void SceneObject::SetTransform(const D3DXMATRIX* world)
 
 void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 {
-	//m_matrixStack->LoadIdentity();
+	m_matrixStack->LoadIdentity();
     m_matrixStack->LoadMatrix( &m_WorldMatrix );
 	m_matrixStack->Push();
     {
-        m_matrixStack->MultMatrix( world );
+        m_matrixStack->MultMatrixLocal( world );
 		m_WorldMatrix=*m_matrixStack->GetTop();
     }
     m_matrixStack->Pop();
@@ -175,7 +179,17 @@ void SceneObject::Draw()
 
 	m_pMaterial->SetGraphicalData();
 
-	m_pShader->m_pEffect->SetTechnique( "RenderScene" );
+	if(m_bReceiveShadow)
+	{
+		m_pShader->m_pEffect->SetTechnique( "RenderSceneShadow" );
+		m_pShader->m_pEffect->SetTexture("g_TexShadowMap", Renderer::GetInstance()->GetShadowMap()->GetTexShadowMap());
+		D3DXMATRIX LightViewProj=m_WorldMatrix*Renderer::GetInstance()->GetShadowMap()->GetLightViewProjMatrix();
+		D3DXMATRIX TexProj=LightViewProj*Renderer::GetInstance()->GetShadowMap()->GetTexProjMatrix();
+		m_pShader->m_pEffect->SetMatrix("g_mTexProj", &TexProj);
+		m_pShader->m_pEffect->SetMatrix("g_mLightViewProj", &LightViewProj);
+	}
+	else
+		m_pShader->m_pEffect->SetTechnique( "RenderScene" );
 
 	m_pShader->m_pEffect->Begin(0, 0);
 
@@ -200,14 +214,35 @@ void SceneObject::Draw()
 
 void SceneObject::DrawShadow()
 {
-	if (m_pMesh->m_pVB)
+	if(!m_bCastShadow)
+		return;
+
+	m_pShadowShader=Renderer::GetInstance()->GetShadowMap()->GetDepthShader();
+
+	m_pShadowShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
+
+	m_pShadowShader->m_pEffect->SetTechnique( "RenderShadow" );
+
+	m_pShadowShader->m_pEffect->Begin(0, 0);
+
+	m_pShadowShader->m_pEffect->BeginPass(0);
+
+	m_pDevice->SetVertexDeclaration(m_pMesh->m_decl);
+
+	if(m_pMesh->m_pVB)
 	{
-			m_pDevice->SetStreamSource(0, m_pMesh->m_pVB, 0, D3DXGetDeclVertexSize(m_pMesh->m_VBdecl, 0));
+		m_pDevice->SetStreamSource(0, m_pMesh->m_pVB, 0, D3DXGetDeclVertexSize(m_pMesh->m_VBdecl, 0));
 
-			m_pDevice->SetIndices ( m_pMesh->m_pIB );
+		m_pDevice->SetIndices( m_pMesh->m_pIB);
 
-			m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3); 
+		m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3);
 	}
+
+	m_pShadowShader->m_pEffect->CommitChanges();
+
+	m_pShadowShader->m_pEffect->EndPass();
+
+	m_pShadowShader->m_pEffect->End();
 }
 
 void SceneObject::DeleteDeviceData()
@@ -232,3 +267,14 @@ void SceneObject::DeleteData()
 //===========================================================================//
 void SceneObject::SetVisible(bool value)	{m_bVisible = value;}
 bool SceneObject::GetVisible()				{return m_bVisible;}
+
+
+void SceneObject::SetCastShadow(bool value)
+{
+	m_bCastShadow=value;
+}
+void SceneObject::SetReceiveShadow(bool value)
+{
+	m_bReceiveShadow=value;
+}
+

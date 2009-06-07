@@ -1,5 +1,5 @@
-#ifndef		_Sprite_H
-#define		_Sprite_H
+#ifndef		_SPRITE_H_
+#define		_SPRITE_H_
 
 //******************************************************************
 
@@ -13,27 +13,26 @@ class Sprite : public Quad
 {
 public:
 
-	//-- Méthodes publiques
-	
-	//Sprite( crc32 spriteID );
-	Sprite( const char *path );
+	Sprite( const std::string &spriteName );
 	virtual ~Sprite();
 
-	virtual void Draw();		// Affiche l'objet
+	// Affichage
+	virtual void Draw();
 
-	//-- Méthodes spécifiques pour DirectX
-	
+	// Taille
+	//void SetSizeToDefault();
+
+	// Gestion des données DirectX
 	virtual void InitDxData();		// Initialise les données Dx
 	virtual void ClearDxData();		// Libère les données Dx
 	virtual bool IsDxReady() const;	// Vérifie si les données Dx sont prètes
 
 protected:
 
-	//crc32				m_TextureID;	// ID de la texture
-	std::string			m_TextureName;	// Nom de la texture
-	Texture				*m_pTexture;	// Texture
+	std::string		m_SpriteName;	// Nom de la texture
+	Texture			*m_Texture;		// Texture
 
 };
 
 //******************************************************************
-#endif		//_Sprite_H
+#endif		//_SPRITE_H_

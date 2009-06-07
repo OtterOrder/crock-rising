@@ -46,8 +46,8 @@ bool VEC_AreAlmostEqual( const Vector4f &v1, const Vector4f &v2 )
 
 //**********************************************************
 // Constructeur de Vector2i avec paramètres.
-// @param[in]	_x	: coordonnée x
-// @param[in]	_y	: coordonnée y
+// @param[in]	_x	: Coordonnée x
+// @param[in]	_y	: Coordonnée y
 //**********************************************************
 Vector2i::Vector2i( s32 _x, s32 _y )
 {
@@ -57,10 +57,32 @@ Vector2i::Vector2i( s32 _x, s32 _y )
 
 //**********************************************************
 // Constructeur de Vector2i par copie.
-// @param[in]	_v	: vecteur
+// @param[in]	_v	: Vecteur
 //**********************************************************
 Vector2i::Vector2i( const Vector2i &_v )
 {
 	x = _v.x;
 	y = _v.y;
+}
+
+//**********************************************************
+// Constructeur de Vector2i par copie d'un Vector2f.
+// @param[in]	_v	: Vecteur
+//**********************************************************
+Vector2i::Vector2i( const Vector2f &_v )
+{
+	x = (s32)_v.x;
+	y = (s32)_v.y;
+}
+
+//**********************************************************
+// Cast en Vector2f. Applique un cast standard int -> float.
+// @return	Le vecteur sous forme de Vector2f
+//**********************************************************
+Vector2i::operator Vector2f()
+{
+	Vector2f v;
+	v.x = (float)x;
+	v.y = (float)y;
+	return v;
 }

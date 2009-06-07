@@ -9,7 +9,7 @@
 
 #include	"Core/Inputs/InputManager.h"
 #include	"Objects/SceneObject.h"
-#include	"Objects/2D/Object2D.h"
+#include	"Objects/2D/SceneObject2D.h"
 #include	"Objects/Camera.h"
 #include	"Objects/Skybox.h"
 #include	"Objects/Light.h"
@@ -40,7 +40,7 @@ Renderer::Renderer()
 
 	// On récupère les listes d'objets
 	m_ScObjList	= &SceneObject::RefList;
-	m_Obj2DList	= &Object2D::RefList;
+	m_Obj2DList	= &SceneObject2D::RefList;
 	m_LightList	= &Light::RefList;
 	m_UseShadowMap = false;
 }
@@ -65,7 +65,7 @@ HRESULT Renderer::BeforeCreateDevice()
 HRESULT Renderer::OnCreateDevice()
 {
 	SceneObject::ScObjIt	scobj;
-	Object2D::Obj2DIt obj2d;
+	list<SceneObject2D*>::iterator obj2d;
 	HRESULT	hr;
 
 	if( FAILED( hr = m_pStatsFont->InitDeviceObjects( m_pd3dDevice ) ) )
@@ -179,7 +179,7 @@ HRESULT Renderer::OnResetDevice()
 
 	//-- Objets 2D
 	
-	Object2D::Obj2DIt obj2d = m_Obj2DList->begin();
+	list<SceneObject2D*>::iterator obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
 		(*obj2d)->InitDxData();
@@ -195,7 +195,7 @@ HRESULT Renderer::OnResetDevice()
 	//-- Post Processes
 	LPDIRECT3DSURFACE9 pBackBuffer;
 	m_pd3dDevice->GetRenderTarget(0 , &pBackBuffer);
-	PostRenderer::GetInstance()->Create(m_pd3dDevice, (u32)GetWindowWidth(), (u32)GetWindowHeight());
+	PostRenderer::GetInstance()->Create(m_pd3dDevice, GetWindowWidth(), GetWindowHeight());
 	PostRenderer::GetInstance()->SetBackBuffer(pBackBuffer);
 
 	return S_OK;
@@ -210,7 +210,7 @@ HRESULT Renderer::Render()
 	m_pd3dDevice->SetRenderTarget(0, PostRenderer::GetInstance()->GetSceneRenderSurface());
 
 	SceneObject::ScObjIt scobj;
-	Object2D::Obj2DIt obj2d, lastObj2d;
+	list<SceneObject2D*>::iterator obj2d, lastObj2d;
 	
 	m_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_COLOR4F( m_ClearColor ), 1.0f, 0);
 
@@ -260,7 +260,7 @@ HRESULT Renderer::Render()
 	lastObj2d	= m_Obj2DList->end();
 
 	// Tri par priorité croissante.. /!\ A optimiser si besoin
-	m_Obj2DList->sort( Object2D::ComparePriority );
+	m_Obj2DList->sort( SceneObject2D::ComparePriority );
 
 	// Filtre texture pour la 2D
 	/*m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
@@ -276,8 +276,8 @@ HRESULT Renderer::Render()
 	}
 
 	/*m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_NONE );
-	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_NONE );
-	*/
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_NONE );*/
+	
 	//-- ?
 	
 	// Affichage grille (Pipe line par défaut)
@@ -315,7 +315,7 @@ HRESULT Renderer::Render()
 HRESULT Renderer::OnLostDevice()
 {
 	SceneObject::ScObjIt scobj;
-	Object2D::Obj2DIt obj2d;
+	list<SceneObject2D*>::iterator obj2d;
 	
 	m_pStatsFont->InvalidateDeviceObjects();
 	m_pGridVB->Release();
@@ -359,7 +359,7 @@ HRESULT Renderer::OnLostDevice()
 HRESULT Renderer::OnDestroyDevice()
 {
 	SceneObject::ScObjIt scobj;
-	Object2D::Obj2DIt obj2d;
+	list<SceneObject2D*>::iterator obj2d;
 	
 	m_pStatsFont->DeleteDeviceObjects();
 
@@ -445,17 +445,17 @@ void Renderer::SetShadowMap(Light *ShadowLight)
 //**********************************************************
 // Largeur de la fenêtre en pixels.
 //**********************************************************
-int Renderer::GetWindowWidth() const
+u32 Renderer::GetWindowWidth() const
 {
-	return (int)m_d3dsdBackBuffer.Width;
+	return (u32)m_d3dsdBackBuffer.Width;
 }
 
 //**********************************************************
 // Hauteur de la fenêtre en pixels..
 //**********************************************************
-int Renderer::GetWindowHeight() const
+u32 Renderer::GetWindowHeight() const
 {
-	return (int)m_d3dsdBackBuffer.Height;
+	return (u32)m_d3dsdBackBuffer.Height;
 }
 
 //**********************************************************

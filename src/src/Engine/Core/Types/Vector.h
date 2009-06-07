@@ -42,6 +42,9 @@ struct Vector2i
 	Vector2i() {}
 	Vector2i( s32 _x, s32 _y );
 	Vector2i( const Vector2i &_v );
+	Vector2i( const Vector2f &_v );
+
+	operator Vector2f();
 
 };
 

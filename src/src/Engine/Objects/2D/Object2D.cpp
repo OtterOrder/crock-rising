@@ -1,34 +1,14 @@
 #include	"Object2D.h"
 
-#include	<assert.h>
-#include	"Renderer/Renderer.h"
-
-using namespace std;
-
 //******************************************************************
 
-#define		O2D_DEFAULT_WIDTH			(0)
-#define		O2D_DEFAULT_HEIGHT			(0)
-#define		O2D_DEFAULT_COLOR			(Color4f( 1.f, 1.f, 1.f, 1.f ))
 #define		O2D_DEFAULT_POSITION		(Vector3f( 0.f, 0.f, 0.f ))
 #define		O2D_DEFAULT_SCALE			(Vector3f( 1.f, 1.f, 1.f ))
 #define		O2D_DEFAULT_ROTATION		(Vector3f( 0.f, 0.f, 0.f ))
-#define		O2D_DEFAULT_PRIORITY		(0)
 
 //******************************************************************
 
-list< Object2D* > Object2D::RefList;
-
-//******************************************************************
-
-// Coordonnées de texture par défaut d'un quad
-static Vector2f g_QuadTexCoord[O2D_VERTICES] =
-{
-	Vector2f( 0.f, 0.f ),
-	Vector2f( 1.f, 0.f ),
-	Vector2f( 1.f, 1.f ),
-	Vector2f( 0.f, 1.f )
-};
+std::list< Object2D* > Object2D::RefList;
 
 //******************************************************************
 
@@ -37,20 +17,14 @@ static Vector2f g_QuadTexCoord[O2D_VERTICES] =
 //**********************************************************
 Object2D::Object2D()
 {
-	m_Width				= O2D_DEFAULT_WIDTH;
-	m_Height			= O2D_DEFAULT_HEIGHT;
-	m_Color				= O2D_DEFAULT_COLOR;
-	m_HotPoint			= HOTPOINT_V0;
-	m_HotPointIndex		= 0;
-	m_Priority			= O2D_DEFAULT_PRIORITY;
-	m_IsHidden			= false;
-	
-	m_Position			= O2D_DEFAULT_POSITION;
-	m_Scale				= O2D_DEFAULT_SCALE;
-	m_Rotation			= O2D_DEFAULT_ROTATION;
+	m_Position		= O2D_DEFAULT_POSITION;
+	m_Scale			= O2D_DEFAULT_SCALE;
+	m_Rotation		= O2D_DEFAULT_ROTATION;
+	m_Flags			= 0;
+	m_Dirty			= false;
 	
 	// Enregistrement dans la liste
-	Object2D::RefList.push_back( this );
+	Object2D::RefList.push_front( this );
 }
 
 //**********************************************************
@@ -63,185 +37,68 @@ Object2D::~Object2D()
 }
 
 //**********************************************************
-// Update, appelée à chaque tour moteur. A surcharger.
-//**********************************************************
-void Object2D::Update()
-{
-}
-
-//**********************************************************
-// Change la taille.
-// @param[in]	width : largeur en pixels
-// @param[in]	height : hauteur en pixels
-//**********************************************************
-void Object2D::SetSize( int width, int height )
-{
-	m_Width = width;
-	m_Height = height;
-}
-
-//**********************************************************
-// Change la taille.
-// @param[in]	size : { largeur, hauteur }
-//**********************************************************
-void Object2D::SetSize( const Vector2f &size )
-{
-	SetSize( (int)size.x, (int)size.y );
-}
-
-//**********************************************************
-// Donne la largeur de l'objet.
-//**********************************************************
-int Object2D::GetWidth() const
-{
-	return m_Width;
-}
-
-//**********************************************************
-// Donne la hauteur de l'objet.
-//**********************************************************
-int Object2D::GetHeight() const
-{
-	return m_Height;
-}
-
-//**********************************************************
-// Change la couleur.
-// @param[in]	color : RGBA (0->1)
-//**********************************************************
-void Object2D::SetColor( const Color4f &color )
-{
-	m_Color = color;
-}
-
-//**********************************************************
-// Donne la couleur.
-// @return	la couleur RGBA
-//**********************************************************
-Color4f Object2D::GetColor() const
-{
-	return m_Color;
-}
-
-//**********************************************************
-// Change l'alpha (= transparence).
-// @param[in]	alpha : alpha (0->1)
-//**********************************************************
-void Object2D::SetAlpha( float alpha )
-{
-	m_Color.a = alpha;
-}
-
-//**********************************************************
-// Donne l'alpha.
-// @return	l'alpha (woohoo)
-//**********************************************************
-float Object2D::GetAlpha() const
-{
-	return m_Color.a;
-}
-
-//**********************************************************
-// Change la priorité (ordre d'affichage).
-// @param[in]	priority : priorité entre 0 et 255
-//				0 : devant, 255 : derrière
-//**********************************************************
-void Object2D::SetPriority( int priority )
-{
-	m_Priority = MATH_Clamp( priority, 0, 255 );
-}
-
-//**********************************************************
-// Donne la priorité.
-// @return	la priorité
-//**********************************************************
-int Object2D::GetPriority() const
-{
-	return m_Priority;
-}
-
-//**********************************************************
-// Rend l'objet visible.
-//**********************************************************
-void Object2D::Show()
-{
-	m_IsHidden = false;
-}
-
-//**********************************************************
-// Rend l'objet invisible (Draw n'est plus appelée).
-//**********************************************************
-void Object2D::Hide()
-{
-	m_IsHidden = true;
-}
-
-//**********************************************************
-// Vérifie si l'objet est caché.
-// @return	vrai si l'objet est caché, faux sinon
-//**********************************************************
-bool Object2D::IsHidden() const
-{
-	return m_IsHidden;
-}
-
-//**********************************************************
 // Change la position.
-// @param[in]	posX : coordonnée x (pixels)
-// @param[in]	posY : coordonnée y (pixels)
+// @param[in]	posX : Coordonnée x (pixels)
+// @param[in]	posY : Coordonnée y (pixels)
 //**********************************************************
-void Object2D::SetPosition( float posX, float posY )
+void Object2D::SetPosition( s32 posX, s32 posY )
 {
-	m_Position.x = posX;
-	m_Position.y = posY;
+	if( posX != (s32)m_Position.x || posY != (s32)m_Position.y )
+	{
+		m_Position.x = (float)posX;
+		m_Position.y = (float)posY;
+		activate_dirty();
+	}
 }
 
 //**********************************************************
 // Change la position.
 // @param[in]	position : (x,y)
 //**********************************************************
-void Object2D::SetPosition( const Point2f &position )
+void Object2D::SetPosition( const Vector2i &position )
 {
 	SetPosition( position.x, position.y );
 }
 
 //**********************************************************
-// Change le point chaud de l'objet.
-// @param[in]	hotPoint : type de point chaud
-// @param[in]	vertex : index du vertex (utile si hotPoint
-//				= HOTPOINT_INDEX)
+// Change la position.
+// @param[in]	position : (x,y)
 //**********************************************************
-/*void Object2D::SetHotPoint( HotPoint hotPoint, int vertex )
+void Object2D::SetPosition( const Vector2f &position )
 {
-	if( hotPoint == HOTPOINT_INDEX )
-	{
-		// En mode INDEX, on vérifie que le vertex existe
-		assert( vertex >= 0 && vertex < O2D_VERTICES );
-		m_HotPointIndex = vertex;
-	}
-	m_HotPoint = hotPoint;
-}*/
+	SetPosition( (s32)position.x, (s32)position.y );
+}
 
 //**********************************************************
-// Donne la position.
-// @return	position du l'objet
+// Donne la position. On renvoie un Vector2i car ce sont
+// des pixels (donc des entiers), mais aussi parce que le
+// cast Vector2i -> Vector2f est défini, contrairement au
+// cast inverse.
+// @return	Position du l'objet
 //**********************************************************
-Point2f Object2D::GetPosition() const
+Vector2i Object2D::GetPosition() const
 {
-	return Vector2f( m_Position.x, m_Position.y );
+	return Vector2i( (s32)m_Position.x, (s32)m_Position.y );
 }
 
 //**********************************************************
 // Change l'échelle.
+// @param[in]	scaleX : Echelle sur l'axe OX
+// @param[in]	scaleY : Echelle sur l'axe OY
 //**********************************************************
 void Object2D::SetScale( float scaleX, float scaleY )
 {
-	m_Scale.x = scaleX;
-	m_Scale.y = scaleY;
+	if( scaleX != m_Scale.x || scaleY != m_Scale.y )
+	{
+		m_Scale.x = scaleX;
+		m_Scale.y = scaleY;
+		activate_dirty();
+	}
 }
 
 //**********************************************************
 // Change l'échelle.
+// @param[in]	scale : Echelle (x,y) sur les axes (OX,OY)
 //**********************************************************
 void Object2D::SetScale( const Vector2f &scale )
 {
@@ -250,6 +107,7 @@ void Object2D::SetScale( const Vector2f &scale )
 
 //**********************************************************
 // Donne l'échelle.
+// @return	L'echelle sur (OX,OY)
 //**********************************************************
 Vector2f Object2D::GetScale() const
 {
@@ -259,15 +117,20 @@ Vector2f Object2D::GetScale() const
 //**********************************************************
 // Change l'angle de rotation. La rotation s'effectue autour
 // du point chaud de l'objet.
-// @param[in]	angle : angle de rotation (radian)
+// @param[in]	angle : Angle de rotation en radians
 //**********************************************************
 void Object2D::SetRotation( float angle )
 {
-	m_Rotation.z = angle;
+	if( angle != m_Rotation.z )
+	{
+		m_Rotation.z = angle;
+		activate_dirty();
+	}
 }
 
 //**********************************************************
 // Donne l'angle de rotation.
+// @return	L'angle en radians
 //**********************************************************
 float Object2D::GetRotation() const
 {
@@ -275,49 +138,59 @@ float Object2D::GetRotation() const
 }
 
 //**********************************************************
-// Update tous les objets 2D.
+// Active le flag.
+// @param[in]	flag : Flag à activer
 //**********************************************************
-void Object2D::UpdateAll()
+void Object2D::SetFlag( u32 flag )
 {
-	list< Object2D* >::iterator it = RefList.begin();
+	FLAG_Set( m_Flags, flag );
+}
+
+//**********************************************************
+// Désactive le flag.
+// @param[in]	flag : Flag à désactiver
+//**********************************************************
+void Object2D::UnsetFlag( u32 flag )
+{
+	FLAG_Unset( m_Flags, flag );
+}
+
+//**********************************************************
+// Vérifie si le flag est activé.
+// @param[in]	flag : Flag à vérifier
+// @return	Vrai si le flag est activé
+//**********************************************************
+bool Object2D::IsFlagSet( u32 flag ) const
+{
+	return FLAG_IsSet( m_Flags, flag );
+}
+
+//**********************************************************
+// Update toute la 2D : appelle l'Update de tous les
+// objets 2d, gère le "dirty", etc.
+//**********************************************************
+void Object2D::FullUpdate()
+{
+	Object2D *pObj;
+	std::list<Object2D*>::iterator it = RefList.begin();
 	
 	while( it != RefList.end() )
 	{
-		(*it)->Update();
+		pObj = *it;
+		pObj->Update();
+		
+		if( pObj->m_Dirty )
+		{
+			pObj->dirty_Refresh();
+			pObj->m_Dirty = false;
+		}
 		++it;
 	}
 }
 
 //**********************************************************
-// Compare les priorités des objets. Permet de trier les
-// objets par ordre de priorité croissante (pour l'affichage).
-//**********************************************************
-bool Object2D::ComparePriority( const Object2D *o1, const Object2D *o2 )
-{
-	// o1 est avant o2 si sa priorité est plus faible, la
-	// priorité la plus faible étant 255, la plus forte 0.
-	return o1->m_Priority > o2->m_Priority;
-}
-
-//**********************************************************
-// Applique la matrice aux points du l'objets (m_Vertices).
-// @param[in]	pMatrix : matrice
-//**********************************************************
-void Object2D::SetTransform( const D3DMATRIX *pMatrix )
-{
-	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
-	{
-		D3DXVec4Transform(
-			&m_Vertices[vertex].position,
-			&m_Vertices[vertex].position,
-			(D3DXMATRIX*)pMatrix
-		);
-	}
-}
-
-//**********************************************************
 // Calcule la matrice de l'objet dans le repère world.
-// @param[out]	pMatrix : matrice world de l'objet
+// @param[out]	pMatrix : Matrice world de l'objet
 //**********************************************************
 void Object2D::WorldMatrix( D3DMATRIX *pMatrix ) const
 {
@@ -326,97 +199,4 @@ void Object2D::WorldMatrix( D3DMATRIX *pMatrix ) const
 	D3DXMatrixRotationYawPitchRoll( &rotat, m_Rotation.x, m_Rotation.y, m_Rotation.z );
 	D3DXMatrixScaling( &scale, m_Scale.x, m_Scale.y, m_Scale.z );
 	*pMatrix = scale * rotat * trans;
-}
-
-//**********************************************************
-// Génère les points d'un quad à partir des données de
-// l'objet. Les points sont organisés comme sur le schéma
-// ci-dessous.
-//
-//  v0 +--------+ v1
-//     |        |
-//     |        |
-//     |        |
-//  v3 +--------+ v2
-//
-// @param[out]	vertices : tableau de 4 Object2D::Vertex
-//**********************************************************
-void Object2D::GenQuad( Vertex *vertices ) const
-{
-	D3DXMATRIX world;
-	WorldMatrix( &world );
-	
-	// Initialisation des points
-	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
-	{
-		vertices[vertex].position	= Vector4f( 0.f, 0.f, 0.f, 1.f );
-		vertices[vertex].color		= m_Color;
-		vertices[vertex].texCoord	= g_QuadTexCoord[vertex];
-	}
-
-	// Les coordonnées dépendent du point chaud..
-	switch( m_HotPoint )
-	{
-		case HOTPOINT_V0:
-			vertices[1].position.x	+= m_Width;
-			vertices[2].position.x	+= m_Width;
-			vertices[2].position.y	+= m_Height;
-			vertices[3].position.y	+= m_Height;
-			break;
-
-		default:
-			// Aucun autre cas ne devrait être possible
-			assert( false );
-	}
-
-	// On applique la transformation
-	for( int vertex = 0; vertex < O2D_VERTICES; vertex++ )
-	{
-		D3DXVec4Transform(
-			&vertices[vertex].position,
-			&vertices[vertex].position,
-			&world
-		);
-	}
-}
-
-//**********************************************************
-// Génére la vertex declaration correspondante à la
-// structure du vertex.
-// @param[out]	vElements : tableau de D3DVERTEXELEMENT9
-//**********************************************************
-void Object2D::Vertex::GenDeclaration( vector<D3DVERTEXELEMENT9> *vElements )
-{
-	D3DVERTEXELEMENT9 element;
-	int offset = 0;
-
-	// Propriétés communes
-	element.Stream		= 0;
-	element.Method		= D3DDECLMETHOD_DEFAULT;
-	element.UsageIndex	= 0;
-
-	// POSITION (xyzrhw)
-	element.Offset	= offset;
-	element.Type	= D3DDECLTYPE_FLOAT4;
-	element.Usage	= D3DDECLUSAGE_POSITIONT;
-	offset			+= sizeof(Vector4f);
-	vElements		->push_back( element );
-
-	// COLOR (rgba)
-	element.Offset	= offset;
-	element.Type	= D3DDECLTYPE_FLOAT4;
-	element.Usage	= D3DDECLUSAGE_COLOR;
-	offset			+= sizeof(Color4f);
-	vElements		->push_back( element );
-
-	// TEXCOORD (uv)
-	element.Offset	= offset;
-	element.Type	= D3DDECLTYPE_FLOAT2;
-	element.Usage	= D3DDECLUSAGE_TEXCOORD;
-	offset			+= sizeof(Vector2f);
-	vElements		->push_back( element );
-
-	// Element de fin
-	D3DVERTEXELEMENT9 endElement = D3DDECL_END();
-	vElements->push_back( endElement );
 }

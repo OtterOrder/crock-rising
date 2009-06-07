@@ -306,35 +306,11 @@
 				Name="2D"
 				>
 				<File
-					RelativePath=".\Objects\2D\Background.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Background.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Objects\2D\Object2D.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Objects\2D\Object2D.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Quad.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Quad.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Sprite.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Sprite.h"
 					>
 				</File>
 				<File
@@ -345,6 +321,34 @@
 					RelativePath=".\Objects\2D\Text.h"
 					>
 				</File>
+				<Filter
+					Name="SceneObject2D"
+					>
+					<File
+						RelativePath=".\Objects\2D\Quad.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\Quad.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\SceneObject2D.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\SceneObject2D.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\Sprite.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\Sprite.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Skybox"

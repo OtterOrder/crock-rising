@@ -1,15 +1,16 @@
-#ifndef		_Object2D_H
-#define		_Object2D_H
+#ifndef		_OBJECT2D_H_
+#define		_OBJECT2D_H_
 
 //******************************************************************
 
 #include	<list>
-#include	<vector>
 #include	"Core/Math.h"
 
 //******************************************************************
 
-#define		O2D_VERTICES		4	// Nombre de vertices des objets 2D
+// Flags pour les objets 2D
+//#define		O2D_WINDOW_SIZE				(1<<0)		// L'objet a la taille de la fenêtre
+//#define		O2D_ALWAYS_ON_CENTER		(1<<1)		// Point chaud toujours au centre
 
 //******************************************************************
 
@@ -19,52 +20,20 @@ public:
 
 	// Liste de références sur les objets 2D
 	static std::list< Object2D* > RefList;
-
-	typedef std::list< Object2D* >::iterator Obj2DIt;
-
-	//-- Enum publiques
-
-	enum HotPoint
-	{
-		HOTPOINT_V0,		// Vertex 0 (par défaut)
-		//HOTPOINT_CENTER,	// Isobarycentre des vertices
-		//HOTPOINT_INDEX		// Un vertex de l'objet
-	};
 	
 	//-- Méthodes publiques
 	
 	Object2D();
 	virtual ~Object2D();
 
-	virtual void Draw() =0;		// Affiche l'objet
-	virtual void Update();		// Update, à surcharger
-
-	// Taille
-	void SetSize( int width, int height );
-	void SetSize( const Vector2f &size );
-	int GetWidth() const;
-	int GetHeight() const;
-
-	// Couleur
-	void SetColor( const Color4f &color );
-	void SetAlpha( float alpha );
-	Color4f GetColor() const;
-	float GetAlpha() const;
-
-	// Priorité (ordre d'affichage)
-	void SetPriority( int priority );	// 0>>255
-	int GetPriority() const;
-
-	// Visibilité (optim)
-	void Show();
-	void Hide();
-	bool IsHidden() const;
+	// Update. A surcharger
+	virtual void Update() {}
 
 	// Position
-	void SetPosition( float posX, float posY );
-	void SetPosition( const Point2f &position );
-	//void SetHotPoint( HotPoint hotPoint, int vertex = 0 );
-	Point2f GetPosition() const;
+	void SetPosition( s32 posX, s32 posY );
+	void SetPosition( const Vector2i &position );
+	void SetPosition( const Vector2f &position );
+	Vector2i GetPosition() const;
 	
 	// Echelle
 	void SetScale( float scaleX, float scaleY );
@@ -75,58 +44,35 @@ public:
 	void SetRotation( float angle );
 	float GetRotation() const;
 
-	//-- Méthodes spécifiques pour DirectX (utilisées dans le Renderer)
-	
-	virtual void InitDxData(){}			// Initialise les données Dx
-	virtual void ClearDxData(){}		// Libère les données Dx
-	virtual bool IsDxReady() const		// Vérifie si les données Dx sont prètes
-	{
-		return false;
-	}
+	// Gestion des flags
+	void SetFlag( u32 flag );
+	void UnsetFlag( u32 flag );
+	bool IsFlagSet( u32 flag ) const;
 
-	//-- Méthodes statiques
-	
-	static void UpdateAll();			// Update tous les objets 2D
-	static bool	ComparePriority( const Object2D *o1, const Object2D *o2 );
+	// Update toute la 2D
+	static void FullUpdate();
 
 protected:
 
-	//-- Structures protégées
-
-	struct Vertex
-	{
-		Vector4f	position;	// POSITION (xyzrhw)
-		Color4f		color;		// COLOR (rgba)
-		Vector2f	texCoord;	// TEXCOORD (uv)
-
-		// Génére la vertex déclaration correspondante..
-		static void GenDeclaration( std::vector<D3DVERTEXELEMENT9> *vElements );
-	};
-
-	//-- Données protégées
-	
-	int				m_Width;					// Largeur
-	int				m_Height;					// Hauteur
-	Color4f			m_Color;					// Couleur
-	HotPoint		m_HotPoint;					// Point chaud
-	int				m_HotPointIndex;			// Index du point chaud (HOTPOINT_INDEX)
-	int				m_Priority;					// Priorité d'affichage de l'objet (0>>255)
-	bool			m_IsHidden;					// Si l'objet est caché
-
-	Vector3f		m_Position;					// Position (du point chaud)
-	Vector3f		m_Scale;					// Echelle
-	Vector3f		m_Rotation;					// Rotation
-
-	Vertex			m_Vertices[O2D_VERTICES];	// Tableau des vertices
+	Vector3f		m_Position;			// Position (= translation)
+	Vector3f		m_Scale;			// Echelle
+	Vector3f		m_Rotation;			// Rotation
+	u32				m_Flags;			// Flags
+	bool			m_Dirty;			// Indiquateur crade
 
 	//-- Méthodes protégées
 
-	virtual void SetTransform( const D3DMATRIX *pMatrix );	// Applique la matrice aux points du l'objets (m_Vertices)
-	
+	//**********************************************************
+	// Active le "dirty" : indique à l'objet qu'il doit mettre
+	// à jour des trucs. Cette méthode est tellement crade qu'elle
+	// ne suit même pas la nomenclature standard..
+	//**********************************************************
+	inline void activate_dirty() { m_Dirty = true; }
+
+	virtual void dirty_Refresh() {}					// Met à jour tout le bazar. A surcharger
 	void WorldMatrix( D3DMATRIX *pMatrix ) const;	// Calcule la matrice de l'objet dans le repère world
-	void GenQuad( Vertex *vertices ) const;			// Génère les points d'un quad à partir des données de l'objet
 
 };
 
 //******************************************************************
-#endif		//_Object2D_H
+#endif		//_OBJECT2D_H_

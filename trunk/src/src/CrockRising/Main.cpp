@@ -30,6 +30,9 @@ int WINAPI WinMain(
 	// Création du System
 	System::GetInstance();
 
+	// Nom du jeu
+	Game::GetInstance()->SetGameName( "Crock Rising" );
+
 	// Création/enregistrement de la sauvegarde
 	CRBackup *pBackup = new CRBackup;
 	Game::GetInstance()->StoreBackup( pBackup );

@@ -1,43 +1,41 @@
-#ifndef		_Quad_H
-#define		_Quad_H
+#ifndef		_QUAD_H_
+#define		_QUAD_H_
 
 //******************************************************************
 
-#include	"Object2D.h"
+#include	"SceneObject2D.h"
 
 //******************************************************************
 
-class Quad : public Object2D
+class Quad : public SceneObject2D
 {
 public:
 
-	//-- Méthodes publiques
-	
-	Quad( int width, int height, const Color4f &color );
-	Quad( const Vector2f &size, const Color4f &color );
+	Quad( u32 width, u32 height, const Color4f &color );
+	Quad( const Vector2i &size, const Color4f &color );
 	virtual ~Quad();
 
-	virtual void Draw();		// Affiche l'objet
+	// Affichage
+	virtual void Draw();
 
-	//-- Méthodes spécifiques pour DirectX (utilisées dans le Renderer)
-	
-	virtual void InitDxData();		// Initialise les données Dx
-	virtual void ClearDxData();		// Libère les données Dx
-	virtual bool IsDxReady() const;	// Vérifie si les données Dx sont prètes
+	// Taille
+	void SetSize( u32 width, u32 height );
+	void SetSize( const Vector2i &size );
+	u32 GetWidth() const;
+	u32 GetHeight() const;
+
+	// Gestion des données DirectX
+	// Pas besoin..
 
 protected:
 
-	//-- Données protégées
+	u32		m_Width;		// Largeur
+	u32		m_Height;		// Hauteur
 
-	IDirect3DVertexDeclaration9	*m_pVertexDeclaration;
-	IDirect3DVertexBuffer9		*m_pVertexBuffer;
-	int		m_VBSize;
-
-	//-- Méthodes protégées
-
-	void CommonInit();	// Initialisation commune à tous les constructeurs
+	void CommonInit();				// Initialisation commune aux constructeurs
+	virtual void dirty_Refresh();	// Met à jour tout le bazar
 
 };
 
 //******************************************************************
-#endif		//_Quad_H
+#endif		//_QUAD_H_

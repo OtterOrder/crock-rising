@@ -6,8 +6,6 @@
 #include	"Objects/Object.h"
 #include	"Objects/2D/Object2D.h"
 
-//using namespace std;
-
 //******************************************************************
 
 //**********************************************************
@@ -15,6 +13,7 @@
 //**********************************************************
 Game::Game( void )
 {
+	m_GameName		= "Default Name";
 	m_Backup		= NULL;
 	m_CurrentLevel	= NULL;
 	m_PrevLevelID	= CRC32_NULL;
@@ -43,11 +42,11 @@ void Game::Start( void )
 }
 
 //**********************************************************
-// Update du jeu, appellée à chaque tour moteur.
+// Update du jeu, appelé à chaque tour moteur.
 //**********************************************************
 void Game::Update( void )
 {
-	ObjIt	obj, lastObj;
+	std::list<Object*>::iterator obj, lastObj;
 	
 	// Update des objets 3D
 	
@@ -61,13 +60,31 @@ void Game::Update( void )
 	}
 
 	// Update des objets 2D
-	Object2D::UpdateAll();
+	Object2D::FullUpdate();
 	
 	if( m_CurrentLevel )
 	{
 		// Update du level courant
 		m_CurrentLevel->Update();
 	}
+}
+
+//**********************************************************
+// Change le nom du jeu.
+// @param[in]	gameName : Nom du jeu
+//**********************************************************
+void Game::SetGameName( const std::string &gameName )
+{
+	m_GameName = gameName;
+}
+
+//**********************************************************
+// Donne le nom du jeu.
+// @return	Le nom du jeu
+//**********************************************************
+const std::string& Game::GetGameName( void ) const
+{
+	return m_GameName;
 }
 
 //**********************************************************

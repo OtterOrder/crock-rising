@@ -4,13 +4,13 @@
 // Include                                                                   //
 //===========================================================================//
 #include	"Core/Singleton.h"
-#include	"Core/Types/Color.h"
+#include	"Core/Math.h"
 #include	"D3DApp/d3dapp.h"
 #include	<list>
 
 class SceneObject;
+class SceneObject2D;
 class Camera;
-class Object2D;
 class Light;
 class Skybox;
 class ShadowMap;
@@ -43,8 +43,8 @@ public:
 	ShadowMap* GetShadowMap(){return m_ShadowMap;}
 
 	// Infos sur la fenêtre
-	int	GetWindowWidth() const;
-	int	GetWindowHeight() const;
+	u32	GetWindowWidth() const;
+	u32	GetWindowHeight() const;
 
 	// Accès/modif de la couleur de fond
 	void SetClearColor( const Color4f &color );
@@ -58,7 +58,7 @@ protected:
 	LPDIRECT3DVERTEXBUFFER9 m_pGridVB; // ?? = VB de la grille
 	
 	std::list< SceneObject* >	*m_ScObjList; // Liste des objets de scène
-	std::list< Object2D* >		*m_Obj2DList; // Liste des objets 2d
+	std::list< SceneObject2D* >	*m_Obj2DList; // Liste des objets 2d
 	std::list< Light* >			*m_LightList; // Liste des lumières
 
 	Camera	    *m_Camera;		// Pointeur sur la camera

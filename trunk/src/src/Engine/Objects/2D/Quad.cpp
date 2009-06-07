@@ -1,49 +1,61 @@
 #include	"Quad.h"
 
-//#include	<assert.h>
 #include	"Renderer/Renderer.h"
 
-using namespace std;
+//******************************************************************
+
+#define		QUAD_VERTICES			4
+#define		QUAD_DEFAULT_POSITIONT	(Vector4f( 0.f, 0.f, 0.f, 1.f ))
+
+//******************************************************************
+
+// Coordonnées de texture par défaut du quad
+static Vector2f g_DefaultTexCoord[QUAD_VERTICES] =
+{
+	Vector2f( 0.f, 0.f ),
+	Vector2f( 1.f, 0.f ),
+	Vector2f( 1.f, 1.f ),
+	Vector2f( 0.f, 1.f )
+};
 
 //******************************************************************
 
 //**********************************************************
-// Initialisation commune à tous les constructeurs.
+// Initialisation commune aux constructeurs.
 //**********************************************************
 void Quad::CommonInit()
 {
-	m_pVertexDeclaration	= NULL;
-	m_pVertexBuffer			= NULL;
+	m_NbVertices = QUAD_VERTICES;
+	m_Vertices = new Vertex[m_NbVertices];
+	activate_dirty(); // Pour initialiser les sommets
 }
 
 //**********************************************************
 // Constructeur.
-// @param[in]	width : largeur
-// @param[in]	height : hauteur
-// @param[in]	color : couleur
+// @param[in]	width	: Largeur
+// @param[in]	height	: Hauteur
+// @param[in]	color	: Couleur
 //**********************************************************
-Quad::Quad( int width, int height, const Color4f &color )
-: Object2D()
+Quad::Quad( u32 width, u32 height, const Color4f &color )
+: SceneObject2D()
 {
 	m_Width		= width;
 	m_Height	= height;
 	m_Color		= color;
-
 	CommonInit();
 }
 
 //**********************************************************
 // Constructeur.
-// @param[in]	size : { largeur, hauteur }
-// @param[in]	color : couleur
+// @param[in]	size	: { Largeur, Hauteur }
+// @param[in]	color	: Couleur
 //**********************************************************
-Quad::Quad( const Vector2f &size, const Color4f &color )
-: Object2D()
+Quad::Quad( const Vector2i &size, const Color4f &color )
+: SceneObject2D()
 {
-	m_Width		= (int)size.x;
-	m_Height	= (int)size.y;
+	m_Width		= (u32)size.x;
+	m_Height	= (u32)size.y;
 	m_Color		= color;
-	
 	CommonInit();
 }
 
@@ -52,7 +64,8 @@ Quad::Quad( const Vector2f &size, const Color4f &color )
 //**********************************************************
 Quad::~Quad()
 {
-	ClearDxData();
+	if( m_Vertices )
+		delete[] m_Vertices;
 }
 
 //**********************************************************
@@ -62,90 +75,107 @@ void Quad::Draw()
 {
 	if( !IsDxReady() )
 	{
-		// Si les données directx ne sont pas initialisées,
-		// on le fait au premier affichage, ça évite de le
-		// faire dans les constructeurs..
+		// Si les données dx n'existent pas, on les crées ici, ça évite
+		// de le faire dans les constructeurs. On active le dirty et on
+		// sort, on n'affichera qu'à la prochaine frame..
 		InitDxData();
+		activate_dirty();
+		return;
 	}
-	
-	Vertex vertices[O2D_VERTICES];
-	LPDIRECT3DDEVICE9 pDevice;
-	void *pData;
 
-	pDevice = Renderer::GetInstance()->m_pd3dDevice;
+	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 	
-	// On génère les points du quad
-	GenQuad( vertices );
-	
-	// Remplissage du vertex buffer
-	m_pVertexBuffer->Lock( 0, m_VBSize, (void**)&pData, 0 );
-	memcpy( pData, vertices, m_VBSize );
-	m_pVertexBuffer->Unlock();
-	
-	// Rendu
-	pDevice->SetVertexDeclaration( m_pVertexDeclaration );
-	pDevice->SetStreamSource( 0, m_pVertexBuffer, 0, sizeof(Vertex) );
+	// Rendu..
+	pDevice->SetVertexDeclaration( m_VertexDeclaration );
+	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );
 	pDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
 }
 
 //**********************************************************
-// Initialise les données Dx.
+// Change la taille.
+// @param[in]	width	: Largeur en pixels
+// @param[in]	height	: Hauteur en pixels
 //**********************************************************
-void Quad::InitDxData()
+void Quad::SetSize( u32 width, u32 height )
 {
-	LPDIRECT3DDEVICE9			pDevice;
-	vector<D3DVERTEXELEMENT9>	elements;
-
-	pDevice		= Renderer::GetInstance()->m_pd3dDevice;
-	m_VBSize	= O2D_VERTICES*sizeof(Vertex);
-
-	// Vertex déclaration
-	if( !m_pVertexDeclaration )
+	if( width != m_Width || height != m_Height )
 	{
-		Vertex::GenDeclaration( &elements );
-		pDevice->CreateVertexDeclaration(
-			&elements[0],
-			&m_pVertexDeclaration
-		);
-	}
-
-	// Vertex buffer
-	if( !m_pVertexBuffer )
-	{
-		pDevice->CreateVertexBuffer(
-			m_VBSize,
-			NULL,
-			0,
-			D3DPOOL_DEFAULT,
-			&m_pVertexBuffer,
-			NULL
-		);
+		m_Width = width;
+		m_Height = height;
+		activate_dirty();
 	}
 }
 
 //**********************************************************
-// Libère les données Dx.
+// Change la taille.
+// @param[in]	size : { largeur, hauteur }
 //**********************************************************
-void Quad::ClearDxData()
+void Quad::SetSize( const Vector2i &size )
 {
-	if( m_pVertexDeclaration )
-	{
-		m_pVertexDeclaration->Release();
-		m_pVertexDeclaration = NULL;
-	}
-	
-	if( m_pVertexBuffer )
-	{
-		m_pVertexBuffer->Release();
-		m_pVertexBuffer = NULL;
-	}
+	SetSize( (u32)size.x, (u32)size.y );
 }
 
 //**********************************************************
-// Vérifie si les données Dx sont prètes.
+// Donne la largeur de l'objet.
 //**********************************************************
-bool Quad::IsDxReady() const
+u32 Quad::GetWidth() const
 {
-	return m_pVertexDeclaration
-		&& m_pVertexBuffer;
+	return m_Width;
+}
+
+//**********************************************************
+// Donne la hauteur de l'objet.
+//**********************************************************
+u32 Quad::GetHeight() const
+{
+	return m_Height;
+}
+
+//**********************************************************
+// Recalcule les sommets de l'objet. Cette méthode est
+// appelée quand le dirty est activé.
+// Configuration du quad :
+//
+//   v0 +-------+ v1
+//      |       |
+//      |       |
+//      |       |
+//   v3 +-------+ v2
+//
+//**********************************************************
+void Quad::dirty_Refresh()
+{
+	// 1. On réinitialise les sommets
+	for( int i = 0; i < m_NbVertices; i++ )
+	{
+		m_Vertices[i].position	= QUAD_DEFAULT_POSITIONT;
+		m_Vertices[i].texCoord	= g_DefaultTexCoord[i];
+		m_Vertices[i].color		= m_Color;
+	}
+
+	// 2. On place v1, v2 et v3 grace à largeur/hauteur
+	m_Vertices[1].position.x += m_Width;
+	m_Vertices[2].position.x += m_Width;
+	m_Vertices[2].position.y += m_Height;
+	m_Vertices[3].position.y += m_Height;
+
+	D3DXMATRIX world;
+	WorldMatrix( &world ); // = Matrice de transformation de l'objet
+
+	for( int i = 0; i < m_NbVertices; i++ )
+	{
+		// 3. On décale les points en fonction du point chaud
+		m_Vertices[i].position.x -= m_HotPoint.x;
+		m_Vertices[i].position.y -= m_HotPoint.y;
+
+		// 4. On applique la transformation
+		D3DXVec4Transform(
+			&m_Vertices[i].position,
+			&m_Vertices[i].position,
+			&world
+		);
+	}
+
+	// 5. Copie dans le vertex buffer
+	CopyVerticesToVertexBuffer();
 }

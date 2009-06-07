@@ -1,9 +1,5 @@
 #include	"Sprite.h"
 
-//#include	<assert.h>
-#include	<d3dx9.h>
-
-//#include	"Core/Math.h"
 #include	"Renderer/Renderer.h"
 #include	"Resources/ResourceManager.h"
 #include	"Resources/Texture.h"
@@ -15,24 +11,14 @@
 //******************************************************************
 
 //**********************************************************
-// Constructeur.
-// @param[in]	spriteID : ID du sprite
+// Constructeur avec paramètre.
+// @param[in]	spriteName : Nom de l'image (texture)
 //**********************************************************
-/*Sprite::Sprite( crc32 spriteID )
-: Object2D()
-{
-	m_TextureID = spriteID;
-}*/
-
-//**********************************************************
-// Constructeur.
-// @param[in]	path : chemin vers l'image (texture)
-//**********************************************************
-Sprite::Sprite( const char *path )
+Sprite::Sprite( const std::string &spriteName )
 : Quad( 0, 0, SPRITE_DEFAULT_COLOR )
 {
-	m_TextureName	= path;
-	m_pTexture		= NULL;
+	m_SpriteName	= spriteName;
+	m_Texture		= NULL;
 }
 
 //**********************************************************
@@ -50,17 +36,25 @@ void Sprite::Draw()
 {
 	if( !IsDxReady() )
 	{
-		// Si les données directx ne sont pas initialisées,
-		// on le fait au premier affichage, ça évite de le
-		// faire dans les constructeurs..
+		// Si les données dx n'existent pas, on les crées ici, ça évite
+		// de le faire dans les constructeurs. On active le dirty et on
+		// sort, on n'affichera qu'à la prochaine frame..
 		InitDxData();
+		activate_dirty();
+		return;
 	}
 
-	LPDIRECT3DDEVICE9 pDevice;
-	pDevice = Renderer::GetInstance()->m_pd3dDevice;
+	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 	
-	pDevice->SetTexture( 0, m_pTexture->m_pTex );
-	Quad::Draw();
+	// Rendu..
+	pDevice->SetTexture( 0, m_Texture->m_pTex );
+
+	// Optim: on n'appelle PAS Quad::Draw, ça reviendrait
+	// au même mais avec un appel de fonction en plus
+	pDevice->SetVertexDeclaration( m_VertexDeclaration );
+	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );
+	pDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
+
 	pDevice->SetTexture( 0, NULL );
 }
 
@@ -72,14 +66,14 @@ void Sprite::InitDxData()
 	Quad::InitDxData();
 
 	// Chargement de la texture..
-	m_pTexture = ResourceManager::GetInstance()->Load<Texture>(
-		m_TextureName,
+	m_Texture = ResourceManager::GetInstance()->Load<Texture>(
+		m_SpriteName,
 		(ResourceParam)Texture::SPRITE
 	);
 
 	// Initialisation de la taille du sprite
-	m_Width		= m_pTexture->GetSrcWidth();
-	m_Height	= m_pTexture->GetSrcHeight();
+	m_Width = m_Texture->GetSrcWidth();
+	m_Height = m_Texture->GetSrcHeight();
 }
 
 //**********************************************************
@@ -88,10 +82,10 @@ void Sprite::InitDxData()
 void Sprite::ClearDxData()
 {
 	Quad::ClearDxData();
-
+	
 	// Déchargement de la texture..
-	ResourceManager::GetInstance()->Remove<Texture>( m_TextureName );
-	m_pTexture = NULL;
+	ResourceManager::GetInstance()->Remove<Texture>( m_SpriteName );
+	m_Texture = NULL;
 }
 
 //**********************************************************
@@ -100,5 +94,5 @@ void Sprite::ClearDxData()
 bool Sprite::IsDxReady() const
 {
 	return Quad::IsDxReady()
-		&& m_pTexture;
+		&& m_Texture;
 }

@@ -35,24 +35,25 @@ public:
 
 	//-- Méthodes publiques
 
-	void	Start			( void );			// Lance le niveau de départ
-	void	Update			( void );			// Update du jeu
+	void				Start			( void );				// Lance le niveau de départ
+	void				Update			( void );				// Update du jeu
 
-	void	StoreBackup		( Backup *pBackup );
-	Backup*	GetBackup		( void ) const;
+	void				SetGameName		( const std::string &gameName ); // Change le nom du jeu
+	const std::string&	GetGameName		( void ) const;			// Donne le nom du jeu
+
+	void				StoreBackup		( Backup *pBackup );
+	Backup*				GetBackup		( void ) const;
 	
-	void	SetStartLevel	( crc32 levelID );	// Positionne le niveau de départ
-	void	ChangeLevel		( crc32 levelID );	// Change de niveau
-	crc32	GetLevelID		( void ) const;		// Donne l'ID du niveau courant
-	crc32	GetPrevLevelID	( void ) const;		// Donne l'ID du niveau précédent
+	void				SetStartLevel	( crc32 levelID );		// Positionne le niveau de départ
+	void				ChangeLevel		( crc32 levelID );		// Change de niveau
+	crc32				GetLevelID		( void ) const;			// Donne l'ID du niveau courant
+	crc32				GetPrevLevelID	( void ) const;			// Donne l'ID du niveau précédent
 
 protected:
 
-	//-- Types protégés
-
-	typedef std::list< Object* >::iterator		ObjIt;		// Itérateur d'objet
-
 	//-- Données protégées
+	
+	std::string				m_GameName;			// Nom du jeu
 	
 	Backup					*m_Backup;			// Sauvegarde du jeu (ce qu'on veut)
 	

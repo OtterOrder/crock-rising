@@ -71,5 +71,5 @@ void LevelAlafraise::Update( void )
 	// pour rester au centre même en cas de redimmentionnement)
 	logoX = pRenderer->GetWindowWidth()/2 - m_pLogo->GetWidth()/2;
 	logoY = pRenderer->GetWindowHeight()/2 - m_pLogo->GetHeight()/2;
-	m_pLogo->SetPosition( (float)logoX, (float)logoY );
+	m_pLogo->SetPosition( logoX, logoY );
 }

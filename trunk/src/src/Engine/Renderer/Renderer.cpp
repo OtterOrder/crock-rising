@@ -263,9 +263,8 @@ HRESULT Renderer::Render()
 	//m_Obj2DList->sort( SceneObject2D::ComparePriority );
 
 	// Paramètres du device
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, true );
-	//m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
-	//m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );
+	//m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
 
 	while( obj2d != lastObj2d )
 	{
@@ -276,9 +275,7 @@ HRESULT Renderer::Render()
 		++obj2d;
 	}
 
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, false );
-	//m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_NONE );
-	//m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_NONE );
+	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
 	
 	//-- ?
 	

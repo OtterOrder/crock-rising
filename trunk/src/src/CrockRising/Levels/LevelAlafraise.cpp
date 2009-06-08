@@ -51,8 +51,8 @@ void LevelAlafraise::Init( void )
 	// Logo à la fraise
 	m_pLogo = new Sprite( "alafraiseprod.png" );
 	
-	m_LogoOpacity = 0.f;
-	m_pLogo->SetOpacity( m_LogoOpacity );
+	m_LogoAlpha = 0.f;
+	m_pLogo->SetAlpha( m_LogoAlpha );
 }
 
 /***********************************************************
@@ -69,10 +69,10 @@ void LevelAlafraise::Update( void )
 
 	
 	// Le logo apparait progressivement..
-	if( m_LogoOpacity < 0.999f )
+	if( m_LogoAlpha < 0.999f )
 	{
-		m_LogoOpacity += 0.001f;
-		m_pLogo->SetOpacity( m_LogoOpacity );
+		m_LogoAlpha = MATH_Clamp( m_LogoAlpha+0.001f, 0.f, 1.f );
+		m_pLogo->SetAlpha( m_LogoAlpha );
 	}
 	
 	int logoX, logoY;

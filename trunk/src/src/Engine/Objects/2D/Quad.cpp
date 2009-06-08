@@ -87,7 +87,7 @@ void Quad::Draw()
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	// Paramètres du shader
-	m_Shader->m_pEffect->SetValue( "g_Opacity", (void*)&m_Opacity, sizeof(float) );
+	m_Shader->m_pEffect->SetValue( "g_Color", (void*)&m_Color, sizeof(Color4f) );
 	m_Shader->m_pEffect->SetBool( "g_IsTextured", false );
 	m_Shader->m_pEffect->SetTechnique( "RenderScene" );
 	
@@ -162,7 +162,6 @@ void Quad::dirty_Refresh()
 	{
 		m_Vertices[i].position	= QUAD_DEFAULT_POSITIONT;
 		m_Vertices[i].texCoord	= g_DefaultTexCoord[i];
-		m_Vertices[i].color		= m_Color;
 	}
 
 	// 2. On place v1, v2 et v3 grace à largeur/hauteur

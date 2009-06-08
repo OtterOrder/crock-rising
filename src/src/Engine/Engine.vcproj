@@ -537,6 +537,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\data\shader\default2d.fx"
+						>
+					</File>
+					<File
 						RelativePath="..\..\data\shader\default_normalmap.fx"
 						>
 					</File>

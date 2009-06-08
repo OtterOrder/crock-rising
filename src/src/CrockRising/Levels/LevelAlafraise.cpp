@@ -50,6 +50,9 @@ void LevelAlafraise::Init( void )
 
 	// Logo à la fraise
 	m_pLogo = new Sprite( "alafraiseprod.png" );
+	
+	m_LogoOpacity = 0.f;
+	m_pLogo->SetOpacity( m_LogoOpacity );
 }
 
 /***********************************************************
@@ -62,6 +65,14 @@ void LevelAlafraise::Update( void )
 		// On passe au level suivant dès qu'on appuie sur Espace..
 		Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 		return;
+	}
+
+	
+	// Le logo apparait progressivement..
+	if( m_LogoOpacity < 0.999f )
+	{
+		m_LogoOpacity += 0.001f;
+		m_pLogo->SetOpacity( m_LogoOpacity );
 	}
 	
 	int logoX, logoY;

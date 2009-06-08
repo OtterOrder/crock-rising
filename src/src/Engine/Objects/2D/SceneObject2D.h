@@ -8,6 +8,8 @@
 
 //******************************************************************
 
+class Shader;
+
 class SceneObject2D : public Object2D
 {
 public:
@@ -30,18 +32,22 @@ public:
 
 	// Couleur
 	void SetColor( const Color4f &color );
-	void SetAlpha( float alpha );
 	Color4f GetColor() const;
-	float GetAlpha() const;
+
+	// Opacité
+	void SetOpacity( float opacity );
+	float GetOpacity() const;
 
 	// Priorité (ordre d'affichage)
 	void SetPriority( u8 priority );
 	u8 GetPriority() const;
 
 	// Visibilité (optim)
-	void Show();
-	void Hide();
-	inline bool IsHidden() const { return m_IsHidden; }
+	inline bool IsHidden() const { return m_Opacity == 0.f; }
+
+	// Shader
+	void SetShader( const std::string &shaderName );
+	const std::string& GetShader() const;
 
 	// Compare les priorités, utile pour trier la liste
 	static bool	ComparePriority( const SceneObject2D *pObj1, const SceneObject2D *pObj2 );
@@ -70,8 +76,11 @@ protected:
 	Vertex			*m_Vertices;		// Sommets de l'objet
 	Vector2i		m_HotPoint;			// Point chaud relatif à m_v[0]
 	Color4f			m_Color;			// Couleur de l'objet
+	float			m_Opacity;			// Opacité de l'objet
 	u8				m_Priority;			// Priorité d'affichage de l'objet (0>>255)
-	bool			m_IsHidden;			// Si l'objet est caché
+
+	std::string		m_ShaderName;		// Nom du shader
+	Shader			*m_Shader;			// Shader de l'objet
 
 	// Données pour l'affichage DirectX
 	LPDIRECT3DVERTEXDECLARATION9	m_VertexDeclaration;	// Vertex déclaration

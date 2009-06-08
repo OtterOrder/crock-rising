@@ -1,6 +1,7 @@
 #include	"Quad.h"
 
 #include	"Renderer/Renderer.h"
+#include	"Resources/Shader.h"
 
 //******************************************************************
 
@@ -84,11 +85,22 @@ void Quad::Draw()
 	}
 
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
+
+	// Paramètres du shader
+	m_Shader->m_pEffect->SetValue( "g_Opacity", (void*)&m_Opacity, sizeof(float) );
+	m_Shader->m_pEffect->SetBool( "g_IsTextured", false );
+	m_Shader->m_pEffect->SetTechnique( "RenderScene" );
+	
+	m_Shader->m_pEffect->Begin( 0, 0 );
+	m_Shader->m_pEffect->BeginPass( 0 );
 	
 	// Rendu..
 	pDevice->SetVertexDeclaration( m_VertexDeclaration );
 	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );
 	pDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
+
+	m_Shader->m_pEffect->EndPass();
+	m_Shader->m_pEffect->End();
 }
 
 //**********************************************************

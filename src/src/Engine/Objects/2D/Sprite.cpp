@@ -2,6 +2,7 @@
 
 #include	"Renderer/Renderer.h"
 #include	"Resources/ResourceManager.h"
+#include	"Resources/Shader.h"
 #include	"Resources/Texture.h"
 
 //******************************************************************
@@ -45,17 +46,23 @@ void Sprite::Draw()
 	}
 
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
+
+	// Paramètres du shader
+	m_Shader->m_pEffect->SetValue( "g_Opacity", (void*)&m_Opacity, sizeof(float) );
+	m_Shader->m_pEffect->SetBool( "g_IsTextured", true );
+	m_Shader->m_pEffect->SetTexture( "g_Texture", m_Texture->m_pTex );
+	m_Shader->m_pEffect->SetTechnique( "RenderScene" );
+	
+	m_Shader->m_pEffect->Begin( 0, 0 );
+	m_Shader->m_pEffect->BeginPass( 0 );
 	
 	// Rendu..
-	pDevice->SetTexture( 0, m_Texture->m_pTex );
-
-	// Optim: on n'appelle PAS Quad::Draw, ça reviendrait
-	// au même mais avec un appel de fonction en plus
 	pDevice->SetVertexDeclaration( m_VertexDeclaration );
 	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );
 	pDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
 
-	pDevice->SetTexture( 0, NULL );
+	m_Shader->m_pEffect->EndPass();
+	m_Shader->m_pEffect->End();
 }
 
 //**********************************************************

@@ -2,11 +2,14 @@
 
 #include	<assert.h>
 #include	"Renderer/Renderer.h"
+#include	"Resources/ResourceManager.h"
+#include	"Resources/Shader.h"
 
 //******************************************************************
 
 #define		O2D_DEFAULT_HOT_POINT		(Vector2i( 0, 0 ))
 #define		O2D_DEFAULT_COLOR			(Color4f( 1.f, 1.f, 1.f, 1.f ))
+#define		O2D_DEFAULT_OPACITY			(1.f)
 #define		O2D_DEFAULT_PRIORITY		(0)
 
 //******************************************************************
@@ -25,8 +28,11 @@ SceneObject2D::SceneObject2D()
 	m_Vertices		= NULL;
 	m_HotPoint		= O2D_DEFAULT_HOT_POINT;
 	m_Color			= O2D_DEFAULT_COLOR;
+	m_Opacity		= O2D_DEFAULT_OPACITY;
 	m_Priority		= O2D_DEFAULT_PRIORITY;
-	m_IsHidden		= false;
+
+	m_ShaderName	= "default2d.fx";
+	m_Shader		= NULL;
 
 	m_VertexDeclaration	= NULL;
 	m_VertexBuffer		= NULL;
@@ -106,22 +112,22 @@ Color4f SceneObject2D::GetColor() const
 }
 
 //**********************************************************
-// Change l'alpha (= transparence).
-// @param[in]	alpha : Alpha (0->1)
+// Change l'opacité (= transparence).
+// @param[in]	opacity : Opacité (0->1)
 //**********************************************************
-void SceneObject2D::SetAlpha( float alpha )
+void SceneObject2D::SetOpacity( float opacity )
 {
-	m_Color.a = alpha;
+	m_Opacity = opacity;
 	activate_dirty();
 }
 
 //**********************************************************
-// Donne l'alpha.
-// @return	L'alpha (woohoo)
+// Donne l'opacité.
+// @return	L'opacité (woohoo)
 //**********************************************************
-float SceneObject2D::GetAlpha() const
+float SceneObject2D::GetOpacity() const
 {
-	return m_Color.a;
+	return m_Opacity;
 }
 
 //**********************************************************
@@ -144,19 +150,26 @@ u8 SceneObject2D::GetPriority() const
 }
 
 //**********************************************************
-// Rend l'objet visible.
+// Change le shader appliqué à l'objet.
+// @param[in]	shaderName : Nom de la ressource shader
 //**********************************************************
-void SceneObject2D::Show()
+void SceneObject2D::SetShader( const std::string &shaderName )
 {
-	m_IsHidden = false;
+	if( m_Shader && shaderName != m_ShaderName )
+	{
+		ResourceManager::GetInstance()->Remove<Shader>( m_ShaderName );
+		m_Shader = ResourceManager::GetInstance()->Load<Shader>( shaderName );
+	}
+	m_ShaderName = shaderName;
 }
 
 //**********************************************************
-// Rend l'objet invisible (Draw n'est plus appelée).
+// Donne le shader courant de l'objet.
+// @return	Nom de la ressource shader
 //**********************************************************
-void SceneObject2D::Hide()
+const std::string& SceneObject2D::GetShader() const
 {
-	m_IsHidden = true;
+	return m_ShaderName;
 }
 
 //**********************************************************
@@ -202,6 +215,12 @@ void SceneObject2D::InitDxData()
 			&m_VertexDeclaration
 		);
 	}
+
+	// Shader
+	if( !m_Shader )
+	{
+		m_Shader = ResourceManager::GetInstance()->Load<Shader>( m_ShaderName );
+	}
 }
 
 //**********************************************************
@@ -218,6 +237,11 @@ void SceneObject2D::ClearDxData()
 	{
 		m_VertexDeclaration->Release();
 		m_VertexDeclaration = NULL;
+	}
+	if( m_Shader )
+	{
+		ResourceManager::GetInstance()->Remove<Shader>( m_ShaderName );
+		m_Shader = NULL;
 	}
 }
 

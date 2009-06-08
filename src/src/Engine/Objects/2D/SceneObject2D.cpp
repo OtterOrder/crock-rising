@@ -9,7 +9,6 @@
 
 #define		O2D_DEFAULT_HOT_POINT		(Vector2i( 0, 0 ))
 #define		O2D_DEFAULT_COLOR			(Color4f( 1.f, 1.f, 1.f, 1.f ))
-#define		O2D_DEFAULT_OPACITY			(1.f)
 #define		O2D_DEFAULT_PRIORITY		(0)
 
 //******************************************************************
@@ -28,7 +27,6 @@ SceneObject2D::SceneObject2D()
 	m_Vertices		= NULL;
 	m_HotPoint		= O2D_DEFAULT_HOT_POINT;
 	m_Color			= O2D_DEFAULT_COLOR;
-	m_Opacity		= O2D_DEFAULT_OPACITY;
 	m_Priority		= O2D_DEFAULT_PRIORITY;
 
 	m_ShaderName	= "default2d.fx";
@@ -99,7 +97,6 @@ Vector2i SceneObject2D::GetHotPoint() const
 void SceneObject2D::SetColor( const Color4f &color )
 {
 	m_Color = color;
-	activate_dirty();
 }
 
 //**********************************************************
@@ -112,22 +109,21 @@ Color4f SceneObject2D::GetColor() const
 }
 
 //**********************************************************
-// Change l'opacité (= transparence).
-// @param[in]	opacity : Opacité (0->1)
+// Change la composante alpha de la couleur (= transparence).
+// @param[in]	alpha : Alpha (0->1)
 //**********************************************************
-void SceneObject2D::SetOpacity( float opacity )
+void SceneObject2D::SetAlpha( float alpha )
 {
-	m_Opacity = opacity;
-	activate_dirty();
+	m_Color.a = alpha;
 }
 
 //**********************************************************
-// Donne l'opacité.
-// @return	L'opacité (woohoo)
+// Donne la composante alpha de la couleur.
+// @return	L'alpha (woohoo)
 //**********************************************************
-float SceneObject2D::GetOpacity() const
+float SceneObject2D::GetAlpha() const
 {
-	return m_Opacity;
+	return m_Color.a;
 }
 
 //**********************************************************
@@ -298,13 +294,6 @@ void SceneObject2D::Vertex::GenDeclaration( std::vector<D3DVERTEXELEMENT9> *vEle
 	element.Type	= D3DDECLTYPE_FLOAT2;
 	element.Usage	= D3DDECLUSAGE_TEXCOORD;
 	offset			+= sizeof(Vector2f);
-	vElements		->push_back( element );
-
-	// COLOR (rgba)
-	element.Offset	= offset;
-	element.Type	= D3DDECLTYPE_FLOAT4;
-	element.Usage	= D3DDECLUSAGE_COLOR;
-	offset			+= sizeof(Color4f);
 	vElements		->push_back( element );
 
 	// Element de fin

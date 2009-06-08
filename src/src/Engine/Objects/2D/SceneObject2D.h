@@ -33,17 +33,15 @@ public:
 	// Couleur
 	void SetColor( const Color4f &color );
 	Color4f GetColor() const;
-
-	// Opacité
-	void SetOpacity( float opacity );
-	float GetOpacity() const;
+	void SetAlpha( float alpha );
+	float GetAlpha() const;
 
 	// Priorité (ordre d'affichage)
 	void SetPriority( u8 priority );
 	u8 GetPriority() const;
 
 	// Visibilité (optim)
-	inline bool IsHidden() const { return m_Opacity == 0.f; }
+	inline bool IsHidden() const { return m_Color.a <= 0.f; }
 
 	// Shader
 	void SetShader( const std::string &shaderName );
@@ -64,7 +62,6 @@ protected:
 	{
 		Vector4f	position;	// POSITIONT (xyzrhw)
 		Vector2f	texCoord;	// TEXCOORD (uv)
-		Color4f		color;		// COLOR (rgba)
 
 		// Génére la vertex déclaration correspondante
 		static void GenDeclaration( std::vector<D3DVERTEXELEMENT9> *vElements );
@@ -76,7 +73,6 @@ protected:
 	Vertex			*m_Vertices;		// Sommets de l'objet
 	Vector2i		m_HotPoint;			// Point chaud relatif à m_v[0]
 	Color4f			m_Color;			// Couleur de l'objet
-	float			m_Opacity;			// Opacité de l'objet
 	u8				m_Priority;			// Priorité d'affichage de l'objet (0>>255)
 
 	std::string		m_ShaderName;		// Nom du shader

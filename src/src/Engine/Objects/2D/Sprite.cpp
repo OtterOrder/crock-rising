@@ -48,14 +48,14 @@ void Sprite::Draw()
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	// Paramètres du shader
-	m_Shader->m_pEffect->SetValue( "g_Opacity", (void*)&m_Opacity, sizeof(float) );
+	m_Shader->m_pEffect->SetValue( "g_Color", (void*)&m_Color, sizeof(Color4f) );
 	m_Shader->m_pEffect->SetBool( "g_IsTextured", true );
 	m_Shader->m_pEffect->SetTexture( "g_Texture", m_Texture->m_pTex );
 	m_Shader->m_pEffect->SetTechnique( "RenderScene" );
 	
 	m_Shader->m_pEffect->Begin( 0, 0 );
 	m_Shader->m_pEffect->BeginPass( 0 );
-	
+
 	// Rendu..
 	pDevice->SetVertexDeclaration( m_VertexDeclaration );
 	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );

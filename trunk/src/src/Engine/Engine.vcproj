@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="Engine"
 	ProjectGUID="{7861809D-D7A5-4DFA-A961-B2AB05059F05}"
 	>
@@ -735,11 +735,11 @@
 			Name="Culling"
 			>
 			<File
-				RelativePath=".\Culling.cpp"
+				RelativePath=".\Culling\Culling.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Culling.h"
+				RelativePath=".\Culling\Culling.h"
 				>
 			</File>
 		</Filter>

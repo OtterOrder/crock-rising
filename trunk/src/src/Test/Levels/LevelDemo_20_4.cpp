@@ -52,10 +52,10 @@ void LevelDemo_20_4::Init( void )
 	Renderer::GetInstance()->SetSkybox(s);
 
 	SceneObject* robot = new SceneObject("Robot_Mesh.DAE",D3DXVECTOR3(-30.f,63.f,100.f));
-	robot->InitObject();
+	robot->Init();
 
 	SceneObject * obj0=new SceneObject("canyon1.DAE", D3DXVECTOR3(0.f, -57.f, 0.f));
-	obj0->InitObject();
+	obj0->Init();
 	obj0->GetMaterial()->SetTexture("roche.jpg", Texture::DIFFUSE);
 	obj0->GetMaterial()->SetTexture("roche-normal.jpg", Texture::NORMALMAP);
 
@@ -76,8 +76,7 @@ void LevelDemo_20_4::Init( void )
 	for(int i=0; i<5; i++)
 	{
 		SceneObjectAnimated * obj=new SceneObjectAnimated("Alien_Mesh.DAE", "animBoredom.DAE", D3DXVECTOR3(0.f, -17.f, i*10.f));
-		obj->InitObject();
-		obj->InitDeviceData();
+		obj->Init();
 		obj->GetMaterial()->m_Glossiness=80.f;
 		obj->SetAnimFPS(20.f);
 	}
@@ -85,8 +84,7 @@ void LevelDemo_20_4::Init( void )
 	for(int i=0; i<5; i++)
 	{
 		SceneObjectAnimated * obj=new SceneObjectAnimated("Alien_Mesh.DAE", "animBoredom2.DAE", D3DXVECTOR3(-200.f, -17.f, i*10.f));
-		obj->InitObject();
-		obj->InitDeviceData();
+		obj->Init();
 		obj->GetMaterial()->m_Glossiness=80.f;
 		obj->SetAnimFPS(20.f);
 	}
@@ -94,8 +92,7 @@ void LevelDemo_20_4::Init( void )
 	for(int i=0; i<5; i++)
 	{
 		SceneObjectAnimated * obj=new SceneObjectAnimated("Alien_Mesh.DAE", "AnimFrappeDroite.DAE", D3DXVECTOR3(-100.f, -17.f, i*10.f));
-		obj->InitObject();
-		obj->InitDeviceData();
+		obj->Init();
 		obj->GetMaterial()->m_Glossiness=80.f;
 		obj->SetAnimFPS(20.f);
 	}

@@ -17,6 +17,7 @@ public:
 	void	     setLife ( const int life ) { m_iLife += life; }   // La variable life représentant un bonus ou malus 
 
 	void	     update( );
+	SceneObjectAnimated*	getSceneObjectAnimated()	{	return m_pAnimated;	}
 
 protected:
 	int			 m_iLife;

@@ -50,12 +50,12 @@ void Material::SetTexture(LPDIRECT3DTEXTURE9 Tex, Texture::Type Type)
 	{
 		case Texture::DIFFUSE:
 			m_Maps[Texture::DIFFUSE]=new Texture();
-			m_Maps[Texture::DIFFUSE]->m_pTex=Tex;
+			m_Maps[Texture::DIFFUSE]->SetTexture( Tex );
 			break;
 
 		case Texture::NORMALMAP:
 			m_Maps[Texture::NORMALMAP]=new Texture();
-			m_Maps[Texture::NORMALMAP]->m_pTex=Tex;
+			m_Maps[Texture::NORMALMAP]->SetTexture( Tex );
 			break;
 	}
 
@@ -67,24 +67,24 @@ void Material::SetGraphicalData()
 	// On transmet les textures de l'objet au shader
 	if(m_Maps[Texture::DIFFUSE])
 	{
-		m_pShader->m_pEffect->SetBool("g_UseTex", true);
-		m_pShader->m_pEffect->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->m_pTex);
+		m_pShader->GetEffect()->SetBool("g_UseTex", true);
+		m_pShader->GetEffect()->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->GetTexture());
 
-		m_pShader->m_pEffect->SetBool("g_UseNormalMap", false);
+		m_pShader->GetEffect()->SetBool("g_UseNormalMap", false);
 		if (m_Maps[Texture::NORMALMAP])
 		{
-			m_pShader->m_pEffect->SetBool("g_UseNormalMap", true);
-			m_pShader->m_pEffect->SetTexture("g_NormalMapTexture", m_Maps[Texture::NORMALMAP]->m_pTex);
+			m_pShader->GetEffect()->SetBool("g_UseNormalMap", true);
+			m_pShader->GetEffect()->SetTexture("g_NormalMapTexture", m_Maps[Texture::NORMALMAP]->GetTexture());
 		}
 	}
 	else
-		m_pShader->m_pEffect->SetBool("g_UseTex", false);
+		m_pShader->GetEffect()->SetBool("g_UseTex", false);
 
 	// On transmet les couleurs de l'objet au shader
-	m_pShader->m_pEffect->SetVector("g_ObjectDiffuse", &m_DiffuseColor);
-	m_pShader->m_pEffect->SetVector("g_ObjectAmbient", &m_AmbientColor);
-	m_pShader->m_pEffect->SetVector("g_ObjectSpecular", &m_SpecularColor);
-	m_pShader->m_pEffect->SetValue("g_Glossiness", (void*)&m_Glossiness, sizeof(float));
+	m_pShader->GetEffect()->SetVector("g_ObjectDiffuse", &m_DiffuseColor);
+	m_pShader->GetEffect()->SetVector("g_ObjectAmbient", &m_AmbientColor);
+	m_pShader->GetEffect()->SetVector("g_ObjectSpecular", &m_SpecularColor);
+	m_pShader->GetEffect()->SetValue("g_Glossiness", (void*)&m_Glossiness, sizeof(float));
 
 	// On transmet les lumières au shader
 	std::list< Light* >::iterator it=m_LightList->begin();
@@ -98,7 +98,7 @@ void Material::SetGraphicalData()
 	{
 		m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 		m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-		m_pShader->m_pEffect->SetValue("g_Opacity", (void*)&m_Opacity, sizeof(float));
+		m_pShader->GetEffect()->SetValue("g_Opacity", (void*)&m_Opacity, sizeof(float));
 	}
 
 }
@@ -116,8 +116,8 @@ void Material::SetTextureData()
 {
 	if(m_Maps[Texture::DIFFUSE])
 	{
-		m_pShader->m_pEffect->SetBool("g_UseTex", true);
-		m_pShader->m_pEffect->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->m_pTex);
+		m_pShader->GetEffect()->SetBool("g_UseTex", true);
+		m_pShader->GetEffect()->SetTexture("g_MeshTexture", m_Maps[Texture::DIFFUSE]->GetTexture());
 	}
 
 }

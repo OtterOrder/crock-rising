@@ -17,7 +17,8 @@ Texture::Texture()
 //===========================================================================//
 Texture::~Texture()
 {
-	if( m_pTex ) m_pTex->Release();
+	if( m_pTex )
+		m_pTex->Release();
 }
 
 //===========================================================================//
@@ -55,6 +56,29 @@ ResourceResult Texture::Load( std::string resource, ResourceParam param )
 	
 	// Chargement de la texture
 	return DxLoad( dir + resource );
+}
+
+//===========================================================================//
+// Donne la texture DirectX.
+// @return	Pointeur sur la texture DirectX
+//===========================================================================//
+IDirect3DTexture9* const Texture::GetTexture() const
+{
+	return m_pTex;
+}
+
+//===========================================================================//
+// Change la texture DirectX.
+// @param[in]	pTexture : Pointeur sur la texture DirectX
+//===========================================================================//
+void Texture::SetTexture( IDirect3DTexture9 *pTexture )
+{
+	if( m_pTex )
+	{
+		m_pTex->Release();
+		m_pTex = NULL;
+	}
+	m_pTex = pTexture;
 }
 
 //===========================================================================//

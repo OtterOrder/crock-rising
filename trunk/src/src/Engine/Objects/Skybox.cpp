@@ -121,20 +121,20 @@ void Skybox::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const 
     D3DXMatrixMultiply( &MatWorldView, &m_WorldMatrix, &mView );
 	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
 
-	m_pSkyShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
-	m_pSkyShader->m_pEffect->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
-	m_pSkyShader->m_pEffect->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
+	m_pSkyShader->GetEffect()->SetMatrix( "g_mWorld", &m_WorldMatrix);
+	m_pSkyShader->GetEffect()->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
+	m_pSkyShader->GetEffect()->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
 
 }
 
 
 HRESULT Skybox::Draw()
 {
-	m_pSkyShader->m_pEffect->SetTechnique( "RenderSkybox" );
+	m_pSkyShader->GetEffect()->SetTechnique( "RenderSkybox" );
 
-	m_pSkyShader->m_pEffect->Begin(0, 0);
+	m_pSkyShader->GetEffect()->Begin(0, 0);
 
-	m_pSkyShader->m_pEffect->BeginPass(0);
+	m_pSkyShader->GetEffect()->BeginPass(0);
 
 	if (m_pSkyVB)
 	{
@@ -144,15 +144,15 @@ HRESULT Skybox::Draw()
 			
 			m_pDevice->SetStreamSource(0, m_pSkyVB, 0, sizeof(SKYBOX_VERTEX));
 
-			m_pSkyShader->m_pEffect->SetTexture("g_txEnvMap", m_pEnvTex);
+			m_pSkyShader->GetEffect()->SetTexture("g_txEnvMap", m_pEnvTex);
 
 			m_pDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, i * 4, 2 );
 		}
 	}
 
-	m_pSkyShader->m_pEffect->EndPass();
+	m_pSkyShader->GetEffect()->EndPass();
 
-	m_pSkyShader->m_pEffect->End();
+	m_pSkyShader->GetEffect()->End();
 
 	return S_OK;
 
@@ -161,7 +161,7 @@ HRESULT Skybox::Draw()
 HRESULT Skybox::LostDevice()
 {
 	m_pSkyVB->Release();
-	m_pSkyShader->m_pEffect->Release();
+	m_pSkyShader->GetEffect()->Release();
 	m_pEnvTex->Release();
 
 	return S_OK;

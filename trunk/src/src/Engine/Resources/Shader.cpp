@@ -40,6 +40,14 @@ ResourceResult Shader::Load( std::string resource, ResourceParam param )
 }
 
 //===========================================================================//
+// Donne l'effet du shader.                                                  //
+//===========================================================================//
+ID3DXEffect* const Shader::GetEffect() const
+{
+	return m_pEffect;
+}
+
+//===========================================================================//
 // Changement de paramètres                                                  //
 //===========================================================================//
 // Change un paramètre du shader (float)

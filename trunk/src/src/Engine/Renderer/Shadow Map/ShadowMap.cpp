@@ -20,13 +20,13 @@ void ShadowMap::ResetDevice()
 {
 	m_pDevice->CreateTexture( SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 1, D3DUSAGE_RENDERTARGET, D3DFMT_R32F, D3DPOOL_DEFAULT, &m_pShadowMap, NULL );
 	m_pDevice->CreateDepthStencilSurface( SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, TRUE, &m_pShadowDepth, NULL );
-	m_pShadowShader->m_pEffect->OnResetDevice();
+	m_pShadowShader->GetEffect()->OnResetDevice();
 	m_pShadowMap->GetSurfaceLevel( 0, &m_pShadowSurf );
 }
 
 void ShadowMap::LostDevice()
 {
-	m_pShadowShader->m_pEffect->OnLostDevice();
+	m_pShadowShader->GetEffect()->OnLostDevice();
 	m_pShadowMap->Release();
 	m_pShadowSurf->Release();
 	m_pShadowDepth->Release();
@@ -86,7 +86,7 @@ void ShadowMap::Render()
 	while( scobj != m_ScObjList->end() )
 	{
 		m_mLightViewProj = m_mLightView * m_mLightProj;
-		m_pShadowShader->m_pEffect->SetMatrix( "g_mViewProj", &m_mLightViewProj);
+		m_pShadowShader->GetEffect()->SetMatrix( "g_mViewProj", &m_mLightViewProj);
 		(*scobj)->DrawShadow();
 		++scobj;
 	}

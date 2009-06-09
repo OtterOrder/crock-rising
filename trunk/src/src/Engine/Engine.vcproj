@@ -39,7 +39,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="_WIN32;WIN32;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="_WIN32;WIN32;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -103,7 +103,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
@@ -627,19 +627,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Physics\BoundingBoxLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Physics\BoundingBoxLoader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControledPhysicalCharacter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControledPhysicalCharacter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Physics\Physicalizer.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Physics\Physicalizer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Physics\Stream.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Physics\Stream.h"
 				>
 			</File>
 			<Filter

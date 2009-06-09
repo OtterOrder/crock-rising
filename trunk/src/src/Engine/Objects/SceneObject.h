@@ -1,13 +1,15 @@
-#pragma once
+#ifndef		_SceneObject_H
+#define		_SceneObject_H
+
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#define		NOMINMAX
-
 #include	<map>
 #include	<vector>
 #include	"Object.h"
 #include	"Resources/Texture.h"
+#include "../Physics/BoundingBox.h"
+#include	"ControledPhysicalCharacter.h"
 
 
 //===========================================================================//
@@ -16,10 +18,9 @@ class Texture;
 class Shader;
 class Mesh;
 class Material;
-class BoundingBox;
+//class BoundingBox;
 class Renderer;
 class ShadowMap;
-typedef std::list< int > TEmpList;
 
 //===========================================================================//
 // Classe pour un objet affichable dans la scène 3D                          //
@@ -56,6 +57,17 @@ public:
 	void			SetReceiveShadow(bool value);
 	virtual Mesh*	GetMesh ()	{ return m_pMesh; };
 
+
+	//===========================================================================//
+	// Physique de l'objet														 //
+	//===========================================================================//
+	void SetObjectPhysical( const std::string& physic, Vector3f Pos);
+	void SetControledCharacter( const std::string& physic, Vector3f Pos){}
+	void SetControledCharacter(Vector3f Pos, float radius, float height);
+	void SetControledCharacter(Vector3f Pos, Vector3f size);
+	void SetObjectUnPhysical();
+	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)());
+	void MoveTo( float dispX, float dispY, float dispZ );
 public:
 
 	//===========================================================================//
@@ -72,8 +84,11 @@ public:
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
 	
-	TEmpList* getEmpList(){ return m_EmpList; }
-	void setEmpList(TEmpList* L){ m_EmpList = L; }
+	int  getEmpActor(){ return m_EmpActor; }
+	void setEmpActor(int Emp){ m_EmpActor = Emp; }
+	int  getEmpController(){ return m_EmpController; }
+	void setEmpController(int Emp){ m_EmpController = Emp; }
+
 
 
 protected:
@@ -92,7 +107,9 @@ protected:
 	bool							m_bCastShadow;
 	bool							m_bReceiveShadow;
 	LPD3DXMATRIXSTACK				m_matrixStack;  // Stack de matrice de l'objet
-	TEmpList*						m_EmpList;
+	ListOfBoundingBox				m_ListOfBoundingBox;
+	int								m_EmpActor;
+	int								m_EmpController;
 	
 
 	
@@ -110,3 +127,4 @@ protected:
 	
 };
 
+#endif

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Physics/BoundingBox.h"
+#include "Objects/SceneObject.h"
 #include "Objects/Camera.h"
 
 #include <list>
@@ -12,7 +12,7 @@ public:
 	Culling() {};
 	virtual ~Culling() {};
 
-	virtual void Process (list<SceneObjectPhysics*> _SceneObjectList, Camera* _Camera, list<SceneObjectPhysics*>& _SortedList) =0;
+	virtual void Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, list<SceneObject*>& _SortedList) =0;
 };
 
 /*******************************************************************************************************/
@@ -32,7 +32,7 @@ class Culling3D : public Culling
 public:
 	Culling3D () {};
 
-	virtual void Process (list<SceneObjectPhysics*> _SceneObjectList, Camera* _Camera, list<SceneObjectPhysics*>& _SortedList);
+	virtual void Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, list<SceneObject*>& _SortedList);
 
 private:
 	Plane m_fustrumShape [6];

@@ -1,10 +1,10 @@
 #include "Culling.h"
 
-void Culling3D::Process (list<SceneObjectPhysics*> _SceneObjectList, Camera* _Camera, list<SceneObjectPhysics*>& _SortedList)
+void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, list<SceneObject*>& _SortedList)
 {
 	ComputeCameraFustrumShape(_Camera);
 
-	std::list<SceneObjectPhysics*>::iterator scnObjPhysics = _SceneObjectList.begin();
+	std::list<SceneObject*>::iterator scnObjPhysics = _SceneObjectList.begin();
 	while (scnObjPhysics != _SceneObjectList.end())
 	{
 		// parcours des points de la géometrie englobante

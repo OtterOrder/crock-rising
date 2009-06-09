@@ -377,6 +377,10 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 							}
 						}
 					}
+					else
+					{
+						m_ReglagePivot = D3DXVECTOR3(0.f, 0.f, 0.f);
+					}
 
 				}
 			}

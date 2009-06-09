@@ -4,7 +4,7 @@
 #include	<string>
 #include	<vector>
 
-#include	<TinyXml/tinyxml.h>
+#include	"TinyXml/tinyxml.h"
 #include	"Core/Types/Vector.h"
 
 #include	"Resource.h"

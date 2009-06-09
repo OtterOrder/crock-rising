@@ -17,26 +17,29 @@ public:
 
 	// =========================================================
 	// Méthodes publiques
-	u32 GetDeltaTimeF();
-	u32 GetDeltaTimeE();
-	u32 GetTime();
 
-	float GetDeltaTimeESeconde();
-	float GetDeltaTimeFSeconde();
-	float GetTimeSeconde();
+	u32 GetDeltaTimeEMs();
+	u32 GetDeltaTimeFMs();
+	u32 GetTimeMs();
+	
+	inline float GetDeltaTimeE() { return m_DeltaTimeE; }
+	inline float GetDeltaTimeF() { return m_DeltaTimeF; }
+	float GetTime();
 
-	void ResetDeltaTimeE();
-	void ResetDeltaTimeF();
+	void EndE();	// Fin d'un tour moteur (System)
+	void EndF();	// Fin d'un frame (System)
 
 protected:
 
 	// =========================================================
 	// Données protégées
-	__int64 m_StartDeltaTimeE;
-	__int64 m_StartDeltaTimeF;
-	__int64 m_DeltaTimeF;
-	__int64 m_TimeStart;
-	__int64 m_Freq;
+
+	float			m_Freq;
+	LARGE_INTEGER	m_TimeStart;
+	LARGE_INTEGER	m_StartDeltaTimeE;
+	LARGE_INTEGER	m_StartDeltaTimeF;
+	float			m_DeltaTimeE;
+	float			m_DeltaTimeF;
 
 };
 

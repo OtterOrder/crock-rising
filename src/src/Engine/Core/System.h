@@ -9,6 +9,8 @@
 
 //******************************************************************
 
+class Time;
+
 class System : public Singleton< System >
 {
 	// Indispensable car Singleton doit pouvoir accéder aux
@@ -21,6 +23,8 @@ public:
 	// Méthodes publiques
 
 	int		MainLoop	( void );	// Boucle principale de l'appli
+	
+	Time* const GetTime() const;	// Donne le gestionnaire de temps
 
 	static LRESULT CALLBACK	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );// Fonction de rappel des événements
 
@@ -41,6 +45,7 @@ protected:
 	
 	HINSTANCE		m_Instance;			// Instance de l'application
 	HICON			m_Icon;
+	Time			*m_Time;			// Gestion du temps
 
 };
 

@@ -1,8 +1,12 @@
-#ifndef	_Time_H
-#define	_Time_H
+#ifndef		_TIME_H_
+#define		_TIME_H_
 
 //******************************************************************
-#include <windows.h>
+
+#include	<windows.h>
+#include	"Core/Types/Types.h"
+
+//******************************************************************
 
 class Time
 {
@@ -13,27 +17,28 @@ public:
 
 	// =========================================================
 	// Méthodes publiques
-	unsigned int getDeltaTimeF();
-	unsigned int getDeltaTimeE();
-	unsigned int getTime();
+	u32 GetDeltaTimeF();
+	u32 GetDeltaTimeE();
+	u32 GetTime();
 
-	float getDeltaTimeESeconde()	{	return float(getDeltaTimeE()) / 1000.0f;	}
-	float getDeltaTimeFSeconde()	{	return float(getDeltaTimeF()) / 1000.0f;	}
-	float getTimeSeconde()			{	return float(getTime()) / 1000.0f;			}
+	float GetDeltaTimeESeconde();
+	float GetDeltaTimeFSeconde();
+	float GetTimeSeconde();
 
-	void resetDeltaTimeE()	{	startDeltaTimeE = 0;	}
-	void resetDeltaTimeF()	{	deltaTimeF = 0;	startDeltaTimeF = getDeltaTimeE();	}
+	void ResetDeltaTimeE();
+	void ResetDeltaTimeF();
 
 protected:
 
 	// =========================================================
 	// Données protégées
-	__int64 startDeltaTimeE;
-	__int64 startDeltaTimeF;
-	__int64 deltaTimeF;
-	__int64 timeStart;
-	__int64 freq;
+	__int64 m_StartDeltaTimeE;
+	__int64 m_StartDeltaTimeF;
+	__int64 m_DeltaTimeF;
+	__int64 m_TimeStart;
+	__int64 m_Freq;
+
 };
 
 //******************************************************************
-#endif		// _Time_H
+#endif		// _TIME_H_

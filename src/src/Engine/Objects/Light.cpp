@@ -39,14 +39,14 @@ Light::~Light()
 void Light::SetLightData(Shader * shader)
 {
 	int size=(int)RefList.size();
-	shader->m_pEffect->SetValue( "g_NumLights", (void*)&size, sizeof(int));
-	shader->m_pEffect->SetValue( "g_LightsColor", m_LightsColor, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsSpecular", m_LightsSpecular, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsPosition", m_LightsPosition, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsDirection", m_LightsDirection, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsAttenuation", m_LightsAttenuation, sizeof( float ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsAngle", m_LightsAngle, sizeof( float ) * MAX_LIGHTS );
-	shader->m_pEffect->SetValue( "g_LightsExponent", m_LightsExponent, sizeof( float ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_NumLights", (void*)&size, sizeof(int));
+	shader->GetEffect()->SetValue( "g_LightsColor", m_LightsColor, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsSpecular", m_LightsSpecular, sizeof( D3DXVECTOR4 ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsPosition", m_LightsPosition, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsDirection", m_LightsDirection, sizeof( D3DXVECTOR3 ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsAttenuation", m_LightsAttenuation, sizeof( float ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsAngle", m_LightsAngle, sizeof( float ) * MAX_LIGHTS );
+	shader->GetEffect()->SetValue( "g_LightsExponent", m_LightsExponent, sizeof( float ) * MAX_LIGHTS );
 
 }
 

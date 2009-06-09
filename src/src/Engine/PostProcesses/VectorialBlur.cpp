@@ -26,7 +26,7 @@ void VectorialBlur::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
 {
 	if (!m_pShader)
 		return;
-	m_pShader->m_pEffect->OnResetDevice();
+	m_pShader->GetEffect()->OnResetDevice();
 	
 	m_pRenderQuad = new Quad (10, 10, Color4f(0.f, 1.f, 0.f, 1.f));
 	Object2D::RefList.remove(m_pRenderQuad);
@@ -37,7 +37,7 @@ void VectorialBlur::Release ()
 {
 	if (!m_pShader)
 		return;
-	m_pShader->m_pEffect->OnLostDevice();
+	m_pShader->GetEffect()->OnLostDevice();
 	
 	if(m_pRenderQuad)
 	{
@@ -69,21 +69,21 @@ void VectorialBlur::Apply(list<SceneObject*>* m_pObjectList)
 	PostRenderer::GetInstance()->SetRenderTarget(m_pBlurredSurface);
 
 	// Parameter shader
-	m_pShader->m_pEffect->SetTexture( "g_TextureToBlur",	m_pTextureToBlur);
-	m_pShader->m_pEffect->SetTexture( "g_VectorsTexture",	m_pVectorsTexture);
+	m_pShader->GetEffect()->SetTexture( "g_TextureToBlur",	m_pTextureToBlur);
+	m_pShader->GetEffect()->SetTexture( "g_VectorsTexture",	m_pVectorsTexture);
 
 	// Apply the shader
-	m_pShader->m_pEffect->SetTechnique( "VectorialBlur" );
+	m_pShader->GetEffect()->SetTechnique( "VectorialBlur" );
 
-	m_pShader->m_pEffect->Begin(0, 0);
+	m_pShader->GetEffect()->Begin(0, 0);
 
-	m_pShader->m_pEffect->BeginPass(0);
+	m_pShader->GetEffect()->BeginPass(0);
 
 	m_pRenderQuad->Draw();
 
-	m_pShader->m_pEffect->EndPass();
+	m_pShader->GetEffect()->EndPass();
 
-	m_pShader->m_pEffect->End();
+	m_pShader->GetEffect()->End();
 
 	// Restore Render target
 	PostRenderer::GetInstance()->SetRenderTarget(m_pCurrentRenderTarget);

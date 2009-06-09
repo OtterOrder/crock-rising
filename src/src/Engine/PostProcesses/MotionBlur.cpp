@@ -30,7 +30,7 @@ void MotionBlur::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
 
 	if (!m_pShader)
 		return;
-	m_pShader->m_pEffect->OnResetDevice();
+	m_pShader->GetEffect()->OnResetDevice();
 
 	VectorialBlur::GetInstance()->Create();
 }
@@ -46,7 +46,7 @@ void MotionBlur::Release ()
 
 	if (!m_pShader)
 		return;
-	m_pShader->m_pEffect->OnLostDevice();
+	m_pShader->GetEffect()->OnLostDevice();
 
 	VectorialBlur::GetInstance()->Release();
 }
@@ -105,17 +105,17 @@ void MotionBlur::RenderVelocity (list<SceneObject*>* _pObjectList)
 		D3DXMatrixMultiply(&WorldViewProj		,(*scobj)->GetWorldMatrix(), &m_ViewProj);
 		D3DXMatrixMultiply(&LastWorldViewProj	,(*scobj)->GetWorldMatrix(), &m_LastViewProj);
 
-		m_pShader->m_pEffect->SetMatrix( "g_mWorldViewProjection",	&WorldViewProj);
-		m_pShader->m_pEffect->SetMatrix( "g_mWorldViewProjLast",	&LastWorldViewProj);
+		m_pShader->GetEffect()->SetMatrix( "g_mWorldViewProjection",	&WorldViewProj);
+		m_pShader->GetEffect()->SetMatrix( "g_mWorldViewProjLast",	&LastWorldViewProj);
 
 		// Draw Objects
 		pDevice->SetVertexDeclaration(pMesh->m_decl);
 
-		m_pShader->m_pEffect->SetTechnique( "RenderVelocity" );
+		m_pShader->GetEffect()->SetTechnique( "RenderVelocity" );
 
-		m_pShader->m_pEffect->Begin(0, 0);
+		m_pShader->GetEffect()->Begin(0, 0);
 
-		m_pShader->m_pEffect->BeginPass(0);
+		m_pShader->GetEffect()->BeginPass(0);
 
 		if (pMesh->m_pVB)
 		{
@@ -126,9 +126,9 @@ void MotionBlur::RenderVelocity (list<SceneObject*>* _pObjectList)
 			pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, pMesh->m_iNbVertices, 0, pMesh->m_iNbIndex/3); 
 		}
 
-		m_pShader->m_pEffect->EndPass();
+		m_pShader->GetEffect()->EndPass();
 
-		m_pShader->m_pEffect->End();
+		m_pShader->GetEffect()->End();
 
 		scobj ++;
 	}

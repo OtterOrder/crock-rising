@@ -128,17 +128,17 @@ void SceneObject::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj)
 	D3DXMatrixMultiply(&MatWorldView, &m_WorldMatrix, view);
 	D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
 
-	m_pShader->m_pEffect->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
-	m_pShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
-	m_pShader->m_pEffect->SetMatrix( "g_mView", view);
+	m_pShader->GetEffect()->SetMatrix( "g_mWorldViewProjection", &mWorldViewProjection);
+	m_pShader->GetEffect()->SetMatrix( "g_mWorld", &m_WorldMatrix);
+	m_pShader->GetEffect()->SetMatrix( "g_mView", view);
 	D3DXMATRIXA16 mWorldView = (*m_WorldMatrix) * (*view);
-	m_pShader->m_pEffect->SetMatrix( "g_mWorldView", &MatWorldView);
+	m_pShader->GetEffect()->SetMatrix( "g_mWorldView", &MatWorldView);
 }
 
 void SceneObject::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos)
 {
 	SceneObject::SetTransform(view, proj);
-	m_pShader->m_pEffect->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
+	m_pShader->GetEffect()->SetValue("g_vCamPos", CamPos, sizeof(D3DXVECTOR3));
 }
 
 void SceneObject::SetTransform(const D3DXMATRIX* world)
@@ -170,7 +170,7 @@ void SceneObject::BerSetTransform( const D3DXMATRIX* world )
 void SceneObject::InitDeviceData()
 {
 	m_pMesh->FillD3DBuffers();
-	m_pShader->m_pEffect->OnResetDevice();
+	m_pShader->GetEffect()->OnResetDevice();
 }
 
 void SceneObject::Draw()
@@ -181,19 +181,19 @@ void SceneObject::Draw()
 
 	if(m_bReceiveShadow)
 	{
-		m_pShader->m_pEffect->SetTechnique( "RenderSceneShadow" );
-		m_pShader->m_pEffect->SetTexture("g_TexShadowMap", Renderer::GetInstance()->GetShadowMap()->GetTexShadowMap());
+		m_pShader->GetEffect()->SetTechnique( "RenderSceneShadow" );
+		m_pShader->GetEffect()->SetTexture("g_TexShadowMap", Renderer::GetInstance()->GetShadowMap()->GetTexShadowMap());
 		D3DXMATRIX LightViewProj=m_WorldMatrix*Renderer::GetInstance()->GetShadowMap()->GetLightViewProjMatrix();
 		D3DXMATRIX TexProj=LightViewProj*Renderer::GetInstance()->GetShadowMap()->GetTexProjMatrix();
-		m_pShader->m_pEffect->SetMatrix("g_mTexProj", &TexProj);
-		m_pShader->m_pEffect->SetMatrix("g_mLightViewProj", &LightViewProj);
+		m_pShader->GetEffect()->SetMatrix("g_mTexProj", &TexProj);
+		m_pShader->GetEffect()->SetMatrix("g_mLightViewProj", &LightViewProj);
 	}
 	else
-		m_pShader->m_pEffect->SetTechnique( "RenderScene" );
+		m_pShader->GetEffect()->SetTechnique( "RenderScene" );
 
-	m_pShader->m_pEffect->Begin(0, 0);
+	m_pShader->GetEffect()->Begin(0, 0);
 
-	m_pShader->m_pEffect->BeginPass(0);
+	m_pShader->GetEffect()->BeginPass(0);
 
 	if (m_pMesh->m_pVB)
 	{
@@ -204,9 +204,9 @@ void SceneObject::Draw()
 			m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3); 
 	}
 
-	m_pShader->m_pEffect->EndPass();
+	m_pShader->GetEffect()->EndPass();
 
-	m_pShader->m_pEffect->End();
+	m_pShader->GetEffect()->End();
 
 	m_pMaterial->StopGraphicalData();
 
@@ -219,13 +219,13 @@ void SceneObject::DrawShadow()
 
 	m_pShadowShader=Renderer::GetInstance()->GetShadowMap()->GetDepthShader();
 
-	m_pShadowShader->m_pEffect->SetMatrix( "g_mWorld", &m_WorldMatrix);
+	m_pShadowShader->GetEffect()->SetMatrix( "g_mWorld", &m_WorldMatrix);
 
-	m_pShadowShader->m_pEffect->SetTechnique( "RenderShadow" );
+	m_pShadowShader->GetEffect()->SetTechnique( "RenderShadow" );
 
-	m_pShadowShader->m_pEffect->Begin(0, 0);
+	m_pShadowShader->GetEffect()->Begin(0, 0);
 
-	m_pShadowShader->m_pEffect->BeginPass(0);
+	m_pShadowShader->GetEffect()->BeginPass(0);
 
 	m_pDevice->SetVertexDeclaration(m_pMesh->m_decl);
 
@@ -238,17 +238,17 @@ void SceneObject::DrawShadow()
 		m_pDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pMesh->m_iNbVertices, 0, m_pMesh->m_iNbIndex/3);
 	}
 
-	m_pShadowShader->m_pEffect->CommitChanges();
+	m_pShadowShader->GetEffect()->CommitChanges();
 
-	m_pShadowShader->m_pEffect->EndPass();
+	m_pShadowShader->GetEffect()->EndPass();
 
-	m_pShadowShader->m_pEffect->End();
+	m_pShadowShader->GetEffect()->End();
 }
 
 void SceneObject::DeleteDeviceData()
 {
 	m_pMesh->ReleaseD3DBuffers();
-	m_pShader->m_pEffect->OnLostDevice();
+	m_pShader->GetEffect()->OnLostDevice();
 }
 
 void SceneObject::DeleteData()

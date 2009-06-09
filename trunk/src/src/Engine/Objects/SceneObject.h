@@ -8,8 +8,8 @@
 #include	<vector>
 #include	"Object.h"
 #include	"Resources/Texture.h"
-#include "../Physics/BoundingBox.h"
-#include	"ControledPhysicalCharacter.h"
+#include	"../Physics/BoundingBox.h"
+#include	"../Physics/ControledPhysicalCharacter.h"
 
 
 //===========================================================================//

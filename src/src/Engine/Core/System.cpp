@@ -100,9 +100,10 @@ int System::MainLoop( void )
 			if( m_Time->GetDeltaTimeF() >= nbFps ) 
 			{
 				physX->RunPhysics();
-				m_Time->ResetDeltaTimeF();    // Reset du temps entre les 2 frames
+				m_Time->EndF();    // Reset du temps entre les 2 frames
 			}
 		}
+		m_Time->EndE();
 	}
 
 	// Destruction des singletons

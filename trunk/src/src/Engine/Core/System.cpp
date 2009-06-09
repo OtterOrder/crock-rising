@@ -7,7 +7,7 @@
 #include	"Game/Game.h"
 #include	"Physics/Physicalizer.h"
 #include	"Sound/SoundSystem.h"
-#include	"Time.h"
+#include	"Core/Time.h"
 
 #define FPS_MAX 80
 //******************************************************************
@@ -20,6 +20,9 @@ System::System( void )
 	// Création du device, initialisation D3D, création de la fenêtre
 	if( FAILED( InitWindow() ) )
 		MessageBox(NULL, "Initialisation de la fenetre impossible", "Erreur System", MB_ICONERROR);
+
+	// Gestion du temps
+	m_Time = new Time;
 }
 
 /***********************************************************
@@ -60,8 +63,7 @@ int System::MainLoop( void )
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 	
-	Time            *time = new Time();
-	unsigned int    nbFps = 1000 / FPS_MAX;
+	u32 nbFps = 1000 / FPS_MAX;
 	
 	// Boucle principale..
 	while( msg.message != WM_QUIT )
@@ -95,10 +97,10 @@ int System::MainLoop( void )
 			//soundSystem->Update();
 
 			//Update de physX				
-			if (time->getDeltaTimeF() >= nbFps) 
+			if( m_Time->GetDeltaTimeF() >= nbFps ) 
 			{
 				physX->RunPhysics();
-				time->resetDeltaTimeF();    // Reset du temps entre les 2 frames
+				m_Time->ResetDeltaTimeF();    // Reset du temps entre les 2 frames
 			}
 		}
 	}
@@ -114,6 +116,14 @@ int System::MainLoop( void )
 	return (int)msg.wParam;
 }
 
+/***********************************************************
+ * Donne le gestionnaire de temps.
+ * @return	Pointeur sur le gestionnaire de temps
+ **********************************************************/
+Time* const System::GetTime() const
+{
+	return m_Time;
+}
 
 /***********************************************************
  * Fonction de rappel des événements.

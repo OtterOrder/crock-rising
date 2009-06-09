@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)src\CrockRising&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -143,12 +144,68 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="pathFind"
+			>
+			<File
+				RelativePath=".\AIMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AIMap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\AStar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AStar.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\AIManager.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\AIManager.h"
+			>
+		</File>
+		<File
+			RelativePath=".\AIRess.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AIRess.h"
+			>
+		</File>
+		<File
+			RelativePath="..\CrockRising\Characters\Enemy.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\CrockRising\Characters\Enemy.h"
+			>
+		</File>
+		<File
+			RelativePath=".\group.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\group.h"
+			>
+		</File>
+		<File
+			RelativePath=".\members.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\members.h"
+			>
+		</File>
+		<File
+			RelativePath=".\states.h"
 			>
 		</File>
 	</Files>

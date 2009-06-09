@@ -6,7 +6,7 @@
 #include "Resources/Mesh.h"
 #include "Resources/Material.h"
 #include "Renderer/Shadow Map/ShadowMap.h"
-#include "../Physics/BoundingBox.h"
+#include "../Physics/Physicalizer.h"
 
 using namespace std;
 
@@ -50,7 +50,8 @@ SceneObject::SceneObject(const std::string& mesh,
 	m_WorldMatrix._22=0; m_WorldMatrix._23=1;
 	m_WorldMatrix._32=1; m_WorldMatrix._33=0;
 
-	m_EmpList = new TEmpList;
+	m_EmpActor = -1;
+	m_EmpController = -1;
 
 	m_bCastShadow = false;
 	m_bReceiveShadow = false;
@@ -58,7 +59,7 @@ SceneObject::SceneObject(const std::string& mesh,
 
 SceneObject::~SceneObject()
 {
-	m_EmpList->clear(); // suppression dans la liste
+	m_ListOfBoundingBox.ReleaseList(); // suppression dans la liste
 	if(m_pMaterial)
 		delete m_pMaterial;
 }
@@ -82,6 +83,75 @@ void SceneObject::SetShader(const std::string& strShader)
 		m_strShader=strShader;
 		m_pShader=ResourceManager::GetInstance()->Load<Shader>(strShader.c_str());
 		m_pMaterial->SetShader(m_pShader);
+	}
+}
+
+//===========================================================================//
+// Physique de l'objet														 //
+//===========================================================================//
+void SceneObject::SetObjectPhysical( const std::string& physic, Vector3f Pos )
+{
+	BoundingBoxLoader Loader;
+	if( Loader.Load(physic) == RES_SUCCEED)
+	{
+		//Fonctions liées aux triggers, à remplir a la création du sceneobj
+
+		m_ListOfBoundingBox.List = Loader.getvDynamicBody();
+		m_ListOfBoundingBox.WorldPos = Pos - m_pMesh->m_ReglagePivot;
+		m_ListOfBoundingBox.MajPivot(m_pMesh);
+
+		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox, false );
+	}
+}
+
+void SceneObject::SetControledCharacter(Vector3f Pos, float radius, float height)
+{
+	m_EmpController = CreateControlledCapsule(Pos, radius, height);
+}
+
+void SceneObject::SetControledCharacter(Vector3f Pos, Vector3f size)
+{
+	m_EmpController = CreateControlledBox(Pos, size);
+}
+
+void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)() )
+{
+	BoundingBoxLoader Loader;
+	ListOfBoundingBox BB_List;
+	if( Loader.Load(physic) == RES_SUCCEED)
+	{
+		m_ListOfBoundingBox.List = Loader.getvDynamicBody();
+		m_ListOfBoundingBox.WorldPos = Pos - m_pMesh->m_ReglagePivot;
+		m_ListOfBoundingBox.MajPivot(m_pMesh);
+		m_ListOfBoundingBox.List[0]->OnEnterFunc= OnEnterFunc; 
+		m_ListOfBoundingBox.List[0]->OnStayFunc = OnStayFunc; 
+		m_ListOfBoundingBox.List[0]->OnLeaveFunc= OnLeaveFunc; 
+
+		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox, true );
+	}
+}
+
+
+void SceneObject::SetObjectUnPhysical()
+{
+	//Les objets ne sont pas retirés de la simulation physique, a voir.
+	m_EmpActor = -1;
+	m_EmpController = -1;
+}
+
+void SceneObject::MoveTo( float dispX, float dispY, float dispZ )
+{
+	if(m_EmpController >= 0)
+	{
+		Physicalizer* physXInstance = Physicalizer::GetInstance();
+		NxController* pControler = physXInstance->getControllerManager()->getController( m_EmpController );
+		assert( pControler );
+
+		NxU32 collisionFlags; 
+		NxF32 minDistance = 0.001f;
+		NxVec3 disp( dispX, dispY, dispZ ); 
+
+		pControler->move( disp, Physicalizer::MASK_OTHER, minDistance, collisionFlags );
 	}
 }
 

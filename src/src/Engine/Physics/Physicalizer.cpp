@@ -3,7 +3,7 @@
 //
 // ===============================================================================
 #include "Physicalizer.h"
-#include	"Trigger/Trigger.h"
+#include "Trigger/Trigger.h"
 
 extern TriggerReport gTriggerReport;
 
@@ -33,13 +33,7 @@ bool Physicalizer::InitPhysX()
 	//m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, m_AdvancedParam.VisualizeCollisionShape);
 	//m_PhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_SLEEP,	  m_AdvancedParam.VisualizeClothSleep);
 
-
-	m_Cooking = NxGetCookingLib( NX_PHYSICS_SDK_VERSION );
-	if( m_Cooking == NULL )
-	{
-		assert( m_Cooking );
-		return false;
-	}
+	connectToVRD();
 
     NxSceneDesc sceneDesc;
  	sceneDesc.simType				= NX_SIMULATION_HW; //avec carte accé PhysX
@@ -65,12 +59,12 @@ bool Physicalizer::InitPhysX()
 	defaultMaterial->setStaticFriction(0.5f);
 	defaultMaterial->setDynamicFriction(0.5f);
 
-	NxPlaneShapeDesc planeDesc;
+	/*NxPlaneShapeDesc planeDesc;
 	planeDesc.group = GROUP_STATIC;
 	//planeDesc.d = -25.f;
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&planeDesc);
-	m_Scene->createActor(actorDesc);
+	m_Scene->createActor(actorDesc);*/
 
 	// Récupération du temps
 	UpdateTime();
@@ -130,6 +124,19 @@ PhysXResult Physicalizer::RunPhysics()
 	return PHYSX_FAILED;
 }
 
+void Physicalizer::connectToVRD()
+{ 	
+#if defined( _DEBUG ) && defined( CONNECT_VRD )
+	m_PhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect( "localhost");
+
+	bool connectToVisualRemoteDebugger;
+	if( (connectToVisualRemoteDebugger = m_PhysicsSDK->getFoundationSDK().getRemoteDebugger()->isConnected())==0 )
+	{
+		assert( connectToVisualRemoteDebugger );
+	}
+#endif
+}
+
 PhysXResult Physicalizer::DoTransform()
 {	//matrice obtenue de PhysX
 	std::list< SceneObject* > List = SceneObject::RefList;
@@ -138,42 +145,61 @@ PhysXResult Physicalizer::DoTransform()
 
 	while( it != List.end() )
 	{
-		SceneObjectPhysics* aSObj = (SceneObjectPhysics*)*it; 
-		if (IsPhysicable(aSObj))
-		{
-			int emp = (*aSObj->getEmpList()->begin());
-			if(emp < 0) return PHYSX_FAILED;
+		SceneObject* aSObj = (SceneObject*)*it; 
+		PhysicalObjectType type = IsPhysical(aSObj);
+		switch (type)
+		{		
+			case ACTOR :
+				{
+					int emp = aSObj->getEmpActor();
+					if(emp < 0) return PHYSX_FAILED;
 
-			NxActor** ac =  getScene()->getActors(); //La liste des acteurs
-			NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
+					NxActor** ac =  getScene()->getActors(); //La liste des acteurs
+					NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
+					D3DXMATRIX WorldMat;
+					pac->getGlobalPose().getColumnMajor44( WorldMat );
+					//aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					break;
+				}
+			case CONTROLLER :
+				{
+					int emp = aSObj->getEmpController();
+					if(emp < 0) return PHYSX_FAILED;
 
-			D3DXMATRIX WorldMat;
-			pac->getGlobalPose().getColumnMajor44( WorldMat );
-			aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					m_ControllerManager->updateControllers();
+					NxController* pController = m_ControllerManager->getController( emp );
+					NxExtendedVec3 pos = pController->getPosition();
+
+
+					NxActor** ac =  getScene()->getActors(); //La liste des acteurs
+					NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
+					D3DXMATRIX WorldMat;
+					D3DXMatrixTranslation(&WorldMat, (float)pos.x, (float)pos.y, (float)pos.z);
+
+					//aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					break;
+				}
+			default : break;
 		}
 		++it;
 	}
 	return PHYSX_SUCCEED;
 }
 
-PhysXResult Physicalizer::SetPhysicable( SceneObject* SceObj, BoundingBox* bb )
-{
-	if(SceObj) //Le SceneObject est valide, OK
-	{
-		if(bb) //La BB existe donc on l'applique
-			SceObj->getEmpList()->push_front( bb->getEmplacement() );
-		else //Elle ne l'est pas donc on retire le SceneObject de la liste si il y est.
-			if(IsPhysicable(SceObj))
-				SceObj->getEmpList()->clear();
-
-		return PHYSX_SUCCEED;
-	}
-	return PHYSX_FAILED; // Le SceneObject n'est pas bon, probleme 
-}
-
-bool Physicalizer::IsPhysicable( SceneObject* SceObj )
+PhysicalObjectType Physicalizer::IsPhysical( SceneObject* SceObj )
 {
 	if(SceObj) 
-		return !SceObj->getEmpList()->empty();
-	return false;
+	{
+		if(SceObj->getEmpActor() >= 0) return ACTOR;
+		if(SceObj->getEmpController() >= 0) return CONTROLLER;
+	}
+	return NOPHYSICAL;
+}
+
+NxScene* GetPhysicScene()
+{
+	Physicalizer* physInstance = Physicalizer::GetInstance();
+	return physInstance->getScene();
 }

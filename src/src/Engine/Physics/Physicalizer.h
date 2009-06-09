@@ -4,7 +4,6 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
-#define NOMINMAX
 #include	<windows.h>
 #include	<stdio.h>
 #include	<crtdbg.h>
@@ -18,6 +17,7 @@
 #include	"../Objects/SceneObject.h"
 #include	"BoundingBox.h"
 
+#define CONNECT_VRD
 
 
 enum PhysXResult
@@ -30,7 +30,7 @@ enum PhysXResult
 //afin d'avoir une utilisation plus intuitive de la classe. 
 struct AdvancedPhysXParam
 {
-	AdvancedPhysXParam(NxReal aSkinWidth = 0.025f,			 // [0, inf[
+	AdvancedPhysXParam(NxReal aSkinWidth = 0.005f,			 // [0, inf[
 						NxReal aVisualisationScale = 1,		 // [0 / 1]
 						NxReal aVisualizeCollisionShape = 1, // [0 / 1]
 						NxReal aVisualizeActorAxe = 1,		 // [0 / 1]
@@ -51,11 +51,12 @@ struct AdvancedPhysXParam
 	NxReal VisualizeClothSleep;
 };
 
+NxScene* GetPhysicScene();
 
 class Physicalizer : public Singleton< Physicalizer >
 {
 	friend class Singleton< Physicalizer >;
-	friend class BoundingBox;
+	//friend class BoundingBox;
 	friend class ControledBB;
 	friend class PhysicsMesh;
 
@@ -66,20 +67,22 @@ class Physicalizer : public Singleton< Physicalizer >
 	NxReal				m_DeltaTime		;
 
 	NxControllerManager*		m_ControllerManager;
-	NxCookingInterface*			m_Cooking;
 	NxUserAllocatorDefault*		m_Allocator;
 
 
 public:
 	enum GroupCollision
 	{
-		GROUP_STATIC = 0,
-		GROUP_DYNAMIQUE = 1,
+		GROUP_NONPHYSICS = 0,
+		GROUP_STATIC = 1,
+		GROUP_DYNAMIQUE = 2,
+		GROUP_WEAPON = 3,
 
 		MASK_STATIC			= 1 << GROUP_STATIC,
 		MASK_DYNAMIQUE		= 1 << GROUP_DYNAMIQUE,
+		MASK_WEAPON			= 1 << GROUP_WEAPON,
 
-		MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE
+		MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE | MASK_WEAPON
 
 	};
 
@@ -91,9 +94,9 @@ public:
 	void GetPhysicsResults(); //Doit être avant chaque rendu pour la mise à jour des matrices.
 	PhysXResult DoTransform(); //Applique les transformations à tous la liste des SceneObject.
 	PhysXResult RunPhysics(); //Permet de récupérer le résultat de la physique, en appelant les fonctions dans le bon ordre
+	void connectToVRD();		//Fonction d'aide au debug, lancer le remote debuger de physX et exécuter CR.
 
-	PhysXResult SetPhysicable(SceneObject* SceObj, BoundingBox* bb = NULL); //Applique une BB au SO, si la BB est nulle, on retire la physique du SO
-	bool IsPhysicable(SceneObject* SceObj);
+	PhysicalObjectType IsPhysical(SceneObject* SceObj);
 
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //
@@ -102,6 +105,7 @@ public:
 	inline NxScene*			getScene()			{ return m_Scene;			}	
 	inline Vector3f			getGravity()		{ return m_Gravity;			}	
 	inline AdvancedPhysXParam	getAdvancedParam()	{ return m_AdvancedParam ;  }
+	inline NxControllerManager* getControllerManager(){ return m_ControllerManager; }
 
 	///////////////////////////////////////////////////////////////////////////
 	// Modificateurs															 //

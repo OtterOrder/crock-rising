@@ -3,8 +3,6 @@
 
 #include	<list>
 
-#define	NOMINMAX
-
 #include	"NxPhysics.h"
 #include	"NxBoxController.h"
 #include	"NxCapsuleController.h"
@@ -12,19 +10,26 @@
 
 #include	"Resources/Mesh.h"
 #include	"Trigger/UserData.h"
-#include	"Objects/SceneObject.h"
-#include	"Objects/SceneObjectAnimated.h"
 #include	"BoundingBoxLoader.h"
 
-/*
-enum ShapeType
+struct ListOfBoundingBox
 {
-	BOX,
-	SPHERE,
-	CAPSULE,
-	PLAN,
-	TRIGGER
-};*/
+	std::vector<PhysicBody*>	List;
+	Vector3f					WorldPos;
+	//Rotate?
+	std::vector<NxShapeDesc*>	ShapeRefList; //Ne servira qu'à la destruction.
+
+	void SetTriggerFuncs( void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)());
+	void MajPivot(Mesh* pMesh);
+	void ReleaseList();
+};
+
+enum PhysicalObjectType
+{
+	ACTOR,
+	CONTROLLER,
+	NOPHYSICAL
+};
 
 NxVec3 VecToNxVec(const Vector3f V);
 void Normalize(Vector3f &V);
@@ -94,199 +99,39 @@ struct TriggerDescription : public ShapeDescription
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// Structure material comprenant toutes les valeurs utiles de NxMaterials //
-////////////////////////////////////////////////////////////////////////////
-struct MaterialPhysics
-{
-	MaterialPhysics(float aRestitution = 0.5,
-		     float aStaticFriction = 0.5,
-			 float aDynamicFriction = 0.5)
-	{
-		Restitution = aRestitution;
-		StaticFriction = aStaticFriction;
-		DynamicFriction = aDynamicFriction;
-	}
-	~MaterialPhysics(){}
 
-	float Restitution;
-	float StaticFriction;
-	float DynamicFriction;
-
-	MaterialPhysics& operator =(const MaterialPhysics& m)
-	{
-		Restitution = m.Restitution;
-		StaticFriction = m.StaticFriction;
-		DynamicFriction = m.DynamicFriction;
-		return *this;
-	}
-};
-
-class ControllerHitReport : public NxUserControllerHitReport
-{
-public:
-	virtual NxControllerAction  onShapeHit(const NxControllerShapeHit& hit)
-	{
-		if(hit.shape)
-		{
-			NxCollisionGroup group = hit.shape->getGroup();
-			if( group /*!= 0*/ /*Physicalizer::GROUP_STATIC*/ )
-			{
-				NxActor& actor = hit.shape->getActor();
-				if(actor.isDynamic())
-				{
-					if(hit.dir.y==0.0f)
-					{
-						NxF32 force = 200.0f;
-						NxF32 coeff = actor.getMass() * hit.length * force;
-						actor.addForceAtLocalPos( hit.dir*coeff, NxVec3(0,0,0), NX_IMPULSE );
-					}
-				}
-			}
-			/*else
-			{
-				NxActor& actor = hit.shape->getActor();
-			}*/
-		}
-
-		return NX_ACTION_NONE;
-	}
-
-	virtual NxControllerAction  onControllerHit(const NxControllersHit& hit)
-	{ 
-		return NX_ACTION_NONE; 
-	}
-
-};
 
 /////////////////////////////////////////////////////////
 // Structure BoundingBox qui englobera les objets.	   //
 // Elles seront fournies au moteur physique.		   //
+// DEPRECATED										   //
 /////////////////////////////////////////////////////////
-class BoundingBox
-{
-	bool			m_bDebugMode; //Si vrai, les bounding box se dessinent pour debugger.
-	MaterialPhysics		m_Mat; 
-	int				m_iEmplacement;
-	//What else? Groupe de collision?
+// class BoundingBox
+// {
+// 	//What else? Groupe de collision?
+// 
+// 	void CreateBox( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger );
+// 	void CreateSphere( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger  );
+// 	void CreateCapsule( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger  );
+// 	void FinalizeActor(NxActorDesc ActorDesc, ListOfBoundingBox List, bool IsTrigger);
+// 	NxMaterialIndex GenMaterial( float restitution, float staticFriction, float dynamiqueFriction );
+// 
+// public:
+// 	BoundingBox(){}																									//TRIGGER
+// 	BoundingBox(ShapeDescription* Desc);
+// 	BoundingBox(ListOfBoundingBox &BBList, bool IsTrigger);
+// 	BoundingBox& operator =(const BoundingBox& bb);
+// 
+// 	~BoundingBox(){}
+// };
 
-public:
-	BoundingBox(){}																									//TRIGGER
-	BoundingBox(ShapeDescription* Desc);
-	BoundingBox& operator =(const BoundingBox& bb);
+int CreateBoundingBox(ShapeDescription* Desc);
+int CreateBoundingBox(ListOfBoundingBox &BBList, bool IsTrigger = false);
 
-	~BoundingBox(){}
-
-	bool IsInCollision(const BoundingBox &po);
-
-	bool getDebugMode	() const { return m_bDebugMode; }
-	MaterialPhysics getMat		() const { return m_Mat; }
-	int getEmplacement	() const { return m_iEmplacement; }
-
-	void setDebugMode	(bool DebugMode) { m_bDebugMode = DebugMode; }
-	void setMat			(MaterialPhysics Mat)	 { m_Mat = Mat; }
-	void setEmplacement	(int Emp)		 { m_iEmplacement = Emp; }
-};
-
-
-class SceneObjectPhysics : public SceneObject, public BoundingBox
-{
-	std::string m_PhysicPath;
-	D3DXVECTOR3 m_PhysicPosition;
-public:
-	void	InitObject();
-
-	SceneObjectPhysics(const std::string& mesh, const D3DXVECTOR3& Position);
-	SceneObjectPhysics(const std::string& mesh, const std::string& physic, const D3DXVECTOR3& Position);
-};
-
-
-class ControledBB
-{
-	int empControlerList;
-	int empActorList;
-
-	ControllerHitReport objCallback;
-
-protected:
-	NxController* getBBController( void );
-
-public:
-	ControledBB( Vector3f pos, ShapeType type=CAPSULE );
-
-	void moveTo( float dispX, float dispY, float dispZ );
-
-};
-
-
-class ControledPhysicsCharacter : public SceneObject/*Animated*/, public ControledBB
-{
-public:
-	ControledPhysicsCharacter(const std::string& mesh, /*const std::string& anim,*/ const D3DXVECTOR3& Position)
-		:SceneObject/*Animated*/( mesh, /*anim,*/ Position ), ControledBB( Position )
-	{}
-
-	void updateControlledPosition( void );
-
-};
-
-class PhysicsStaticMesh : public SceneObject//, public ControledBB
-{
-public:
-	PhysicsStaticMesh(const std::string& mesh, const D3DXVECTOR3& Position)
-		:SceneObject( mesh, Position )//, ControledBB( Position )
-	{
-		NxTriangleMeshDesc terrainDesc;
-		/*terrainDesc.numVertices					= gTerrainData->nbVerts;
-		terrainDesc.numTriangles				= gTerrainData->nbFaces;*/
-		terrainDesc.pointStrideBytes			= sizeof(NxVec3);
-		terrainDesc.triangleStrideBytes			= 3*sizeof(NxU32);
-	/*	terrainDesc.points						= gTerrainData->verts;
-		terrainDesc.triangles					= gTerrainData->faces;*/
-		terrainDesc.flags						= 0;
-
-		terrainDesc.heightFieldVerticalAxis		= NX_Y;
-		terrainDesc.heightFieldVerticalExtent	= -1000.0f;
-
-		//MemoryWriteBuffer buf;
-		//bool status =  Physicalizer::m_Cooking->NxCookTriangleMesh( terrainDesc, buf );
-		//if (!status) 
-		//{
-		//	printf("Unable to cook a triangle mesh.");
-		//	exit(1);
-		//}
-
-		//MemoryReadBuffer readBuffer( buf.data );
-		//terrainMesh = Physicalizer::m_PhysicsSDK->createTriangleMesh(readBuffer);
-
-		//
-		// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
-		// by API "meshData->getReferenceCount() == 0". And, the release API is "gPhysicsSDK->releaseTriangleMesh(*meshData);"
-		//
-
-		/*NxTriangleMeshShapeDesc terrainShapeDesc;
-		terrainShapeDesc.meshData				= terrainMesh;
-		terrainShapeDesc.shapeFlags				= NX_SF_FEATURE_INDICES;
-
-		NxActorDesc ActorDesc;
-		ActorDesc.shapes.pushBack(&terrainShapeDesc);
-		gTerrain = gScene->createActor(ActorDesc);
-		gTerrain->userData = (void*)0;*/
-
-		//Physicalizer::m_Cooking->
-	
-	}
-
-
-};
-
-
-
-
-
-
-
-
-
+void CreateBox( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger );
+void CreateSphere( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger  );
+void CreateCapsule( NxActorDesc& ActorDesc, ListOfBoundingBox& List, PhysicBody* Pb, bool IsTrigger  );
+void FinalizeActor(NxActorDesc ActorDesc, ListOfBoundingBox List, bool IsTrigger);
+NxMaterialIndex GenMaterial( float restitution, float staticFriction, float dynamiqueFriction );						//TRIGGER
 
 #endif

@@ -28,6 +28,7 @@ protected:
 	u8	m_PostEffects;
 
 	LPDIRECT3DSURFACE9	m_pBackBuffer;
+	LPDIRECT3DDEVICE9   m_pDevice;
 
 	RenderTarget*		m_pSceneRenderTarget;
 	RenderTarget*		m_pSceneRenderTargetTemp;

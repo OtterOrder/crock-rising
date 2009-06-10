@@ -10,6 +10,10 @@
 #include	"Core/Time.h"
 
 #define FPS_MAX 80
+
+#define		NB_FPS			80
+#define		FRAME_DELAY		(1000/NB_FPS)
+
 //******************************************************************
 
 /***********************************************************
@@ -43,7 +47,7 @@ int System::MainLoop( void )
 	PostRenderer	*postRenderer;
 	Game			*game;
 	Physicalizer	*physX;
-	SoundSystem		*soundSystem;
+//	SoundSystem		*soundSystem;
 
 	bool			bGotMsg;
 	MSG				msg;
@@ -53,7 +57,7 @@ int System::MainLoop( void )
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
-	soundSystem		= SoundSystem::GetInstance();
+	//soundSystem		= SoundSystem::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	game			= Game::GetInstance();
 
@@ -63,7 +67,7 @@ int System::MainLoop( void )
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 	
-	u32 nbFps = 1000 / FPS_MAX;
+	u32 frameTimer = 0;
 	
 	// Boucle principale..
 	while( msg.message != WM_QUIT )
@@ -97,12 +101,13 @@ int System::MainLoop( void )
 			//soundSystem->Update();
 
 			//Update de physX				
-			if( m_Time->GetDeltaTimeF() >= nbFps ) 
+			if( frameTimer >= FRAME_DELAY ) 
 			{
 				physX->RunPhysics();
-				m_Time->EndF();    // Reset du temps entre les 2 frames
+				frameTimer = 0;
 			}
 		}
+		frameTimer += m_Time->GetDeltaTimeEMs();
 		m_Time->EndE();
 	}
 
@@ -110,7 +115,7 @@ int System::MainLoop( void )
 	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
 	postRenderer->Destroy();
-	soundSystem->Destroy();
+	//soundSystem->Destroy();
 	inputManager->Destroy();
 	resourceManager->Destroy();
 

@@ -13,6 +13,7 @@ PostRenderer::PostRenderer(void)
 
 	MotionBlur* pMotionBlur = new MotionBlur();
 	m_pPostEffects.push_back(pMotionBlur);
+	m_pDevice=Renderer::GetInstance()->m_pd3dDevice;
 
 	m_PostEffects = 0;
 }
@@ -40,11 +41,15 @@ void PostRenderer::SetBackBuffer (LPDIRECT3DSURFACE9 _pBackBuffer)
 //----------------------------------------------------------------------------------------------
 void PostRenderer::RenderPostEffects ()
 {
+	m_pDevice->BeginScene();
+
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
 		if (m_pPostEffects[postEffect] && ((m_PostEffects & (1<<postEffect)) == 1<<postEffect))
 			m_pPostEffects[postEffect]->Apply(&SceneObject::RefList);
 	}
+
+	m_pDevice->EndScene();
 
 	if (! (m_pSceneRenderTarget && m_pBackBuffer))
 		return;
@@ -54,10 +59,8 @@ void PostRenderer::RenderPostEffects ()
 	windowRect.top		= 0;
 	windowRect.right	= Renderer::GetInstance()->GetWindowWidth();
 	windowRect.bottom	= Renderer::GetInstance()->GetWindowHeight();
-	Renderer::GetInstance()->m_pd3dDevice->StretchRect(m_pSceneRenderTarget->GetSurface(), NULL, m_pBackBuffer, &windowRect, D3DTEXF_NONE);
+	m_pDevice->StretchRect(m_pSceneRenderTarget->GetSurface(), NULL, m_pBackBuffer, &windowRect, D3DTEXF_NONE);
 
-	//// Delete Me !!!!
-	//Sleep(10);
 }
 
 //----------------------------------------------------------------------------------------------

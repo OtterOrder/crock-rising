@@ -33,7 +33,7 @@ public:
 	virtual void SetTransform(const D3DXMATRIX* world) {}
 	virtual void ApplyTransform(const D3DXMATRIX* world) {}
 
-	Vector3f GetPosition() const { return m_vPosition; }
+	Vector3f GetPosition() const;
 	void SetTranslation( float x, float y, float z );
 	void SetRotation( int angleX, int angleY, int angleZ );
 	
@@ -42,9 +42,6 @@ protected:
 	
 	D3DXMATRIX			m_WorldMatrix;
 	LPDIRECT3DDEVICE9	m_pDevice;
-
-	Vector3f m_vPosition;
-	int m_vAngleX, m_vAngleY, m_vAngleZ; //angle en degres
 
 private:
 

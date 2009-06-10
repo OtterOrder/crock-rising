@@ -36,7 +36,7 @@ SceneObject2D::SceneObject2D()
 	m_VertexBuffer		= NULL;
 	m_VertexBufferSize	= 0;
 
-	SceneObject2D::RefList.push_front( this );
+	SceneObject2D::RefList.push_back( this );
 }
 
 //**********************************************************
@@ -147,25 +147,26 @@ u8 SceneObject2D::GetPriority() const
 
 //**********************************************************
 // Change le shader appliqué à l'objet.
-// @param[in]	shaderName : Nom de la ressource shader
+// @param[in]	shader : Pointeur sur le shader
 //**********************************************************
-void SceneObject2D::SetShader( const std::string &shaderName )
+void SceneObject2D::SetShader( Shader *shader )
 {
-	if( m_Shader && shaderName != m_ShaderName )
+	assert( shader );
+	if( m_Shader )
 	{
 		ResourceManager::GetInstance()->Remove<Shader>( m_ShaderName );
-		m_Shader = ResourceManager::GetInstance()->Load<Shader>( shaderName );
+		m_Shader = shader;
 	}
-	m_ShaderName = shaderName;
+	m_ShaderName = shader->GetName();
 }
 
 //**********************************************************
 // Donne le shader courant de l'objet.
-// @return	Nom de la ressource shader
+// @return	Pointeur sur le shader
 //**********************************************************
-const std::string& SceneObject2D::GetShader() const
+Shader* const SceneObject2D::GetShader() const
 {
-	return m_ShaderName;
+	return m_Shader;
 }
 
 //**********************************************************
@@ -217,6 +218,8 @@ void SceneObject2D::InitDxData()
 	{
 		m_Shader = ResourceManager::GetInstance()->Load<Shader>( m_ShaderName );
 	}
+
+	activate_dirty();
 }
 
 //**********************************************************

@@ -44,8 +44,8 @@ public:
 	inline bool IsHidden() const { return m_Color.a <= 0.f; }
 
 	// Shader
-	void SetShader( const std::string &shaderName );
-	const std::string& GetShader() const;
+	void SetShader( Shader *shader );
+	Shader* const GetShader() const;
 
 	// Compare les priorités, utile pour trier la liste
 	static bool	ComparePriority( const SceneObject2D *pObj1, const SceneObject2D *pObj2 );

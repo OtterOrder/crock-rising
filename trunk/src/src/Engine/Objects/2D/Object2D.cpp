@@ -24,7 +24,7 @@ Object2D::Object2D()
 	m_Dirty			= false;
 	
 	// Enregistrement dans la liste
-	Object2D::RefList.push_front( this );
+	Object2D::RefList.push_back( this );
 }
 
 //**********************************************************

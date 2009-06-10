@@ -234,6 +234,41 @@ void SceneObject::BerSetTransform( const D3DXMATRIX* world )
 	m_WorldMatrix = *world;
 }
 
+void SceneObject::Update()
+{
+	// Si l'objet affecté par la physique
+
+		// Maj de l'objet graphique : On utilise la matrice calculée par le moteur physique
+		// Si controller multiplier par la matrice de rotation
+		// m_WorldMatrix = GetObjectPhysicalMatrix;
+
+
+}
+
+void SceneObject::SetTranslation( float x, float y, float z )
+{
+
+	// Si l'objet est affecté par la physique (controller)
+
+		// On affecte la transformation à la physique (appeler MoveTo (nom à changer))
+
+	// Sinon on transforme l'objet graphique
+
+
+}
+
+void SceneObject::SetRotation( int angleX, int angleY, int angleZ )
+{
+
+	// Si l'objet est affecté par la physique (controller)
+
+		// On transmet la transformation à la physique
+
+	// Sinon on transforme l'objet graphique
+
+}
+
+
 //===========================================================================//
 // Gestion de l'objet						                                 //
 //===========================================================================//

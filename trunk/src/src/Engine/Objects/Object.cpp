@@ -73,10 +73,8 @@ void Object::SetRotation( int angleX, int angleY, int angleZ )
 	ApplyTransform(&result);
 }
 
-Vector3f Object::GetPosition() const
+Vector3f Object::GetPosition()
 { 
-	
-	return Vector3f(0.f, 0.f, 0.f);
-	
+	return Vector3f(m_WorldMatrix(4, 1), m_WorldMatrix(4, 2), m_WorldMatrix(4, 3));
 
 }

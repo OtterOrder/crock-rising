@@ -6,7 +6,6 @@
 #include	"NxPhysics.h"
 #include	"NxBoxController.h"
 #include	"NxCapsuleController.h"
-#include	"NxCooking.h"
 
 #include	"Resources/Mesh.h"
 #include	"Trigger/UserData.h"

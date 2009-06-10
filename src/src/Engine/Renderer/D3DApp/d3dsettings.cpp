@@ -5,7 +5,11 @@
 //       samples framework library.
 //-----------------------------------------------------------------------------
 #define STRICT
+
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
+
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>

@@ -22,16 +22,13 @@ public:
 	// =========================================================
 	// Méthodes publiques
 
-	u32 GetDeltaTimeEMs();
-	u32 GetDeltaTimeFMs();
+	u32 GetDeltaTimeMs();
 	u32 GetTimeMs();
 	
-	inline float GetDeltaTimeE() { return m_DeltaTimeE; }
-	inline float GetDeltaTimeF() { return m_DeltaTimeF; }
+	inline float GetDeltaTime() { return m_DeltaTime; }
 	float GetTime();
 
 	void EndE();	// Fin d'un tour moteur (System)
-	void EndF();	// Fin d'un frame (System)
 
 protected:
 
@@ -40,10 +37,8 @@ protected:
 
 	float			m_Freq;
 	LARGE_INTEGER	m_TimeStart;
-	LARGE_INTEGER	m_StartDeltaTimeE;
-	LARGE_INTEGER	m_StartDeltaTimeF;
-	float			m_DeltaTimeE;
-	float			m_DeltaTimeF;
+	LARGE_INTEGER	m_StartDeltaTime;
+	float			m_DeltaTime;
 
 };
 

@@ -107,7 +107,7 @@ int System::MainLoop( void )
 				frameTimer = 0;
 			}
 		}
-		frameTimer += m_Time->GetDeltaTimeEMs();
+		frameTimer += m_Time->GetDeltaTimeMs();
 		m_Time->EndE();
 	}
 

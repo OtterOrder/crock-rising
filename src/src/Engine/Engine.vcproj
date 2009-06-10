@@ -635,11 +635,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ControledPhysicalCharacter.cpp"
+				RelativePath=".\Physics\ControledPhysicalCharacter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ControledPhysicalCharacter.h"
+				RelativePath=".\Physics\ControledPhysicalCharacter.h"
 				>
 			</File>
 			<File

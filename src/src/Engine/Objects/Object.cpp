@@ -75,6 +75,9 @@ void Object::SetRotation( int angleX, int angleY, int angleZ )
 
 Vector3f Object::GetPosition()
 { 
-	return Vector3f(m_WorldMatrix(4, 1), m_WorldMatrix(4, 2), m_WorldMatrix(4, 3));
+	float x=m_WorldMatrix._41;
+	float y=m_WorldMatrix._42;
+	float z=m_WorldMatrix._43;
+	return Vector3f(x, y, z);
 
 }

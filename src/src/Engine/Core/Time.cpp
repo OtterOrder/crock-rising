@@ -9,10 +9,8 @@ Time::Time()
 	QueryPerformanceCounter( &m_TimeStart );
 	
 	m_Freq				= (float)freq.QuadPart;
-	m_StartDeltaTimeE	= m_TimeStart;
-	m_StartDeltaTimeF	= m_TimeStart;
-	m_DeltaTimeE		= 0.f;
-	m_DeltaTimeF		= 0.f;
+	m_StartDeltaTime	= m_TimeStart;
+	m_DeltaTime			= 0.f;
 }
 
 //******************************************************************
@@ -23,16 +21,9 @@ Time::~Time()
 
 //******************************************************************
 
-u32 Time::GetDeltaTimeEMs()
+u32 Time::GetDeltaTimeMs()
 {
-	return (u32)(GetDeltaTimeE()*1000.f);
-}
-
-//******************************************************************
-
-u32 Time::GetDeltaTimeFMs()
-{
-	return (u32)(GetDeltaTimeF()*1000.f);
+	return (u32)(GetDeltaTime()*1000.f);
 }
 
 //******************************************************************
@@ -57,16 +48,6 @@ void Time::EndE()
 {
 	LARGE_INTEGER currentTime;
 	QueryPerformanceCounter( &currentTime );
-	m_DeltaTimeE = (float)(currentTime.QuadPart-m_StartDeltaTimeE.QuadPart) / m_Freq;
-	m_StartDeltaTimeE = currentTime;
-}
-
-//******************************************************************
-
-void Time::EndF()
-{
-	LARGE_INTEGER currentTime;
-	QueryPerformanceCounter( &currentTime );
-	m_DeltaTimeF = (float)(currentTime.QuadPart-m_StartDeltaTimeF.QuadPart) / m_Freq;
-	m_StartDeltaTimeF = currentTime;
+	m_DeltaTime = (float)(currentTime.QuadPart-m_StartDeltaTime.QuadPart) / m_Freq;
+	m_StartDeltaTime = currentTime;
 }

@@ -1,10 +1,13 @@
-#ifndef		_System_H
-#define		_System_H
+#ifndef		_SYSTEM_H_
+#define		_SYSTEM_H_
 
-#define NOMINMAX
+//******************************************************************
+
+#ifndef		NOMINMAX
+#define		NOMINMAX
+#endif
+
 #include	<windows.h>
-//#include	<d3d9.h>
-
 #include	"Core/Singleton.h"
 
 //******************************************************************
@@ -50,4 +53,4 @@ protected:
 };
 
 //******************************************************************
-#endif		// _System_H
+#endif		//_SYSTEM_H_

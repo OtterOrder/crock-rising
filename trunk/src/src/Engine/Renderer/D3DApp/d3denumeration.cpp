@@ -4,7 +4,11 @@
 // Desc: Enumerates D3D adapters, devices, modes, etc.
 //-----------------------------------------------------------------------------
 #define STRICT
+
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
+
 #include <windows.h>
 #include <D3D9.h>
 #include "DXUtil.h"

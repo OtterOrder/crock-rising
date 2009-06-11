@@ -53,6 +53,7 @@ SceneObject::SceneObject(const std::string& mesh,
 	m_EmpActor = -1;
 	m_EmpController = -1;
 
+	m_bVisible=true;
 	m_bCastShadow = false;
 	m_bReceiveShadow = false;
 }

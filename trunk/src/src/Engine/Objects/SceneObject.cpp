@@ -152,7 +152,6 @@ void SceneObject::MoveTo( float dispX, float dispY, float dispZ )
 //Fonction pour récupérer les infos de la bb pour le culling
 std::vector<PhysicBody*> SceneObject::getPhysicBodyList()
 {
-	if(m_EmpActor == -1) return NULL;
 	return m_ListOfBoundingBox.getPbList();
 }
 

@@ -7,48 +7,14 @@
 #include	<cstring>
 #include	<Resources/Resource.h>
 #include	<TinyXml/tinyxml.h>
-#include	<Resources/AnimLoader.h>  //Pour utiliser la fonction ConvertStringToFloatArray
+#include	<Physics/BoundingBox.h>
 
 #include	"NxQuat.h"
 
 /***********************************************/
-enum ShapeType
-{
-	BOX,
-	SPHERE,
-	CAPSULE,
-	PLAN,
-	TRIGGER,
-	LOAD_ERROR
-};
-
-struct PhysicBody
-{
-	ShapeType   type;
-	D3DXVECTOR3 bodySize; //BOX = largeur hauteur longueur
-						  //SPHERE = Rayon 0 0
-						  //CAPSULE = rayon, hauteur 0
-
-	D3DXVECTOR3 translate; //Position locale de la bounding box
-	NxQuat		rotate;    //Rotation locale de la bounding box
-	D3DXVECTOR3 angularVelocity; //Vitesse de rotation à la création
-	D3DXVECTOR3 linearVelocity;	 //Vitesse de déplacement à la création
-	float		fMass;			 //Masse
-	float		fLinearDamping;
-	float		fAngularDamping;
-	bool		bDisableCollision;
-	float		restitution;
-	float		staticFriction;
-	float		dynamiqueFriction;
-
-	//Fonctions liées aux triggers, à remplir a la création du sceneobj
-	void (*OnEnterFunc)(); 
-	void (*OnLeaveFunc)(); 
-	void (*OnStayFunc)(); 
-};
 
 void ConvertStringToFloatArrayV2(const char * Array, float * FloatArray, int iCount);
-void ConvertStringToFloatArrayV3(const char * Array, float * FloatArray, int iCount);
+
 struct NodeSaver
 {
 	TiXmlNode *library_visual_scenes;

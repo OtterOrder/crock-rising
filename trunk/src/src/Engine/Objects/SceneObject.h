@@ -61,19 +61,20 @@ public:
 	//===========================================================================//
 	// Physique de l'objet														 //
 	//===========================================================================//
-	void SetObjectPhysical( const std::string& physic, Vector3f Pos);
-	void SetControledCharacter( const std::string& physic, Vector3f Pos){}
-	void SetControledCharacter(Vector3f Pos, float radius, float height);
-	void SetControledCharacter(Vector3f Pos, Vector3f size);
+	void SetObjectPhysical( const std::string& physic, Vector3f Pos);		// Donne la main au moteur physique pour gérer l'objet
+	void SetControledCharacter(Vector3f Pos, float radius, float height);	// Fournis une capsule à un controlleur physique
+	void SetControledCharacter(Vector3f Pos, Vector3f size);				// ---------- box ------------------------------
 	void SetObjectUnPhysical();
 	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)());
-	void MoveTo( float dispX, float dispY, float dispZ );
-
+	
+	void SetPhysicalTranslation( float dispX, float dispY, float dispZ );
 	int  getEmpActor(){ return m_EmpActor; }
 	void setEmpActor(int Emp){ m_EmpActor = Emp; }
 	int  getEmpController(){ return m_EmpController; }
 	void setEmpController(int Emp){ m_EmpController = Emp; }
 	std::vector<PhysicBody*> getPhysicBodyList();
+	bool IsActor(){ return m_EmpActor != -1; }
+	bool IsController(){ return m_EmpController != -1; }
 public:
 
 	//===========================================================================//

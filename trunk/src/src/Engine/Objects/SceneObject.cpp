@@ -135,9 +135,9 @@ void SceneObject::SetObjectUnPhysical()
 	m_EmpController = -1;
 }
 
-void SceneObject::MoveTo( float dispX, float dispY, float dispZ )
+void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ )
 {
-	if(m_EmpController >= 0)
+	if(IsController())
 	{
 		Physicalizer* physXInstance = Physicalizer::GetInstance();
 		NxController* pControler = physXInstance->getControllerManager()->getController( m_EmpController );
@@ -232,14 +232,16 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 
 void SceneObject::BerSetTransform( const D3DXMATRIX* world )
 {
-	D3DXMATRIX posMat;
-	D3DXMatrixIdentity( &posMat );
-	if(m_EmpController != -1)
+	D3DXMATRIX RotMat;
+
+	D3DXMatrixIdentity( &RotMat );
+
+	if(IsController())
 	{
-		posMat._22=0; posMat._23=1;
-		posMat._32=1; posMat._33=0;
+		RotMat._22=0; RotMat._23=1;
+		RotMat._32=1; RotMat._33=0;
 	}
-	m_WorldMatrix = posMat*(*world);
+	m_WorldMatrix = RotMat*(*world);
 }
 
 void SceneObject::Update()
@@ -256,12 +258,15 @@ void SceneObject::SetTranslation( float x, float y, float z )
 {
 
 	// Si l'objet est affecté par la physique (controller)
-
+	if(IsController())
 		// On affecte la transformation à la physique (appeler MoveTo (nom à changer))
 
-	// Sinon on transforme l'objet graphique
+		SetPhysicalTranslation(x, y, z);
 
-	Object::SetTranslation(x, y, z);
+	// Sinon on transforme l'objet graphique
+	else
+
+		Object::SetTranslation(x, y, z);
 
 
 }

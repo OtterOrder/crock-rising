@@ -27,6 +27,7 @@ enum PhysicalObjectType
 	NOPHYSICAL
 };
 
+//Structure pour récupérer les infos sur le body pendant le loader
 struct PhysicBody
 {
 	ShapeType   type;
@@ -52,6 +53,7 @@ struct PhysicBody
 	void (*OnStayFunc)(); 
 };
 
+//Liste des bounding box d'un sceneobj
 class ListOfBoundingBox
 {
 private:
@@ -60,8 +62,8 @@ private:
 	Vector3f m_InitialWorldPos;
 
 public:
-	void ReleaseList();
-	void MajPivot(const Mesh* pMesh);
+	void ReleaseList();					//Permet la libération des descripteur qui st créés dynamiquement
+	void MajPivot(const Mesh* pMesh);	
 
 	inline std::vector<PhysicBody*> getPbList(){ return m_PbList; }
 	inline void setPbList(std::vector<PhysicBody*> L){ m_PbList = L; }
@@ -75,6 +77,7 @@ NxVec3 VecToNxVec(Vector3f V);
 void Normalize(Vector3f &V);
 float Norme(const Vector3f V);
 
+//Fonction qui permet de créer une bounding box.
 int CreateBoundingBox(ListOfBoundingBox &BBList);
 int CreateTrigger(ListOfBoundingBox &BBList,
 	void (*OnEnterFunc)(), 

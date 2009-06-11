@@ -34,7 +34,7 @@ float  g_LightsExponent[4];
 
 float3 g_vCamPos;
 
-static const int MAX_MATRICES = 50;
+static const int MAX_MATRICES = 61;
 float4x4	g_skinningMatrices[MAX_MATRICES];
 bool		g_bShowBone=false;
 bool		g_bTex=false;

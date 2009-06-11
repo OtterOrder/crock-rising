@@ -12,6 +12,11 @@ void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, l
 		{
 			//if ( PointInsideFrustrum(currentPoint))
 			{
+				//(*(*scnObjPhysics)->getPhysicBodyList().begin())->bodySize;
+				//(*(*scnObjPhysics)->getPhysicBodyList().begin())->type;
+				// BOX : (largeur, hauteur, profondeur)
+				// SPHERE : (rayon, 0, 0)
+				// CAPSULE : (rayon, hauteur, 0)
 				_SortedList.push_back(*scnObjPhysics);
 				continue;
 			}

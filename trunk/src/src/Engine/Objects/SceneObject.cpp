@@ -149,6 +149,12 @@ void SceneObject::MoveTo( float dispX, float dispY, float dispZ )
 		pControler->move( disp, Physicalizer::MASK_OTHER, minDistance, collisionFlags );
 	}
 }
+//Fonction pour récupérer les infos de la bb pour le culling
+std::vector<PhysicBody*> SceneObject::getPhysicBodyList()
+{
+	if(m_EmpActor == -1) return NULL;
+	return m_ListOfBoundingBox.getPbList();
+}
 
 void SceneObject::InitObject()
 {

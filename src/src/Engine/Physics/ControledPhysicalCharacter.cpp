@@ -72,23 +72,23 @@ int CreateControlledCapsule( Vector3f pos, float radius, float height )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxCapsuleControllerDesc desc;
-	desc.radius			= 2.0f; //4.5f;//gInitialRadius * scale;
-	desc.height			= 16.0f; //15.f;//gInitialHeight * scale;
+	desc.radius			= radius;
+	desc.height			= height;
 
 	//spawn position
-	desc.position.x = pos.x ,//- 0.7538f , 
-		desc.position.y = pos.y + desc.height/2.0f + desc.radius,//- 3.822f, 
-		desc.position.z = pos.z ;//+ 25.4295f;
+	desc.position.x = pos.x , 
+	desc.position.y = pos.y + desc.height/2.0f + desc.radius, 
+	desc.position.z = pos.z ;
 
 	desc.upDirection	= NX_Y;
 	//		desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
 	desc.slopeLimit		= 0.707f;
 	desc.skinWidth		= 0.01f;
 	desc.stepOffset		= 0.5f;
-	//desc.stepOffset		= gInitialRadius * 0.5 * scale;
-	//	desc.stepOffset	= 0.01f;
-	//		desc.stepOffset		= 0;	// Fixes some issues
-	//		desc.stepOffset		= 10;
+	//desc.stepOffset	= gInitialRadius * 0.5 * scale;
+	//desc.stepOffset	= 0.01f;
+	//desc.stepOffset	= 0;	// Fixes some issues
+	//desc.stepOffset	= 10;
 
 	desc.callback		= gCharacterControllerCallback;
 
@@ -99,7 +99,7 @@ int CreateControlledBox( Vector3f pos, Vector3f size )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxBoxControllerDesc desc;
-	desc.extents.x		= 3.f,   desc.extents.y  = 9.f,   desc.extents.z  = 2.f;
+	desc.extents.x		= size.x,   desc.extents.y  = size.y,   desc.extents.z  = size.z;
 	desc.position.x		= pos.x, desc.position.y = pos.y, desc.position.z = pos.z;
 
 	desc.upDirection	= NX_Y;
@@ -108,8 +108,8 @@ int CreateControlledBox( Vector3f pos, Vector3f size )
 	desc.skinWidth		= 0.2f;
 	desc.stepOffset		= 0.5;
 	//	desc.stepOffset	= 0.01f;
-	//		desc.stepOffset		= 0;
-	//		desc.stepOffset		= 10;
+	//	desc.stepOffset	= 0;
+	//	desc.stepOffset	= 10;
 
 	desc.callback		= gAlienCallBackTest; 
 

@@ -177,7 +177,7 @@ ResourceResult BoundingBoxLoader::getLocalPos( NodeSaver NodeSave )
 				// ROTATION
 				pValues = node->ToElement()->GetText();
 				ConvertStringToFloatArrayV2(pValues,pfValues,4);
-				//NxQuat rotX(0.f, NxVec3(1.f, 0.f, 0.f)); //For Max
+				//NxQuat rotX(90.f, NxVec3(1.f, 0.f, 0.f)); //For Max
 				NxQuat quat(pfValues[3], NxVec3(pfValues[0], pfValues[1], pfValues[2]));
 				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = quat;
 			}	

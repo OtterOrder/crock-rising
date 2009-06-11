@@ -145,7 +145,7 @@ void SceneObject::MoveTo( float dispX, float dispY, float dispZ )
 
 		NxU32 collisionFlags; 
 		NxF32 minDistance = 0.001f;
-		NxVec3 disp( dispX, dispY, dispZ ); 
+		NxVec3 disp( dispX, dispY-0.1f, dispZ ); 
 
 		pControler->move( disp, Physicalizer::MASK_OTHER, minDistance, collisionFlags );
 	}
@@ -232,7 +232,17 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 
 void SceneObject::BerSetTransform( const D3DXMATRIX* world )
 {
-	m_WorldMatrix = *world;
+	D3DXMATRIX posMat;//, RMat;
+
+	D3DXMatrixIdentity( &posMat );
+					//D3DXMatrixTranslation(&posMat, (float)pos.x, (float)pos.y, (float)pos.z);
+	if(m_EmpController != -1)
+	{
+		posMat._22=0; posMat._23=1;
+		posMat._32=1; posMat._33=0;
+	}
+
+	m_WorldMatrix = posMat*(*world);
 }
 
 void SceneObject::Update()
@@ -242,7 +252,6 @@ void SceneObject::Update()
 		// Maj de l'objet graphique : On utilise la matrice calculée par le moteur physique
 		// Si controller multiplier par la matrice de rotation
 		// m_WorldMatrix = GetObjectPhysicalMatrix;
-
 
 }
 

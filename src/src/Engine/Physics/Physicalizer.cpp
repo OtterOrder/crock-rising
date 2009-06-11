@@ -115,6 +115,8 @@ PhysXResult Physicalizer::RunPhysics()
 {
 	if( m_Scene )
 	{
+		m_ControllerManager->updateControllers();
+
 		StartPhysics();
 		GetPhysicsResults();
 
@@ -166,18 +168,17 @@ PhysXResult Physicalizer::DoTransform()
 					int emp = aSObj->getEmpController();
 					if(emp < 0) return PHYSX_FAILED;
 
-					m_ControllerManager->updateControllers();
+					
 					NxController* pController = m_ControllerManager->getController( emp );
 					NxExtendedVec3 pos = pController->getPosition();
 
-
-					NxActor** ac =  getScene()->getActors(); //La liste des acteurs
-					NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
-					D3DXMATRIX WorldMat;
-					D3DXMatrixTranslation(&WorldMat, (float)pos.x, (float)pos.y, (float)pos.z);
-
-					aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					//aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					D3DXMATRIX posMat;
+					Mesh* mesh = aSObj->GetMesh();
+					Vector3f reg = mesh->m_ReglagePivot;
+					D3DXMatrixTranslation(&posMat, (float)pos.x - reg.x, (float)pos.y - reg.z, (float)pos.z - reg.y);
+					
+					aSObj->BerSetTransform( &posMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					//aSObj->ApplyTransform( &posMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
 					break;
 				}
 			default : break;

@@ -166,6 +166,14 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\AIEnemy.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AIEnemy.h"
+			>
+		</File>
+		<File
 			RelativePath=".\AIManager.cpp"
 			>
 		</File>
@@ -179,34 +187,6 @@
 		</File>
 		<File
 			RelativePath=".\AIRess.h"
-			>
-		</File>
-		<File
-			RelativePath="..\CrockRising\Characters\Enemy.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\CrockRising\Characters\Enemy.h"
-			>
-		</File>
-		<File
-			RelativePath=".\group.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\group.h"
-			>
-		</File>
-		<File
-			RelativePath=".\members.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\members.h"
-			>
-		</File>
-		<File
-			RelativePath=".\states.h"
 			>
 		</File>
 	</Files>

@@ -3,7 +3,7 @@
 AStar::AStar()
 {
 	Bitmap loadBmp;
-	bool loadOk = loadBmp.loadBMP("../../data/mapAI/levelTestAI.bmp");
+	bool loadOk = loadBmp.loadBMP("../../data/mapAI/level1AI.bmp");
 
 	if (loadOk)		loadBmp.convertImgToMatrix( tabChemin );
 	else			std::cout << "Erreur chargement AIMap" << std::endl;

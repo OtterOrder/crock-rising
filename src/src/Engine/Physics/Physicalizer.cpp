@@ -27,12 +27,6 @@ bool Physicalizer::InitPhysX()
 		return false;
 	}
 
-	m_PhysicsSDK->setParameter(NX_SKIN_WIDTH,				  m_AdvancedParam.SkinWidth);
-	//m_PhysicsSDK->setParameter(NX_VISUALIZATION_SCALE,		  m_AdvancedParam.VisualisationScale);
-	//m_PhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,		  m_AdvancedParam.VisualizeActorAxe);
-	//m_PhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, m_AdvancedParam.VisualizeCollisionShape);
-	//m_PhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_SLEEP,	  m_AdvancedParam.VisualizeClothSleep);
-
 	connectToVRD();
 
     NxSceneDesc sceneDesc;
@@ -47,26 +41,15 @@ bool Physicalizer::InitPhysX()
 		assert( m_Scene );
 	}
 	
-
 	//Création du manager des objets trigger 
-	m_Scene->setUserTriggerReport(&gTriggerReport);
 	gTriggerReport.scene = m_Scene;
-
+	m_Scene->setUserTriggerReport(&gTriggerReport);
+	
 	// Set default material
 	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);
 	defaultMaterial->setRestitution(0.1f);
 	defaultMaterial->setStaticFriction(0.5f);
 	defaultMaterial->setDynamicFriction(0.5f);
-
-	/*NxPlaneShapeDesc planeDesc;
-	planeDesc.group = GROUP_STATIC;
-	//planeDesc.d = -25.f;
-	NxActorDesc actorDesc;
-	actorDesc.shapes.pushBack(&planeDesc);
-	m_Scene->createActor(actorDesc);*/
-
-	// Récupération du temps
-	UpdateTime();
 
 	// Lance la première frame
 	if (m_Scene)  StartPhysics();
@@ -93,22 +76,14 @@ bool Physicalizer::ReloadPhysX()
 
 void Physicalizer::StartPhysics()
 {
-	// Update the time step
-	//m_DeltaTime = UpdateTime();
-
-	//if( m_ControllerManager )
-	//	m_ControllerManager->updateControllers();
-
-	// Start collision and dynamics for delta time since the last frame
-	m_Scene->simulate( NxReal(0.01667) );//m_DeltaTime
+	m_Scene->simulate( NxReal(0.01667) );
 	m_Scene->flushStream();
 	
 }
 
 void Physicalizer::GetPhysicsResults()
 {
-	// Get results from gScene->simulate(gDeltaTime)
-	m_Scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+	m_Scene->fetchResults(NX_ALL_FINISHED, true); //ou NX_RIGID_BODY_FINISHED
 }
 
 PhysXResult Physicalizer::RunPhysics()
@@ -119,7 +94,6 @@ PhysXResult Physicalizer::RunPhysics()
 
 		StartPhysics();
 		GetPhysicsResults();
-
 		return DoTransform();
 	}
 	return PHYSX_FAILED;
@@ -171,7 +145,6 @@ PhysXResult Physicalizer::DoTransform()
 					
 					NxController* pController = m_ControllerManager->getController( emp );
 					NxExtendedVec3 pos = pController->getPosition();
-
 					D3DXMATRIX posMat;
 					Mesh* mesh = aSObj->GetMesh();
 					Vector3f reg = mesh->m_ReglagePivot;

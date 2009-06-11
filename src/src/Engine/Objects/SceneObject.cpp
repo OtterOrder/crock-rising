@@ -232,16 +232,13 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 
 void SceneObject::BerSetTransform( const D3DXMATRIX* world )
 {
-	D3DXMATRIX posMat;//, RMat;
-
+	D3DXMATRIX posMat;
 	D3DXMatrixIdentity( &posMat );
-					//D3DXMatrixTranslation(&posMat, (float)pos.x, (float)pos.y, (float)pos.z);
 	if(m_EmpController != -1)
 	{
 		posMat._22=0; posMat._23=1;
 		posMat._32=1; posMat._33=0;
 	}
-
 	m_WorldMatrix = posMat*(*world);
 }
 
@@ -271,7 +268,6 @@ void SceneObject::SetTranslation( float x, float y, float z )
 
 void SceneObject::SetRotation( int angleX, int angleY, int angleZ )
 {
-
 	// Si l'objet est affecté par la physique (controller)
 
 		// On transmet la transformation à la physique

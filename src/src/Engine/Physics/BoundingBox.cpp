@@ -32,7 +32,7 @@ float Norme( const Vector3f V )
 void CreateBox( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  )
 {
 	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;
-	if(List.getPbList()[0]->bIsDynamic) 
+	if(!List.getPbList()[0]->bIsDynamic) 
 		boxDesc->group = Physicalizer::GROUP_STATIC;
 	boxDesc->dimensions = VecToNxVec( Pb->bodySize);			//Dimension
 	boxDesc->mass = Pb->fMass;									//Masse

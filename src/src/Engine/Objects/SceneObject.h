@@ -68,6 +68,12 @@ public:
 	void SetObjectUnPhysical();
 	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)());
 	void MoveTo( float dispX, float dispY, float dispZ );
+
+	int  getEmpActor(){ return m_EmpActor; }
+	void setEmpActor(int Emp){ m_EmpActor = Emp; }
+	int  getEmpController(){ return m_EmpController; }
+	void setEmpController(int Emp){ m_EmpController = Emp; }
+	std::vector<PhysicBody*> getPhysicBodyList();
 public:
 
 	//===========================================================================//
@@ -87,10 +93,6 @@ public:
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
 	
-	int  getEmpActor(){ return m_EmpActor; }
-	void setEmpActor(int Emp){ m_EmpActor = Emp; }
-	int  getEmpController(){ return m_EmpController; }
-	void setEmpController(int Emp){ m_EmpController = Emp; }
 
 
 

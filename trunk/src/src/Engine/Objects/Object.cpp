@@ -21,24 +21,21 @@ Object::Object( void )
 {
 	CommonInit();
 
-	//m_vPosition = Vector3f( 0.f, 0.f, 0.f );
-	//m_vAngleX = m_vAngleY = m_vAngleZ = 0;
+	m_vAngleX = m_vAngleY = m_vAngleZ = 0;
 }
 
 Object::Object( float initPosX, float initPosY, float initPosZ )
 {
 	CommonInit();
 
-	//m_vPosition = Vector3f( initPosX, initPosY, initPosZ );
-	//m_vAngleX = m_vAngleY = m_vAngleZ = 0;
+	m_vAngleX = m_vAngleY = m_vAngleZ = 0;
 }
 
 Object::Object( D3DXVECTOR3 pos )
 {
 	CommonInit();
 
-	//m_vPosition = pos;
-	//m_vAngleX = m_vAngleY = m_vAngleZ = 0;
+	m_vAngleX = m_vAngleY = m_vAngleZ = 0;
 
 }
 
@@ -64,10 +61,13 @@ void Object::SetTranslation( float x, float y, float z )
 
 void Object::SetRotation( int angleX, int angleY, int angleZ )
 {
+	m_vAngleX+=angleX;
+	m_vAngleY+=angleY;
+	m_vAngleZ+=angleZ;
 	D3DXMATRIX rotX, rotY, rotZ;
-	D3DXMatrixRotationX(&rotX,  D3DXToRadian(angleX));
-	D3DXMatrixRotationY(&rotY,  D3DXToRadian(angleZ));
-	D3DXMatrixRotationZ(&rotZ,  D3DXToRadian(angleY));
+	D3DXMatrixRotationX(&rotX,  D3DXToRadian(m_vAngleX));
+	D3DXMatrixRotationY(&rotY,  D3DXToRadian(m_vAngleY));
+	D3DXMatrixRotationZ(&rotZ,  D3DXToRadian(m_vAngleZ));
 
 	D3DXMATRIX result=rotX*rotY*rotZ;
 	ApplyTransform(&result);

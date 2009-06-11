@@ -43,7 +43,7 @@ void ShadowMap::InitShadowMap()
 	D3DXVECTOR3 vUp=D3DXVECTOR3(0.0f, 1.0f, 0.0f );
 	D3DXMatrixLookAtLH( &m_mLightView, &m_ShadowLight->GetLightPosition(), &m_ShadowLight->GetLightDirection(), &vUp );
 	//Matrice de projection
-	D3DXMatrixPerspectiveFovLH( &m_mLightProj, D3DXToRadian(60.0f), 1.f, 1.f, 1024.0f );
+	D3DXMatrixPerspectiveFovLH( &m_mLightProj, m_ShadowLight->GetLightAngle(), 1.f, 2.f, 4000.0f );
 
 	//Shader pour le rendu de la z-map
 	m_pShadowShader=new Shader();
@@ -95,6 +95,7 @@ void ShadowMap::Render()
 	m_pDevice->SetDepthStencilSurface( m_pOldDepthRT );
 	SAFE_RELEASE( m_pOldColorRT );
 	SAFE_RELEASE( m_pOldDepthRT );
+
 
 	//D3DXSaveTextureToFile("test.jpg", D3DXIFF_JPG, m_pShadowMap, NULL);
 

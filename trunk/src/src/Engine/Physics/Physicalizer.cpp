@@ -45,7 +45,6 @@ bool Physicalizer::InitPhysX()
 		sceneDesc.simType = NX_SIMULATION_SW; 
 		m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 		assert( m_Scene );
-		return false;
 	}
 	
 
@@ -158,8 +157,8 @@ PhysXResult Physicalizer::DoTransform()
 					NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
 					D3DXMATRIX WorldMat;
 					pac->getGlobalPose().getColumnMajor44( WorldMat );
-					//aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					//aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
 					break;
 				}
 			case CONTROLLER :
@@ -177,8 +176,8 @@ PhysXResult Physicalizer::DoTransform()
 					D3DXMATRIX WorldMat;
 					D3DXMatrixTranslation(&WorldMat, (float)pos.x, (float)pos.y, (float)pos.z);
 
-					//aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
+					//aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
 					break;
 				}
 			default : break;

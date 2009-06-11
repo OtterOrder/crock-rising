@@ -77,7 +77,7 @@ ResourceResult BoundingBoxLoader::Load(const std::string resource)
 
 ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 {
-	m_vDynamicBody.at(m_vDynamicBody.size()-1)->bDisableCollision = !Dyn;
+	m_vDynamicBody.at(m_vDynamicBody.size()-1)->bIsDynamic = Dyn;
 	TiXmlNode* node = NodeSave.RigidBodyNode;
 	node = node->FirstChildElement("shape");
 
@@ -176,10 +176,10 @@ ResourceResult BoundingBoxLoader::getLocalPos( NodeSaver NodeSave )
 			{
 				// ROTATION
 				pValues = node->ToElement()->GetText();
-				ConvertStringToFloatArrayV3(pValues,pfValues,4);
-				NxQuat rotX(0.f, NxVec3(1.f, 0.f, 0.f)); //For Max
+				ConvertStringToFloatArrayV2(pValues,pfValues,4);
+				//NxQuat rotX(0.f, NxVec3(1.f, 0.f, 0.f)); //For Max
 				NxQuat quat(pfValues[3], NxVec3(pfValues[0], pfValues[1], pfValues[2]));
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = rotX * quat;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = quat;
 			}	
 		}		
 		delete [] pfValues;
@@ -379,55 +379,7 @@ ResourceResult BoundingBoxLoader::getDampingAndType	( TiXmlNode* nodeShape )
 	return RES_SUCCEED;
 }
 
-
-
-//La fonction V1 dans AnimLoader a quelques soucis avec l'exporter du plugin PhysX de max
-//PROBLEME AVEC LES ENTIERS
-void ConvertStringToFloatArrayV2(const char * Array, float * FloatArray, int iCount)
-{
-	ConvertStringToFloatArrayV3( Array, FloatArray, iCount);
-
-	/*int id=0;
-	int dec=0;
-
-	float result	= 0;
-	float signe		= 1;
-	float mantisse	= 0.1f;
-	bool IsFloat = false;
-	bool stop = false;
-
-	for (int i = 0 ; i < iCount ; i++)
-	{
-		while(Array[id+dec] != ' ' && Array[id+dec] != '\0' && !stop )
-		{			
-			if(Array[id]!= '.')
-			{
-				if(Array[id]== '-')
-					signe=-1;	
-				else
-					result=Array[id]-'0'+result*10;	
-				id++;
-			}
-			else 
-			{	
-				dec++;	
-				result=((Array[id+dec]-'0')*mantisse)+result;
-				mantisse *= 0.1f;
-
-				if(Array[id+dec+1] == ' ')
-					dec++;
-
-				IsFloat = true;
-			}
-			stop = Array[id+dec+1] == 0;
-		}
-		FloatArray[i]=result*signe;
-		id=id+dec+1;
-		dec=0, result=0, mantisse=0.1f, signe=1;
-	}*/
-}
-
-void ConvertStringToFloatArrayV3( const char * Array, float * FloatArray, int iCount )
+void ConvertStringToFloatArrayV2( const char * Array, float * FloatArray, int iCount )
 {
 	float result = 0;
 	int signe = 1;

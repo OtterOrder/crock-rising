@@ -94,13 +94,11 @@ void SceneObject::SetObjectPhysical( const std::string& physic, Vector3f Pos )
 	BoundingBoxLoader Loader;
 	if( Loader.Load(physic) == RES_SUCCEED)
 	{
-		//Fonctions liées aux triggers, à remplir a la création du sceneobj
-
-		m_ListOfBoundingBox.List = Loader.getvDynamicBody();
-		m_ListOfBoundingBox.WorldPos = Pos - m_pMesh->m_ReglagePivot;
+		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
+		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		m_ListOfBoundingBox.MajPivot(m_pMesh);
 
-		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox, false );
+		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox );
 	}
 }
 
@@ -120,14 +118,11 @@ void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, voi
 	ListOfBoundingBox BB_List;
 	if( Loader.Load(physic) == RES_SUCCEED)
 	{
-		m_ListOfBoundingBox.List = Loader.getvDynamicBody();
-		m_ListOfBoundingBox.WorldPos = Pos - m_pMesh->m_ReglagePivot;
+		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
+		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		m_ListOfBoundingBox.MajPivot(m_pMesh);
-		m_ListOfBoundingBox.List[0]->OnEnterFunc= OnEnterFunc; 
-		m_ListOfBoundingBox.List[0]->OnStayFunc = OnStayFunc; 
-		m_ListOfBoundingBox.List[0]->OnLeaveFunc= OnLeaveFunc; 
 
-		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox, true );
+		m_EmpActor = CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
 	}
 }
 

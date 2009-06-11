@@ -147,17 +147,25 @@ u8 SceneObject2D::GetPriority() const
 
 //**********************************************************
 // Change le shader appliqué à l'objet.
-// @param[in]	shader : Pointeur sur le shader
+// @param[in]	shaderName : Nom de la ressource shader
 //**********************************************************
-void SceneObject2D::SetShader( Shader *shader )
+void SceneObject2D::SetShader( const std::string &shaderName )
 {
-	assert( shader );
-	if( m_Shader )
+	if( m_Shader && shaderName != m_ShaderName )
 	{
 		ResourceManager::GetInstance()->Remove<Shader>( m_ShaderName );
-		m_Shader = shader;
+		m_Shader = ResourceManager::GetInstance()->Load<Shader>( shaderName );
 	}
-	m_ShaderName = shader->GetName();
+	m_ShaderName = shaderName;
+}
+
+//**********************************************************
+// Donne le nom du shader de l'objet.
+// @return	Nom de la ressource shader
+//**********************************************************
+const std::string& SceneObject2D::GetShaderName() const
+{
+	return m_ShaderName;
 }
 
 //**********************************************************

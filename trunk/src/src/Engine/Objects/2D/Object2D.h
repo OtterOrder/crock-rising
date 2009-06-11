@@ -8,9 +8,9 @@
 
 //******************************************************************
 
-// Flags pour les objets 2D
-//#define		O2D_WINDOW_SIZE				(1<<0)		// L'objet a la taille de la fenêtre
-//#define		O2D_ALWAYS_ON_CENTER		(1<<1)		// Point chaud toujours au centre
+// Flags des objets 2D
+//#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
+#define		O2D_RELATIVE_SIZE			(1<<1)		// Taille relative aux dimensions de la fenêtre
 
 //******************************************************************
 
@@ -44,11 +44,6 @@ public:
 	void SetRotation( float angle );
 	float GetRotation() const;
 
-	// Gestion des flags
-	void SetFlag( u32 flag );
-	void UnsetFlag( u32 flag );
-	bool IsFlagSet( u32 flag ) const;
-
 	// Update toute la 2D
 	static void FullUpdate();
 
@@ -71,6 +66,11 @@ protected:
 
 	virtual void dirty_Refresh() {}					// Met à jour tout le bazar. A surcharger
 	void WorldMatrix( D3DMATRIX *pMatrix ) const;	// Calcule la matrice de l'objet dans le repère world
+
+	// Gestion des flags
+	void SetFlag( u32 flag );
+	void UnsetFlag( u32 flag );
+	bool IsFlagSet( u32 flag ) const;
 
 };
 

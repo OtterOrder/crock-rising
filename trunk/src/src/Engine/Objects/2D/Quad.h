@@ -24,6 +24,12 @@ public:
 	u32 GetWidth() const;
 	u32 GetHeight() const;
 
+	// Taille relative aux dimensions de la fenêtre
+	void SetRelSize( float relWidth, float relHeight );
+	void SetRelSize( const Vector2f &relSize );
+	float GetRelWidth() const;
+	float GetRelHeight() const;
+
 	// Gestion des données DirectX
 	// Pas besoin..
 

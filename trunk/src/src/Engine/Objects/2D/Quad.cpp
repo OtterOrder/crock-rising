@@ -8,6 +8,8 @@
 #define		QUAD_VERTICES			4
 #define		QUAD_DEFAULT_POSITIONT	(Vector4f( 0.f, 0.f, 0.f, 1.f ))
 
+#define		RENDERER				(Renderer::GetInstance())	// Raccourcis vers le Renderer
+
 //******************************************************************
 
 // Coordonnées de texture par défaut du quad
@@ -84,7 +86,7 @@ void Quad::Draw()
 		return;
 	}
 
-	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
+	LPDIRECT3DDEVICE9 pDevice = RENDERER->m_pd3dDevice;
 
 	// Paramètres du shader
 	m_Shader->GetEffect()->SetValue( "g_Color", (void*)&m_Color, sizeof(Color4f) );
@@ -141,6 +143,44 @@ u32 Quad::GetWidth() const
 u32 Quad::GetHeight() const
 {
 	return m_Height;
+}
+
+//**********************************************************
+// Change la taille relative.
+// @param[in]	relWidth	: Largeur relative (0->1)
+// @param[in]	relHeight	: Hauteur relative (0->1)
+//**********************************************************
+void Quad::SetRelSize( float relWidth, float relHeight )
+{
+	SetSize(
+		(u32)( (RENDERER->GetWindowWidth()*relWidth)+0.5f ),
+		(u32)( (RENDERER->GetWindowHeight()*relHeight)+0.5f )
+	);
+}
+
+//**********************************************************
+// Change la taille relative.
+// @param[in]	relSize	: { largeur, hauteur } relatives (0->1)
+//**********************************************************
+void Quad::SetRelSize( const Vector2f &relSize )
+{
+	SetRelSize( relSize.x, relSize.y );
+}
+
+//**********************************************************
+// Donne la largeur relative de l'objet.
+//**********************************************************
+float Quad::GetRelWidth() const
+{
+	return (float)m_Width / RENDERER->GetWindowWidth();
+}
+
+//**********************************************************
+// Donne la hauteur relative de l'objet.
+//**********************************************************
+float Quad::GetRelHeight() const
+{
+	return (float)m_Height / RENDERER->GetWindowHeight();
 }
 
 //**********************************************************

@@ -24,6 +24,10 @@ public:
 	Object( D3DXVECTOR3 pos );
 	virtual ~Object( void );
 
+	float m_vAngleX;
+	float m_vAngleY;
+	float m_vAngleZ;
+
 	// Update
 	virtual void Update(); // Méthode appelée chaque tour moteur
 

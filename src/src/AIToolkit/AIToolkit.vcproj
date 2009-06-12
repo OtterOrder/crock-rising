@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)src\CrockRising&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;NOMINMAX"
+				PreprocessorDefinitions="_WIN32;WIN32;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -105,7 +105,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)src\CrockRising&quot;;&quot;$(SolutionDir)include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;NOMINMAX"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

@@ -2,93 +2,76 @@
 #include "Physicalizer.h"
 
 
-//ControllerHitReport* gTest = new ControllerHitReport;
+NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb );
+NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb );
+NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb );
+void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb);
+NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );
 
-//===========================================================================//
-//Testera si il y a collision avec l'objet po                                //
-//===========================================================================//
-NxVec3 VecToNxVec(Vector3f V)
-{
-	return NxVec3(V.x, V.y, V.z);
-}
-
-void Normalize( Vector3f &V )
-{
-	V = V/Norme(V);
-}
-
-float Norme( const Vector3f V )
-{
-	float norme = sqrt(V.x*V.x + V.y*V.y + V.z*V.z);
-	return norme > 0 ? norme : 1;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// Création d'une boundingbox + intégration dans le moteur physique		   //
-// Il faut passer la description associé au type(, boxdesc pour box etc)   //
-/////////////////////////////////////////////////////////////////////////////
-
-
-void CreateBox( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  )
+NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 {
 	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;
-	if(!List.getPbList()[0]->bIsDynamic) 
-		boxDesc->group = Physicalizer::GROUP_STATIC;
-	boxDesc->dimensions = VecToNxVec( Pb->bodySize);			//Dimension
-	boxDesc->mass = Pb->fMass;									//Masse
-	boxDesc->localPose.t = VecToNxVec( Pb->translate );			//Position
-	boxDesc->materialIndex = GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel4
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
-	boxDesc->localPose.M = m;									//Rotation
-	if(IsTrigger) boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;		//Trigger
+
+	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);												//Dimension
+	boxDesc->mass			= Pb->fMass;																//Masse
+	boxDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
+	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	boxDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
+	boxDesc->localPose.M	= m;																		//Rotation
+	if(Pb->type == TRIGGER) 
+		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
 	assert(boxDesc->isValid());
 
 	ActorDesc.shapes.push_back(boxDesc);
-	List.pushShapeRef( boxDesc );
+	return boxDesc;
 }
 
-void CreateSphere( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  )
+NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 {
 	NxSphereShapeDesc *sphereDesc = new NxSphereShapeDesc;
-
-	sphereDesc->radius = (NxReal)Pb->bodySize.x ;				//Rayon
-	sphereDesc->mass = Pb->fMass;								//Masse
-	sphereDesc->localPose.t = VecToNxVec( Pb->translate );		//Position DU SHAPE
-	sphereDesc->materialIndex = GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
-	sphereDesc->localPose.M = m;								//Rotation DU SHAPE
-	if(IsTrigger) sphereDesc->shapeFlags |= NX_TRIGGER_ENABLE;	//Trigger
+
+	sphereDesc->radius			= (NxReal)Pb->bodySize.x ;													//Rayon
+	sphereDesc->mass			= Pb->fMass;																//Masse
+	sphereDesc->localPose.t		= VecToNxVec( Pb->translate );												//Position
+	sphereDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	sphereDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
+	sphereDesc->localPose.M		= m;																		//Rotation
+	if(Pb->type == TRIGGER) 
+		sphereDesc->shapeFlags	|= NX_TRIGGER_ENABLE;														//Trigger
 	assert(sphereDesc->isValid());
 
 	ActorDesc.shapes.push_back(sphereDesc);
-	List.pushShapeRef( sphereDesc );
+	return sphereDesc;
 }
 
-void CreateCapsule( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  )
+NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 {
 	NxCapsuleShapeDesc *capsuleDesc = new NxCapsuleShapeDesc;
+	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);		
 
-	capsuleDesc->radius =(NxReal)Pb->bodySize.x ;				//Rayon
-	capsuleDesc->height =(NxReal)Pb->bodySize.y ;				//Hauteur
-	capsuleDesc->mass = Pb->fMass;								//Masse
-	capsuleDesc->localPose.t = VecToNxVec( Pb->translate );		//Position
-	capsuleDesc->materialIndex = GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
-	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
-	capsuleDesc->localPose.M = m;								//Rotation
-	if(IsTrigger) capsuleDesc->shapeFlags |= NX_TRIGGER_ENABLE;	//Trigger
+	capsuleDesc->radius			=(NxReal)Pb->bodySize.x ;													//Rayon
+	capsuleDesc->height			=(NxReal)Pb->bodySize.y ;													//Hauteur
+	capsuleDesc->mass			= Pb->fMass;																//Masse
+	capsuleDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
+	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	capsuleDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel			
+	capsuleDesc->localPose.M	= m;																		//Rotation
+	if(Pb->type == TRIGGER) 
+		capsuleDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
 	assert(capsuleDesc->isValid());
 
 	ActorDesc.shapes.push_back(capsuleDesc);
-	List.pushShapeRef( capsuleDesc );
+	return capsuleDesc;
 }
 
-void FinalizeActor( NxActorDesc ActorDesc, ListOfBoundingBox List, const bool IsTrigger )
+void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb )
 {
 	ActorDesc.density		= 1.0f;
-	ActorDesc.globalPose.t	= VecToNxVec(List.getInitialWorldPos());
-	PhysicBody* Pb = *List.getPbList().begin();
+	ActorDesc.globalPose.t	= VecToNxVec(Pos);
 
-	if(IsTrigger)
+	if(Pb->type == TRIGGER)
 	{
 		ActorDesc.userData = new ActorUserData;
 		((ActorUserData*)(ActorDesc.userData))->OnEnterFunc = Pb->OnEnterFunc  ;
@@ -112,7 +95,7 @@ void FinalizeActor( NxActorDesc ActorDesc, ListOfBoundingBox List, const bool Is
 
 	assert(ActorDesc.isValid());
 
-	NxScene* scene = GetPhysicScene();
+	NxScene* scene = physX::getPhysicScene();
 	NxActor* pActor = scene->createActor( ActorDesc );
 	assert(pActor);
 }
@@ -120,7 +103,7 @@ void FinalizeActor( NxActorDesc ActorDesc, ListOfBoundingBox List, const bool Is
 
 NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction )
 {
-	NxScene* Scene = GetPhysicScene();
+	NxScene* Scene = physX::getPhysicScene();
 	NxMaterialDesc materialDesc;
 	materialDesc.restitution		= restitution;
 	materialDesc.dynamicFriction	= staticFriction;
@@ -129,7 +112,8 @@ NxMaterialIndex GenMaterial( const float restitution, const float staticFriction
 	return Scene->createMaterial(materialDesc)->getMaterialIndex();
 }
 
-int CreateBoundingBox( ListOfBoundingBox &BBList )
+//////////////////////////////////////////////////////////////////////////
+int physX::CreateBoundingBox( ListOfBoundingBox &BBList )
 {
 	NxActorDesc actorDesc;
 	PhysicBody* Pb;
@@ -141,18 +125,18 @@ int CreateBoundingBox( ListOfBoundingBox &BBList )
 		Pb = *it++;
 		switch( Pb->type )
 		{
-			case BOX	 : CreateBox(actorDesc, BBList, Pb, false);		break;
-			case SPHERE	 : CreateSphere(actorDesc, BBList, Pb, false);	break;
-			case CAPSULE : CreateCapsule(actorDesc, BBList, Pb, false); break;
+			case BOX	 : BBList.pushShapeRef( CreateBox(actorDesc, Pb) );		break;
+			case SPHERE	 : BBList.pushShapeRef( CreateSphere(actorDesc, Pb) );	break;
+			case CAPSULE : BBList.pushShapeRef( CreateCapsule(actorDesc, Pb) ); break;
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList, false);
-	return GetPhysicScene()->getNbActors() - 1;
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
+	return physX::getPhysicScene()->getNbActors() - 1;
 }
 
 
-int CreateTrigger(ListOfBoundingBox &BBList,
+int physX::CreateTrigger(ListOfBoundingBox &BBList,
 	void (*OnEnterFunc)(), 
 	void (*OnLeaveFunc)(), 
 	void (*OnStayFunc)() )
@@ -165,18 +149,60 @@ int CreateTrigger(ListOfBoundingBox &BBList,
 	while(it < PbList.end())
 	{
 		Pb = *it++;
+		Pb->OnEnterFunc = OnEnterFunc;
+		Pb->OnLeaveFunc = OnLeaveFunc;
+		Pb->OnStayFunc = OnStayFunc;
+
 		switch( Pb->type )
 		{
-			case BOX	 : CreateBox(actorDesc, BBList, Pb, true);		break;
-			case SPHERE	 : CreateSphere(actorDesc, BBList, Pb, true);	break;
-			case CAPSULE : CreateCapsule(actorDesc, BBList, Pb, true);  break;
+			case BOX	 : BBList.pushShapeRef( CreateBox(actorDesc, Pb) );		break;
+			case SPHERE	 : BBList.pushShapeRef( CreateSphere(actorDesc, Pb) );	break;
+			case CAPSULE : BBList.pushShapeRef( CreateCapsule(actorDesc, Pb) ); break;
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList, true);
-	return GetPhysicScene()->getNbActors() - 1;
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
+	return physX::getPhysicScene()->getNbActors() - 1;
 }
 
+NxScene* physX::getPhysicScene()
+{
+	Physicalizer* physInstance = Physicalizer::GetInstance();
+	NxScene* pscene = physInstance->getScene();
+	assert(pscene);
+
+	return pscene;
+}
+
+NxActor* physX::getActor( int emp )
+{
+	if(emp == -1) return NULL;
+	NxActor* pactor = getPhysicScene()->getActors()[ emp ];
+	assert(pactor);
+
+	return pactor; 
+}
+
+NxControllerManager* physX::getControllerManager()
+{
+	Physicalizer* physInstance = Physicalizer::GetInstance();
+	NxControllerManager* pControllerManager = physInstance->getControllerManager();
+	assert(pControllerManager);
+
+	return pControllerManager;
+}
+
+NxController* physX::getController( int emp )
+{
+	if(emp == -1) return NULL;
+	NxController* pController = getControllerManager()->getController( emp );
+	assert(pController);
+
+	return pController;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
 void ListOfBoundingBox::MajPivot(const Mesh* pMesh)
 {
 	PhysicBody* Pb;
@@ -196,5 +222,7 @@ void ListOfBoundingBox::ReleaseList()
 	{
 		Sd = *it++;
 		delete Sd;
+		Sd = NULL;
 	}	
+	m_ShapeRefList.clear();
 }

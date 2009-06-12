@@ -61,20 +61,24 @@ public:
 	//===========================================================================//
 	// Physique de l'objet														 //
 	//===========================================================================//
-	void SetObjectPhysical( const std::string& physic, Vector3f Pos);		// Donne la main au moteur physique pour gérer l'objet
-	void SetControledCharacter(Vector3f Pos, float radius, float height);	// Fournis une capsule à un controlleur physique
-	void SetControledCharacter(Vector3f Pos, Vector3f size);				// ---------- box ------------------------------
-	void SetObjectUnPhysical();
-	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)());
+	void SetObjectPhysical( const std::string& physic);		// Donne la main au moteur physique pour gérer l'objet
+	void SetControledCharacter(float radius, float height);	// Fournis une capsule à un controlleur physique
+	void SetControledCharacter(Vector3f size);				// Fournis une box à un controlleur physique
+	void SetObjectUnPhysical();												// Retire la physique à un objet si besoin
+	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); // Donne la main au moteur physique pour gérer l'objet en tant que trigger
 	
-	void SetPhysicalTranslation( float dispX, float dispY, float dispZ );
 	int  getEmpActor(){ return m_EmpActor; }
 	void setEmpActor(int Emp){ m_EmpActor = Emp; }
 	int  getEmpController(){ return m_EmpController; }
 	void setEmpController(int Emp){ m_EmpController = Emp; }
 	std::vector<PhysicBody*> getPhysicBodyList();
-	bool IsActor(){ return m_EmpActor != -1; }
-	bool IsController(){ return m_EmpController != -1; }
+	bool IsController(){ return m_EmpController != -1; }			//Le controleur est un acteur ET un controleur
+	bool IsActor(){ return m_EmpActor != -1 && !IsController(); }	//L'acteur n'est qu'un acteur.
+	bool IsDynamic()
+	{ 
+		//PhysicBody* Pb = (*getPhysicBodyList().begin());
+		return (*getPhysicBodyList().begin())->bIsDynamic; 
+	}
 public:
 
 	//===========================================================================//
@@ -85,7 +89,6 @@ public:
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj);
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
-	virtual void	BerSetTransform(const D3DXMATRIX* world);
 	virtual void	ApplyTransform(const D3DXMATRIX* world);
 	virtual void    Update(); // Méthode appelée chaque tour moteur
 	virtual void    SetTranslation( float x, float y, float z );
@@ -130,6 +133,7 @@ protected:
 	virtual void	DeleteData();
 	virtual void	DrawShadow();
 	void			CommonInit( void ); // Initialisation commune à tous les constructeurs
+	virtual void	SetPhysicalTranslation( float dispX, float dispY, float dispZ ); //Fonction utilisé par le sceneobject pour faire la translation d'un controller
 	
 };
 

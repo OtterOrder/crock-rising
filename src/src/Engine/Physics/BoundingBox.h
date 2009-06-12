@@ -6,20 +6,22 @@
 #include	"NxPhysics.h"
 #include	"NxBoxController.h"
 #include	"NxCapsuleController.h"
+#include	"NxControllerManager.h"
 
 #include	"Resources/Mesh.h"
 #include	"Trigger/UserData.h"
 
+//Type de la shape d'une bounding box
 enum ShapeType
 {
 	BOX,
 	SPHERE,
 	CAPSULE,
-	PLAN,
 	TRIGGER,
 	LOAD_ERROR
 };
 
+//Type de l'objet
 enum PhysicalObjectType
 {
 	ACTOR,
@@ -66,28 +68,85 @@ public:
 	void MajPivot(const Mesh* pMesh);	
 
 	inline std::vector<PhysicBody*> getPbList(){ return m_PbList; }
-	inline void setPbList(std::vector<PhysicBody*> L){ m_PbList = L; }
-	inline Vector3f getInitialWorldPos(){ return m_InitialWorldPos; }
-	inline void setInitialWorldPos(Vector3f P){ m_InitialWorldPos = P; }
-	inline void pushShapeRef(NxShapeDesc *const&Desc){ m_ShapeRefList.push_back(Desc); }
+	inline Vector3f					getInitialWorldPos(){ return m_InitialWorldPos; }
+
+	inline void						setPbList(std::vector<PhysicBody*> L){ m_PbList = L; }
+	inline void						setInitialWorldPos(Vector3f P){ m_InitialWorldPos = P; }
+
+	inline void						pushShapeRef(NxShapeDesc *const&Desc){ m_ShapeRefList.push_back(Desc); }
 
 };
 
-NxVec3 VecToNxVec(Vector3f V);
-void Normalize(Vector3f &V);
-float Norme(const Vector3f V);
+inline NxVec3 VecToNxVec(Vector3f V){ return NxVec3(V.x, V.y, V.z); }
 
-//Fonction qui permet de créer une bounding box.
-int CreateBoundingBox(ListOfBoundingBox &BBList);
-int CreateTrigger(ListOfBoundingBox &BBList,
-	void (*OnEnterFunc)(), 
-	void (*OnLeaveFunc)(), 
-	void (*OnStayFunc)());
+namespace physX
+{
+	/************************************************************************************
+	* Fonction de création d'une bounding box.
+	* @param[in]	ListOfBoundingBox	: Liste des bounding box du DAE avec leurs param
+	* @return		int : l'indice de l'emplacement de l'acteur
+	************************************************************************************/
+	int CreateBoundingBox(ListOfBoundingBox &BBList);
 
-void CreateBox( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger );
-void CreateSphere( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  );
-void CreateCapsule( NxActorDesc& ActorDesc, ListOfBoundingBox& List, const PhysicBody* Pb, const bool IsTrigger  );
-void FinalizeActor(const NxActorDesc ActorDesc, ListOfBoundingBox List, const bool IsTrigger);
-NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );						//TRIGGER
+	/*************************************************************************************
+	* Fonction de création d'un trigger.
+	* @param[in]	ListOfBoundingBox	: Liste des bounding box du DAE avec leurs param
+	* @param[in]	OnEnterFunc	: Fonction lancée quand un objet RENTRE dans le trigger
+	* @param[in]	OnLeaveFunc	: Fonction lancée quand un objet SORT du le trigger
+	* @param[in]	OnStayFunc	: Fonction lancée quand un objet EST dans le trigger
+	* @return		int : l'indice de l'emplacement du trigger
+	************************************************************************************/
+	int CreateTrigger(ListOfBoundingBox &BBList,
+		void (*OnEnterFunc)(), 
+		void (*OnLeaveFunc)(), 
+		void (*OnStayFunc)());
+
+	/************************************************************************************
+	* Fonction de création d'une capsule controller
+	* @param[in]	pos	: Position initiale en world, provient du SceneObject
+	* @param[in]	radius	: Rayon de la capsule du controller
+	* @param[in]	height	: hauteur du controller
+	* @return		int : l'indice de l'emplacement du controller
+	* Précondition	radius et height ne doivent pas être tous les deux nuls.
+	************************************************************************************/
+	int CreateControlledCapsule( Vector3f pos, float radius, float height, int &empActor );
+
+	/************************************************************************************
+	* Fonction de création d'une box controller
+	* @param[in]	pos	: Position initiale en world, provient du SceneObject
+	* @param[in]	size: largeur, hauteur et profondeur de la box 
+	* @return		int : l'indice de l'emplacement du controller
+	* Précondition	size ne doivent pas être un vecteur nul.
+	************************************************************************************/
+	int CreateControlledBox( Vector3f pos, Vector3f size, int &empActor );
+
+	/************************************************************************************
+	* Fonction de récupération de la scène physique
+	* @return	NxScene* : scène physique
+	************************************************************************************/
+	NxScene* getPhysicScene();
+
+	/************************************************************************************
+	* Fonction de récupération d'un acteur
+	* @param[in]	emp	: emplacement de l'acteur dans la liste des acteurs de physX
+	* @return		NxActor* : acteur
+	* Précondition	emp doit être strictement positif et inférieur au nombre d'acteur.
+	************************************************************************************/
+	NxActor* getActor(int emp);
+
+	/************************************************************************************
+	* Fonction de récupération du manager des controlleur
+	* @return	NxControllerManager* : manager des controlleur
+	************************************************************************************/
+	NxControllerManager* getControllerManager();
+
+	/************************************************************************************
+	* Fonction de récupération d'un controleur
+	* @param[in]	emp	: emplacement du controleur dans la liste des controleur de physX
+	* @return		NxController* : controleur
+	* Précondition	emp doit être strictement positif et inférieur au nombre de controller.
+	************************************************************************************/
+	NxController* getController(int emp);
+}
 
 #endif

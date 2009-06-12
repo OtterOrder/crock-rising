@@ -90,27 +90,32 @@ void SceneObject::SetShader(const std::string& strShader)
 //===========================================================================//
 // Physique de l'objet														 //
 //===========================================================================//
-void SceneObject::SetObjectPhysical( const std::string& physic, Vector3f Pos )
+void SceneObject::SetObjectPhysical( const std::string& physic )
 {
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	BoundingBoxLoader Loader;
 	if( Loader.Load(physic) == RES_SUCCEED)
 	{
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		m_ListOfBoundingBox.MajPivot(m_pMesh);
-
-		m_EmpActor = CreateBoundingBox( m_ListOfBoundingBox );
+		
+		m_EmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox );
 	}
+	if(!IsDynamic())
+		physX::getActor(m_EmpActor)->getGlobalPose().getColumnMajor44( m_WorldMatrix );
 }
 
-void SceneObject::SetControledCharacter(Vector3f Pos, float radius, float height)
+void SceneObject::SetControledCharacter( float radius, float height)
 {
-	m_EmpController = CreateControlledCapsule(Pos, radius, height);
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_EmpController = physX::CreateControlledCapsule(Pos, radius, height, m_EmpActor);
 }
 
-void SceneObject::SetControledCharacter(Vector3f Pos, Vector3f size)
+void SceneObject::SetControledCharacter( Vector3f size)
 {
-	m_EmpController = CreateControlledBox(Pos, size);
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_EmpController = physX::CreateControlledBox(Pos, size, m_EmpActor);
 }
 
 void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)() )
@@ -123,33 +128,35 @@ void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, voi
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		m_ListOfBoundingBox.MajPivot(m_pMesh);
 
-		m_EmpActor = CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
+		m_EmpActor = physX::CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
 	}
+	if(!IsDynamic())
+		physX::getActor(m_EmpActor)->getGlobalPose().getColumnMajor44( m_WorldMatrix );
 }
 
 
 void SceneObject::SetObjectUnPhysical()
 {
-	//Les objets ne sont pas retirés de la simulation physique, a voir.
+	if(IsActor())
+		physX::getPhysicScene()->releaseActor(*physX::getActor(m_EmpActor));
+	else if(IsController())
+		physX::getControllerManager()->releaseController(*physX::getController(m_EmpController));
+	m_ListOfBoundingBox.ReleaseList();
 	m_EmpActor = -1;
 	m_EmpController = -1;
 }
 
 void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ )
 {
-	if(IsController())
-	{
-		Physicalizer* physXInstance = Physicalizer::GetInstance();
-		NxController* pControler = physXInstance->getControllerManager()->getController( m_EmpController );
-		assert( pControler );
+		NxController* pControler = physX::getController( m_EmpController );
 
 		NxU32 collisionFlags; 
 		NxF32 minDistance = 0.001f;
-		NxVec3 disp( dispX, dispY-0.1f, dispZ ); 
+		NxVec3 disp( dispX, dispY, dispZ ); 
 
-		pControler->move( disp, Physicalizer::MASK_OTHER, minDistance, collisionFlags );
-	}
+		pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
 }
+
 //Fonction pour récupérer les infos de la bb pour le culling
 std::vector<PhysicBody*> SceneObject::getPhysicBodyList()
 {
@@ -229,21 +236,6 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
     m_matrixStack->Pop();
 }
 
-
-void SceneObject::BerSetTransform( const D3DXMATRIX* world )
-{
-	D3DXMATRIX RotMat;
-
-	D3DXMatrixIdentity( &RotMat );
-
-	if(IsController())
-	{
-		RotMat._22=0; RotMat._23=1;
-		RotMat._32=1; RotMat._33=0;
-	}
-	m_WorldMatrix = RotMat*(*world);
-}
-
 void SceneObject::Update()
 {
 	// Si l'objet affecté par la physique
@@ -252,6 +244,27 @@ void SceneObject::Update()
 		// Si controller multiplier par la matrice de rotation
 		// m_WorldMatrix = GetObjectPhysicalMatrix;
 
+	if (IsActor())
+	{
+		NxActor* pac = physX::getActor(m_EmpActor);
+		if(!pac->isSleeping()) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
+			pac->getGlobalPose().getColumnMajor44( m_WorldMatrix );
+	}
+	else if (IsController())
+	{
+		SetPhysicalTranslation(0.f, -0.1f, 0.f);
+		NxController* pController = physX::getController(m_EmpController);
+
+		NxExtendedVec3 pos = pController->getPosition();
+		D3DXMATRIX posMat, rotMat;
+		Vector3f reg = m_pMesh->m_ReglagePivot;
+		D3DXMatrixTranslation(&posMat, (float)pos.x - reg.x, (float)pos.y - reg.z, (float)pos.z - reg.y);
+		D3DXMatrixIdentity( &rotMat );
+		rotMat._22=0; rotMat._23=1;
+		rotMat._32=1; rotMat._33=0;
+
+		m_WorldMatrix = rotMat*posMat; 
+	}
 }
 
 void SceneObject::SetTranslation( float x, float y, float z )
@@ -259,7 +272,7 @@ void SceneObject::SetTranslation( float x, float y, float z )
 
 	// Si l'objet est affecté par la physique (controller)
 	if(IsController())
-		// On affecte la transformation à la physique (appeler MoveTo (nom à changer))
+		// On affecte la transformation à la physique
 
 		SetPhysicalTranslation(x, y, z);
 

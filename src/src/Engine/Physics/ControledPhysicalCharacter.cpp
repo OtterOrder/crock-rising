@@ -2,16 +2,16 @@
 
 #include "Physics/Physicalizer.h"
 
-HeroHitReport*	gCharacterControllerCallback	= new HeroHitReport;
-AlienHitReport*	gAlienCallBackTest				= new AlienHitReport;
-
+//AlienHitReport*	gAlienCallBackTest				= new AlienHitReport;
+extern HeroHitReport* gCharacterControllerCallback;
 
 NxControllerAction HeroHitReport::onShapeHit(const NxControllerShapeHit& hit)
 {
 	if(hit.shape)
 	{
 		NxCollisionGroup group = hit.shape->getGroup();
-		if( group ) /*!= 0*/ /*Physicalizer::GROUP_STATIC )*/
+		
+		if( group )
 		{
 			NxActor& actor = hit.shape->getActor();
 			if(hit.dir.y==0.0f)
@@ -30,45 +30,22 @@ NxControllerAction HeroHitReport::onControllerHit(const NxControllersHit& hit)
 	return NX_ACTION_NONE; 
 }
 
-NxControllerAction  AlienHitReport::onShapeHit(const NxControllerShapeHit& hit)
-{ 
-	// 1) si hit.shape est l'arme du hero
-	//		alors baisser sa vie
-	//    sinon 
-	//		faire bouger les objets qu'il percutent
 
-	if(hit.shape)
+void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
+{
+	//TODO
+	if (pair.actors[0])
 	{
-		NxCollisionGroup group = hit.shape->getGroup();
-		if( group == Physicalizer::GROUP_WEAPON )
-		{
-			NxU32 collisionFlags; 
-			NxF32 minDistance = 0.001f; 
-
-			hit.controller->move( NxVec3(0, 10, 0), Physicalizer::MASK_OTHER, minDistance, collisionFlags );
-
-			//	NxActor& actor = hit.shape->getActor();
-			//		if(hit.dir.y==0.0f)
-			//		{
-			//			NxF32 force = 100.0f;
-			//			NxF32 coeff = actor.getMass() * hit.length * force;
-			//			actor.addForceAtLocalPos( hit.dir*coeff, NxVec3(0,0,0), NX_IMPULSE );
-			//		} 
-		}
-		/*else
-		{
-		if( group == Physicalizer::GROUP_STATIC )
-		{ 
-		hit.controller->getActor()->addLocalForceAtLocalPos( NxVec3( 0, 1, 0), NxVec3() );
-		}
-		}*/
+		//premièr acteur
 	}
-	return NX_ACTION_NONE;
+
+	if (pair.actors[1])
+	{
+		//etc
+	}
 }
 
-
-
-int CreateControlledCapsule( Vector3f pos, float radius, float height )
+int physX::CreateControlledCapsule( Vector3f pos, float radius, float height, int &empActor )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxCapsuleControllerDesc desc;
@@ -93,9 +70,11 @@ int CreateControlledCapsule( Vector3f pos, float radius, float height )
 	desc.callback		= gCharacterControllerCallback;
 
 	physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
+	empActor = physX::getPhysicScene()->getNbActors() -1;
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
-int CreateControlledBox( Vector3f pos, Vector3f size )
+
+int physX::CreateControlledBox( Vector3f pos, Vector3f size, int &empActor )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxBoxControllerDesc desc;
@@ -111,53 +90,9 @@ int CreateControlledBox( Vector3f pos, Vector3f size )
 	//	desc.stepOffset	= 0;
 	//	desc.stepOffset	= 10;
 
-	desc.callback		= gAlienCallBackTest; 
+//	desc.callback		= gAlienCallBackTest; 
 
 	physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
+	empActor = physX::getPhysicScene()->getNbActors() -1;
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
-
-// NxController* ControledBB::getBBController()
-// { 
-// 	Physicalizer* physXInstance = Physicalizer::GetInstance();
-// 	NxControllerManager* pManager = physXInstance->m_ControllerManager;
-// 
-// 	pManager->updateControllers();
-// 	return pManager->getController( m_empControlerList );
-//}
-
-
-// Vector3f ControledPhysicalCharacter::updateControlledPosition( void )
-// { 
-// 	//if( !m_isAlien ) //condition temp
-// 	moveTo( 0.f, -0.1f, 0.f ); //gravity
-// 
-// 	NxController* pControler = getBBController();
-// 	if( pControler )
-// 	{
-// 		NxExtendedVec3 pos = pControler->getPosition();
-// 
-// 		Vector3f offset( 0.f, -78.f, 0.f ); //offset Robot.dae
-// 		//offset( 0.f, -2.f, 0.f ); //offset Capsule.dae
-// 
-// 		if( m_isAlien )  //offset Alien1.dae
-// 		{
-// 			offset.x =  0.f; 
-// 			offset.y =  -16.f;
-// 			offset.z =  -4.43f; 
-// 		}
-// 
-// 		m_vPosition = Vector3f( (float)pos.x - offset.x, 
-// 			(float)pos.y - offset.y, 
-// 			(float)pos.z - offset.z );
-// 
-// 		return offset;
-// 	}
-// 
-// 	return Vector3f(0.f, 0.f, 0.f);
-// }
-// 
-// void ControledPhysicalCharacter::Update()
-// {
-// 	Object::Update();
-// }

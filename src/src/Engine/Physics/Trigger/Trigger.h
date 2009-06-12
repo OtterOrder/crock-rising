@@ -44,7 +44,7 @@ public:
 			}
 		}
 	}
-} gTriggerReport;
+};
 
 
 #endif  // TRIGGER_REPORT_H

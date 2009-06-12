@@ -24,7 +24,20 @@ enum PhysXResult
 	PHYSX_FAILED
 };
 
-NxScene* GetPhysicScene();
+enum GroupCollision
+{
+	GROUP_NONPHYSICS = 0,
+	GROUP_STATIC = 1,
+	GROUP_DYNAMIQUE = 2,
+	GROUP_WEAPON = 3,
+
+	MASK_STATIC			= 1 << GROUP_STATIC,
+	MASK_DYNAMIQUE		= 1 << GROUP_DYNAMIQUE,
+	MASK_WEAPON			= 1 << GROUP_WEAPON,
+
+	MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE | MASK_WEAPON
+
+};
 
 class Physicalizer : public Singleton< Physicalizer >
 {
@@ -43,37 +56,21 @@ class Physicalizer : public Singleton< Physicalizer >
 
 
 public:
-	enum GroupCollision
-	{
-		GROUP_NONPHYSICS = 0,
-		GROUP_STATIC = 1,
-		GROUP_DYNAMIQUE = 2,
-		GROUP_WEAPON = 3,
-
-		MASK_STATIC			= 1 << GROUP_STATIC,
-		MASK_DYNAMIQUE		= 1 << GROUP_DYNAMIQUE,
-		MASK_WEAPON			= 1 << GROUP_WEAPON,
-
-		MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE | MASK_WEAPON
-
-	};
 
 	bool InitPhysX();
 	void ExitPhysX();
 	bool ReloadPhysX();
 	void StartPhysics(); 
 	void GetPhysicsResults();	//Doit être avant chaque rendu pour la mise à jour des matrices.
-	PhysXResult DoTransform();	//Applique les transformations à tous la liste des SceneObject.
 	PhysXResult RunPhysics();	//Permet de récupérer le résultat de la physique, en appelant les fonctions dans le bon ordre
-	void connectToVRD();		//Fonction d'aide au debug, lancer le remote debuger de physX et exécuter CR.
-
-	PhysicalObjectType IsPhysical(SceneObject* SceObj);
+	void connectToVRD();		//Fonction d'aide au debug, lancer le remote debuger de physX et exécuter CR. 
+	void Link( SceneObject* const obj1, SceneObject* const obj2 );
 
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //
 	///////////////////////////////////////////////////////////////////////////
-	inline NxScene*			getScene()			{ return m_Scene;			}	
-	inline Vector3f			getGravity()		{ return m_Gravity;			}	
+	inline NxScene*				getScene()			{ return m_Scene;			}	
+	inline Vector3f				getGravity()		{ return m_Gravity;			}	
 	inline NxControllerManager* getControllerManager(){ return m_ControllerManager; }
 
 	///////////////////////////////////////////////////////////////////////////

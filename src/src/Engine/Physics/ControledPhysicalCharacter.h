@@ -14,18 +14,12 @@ public:
 	virtual NxControllerAction  onControllerHit(const NxControllersHit& hit);
 };
 
-class AlienHitReport : public NxUserControllerHitReport
+class ContactReport : public NxUserContactReport
 {
 public:
-	virtual NxControllerAction  onShapeHit(const NxControllerShapeHit& hit);
-	virtual NxControllerAction  onControllerHit(const NxControllersHit& hit)
-	{ 
-		return NX_ACTION_NONE; 
-	}
-};
+	virtual void onContactNotify(NxContactPair& pair, NxU32 events);
 
-int CreateControlledCapsule( Vector3f pos, float radius, float height );
-int CreateControlledBox( Vector3f pos, Vector3f size );
+};
 
 
 // class ControledPhysicalCharacter : public SceneObject, public ControledBB

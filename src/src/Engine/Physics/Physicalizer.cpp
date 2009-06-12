@@ -4,8 +4,12 @@
 // ===============================================================================
 #include "Physicalizer.h"
 #include "Trigger/Trigger.h"
+#include "Physics/ControledPhysicalCharacter.h"
 
-extern TriggerReport gTriggerReport;
+TriggerReport*  gTriggerReport					= new TriggerReport;
+
+HeroHitReport*	gCharacterControllerCallback	= new HeroHitReport;
+ContactReport*  gContactReport					= new ContactReport;
 
 bool Physicalizer::InitPhysX()
 {
@@ -27,10 +31,16 @@ bool Physicalizer::InitPhysX()
 		return false;
 	}
 
+	//m_PhysicsSDK->setParameter( NX_SKIN_WIDTH, 0.01 );
+
 	connectToVRD();
 
+	gTriggerReport->scene = m_Scene;
+
     NxSceneDesc sceneDesc;
- 	sceneDesc.simType				= NX_SIMULATION_HW; //avec carte accé PhysX
+ 	sceneDesc.simType				= NX_SIMULATION_SW; //avec carte accé PhysX	
+	sceneDesc.userContactReport		= gContactReport;
+	sceneDesc.userTriggerReport		= gTriggerReport;
 	sceneDesc.gravity               = NxVec3(m_Gravity.x, m_Gravity.y, m_Gravity.z) ;
     m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 
@@ -41,9 +51,6 @@ bool Physicalizer::InitPhysX()
 		assert( m_Scene );
 	}
 	
-	//Création du manager des objets trigger 
-	gTriggerReport.scene = m_Scene;
-	m_Scene->setUserTriggerReport(&gTriggerReport);
 	
 	// Set default material
 	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);
@@ -76,7 +83,7 @@ bool Physicalizer::ReloadPhysX()
 
 void Physicalizer::StartPhysics()
 {
-	m_Scene->simulate( NxReal(0.01667) );
+	m_Scene->simulate( NxReal(0.0125) );
 	m_Scene->flushStream();
 	
 }
@@ -94,7 +101,7 @@ PhysXResult Physicalizer::RunPhysics()
 
 		StartPhysics();
 		GetPhysicsResults();
-		return DoTransform();
+		return PHYSX_SUCCEED;
 	}
 	return PHYSX_FAILED;
 }
@@ -112,67 +119,10 @@ void Physicalizer::connectToVRD()
 #endif
 }
 
-PhysXResult Physicalizer::DoTransform()
-{	//matrice obtenue de PhysX
-	std::list< SceneObject* > List = SceneObject::RefList;
-	std::list< SceneObject* >::iterator it = List.begin();
-	int Size = List.size();
 
-	while( it != List.end() )
-	{
-		SceneObject* aSObj = (SceneObject*)*it; 
-		PhysicalObjectType type = IsPhysical(aSObj);
-		switch (type)
-		{		
-			case ACTOR :
-				{
-					int emp = aSObj->getEmpActor();
-					if(emp < 0) return PHYSX_FAILED;
-
-					NxActor** ac =  getScene()->getActors(); //La liste des acteurs
-					NxActor* pac = ac[ emp ];				 //Pointeur sur l'acteur qui va bien
-					D3DXMATRIX WorldMat;
-					pac->getGlobalPose().getColumnMajor44( WorldMat );
-					aSObj->BerSetTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					//aSObj->ApplyTransform( &WorldMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					break;
-				}
-			case CONTROLLER :
-				{
-					int emp = aSObj->getEmpController();
-					if(emp < 0) return PHYSX_FAILED;
-
-					
-					NxController* pController = m_ControllerManager->getController( emp );
-					NxExtendedVec3 pos = pController->getPosition();
-					D3DXMATRIX posMat;
-					Mesh* mesh = aSObj->GetMesh();
-					Vector3f reg = mesh->m_ReglagePivot;
-					D3DXMatrixTranslation(&posMat, (float)pos.x - reg.x, (float)pos.y - reg.z, (float)pos.z - reg.y);
-					
-					aSObj->BerSetTransform( &posMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					//aSObj->ApplyTransform( &posMat ); // Je comprends pas la nouvelle manière de faire les transforme !!
-					break;
-				}
-			default : break;
-		}
-		++it;
-	}
-	return PHYSX_SUCCEED;
-}
-
-PhysicalObjectType Physicalizer::IsPhysical( SceneObject* SceObj )
+void Physicalizer::Link( SceneObject* const obj1, SceneObject* const obj2 )
 {
-	if(SceObj) 
-	{
-		if(SceObj->getEmpActor() >= 0) return ACTOR;
-		if(SceObj->getEmpController() >= 0) return CONTROLLER;
-	}
-	return NOPHYSICAL;
-}
-
-NxScene* GetPhysicScene()
-{
-	Physicalizer* physInstance = Physicalizer::GetInstance();
-	return physInstance->getScene();
+	NxActor* pactor1  =  physX::getActor(obj1->getEmpActor());
+	NxActor* pactor2  =  physX::getActor(obj2->getEmpActor());
+	m_Scene->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH );
 }

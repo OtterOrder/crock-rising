@@ -45,7 +45,8 @@ SceneObject2D::SceneObject2D()
 SceneObject2D::~SceneObject2D()
 {
 	SceneObject2D::RefList.remove( this );
-	ClearDxData();
+	OnLostDevice();
+	OnDestroyDevice();
 }
 
 //**********************************************************
@@ -189,9 +190,20 @@ bool SceneObject2D::ComparePriority( const SceneObject2D *pObj1, const SceneObje
 }
 
 //**********************************************************
-// Initialise les données Dx.
+// Callback appelée juste après la création du device.
 //**********************************************************
-void SceneObject2D::InitDxData()
+void SceneObject2D::OnCreateDevice()
+{
+	if( !m_Shader )
+	{
+		m_Shader = ResourceManager::GetInstance()->Load<Shader>( m_ShaderName );
+	}
+}
+
+//**********************************************************
+// Callback appelée juste après le reset du device.
+//**********************************************************
+void SceneObject2D::OnResetDevice()
 {
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 	std::vector<D3DVERTEXELEMENT9> elements;
@@ -209,6 +221,7 @@ void SceneObject2D::InitDxData()
 			&m_VertexBuffer,
 			NULL
 		);
+		activate_dirty();	// Pour remplir le vb
 	}
 
 	// Vertex déclaration
@@ -220,20 +233,18 @@ void SceneObject2D::InitDxData()
 			&m_VertexDeclaration
 		);
 	}
-
+	
 	// Shader
-	if( !m_Shader )
+	if( m_Shader )
 	{
-		m_Shader = ResourceManager::GetInstance()->Load<Shader>( m_ShaderName );
+		m_Shader->GetEffect()->OnResetDevice();
 	}
-
-	activate_dirty();
 }
 
 //**********************************************************
-// Libère les données Dx.
+// Callback appelée à chaque fois qu'on perd le device.
 //**********************************************************
-void SceneObject2D::ClearDxData()
+void SceneObject2D::OnLostDevice()
 {
 	if( m_VertexBuffer )
 	{
@@ -247,15 +258,26 @@ void SceneObject2D::ClearDxData()
 	}
 	if( m_Shader )
 	{
+		m_Shader->GetEffect()->OnLostDevice();
+	}
+}
+
+//**********************************************************
+// Callback appelée à chaque fois qu'on détruit le device.
+//**********************************************************
+void SceneObject2D::OnDestroyDevice()
+{
+	if( m_Shader )
+	{
 		ResourceManager::GetInstance()->Remove<Shader>( m_ShaderName );
 		m_Shader = NULL;
 	}
 }
 
 //**********************************************************
-// Vérifie si les données Dx sont prètes.
+// Vérifie que tout est pret pour l'affichage.
 //**********************************************************
-bool SceneObject2D::IsDxReady() const
+bool SceneObject2D::IsDrawable() const
 {
 	return m_VertexDeclaration
 		&& m_VertexBuffer;
@@ -269,7 +291,7 @@ bool SceneObject2D::IsDxReady() const
 void SceneObject2D::CopyVerticesToVertexBuffer()
 {
 	assert( m_NbVertices > 0 );
-	if( IsDxReady() )
+	if( IsDrawable() )
 	{
 		void *pData;
 		m_VertexBuffer->Lock( 0, m_VertexBufferSize, (void**)&pData, 0 );

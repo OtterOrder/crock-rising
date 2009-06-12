@@ -76,13 +76,13 @@ Quad::~Quad()
 //**********************************************************
 void Quad::Draw()
 {
-	if( !IsDxReady() )
+	if( !IsDrawable() )
 	{
-		// Si les données dx n'existent pas, on les crées ici, ça évite
-		// de le faire dans les constructeurs. On active le dirty et on
-		// sort, on n'affichera qu'à la prochaine frame..
-		InitDxData();
-		activate_dirty();
+		// Si les données dx n'existent pas, on les crées ici (ça évite
+		// de le faire dans les constructeurs) puis on sort, on n'affichera
+		// qu'à la prochaine frame..
+		OnCreateDevice();
+		OnResetDevice();
 		return;
 	}
 

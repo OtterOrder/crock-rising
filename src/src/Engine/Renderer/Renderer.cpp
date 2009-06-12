@@ -86,7 +86,7 @@ HRESULT Renderer::OnCreateDevice()
 	obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
-		(*obj2d)->InitDxData();
+		(*obj2d)->OnCreateDevice();
 		++obj2d;
 	}
 
@@ -185,7 +185,7 @@ HRESULT Renderer::OnResetDevice()
 	list<SceneObject2D*>::iterator obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
-		(*obj2d)->InitDxData();
+		(*obj2d)->OnResetDevice();
 		++obj2d;
 	}
 
@@ -263,7 +263,7 @@ HRESULT Renderer::Render()
 	lastObj2d	= m_Obj2DList->end();
 
 	// Tri par priorité croissante.. /!\ A optimiser si besoin
-	//m_Obj2DList->sort( SceneObject2D::ComparePriority );
+	m_Obj2DList->sort( SceneObject2D::ComparePriority );
 
 	// Paramètres du device
 	//m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
@@ -346,7 +346,7 @@ HRESULT Renderer::OnLostDevice()
 	obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
-		(*obj2d)->ClearDxData();
+		(*obj2d)->OnLostDevice();
 		++obj2d;
 	}
 
@@ -379,7 +379,7 @@ HRESULT Renderer::OnDestroyDevice()
 	obj2d = m_Obj2DList->begin();
 	while( obj2d != m_Obj2DList->end() )
 	{
-		(*obj2d)->ClearDxData();
+		(*obj2d)->OnDestroyDevice();
 		++obj2d;
 	}
 

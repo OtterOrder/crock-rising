@@ -30,8 +30,8 @@ public:
 	float GetRelWidth() const;
 	float GetRelHeight() const;
 
-	// Gestion des données DirectX
-	// Pas besoin..
+	// Gestion des entités DirectX
+	// ..
 
 protected:
 

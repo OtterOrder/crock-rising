@@ -16,7 +16,7 @@
 #include	"../Objects/SceneObject.h"
 #include	"BoundingBox.h"
 
-#define CONNECT_VRD
+//#define CONNECT_VRD
 
 enum PhysXResult
 {

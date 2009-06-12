@@ -27,7 +27,8 @@ Sprite::Sprite( const std::string &spriteName )
 //**********************************************************
 Sprite::~Sprite()
 {
-	ClearDxData();
+	OnLostDevice();
+	OnDestroyDevice();
 }
 
 //**********************************************************
@@ -35,13 +36,13 @@ Sprite::~Sprite()
 //**********************************************************
 void Sprite::Draw()
 {
-	if( !IsDxReady() )
+	if( !IsDrawable() )
 	{
-		// Si les données dx n'existent pas, on les crées ici, ça évite
-		// de le faire dans les constructeurs. On active le dirty et on
-		// sort, on n'affichera qu'à la prochaine frame..
-		InitDxData();
-		activate_dirty();
+		// Si les données dx n'existent pas, on les crées ici (ça évite
+		// de le faire dans les constructeurs) puis on sort, on n'affichera
+		// qu'à la prochaine frame..
+		OnCreateDevice();
+		OnResetDevice();
 		return;
 	}
 
@@ -66,40 +67,46 @@ void Sprite::Draw()
 }
 
 //**********************************************************
-// Initialise les données Dx.
+// Callback appelée juste après la création du device.
 //**********************************************************
-void Sprite::InitDxData()
+void Sprite::OnCreateDevice()
 {
-	Quad::InitDxData();
+	Quad::OnCreateDevice();
 
-	// Chargement de la texture..
-	m_Texture = ResourceManager::GetInstance()->Load<Texture>(
-		m_SpriteName,
-		(ResourceParam)Texture::SPRITE
-	);
-
-	// Initialisation de la taille du sprite
-	m_Width = m_Texture->GetSrcWidth();
-	m_Height = m_Texture->GetSrcHeight();
+	if( !m_Texture )
+	{
+		// Chargement de la texture..
+		m_Texture = ResourceManager::GetInstance()->Load<Texture>(
+			m_SpriteName,
+			(ResourceParam)Texture::SPRITE
+		);
+		
+		// Initialisation de la taille du sprite
+		m_Width = m_Texture->GetSrcWidth();
+		m_Height = m_Texture->GetSrcHeight();
+	}
 }
 
 //**********************************************************
-// Libère les données Dx.
+// Callback appelée à chaque fois qu'on détruit le device.
 //**********************************************************
-void Sprite::ClearDxData()
+void Sprite::OnDestroyDevice()
 {
-	Quad::ClearDxData();
-	
-	// Déchargement de la texture..
-	ResourceManager::GetInstance()->Remove<Texture>( m_SpriteName );
-	m_Texture = NULL;
+	Quad::OnDestroyDevice();
+
+	if( m_Texture )
+	{
+		// Déchargement de la texture..
+		ResourceManager::GetInstance()->Remove<Texture>( m_SpriteName );
+		m_Texture = NULL;
+	}
 }
 
 //**********************************************************
-// Vérifie si les données Dx sont prètes.
+// Vérifie que tout est pret pour l'affichage.
 //**********************************************************
-bool Sprite::IsDxReady() const
+bool Sprite::IsDrawable() const
 {
-	return Quad::IsDxReady()
+	return Quad::IsDrawable()
 		&& m_Texture;
 }

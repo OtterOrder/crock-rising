@@ -22,10 +22,10 @@ public:
 	// Taille
 	//void SetSizeToDefault();
 
-	// Gestion des données DirectX
-	virtual void InitDxData();		// Initialise les données Dx
-	virtual void ClearDxData();		// Libère les données Dx
-	virtual bool IsDxReady() const;	// Vérifie si les données Dx sont prètes
+	// Gestion des entités DirectX
+	virtual void OnCreateDevice();
+	virtual void OnDestroyDevice();
+	virtual bool IsDrawable() const;
 
 protected:
 

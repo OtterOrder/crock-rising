@@ -6,18 +6,18 @@
       <authoring_tool>3dsMax 9 - Feeling ColladaMax v3.05B.</authoring_tool>
       <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=3.33333;</comments>
     </contributor>
-    <created>2009-05-13T20:18:35Z</created>
-    <modified>2009-05-13T20:18:36Z</modified>
+    <created>2009-06-12T11:35:18Z</created>
+    <modified>2009-06-12T11:35:19Z</modified>
     <unit meter="0.0254" name="inch"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_materials>
-    <material id="ColorMaterial_876E0800" name="ColorMaterial_876E0800">
-      <instance_effect url="#ColorMaterial_876E0800-fx"/>
+    <material id="ColorMaterial_D59AE500" name="ColorMaterial_D59AE500">
+      <instance_effect url="#ColorMaterial_D59AE500-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="ColorMaterial_876E0800-fx">
+    <effect id="ColorMaterial_D59AE500-fx">
       <profile_COMMON>
         <technique sid="common">
           <phong>
@@ -25,10 +25,10 @@
               <color>0 0 0 1</color>
             </emission>
             <ambient>
-              <color>0.529412 0.431373 0.031372 1</color>
+              <color>0.835294 0.603922 0.898039 1</color>
             </ambient>
             <diffuse>
-              <color>0.529412 0.431373 0.031372 1</color>
+              <color>0.835294 0.603922 0.898039 1</color>
             </diffuse>
             <specular>
               <color>1 1 1 1</color>
@@ -114,31 +114,11 @@
           <instance_geometry url="#Box01-mesh">
             <bind_material>
               <technique_common>
-                <instance_material symbol="ColorMaterial" target="#ColorMaterial_876E0800"/>
+                <instance_material symbol="ColorMaterial" target="#ColorMaterial_D59AE500"/>
               </technique_common>
             </bind_material>
           </instance_geometry>
         </node>
-        <extra>
-          <technique profile="FCOLLADA">
-            <user_properties>PhysicsType = 1&#13;
-Mass = 1.0&#13;
-GeometryType = 1&#13;
-MaterialType = 2&#13;
-Friction = 0.3&#13;
-StaticFriction = 0.3&#13;
-Restitution = 0.5&#13;
-InitialVelocityX = 0.0&#13;
-InitialVelocityY = 0.0&#13;
-InitialVelocityZ = 0.0&#13;
-InitialSpinX = 0.0&#13;
-InitialSpinY = 0.0&#13;
-InitialSpinZ = 0.0&#13;
-PutToSleep = false&#13;
-EnableCCD = false&#13;
-</user_properties>
-          </technique>
-        </extra>
       </node>
       <extra>
         <technique profile="FCOLLADA">

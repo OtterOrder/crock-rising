@@ -1,5 +1,7 @@
 #include	"LevelAlafraise.h"
 
+#include	<Core/System.h>
+#include	<Core/Time.h>
 #include	<Core/Inputs/InputManager.h>
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
@@ -9,6 +11,8 @@
 //******************************************************************
 
 #define		LEVEL_mainmenu			0x56b55f63
+
+#define		LOGO_APPEARANCE_TIME	1.f		// Temps d'apparition du logo en sec
 
 /***********************************************************
  * Constructeur.
@@ -50,9 +54,8 @@ void LevelAlafraise::Init( void )
 
 	// Logo à la fraise
 	m_pLogo = new Sprite( "alafraiseprod.png" );
-	
-	m_LogoAlpha = 0.f;
-	m_pLogo->SetAlpha( m_LogoAlpha );
+	m_pLogo->SetAlpha( 0.f );
+	m_LogoTimer = 0.f;
 }
 
 /***********************************************************
@@ -67,12 +70,12 @@ void LevelAlafraise::Update( void )
 		return;
 	}
 
-	
-	// Le logo apparait progressivement..
-	if( m_LogoAlpha < 0.999f )
+	if( m_LogoTimer < LOGO_APPEARANCE_TIME )
 	{
-		m_LogoAlpha = MATH_Clamp( m_LogoAlpha+0.001f, 0.f, 1.f );
-		m_pLogo->SetAlpha( m_LogoAlpha );
+		// Le logo apparait progressivement..
+		m_LogoTimer += System::GetInstance()->GetTime()->GetDeltaTime();
+		float alpha = m_LogoTimer / LOGO_APPEARANCE_TIME;
+		m_pLogo->SetAlpha( MATH_Clamp( alpha, 0.f, 1.f ) );
 	}
 	
 	int logoX, logoY;

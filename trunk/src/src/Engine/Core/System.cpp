@@ -9,7 +9,8 @@
 #include	"Sound/SoundSystem.h"
 #include	"Core/Time.h"
 
-#define		FPS_MAX			80
+#define		NB_FPS			80
+#define		FRAME_DELAY		(1.f/NB_FPS)
 
 //******************************************************************
 
@@ -44,18 +45,17 @@ int System::MainLoop( void )
 	PostRenderer	*postRenderer;
 	Game			*game;
 	Physicalizer	*physX;
-//	SoundSystem		*soundSystem;
+	SoundSystem		*soundSystem;
 
 	bool			bGotMsg;
 	MSG				msg;
-	Time            *time = new Time();
 
 	// On initialise les modules..
 	resourceManager	= ResourceManager::GetInstance();
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
-	//soundSystem		= SoundSystem::GetInstance();
+	soundSystem		= SoundSystem::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	game			= Game::GetInstance();
 
@@ -64,8 +64,6 @@ int System::MainLoop( void )
 	
 	msg.message = WM_NULL;
 	PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
-	
-	unsigned int    nbFps = 1000 / FPS_MAX;
 	
 	// Boucle principale..
 	while( msg.message != WM_QUIT )
@@ -83,36 +81,37 @@ int System::MainLoop( void )
 		}
 		else
 		{
-			if (time->getDeltaTimeF() >= nbFps) 
+			// Update de la scene
+			game->Update();
+			
+			if( m_Time->GetDeltaTimeF() >= FRAME_DELAY )
 			{
-				//Update de la scene
-				game->Update();
-
-				//Update de physX				
+				// Update de physX
 				physX->RunPhysics();
 				
-				//Rendu de de la scene
+				// Rendu de de la scene
 				renderer->Run();
-
-				//Post effects
+				
+				// Post effects
 				postRenderer->RenderPostEffects();
-
-				// Update des inputs
-				inputManager->Update();
-
-				// Update du son
-				//soundSystem->Update();
-
-				time->resetDeltaTimeF();    // Reset du temps entre les 2 frames
+				
+				m_Time->EndF();	// Fin de la frame
 			}
+
+			// Update du son
+			//soundSystem->Update();
+			
+			// Update des inputs
+			inputManager->Update();
 		}
+		m_Time->EndE();	// Fin du tour moteur
 	}
 
 	// Destruction des singletons
 	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
 	postRenderer->Destroy();
-	//soundSystem->Destroy();
+	soundSystem->Destroy();
 	inputManager->Destroy();
 	resourceManager->Destroy();
 

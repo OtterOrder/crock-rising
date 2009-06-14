@@ -76,8 +76,7 @@ PS_OUTPUT PSVectorialBlur( float2 UV: TEXCOORD0 )
 	}
     
     // Return the average color of all the samples
-    Output.RGBColor=float4(1.f, 0.f, 0.f, 1.f);
-   // Output.RGBColor = float4(Blurred / (NbSamples*2.f), 1.0f);
+    Output.RGBColor = float4(Blurred / (NbSamples*2.f), 1.0f);
 
 	return Output;
 }

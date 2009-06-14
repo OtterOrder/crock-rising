@@ -29,7 +29,7 @@ void VectorialBlur::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
 	m_pShader->GetEffect()->OnResetDevice();
 	
 	m_pRenderQuad = new Quad (10, 10, Color4f(0.f, 1.f, 0.f, 1.f));
-	Object2D::RefList.remove(m_pRenderQuad);
+	SceneObject2D::RefList.remove(m_pRenderQuad);
 	
 }
 
@@ -80,7 +80,7 @@ void VectorialBlur::Apply(list<SceneObject*>* m_pObjectList)
 
 	m_pShader->GetEffect()->BeginPass(0);
 
-	m_pRenderQuad->Draw();
+	m_pRenderQuad->DrawWithoutEffect();
 
 	m_pShader->GetEffect()->EndPass();
 

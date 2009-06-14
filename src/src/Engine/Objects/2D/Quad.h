@@ -17,6 +17,7 @@ public:
 
 	// Affichage
 	virtual void Draw();
+	virtual void DrawWithoutEffect();
 
 	// Taille
 	void SetSize( u32 width, u32 height );

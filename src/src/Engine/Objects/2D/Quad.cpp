@@ -76,6 +76,23 @@ Quad::~Quad()
 //**********************************************************
 void Quad::Draw()
 {
+	// Paramètres du shader
+	m_Shader->GetEffect()->SetValue( "g_Color", (void*)&m_Color, sizeof(Color4f) );
+	m_Shader->GetEffect()->SetBool( "g_IsTextured", false );
+	m_Shader->GetEffect()->SetTechnique( "RenderScene" );
+	
+	m_Shader->GetEffect()->Begin( 0, 0 );
+	m_Shader->GetEffect()->BeginPass( 0 );
+	
+	// Rendu..
+	DrawWithoutEffect();
+
+	m_Shader->GetEffect()->EndPass();
+	m_Shader->GetEffect()->End();
+}
+
+void Quad::DrawWithoutEffect()
+{
 	if( !IsDrawable() )
 	{
 		// Si les données dx n'existent pas, on les crées ici (ça évite
@@ -88,21 +105,10 @@ void Quad::Draw()
 
 	LPDIRECT3DDEVICE9 pDevice = RENDERER->m_pd3dDevice;
 
-	// Paramètres du shader
-	m_Shader->GetEffect()->SetValue( "g_Color", (void*)&m_Color, sizeof(Color4f) );
-	m_Shader->GetEffect()->SetBool( "g_IsTextured", false );
-	m_Shader->GetEffect()->SetTechnique( "RenderScene" );
-	
-	m_Shader->GetEffect()->Begin( 0, 0 );
-	m_Shader->GetEffect()->BeginPass( 0 );
-	
 	// Rendu..
 	pDevice->SetVertexDeclaration( m_VertexDeclaration );
 	pDevice->SetStreamSource( 0, m_VertexBuffer, 0, sizeof(Vertex) );
 	pDevice->DrawPrimitive( D3DPT_TRIANGLEFAN, 0, 2 );
-
-	m_Shader->GetEffect()->EndPass();
-	m_Shader->GetEffect()->End();
 }
 
 //**********************************************************

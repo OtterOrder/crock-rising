@@ -61,24 +61,23 @@ public:
 	//===========================================================================//
 	// Physique de l'objet														 //
 	//===========================================================================//
-	void SetObjectPhysical( const std::string& physic);		// Donne la main au moteur physique pour gérer l'objet
-	void SetControledCharacter(float radius, float height);	// Fournis une capsule à un controlleur physique
-	void SetControledCharacter(Vector3f size);				// Fournis une box à un controlleur physique
+	void SetObjectPhysical( const std::string& physic, GroupCollision group );		
+	void SetControledCharacter(float radius, float height, void* Ref, GroupCollision group );	
+	void SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group );	
+	void SetObjectTrigger( const std::string& physic, Vector3f Pos,
+						void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); 
 	void SetObjectUnPhysical();												// Retire la physique à un objet si besoin
-	void SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); // Donne la main au moteur physique pour gérer l'objet en tant que trigger
 	
-	int  getEmpActor(){ return m_EmpActor; }
-	void setEmpActor(int Emp){ m_EmpActor = Emp; }
-	int  getEmpController(){ return m_EmpController; }
-	void setEmpController(int Emp){ m_EmpController = Emp; }
+	int  getEmpActor()				{ return m_iEmpActor; }
+	int  getEmpController()			{ return m_iEmpController; }
+	void setEmpActor(int Emp)		{ m_iEmpActor = Emp; }
+	void setEmpController(int Emp)	{ m_iEmpController = Emp; }
 	std::vector<PhysicBody*> getPhysicBodyList();
-	bool IsController(){ return m_EmpController != -1; }			//Le controleur est un acteur ET un controleur
-	bool IsActor(){ return m_EmpActor != -1 && !IsController(); }	//L'acteur n'est qu'un acteur.
-	bool IsDynamic()
-	{ 
-		//PhysicBody* Pb = (*getPhysicBodyList().begin());
-		return (*getPhysicBodyList().begin())->bIsDynamic; 
-	}
+
+	bool IsController()	{ return m_iEmpController != -1; }			//Le controleur est un acteur ET un controleur
+	bool IsActor()		{ return m_iEmpActor != -1 && !IsController(); }	//L'acteur n'est qu'un acteur.
+	bool IsPhysical()	{ return IsActor() ||IsController(); }
+	bool IsDynamic()	{ return (*getPhysicBodyList().begin())->bIsDynamic; }
 public:
 
 	//===========================================================================//
@@ -117,8 +116,8 @@ protected:
 	bool							m_bReceiveShadow;
 	LPD3DXMATRIXSTACK				m_matrixStack;  // Stack de matrice de l'objet
 	ListOfBoundingBox				m_ListOfBoundingBox;
-	int								m_EmpActor;
-	int								m_EmpController;
+	int								m_iEmpActor;
+	int								m_iEmpController;
 	
 
 	
@@ -133,7 +132,11 @@ protected:
 	virtual void	DeleteData();
 	virtual void	DrawShadow();
 	void			CommonInit( void ); // Initialisation commune à tous les constructeurs
-	virtual void	SetPhysicalTranslation( float dispX, float dispY, float dispZ ); //Fonction utilisé par le sceneobject pour faire la translation d'un controller
+
+	//Fonctions de transformations spécifiques à physX, appelés par les fonctions publics
+	void	SetPhysicalTranslation( float dispX, float dispY, float dispZ );
+	void	SetPhysicalRotation( float angleX, float angleY, float angleZ );
+	void	SetPhysicalTransform( const D3DXMATRIX* world );
 	
 };
 

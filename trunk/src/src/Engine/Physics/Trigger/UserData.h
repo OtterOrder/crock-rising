@@ -5,10 +5,20 @@
 //						    Written by Bob Schade, 5-1-06
 // ===============================================================================
 
-#ifndef USERDATA_H
-#define USERDATA_H
+#ifndef _USERDATA_H_
+#define _USERDATA_H_
 
 #include "NxPhysics.h"
+
+class Hero;
+class Enemy;
+
+enum DataType
+{
+	HERO,
+	ENEMY,
+	ARME
+};
 
 enum UserDataFlag
 {
@@ -24,15 +34,26 @@ enum UserDataFlag
 };
 
 // structure qui permet de passer des informations dans le userdata d'un nxActor
+
+void SetPersoRef(NxActor* pActor, void* Ref);
+void SetTriggerFunctions(NxActorDesc &ActorDesc,
+						 void (*OnEnterFunc)(), 
+						 void (*OnLeaveFunc)(), 
+						 void (*OnStayFunc)() );
+
 struct ActorUserData
 {
-	NxU32 id;
+	ActorUserData();	
+	void *PersoRef; //Pointeur sur un ennemis ou un hero
+
 	void (*OnEnterFunc)(); 
 	void (*OnLeaveFunc)(); 
 	void (*OnStayFunc)(); 
 
-	ActorUserData();
+	Hero* GetHero();
+	Enemy* GetEnemy();
 };
+
 
 #endif  // USERDATA_H
 

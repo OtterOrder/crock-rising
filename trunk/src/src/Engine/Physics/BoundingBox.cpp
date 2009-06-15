@@ -5,10 +5,10 @@
 NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb );
 NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb );
 NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb );
-void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb);
+void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, GroupCollision group);
 NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );
 
-NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
+NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 {
 	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
@@ -16,7 +16,7 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);												//Dimension
 	boxDesc->mass			= Pb->fMass;																//Masse
 	boxDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
-	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
 	boxDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
 	boxDesc->localPose.M	= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
@@ -27,7 +27,7 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	return boxDesc;
 }
 
-NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
+NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 {
 	NxSphereShapeDesc *sphereDesc = new NxSphereShapeDesc;
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
@@ -36,6 +36,7 @@ NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	sphereDesc->mass			= Pb->fMass;																//Masse
 	sphereDesc->localPose.t		= VecToNxVec( Pb->translate );												//Position
 	sphereDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	//sphereDesc->group			= group;																	//Groupe
 	sphereDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
 	sphereDesc->localPose.M		= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
@@ -46,7 +47,7 @@ NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	return sphereDesc;
 }
 
-NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
+NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 {
 	NxCapsuleShapeDesc *capsuleDesc = new NxCapsuleShapeDesc;
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);		
@@ -55,7 +56,8 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	capsuleDesc->height			=(NxReal)Pb->bodySize.y ;													//Hauteur
 	capsuleDesc->mass			= Pb->fMass;																//Masse
 	capsuleDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
-	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
+	//capsuleDesc->group			= group;																	//Groupe
 	capsuleDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel			
 	capsuleDesc->localPose.M	= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
@@ -66,21 +68,18 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb  )
 	return capsuleDesc;
 }
 
-void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb )
+void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, GroupCollision group )
 {
 	ActorDesc.density		= 1.0f;
 	ActorDesc.globalPose.t	= VecToNxVec(Pos);
 
 	if(Pb->type == TRIGGER)
 	{
-		ActorDesc.userData = new ActorUserData;
-		((ActorUserData*)(ActorDesc.userData))->OnEnterFunc = Pb->OnEnterFunc  ;
-		((ActorUserData*)(ActorDesc.userData))->OnLeaveFunc = Pb->OnLeaveFunc  ;
-		((ActorUserData*)(ActorDesc.userData))->OnStayFunc  = Pb->OnStayFunc   ;
+		SetTriggerFunctions(ActorDesc, Pb->OnEnterFunc, Pb->OnLeaveFunc, Pb->OnStayFunc);
 	}
 	else
 	{
-		if(!Pb->bIsDynamic)
+		if(!Pb->bIsDynamic || group == GROUP_STATIC)
 			ActorDesc.body = NULL;
 		else
 		{
@@ -88,6 +87,7 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 			bodyDesc.angularDamping = 0.5f;
 			bodyDesc.linearVelocity = VecToNxVec( Pb->linearVelocity );
 			bodyDesc.angularVelocity = VecToNxVec( Pb->angularVelocity );
+			if( group == GROUP_WEAPON) bodyDesc.flags |= NX_BF_FROZEN;
 			assert(bodyDesc.isValid());
 			ActorDesc.body = &bodyDesc;
 		}
@@ -97,6 +97,7 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 
 	NxScene* scene = physX::getPhysicScene();
 	NxActor* pActor = scene->createActor( ActorDesc );
+	pActor->setGroup( group );
 	assert(pActor);
 }
 
@@ -113,7 +114,7 @@ NxMaterialIndex GenMaterial( const float restitution, const float staticFriction
 }
 
 //////////////////////////////////////////////////////////////////////////
-int physX::CreateBoundingBox( ListOfBoundingBox &BBList )
+int physX::CreateBoundingBox( ListOfBoundingBox &BBList, GroupCollision group )
 {
 	NxActorDesc actorDesc;
 	PhysicBody* Pb;
@@ -131,7 +132,7 @@ int physX::CreateBoundingBox( ListOfBoundingBox &BBList )
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, group);
 	return physX::getPhysicScene()->getNbActors() - 1;
 }
 
@@ -161,8 +162,18 @@ int physX::CreateTrigger(ListOfBoundingBox &BBList,
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, GROUP_DYNAMIQUE);
 	return physX::getPhysicScene()->getNbActors() - 1;
+}
+
+
+void physX::releaseActor(int &empActor)
+{
+	NxActor* pActor = getActor( empActor );
+	if(pActor->userData) delete pActor->userData;
+	getPhysicScene()->releaseActor(*pActor);
+
+	empActor = -1;
 }
 
 NxScene* physX::getPhysicScene()
@@ -199,6 +210,13 @@ NxController* physX::getController( int emp )
 	assert(pController);
 
 	return pController;
+}
+
+void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
+{
+	NxActor* pactor1  =  getActor(obj1->getEmpActor());
+	NxActor* pactor2  =  getActor(obj2->getEmpActor());
+	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH );
 }
 
 

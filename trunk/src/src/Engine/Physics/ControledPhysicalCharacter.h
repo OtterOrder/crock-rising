@@ -7,6 +7,8 @@
 #include	"Core/Types/Vector.h"
 #include	"Physics/BoundingBoxLoader.h"
 
+class Hero;
+
 class HeroHitReport : public NxUserControllerHitReport
 {
 public:

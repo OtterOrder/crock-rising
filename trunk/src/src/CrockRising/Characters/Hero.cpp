@@ -1,4 +1,5 @@
 #include "Hero.h"
+#include "Physics/Physicalizer.h"
 
 /***********************************************************
 * Constructeur
@@ -8,9 +9,13 @@ Hero::Hero()
 	m_iLife = 100 ;
 
 	//m_pAnimated = new SceneObjectAnimated("Robot_Mesh.DAE","Robot_Marche.DAE",D3DXVECTOR3(0.f,0.f,0.f));
-	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,-17.f,0.f));
+	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,1.f,0.f));
 	m_pAnimated->Init();
-	m_pAnimated->SetRotation(0,0,90);
+	m_pAnimated->SetControledCharacter(4.f, 18.f, this, GROUP_HERO);
+	
+	/*m_pArme = new SceneObject("BatteM.DAE",D3DXVECTOR3( 0.f,10.f,0.f));
+	m_pArme->Init();
+	m_pArme->SetObjectPhysical("BatteP");*/
 
 	m_pInputManager = InputManager::GetInstance();
 	m_pInputManager->HoldMouseAtCenter(true);
@@ -73,11 +78,11 @@ ResourceResult Hero::control( Camera *pCamera )
 	if ( m_pInputManager->IsKeyPressed('B'))
 		changeState(BONUS);
 
+	float sensibilityTranslation = 0.05f;
 	if ( m_pInputManager->IsKeyPressed('Z'))
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.5f;
 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -86,7 +91,6 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.5f;
 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -95,7 +99,6 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.5f;
 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -104,7 +107,6 @@ ResourceResult Hero::control( Camera *pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = 0.5f;
 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -119,7 +121,7 @@ ResourceResult Hero::control( Camera *pCamera )
 		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
 		pCamera->SetOrientationY(angleY);
 	}
-
+	
 
 	Point2f point = m_pInputManager->GetMouseVector();
 	const int sensibiliteSouris = 10;
@@ -135,7 +137,6 @@ ResourceResult Hero::control( Camera *pCamera )
 		D3DXMATRIX rot;
 		D3DXMatrixRotationZ( &rot, diff );
 		m_pAnimated->ApplyTransform( &rot );
-
 	}
 	if( point.y != 0 ) 
 	{
@@ -143,6 +144,7 @@ ResourceResult Hero::control( Camera *pCamera )
 		pCamera->SetOrientationX( offsetCursor );
 	}
 
+	//m_pArme
 	return RES_SUCCEED;
 }
 
@@ -185,4 +187,11 @@ void Hero::update( Camera* pCamera )
 	}
 
 
+}
+
+
+void Hero::OuilleOuilleOuilleCaFaitMal()
+{
+	m_iLife--;
+	m_currentState = BONUS;
 }

@@ -111,5 +111,6 @@ void Bitmap::convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] )
 	// Transforme les valeurs 0 et 255 en 0 et 1 et inverse l'image pour qu'elle soit a l'endroit
 	for (int i=0; i<MAX_TAB; i++)
 	for (int j=0; j<MAX_TAB; j++)
-		tabImg[MAX_TAB-i-1][j] = tabColor[i*tmpSize][j*tmpSize]/255;
+		tabImg[MAX_TAB-i-1][j] = tabColor[i*tmpSize][j*tmpSize]/255;		// Tableau inversé
+		//tabImg[i][j] = tabColor[i*tmpSize][j*tmpSize]/255;		// Tableau non-inversé
 }

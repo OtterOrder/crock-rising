@@ -17,7 +17,7 @@ vector<AIEnemy*> AIManager::initEnnemy( int nbGroup, int nbMember )
 	for ( int i=0; i<nbGroup; i++ )
 	for ( int j=0; j<nbMember; j++ )
 	{
-		listEnemy.push_back( new AIEnemy(cptGeneral, i, j, 100, Vector3f(i*20.f,0.f,j*20.f), Vector3f(0.f,0.f,0.f)) );
+		listEnemy.push_back( new AIEnemy(cptGeneral, i, j, 100, Vector3f(i*20.f, 0.f,j*20.f), Vector3f(0.f,0.f,0.f)) );
 		cptGeneral++;
 	}
 

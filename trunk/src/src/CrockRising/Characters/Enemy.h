@@ -3,6 +3,7 @@
 
 //******************************************************************
 
+#include		<vector>
 #include		<Objects/SceneObjectAnimated.h>
 
 //******************************************************************
@@ -10,18 +11,21 @@
 class Enemy 
 {
 public:
+	static std::vector<Enemy*>  listEnemy;
+
 	Enemy();
 	~Enemy();
 
 	int			 getLife () const { return m_iLife; }
 	void	     setLife ( const int life ) { m_iLife += life; }   // La variable life représentant un bonus ou malus 
 
-	void	     update( );
+	void					update( );
 	SceneObjectAnimated*	getSceneObjectAnimated()	{	return m_pAnimated;	}
 
 protected:
-	int			 m_iLife;
+	int				      m_iLife;
 	SceneObjectAnimated*  m_pAnimated;
+	
 
 };
 

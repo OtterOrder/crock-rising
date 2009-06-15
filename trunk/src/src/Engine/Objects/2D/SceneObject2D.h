@@ -22,6 +22,9 @@ public:
 	SceneObject2D();
 	virtual ~SceneObject2D();
 
+	// Initialisation
+	void Init();
+	
 	// Affichage. A surcharger
 	virtual void Draw() =0;
 

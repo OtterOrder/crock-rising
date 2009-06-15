@@ -54,6 +54,7 @@ void LevelAlafraise::Init( void )
 
 	// Logo à la fraise
 	m_pLogo = new Sprite( "alafraiseprod.png" );
+	m_pLogo->Init();
 	m_pLogo->SetAlpha( 0.f );
 	m_LogoTimer = 0.f;
 }

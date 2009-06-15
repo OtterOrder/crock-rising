@@ -36,16 +36,6 @@ Sprite::~Sprite()
 //**********************************************************
 void Sprite::Draw()
 {
-	if( !IsDrawable() )
-	{
-		// Si les données dx n'existent pas, on les crées ici (ça évite
-		// de le faire dans les constructeurs) puis on sort, on n'affichera
-		// qu'à la prochaine frame..
-		OnCreateDevice();
-		OnResetDevice();
-		return;
-	}
-
 	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
 
 	// Paramètres du shader

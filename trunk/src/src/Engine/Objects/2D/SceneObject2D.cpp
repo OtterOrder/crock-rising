@@ -50,6 +50,16 @@ SceneObject2D::~SceneObject2D()
 }
 
 //**********************************************************
+// Initialise l'objet, à appeler juste après la création.
+//**********************************************************
+void SceneObject2D::Init()
+{
+	// Création de données directx
+	OnCreateDevice();
+	OnResetDevice();
+}
+
+//**********************************************************
 // Change le point chaud. Il s'exprime en coordonnées
 // relatives à v0 (sommet 0 de l'objet).
 //

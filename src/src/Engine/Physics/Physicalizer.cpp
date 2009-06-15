@@ -118,11 +118,3 @@ void Physicalizer::connectToVRD()
 	}
 #endif
 }
-
-
-void Physicalizer::Link( SceneObject* const obj1, SceneObject* const obj2 )
-{
-	NxActor* pactor1  =  physX::getActor(obj1->getEmpActor());
-	NxActor* pactor2  =  physX::getActor(obj2->getEmpActor());
-	m_Scene->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH );
-}

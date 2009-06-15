@@ -43,12 +43,14 @@ public:
 	//Méthodes pour la gestion de l'inventaire d'armes
 	bool			  addWeapon     ( Weapons* weapon);
 	void			  removeWeapon  ( std::string strMesh );
+	void			  OuilleOuilleOuilleCaFaitMal();
 
 
 protected:
 	int					     m_iLife;
 	std::vector<Weapons*>    m_inventory; //Inventaire de ses armes
 	SceneObjectAnimated*	 m_pAnimated;
+	SceneObject*			 m_pArme;
 	InputManager*			 m_pInputManager;
 	HeroState				 m_currentState;
 

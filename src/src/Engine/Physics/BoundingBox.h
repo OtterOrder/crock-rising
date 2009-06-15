@@ -11,6 +11,10 @@
 #include	"Resources/Mesh.h"
 #include	"Trigger/UserData.h"
 
+class Hero;
+class SceneObject;
+enum GroupCollision;
+
 //Type de la shape d'une bounding box
 enum ShapeType
 {
@@ -84,9 +88,11 @@ namespace physX
 	/************************************************************************************
 	* Fonction de création d'une bounding box.
 	* @param[in]	ListOfBoundingBox	: Liste des bounding box du DAE avec leurs param
+	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 	* @return		int : l'indice de l'emplacement de l'acteur
 	************************************************************************************/
-	int CreateBoundingBox(ListOfBoundingBox &BBList);
+	int CreateBoundingBox(ListOfBoundingBox &BBList, GroupCollision group );
 
 	/*************************************************************************************
 	* Fonction de création d'un trigger.
@@ -106,19 +112,39 @@ namespace physX
 	* @param[in]	pos	: Position initiale en world, provient du SceneObject
 	* @param[in]	radius	: Rayon de la capsule du controller
 	* @param[in]	height	: hauteur du controller
+	* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
+	* @param[out]	empActor: Emplacement de l'actor qui sera crée
+	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 	* @return		int : l'indice de l'emplacement du controller
 	* Précondition	radius et height ne doivent pas être tous les deux nuls.
 	************************************************************************************/
-	int CreateControlledCapsule( Vector3f pos, float radius, float height, int &empActor );
+	int CreateControlledCapsule( Vector3f pos, float radius, float height,
+								 void* Ref, int &empActor, GroupCollision group );
 
 	/************************************************************************************
 	* Fonction de création d'une box controller
 	* @param[in]	pos	: Position initiale en world, provient du SceneObject
 	* @param[in]	size: largeur, hauteur et profondeur de la box 
+	* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
+	* @param[out]	empActor: Emplacement de l'actor qui sera crée
+	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 	* @return		int : l'indice de l'emplacement du controller
 	* Précondition	size ne doivent pas être un vecteur nul.
 	************************************************************************************/
-	int CreateControlledBox( Vector3f pos, Vector3f size, int &empActor );
+	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
+							 void* Ref, int &empActor, GroupCollision group ); 
+
+	/************************************************************************************
+	* Détruit un acteur ainsi que son userdata
+	************************************************************************************/
+	void releaseActor(int &empActor);
+	
+	/************************************************************************************
+	* Détruit un controller ainsi que son userdata
+	************************************************************************************/
+	void releaseController(int &empActor, int &empController);
 
 	/************************************************************************************
 	* Fonction de récupération de la scène physique
@@ -147,6 +173,13 @@ namespace physX
 	* Précondition	emp doit être strictement positif et inférieur au nombre de controller.
 	************************************************************************************/
 	NxController* getController(int emp);
+	
+	/************************************************************************************
+	* Fonction qui permet de lier deux objets de sorte à pouvoir récupérer leurs collisions
+	* @param[in]	obj1 : Pointeur sur le premier objet
+	* @param[in]	obj2 : Pointeur sur le deuxieme objet
+	************************************************************************************/
+	void Link( SceneObject* const obj1, SceneObject* const obj2 );
 }
 
 #endif

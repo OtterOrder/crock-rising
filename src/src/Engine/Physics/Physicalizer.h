@@ -14,9 +14,8 @@
 #include	"Core/Singleton.h"
 #include	"../Core/Types/Vector.h"
 #include	"../Objects/SceneObject.h"
-#include	"BoundingBox.h"
 
-//#define CONNECT_VRD
+#define CONNECT_VRD
 
 enum PhysXResult
 {
@@ -30,12 +29,16 @@ enum GroupCollision
 	GROUP_STATIC = 1,
 	GROUP_DYNAMIQUE = 2,
 	GROUP_WEAPON = 3,
+	GROUP_HERO = 4,
+	GROUP_ENEMY = 5,
 
 	MASK_STATIC			= 1 << GROUP_STATIC,
 	MASK_DYNAMIQUE		= 1 << GROUP_DYNAMIQUE,
 	MASK_WEAPON			= 1 << GROUP_WEAPON,
+	MASK_HERO			= 1 << GROUP_HERO,
+	MASK_ENEMY			= 1 << GROUP_ENEMY,
 
-	MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE | MASK_WEAPON
+	MASK_OTHER = MASK_STATIC | MASK_DYNAMIQUE | MASK_WEAPON |MASK_HERO |MASK_ENEMY
 
 };
 

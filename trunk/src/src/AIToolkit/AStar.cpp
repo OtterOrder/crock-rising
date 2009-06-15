@@ -187,8 +187,8 @@ void AStar::retrouverChemin()
 		lastWayPoint.first = chemin[cptChemin-1].x;
 		lastWayPoint.second = chemin[cptChemin-1].y;
 	}
-/*
-	for (int i=0; i<36; i++)
+
+	/*for (int i=0; i<36; i++)
 	{
 		for (int j=0; j<36; j++)	
 		{
@@ -200,6 +200,5 @@ void AStar::retrouverChemin()
 			}
 		}
 		cout << endl;	
-	}
-*/
+	}*/
 }

@@ -27,10 +27,10 @@ public:
 	Vector3f		direcEnnemy;
 	Vector3f		transEnnemy;
 
-	int posXScale;
-	int posYScale;
-	int posEXScale;
-	int posEYScale;
+	int posPlayer2D_X;
+	int posPlayer2D_Y;
+	int posEnemy2D_X;
+	int posEnemy2D_Y;
 	bool existPath;
 
 	float	timeBetFindPath;

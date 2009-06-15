@@ -3,6 +3,7 @@
 //===========================================================================//
 #include "Light.h"
 #include "Resources/Shader.h"
+#include <Math.h>
 
 // Données membres statiques
 
@@ -72,6 +73,7 @@ DirectionalLight::DirectionalLight()
 {
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 300.f, 0.f);
 	m_LightsAngle[m_LightId]=0.f;
+	m_Angle = 1.57f;
 	m_LightsAttenuation[m_LightId]=0.f;
 	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 0.f, 0.f);
 	m_LightsExponent[m_LightId]=0.f;
@@ -89,6 +91,7 @@ PointLight::PointLight()
 {
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, 0.f);
 	m_LightsAngle[m_LightId]=0.1f;
+	m_Angle = 1.57f;
 	m_LightsAttenuation[m_LightId]=0.5f;
 	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 1.f, 0.f);
 	m_LightsExponent[m_LightId]=2.f;
@@ -111,7 +114,8 @@ void PointLight::SetLightAttenuation(float att)
 SpotLight::SpotLight()
 {
 	m_LightsPosition[m_LightId]=D3DXVECTOR3(0.f, 100.f, 0.f);
-	m_LightsAngle[m_LightId]=0.65f;
+	m_LightsAngle[m_LightId]=(cos(1.65f / 2.f)) ;
+	m_Angle = 1.65f;
 	m_LightsAttenuation[m_LightId]=0.5f;
 	m_LightsDirection[m_LightId]=D3DXVECTOR3(0.f, 0.f, 0.f);
 	m_LightsExponent[m_LightId]=2.f;
@@ -124,5 +128,6 @@ SpotLight::~SpotLight()
 
 void SpotLight::SetLightAngle(float angle)
 {
-	m_LightsAngle[m_LightId]=angle;
+	m_LightsAngle[m_LightId]=cos(angle/2.f);
+	m_Angle=angle;
 }

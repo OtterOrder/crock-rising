@@ -43,7 +43,7 @@ void ShadowMap::InitShadowMap()
 	D3DXVECTOR3 vUp=D3DXVECTOR3(0.0f, 1.0f, 0.0f );
 	D3DXMatrixLookAtLH( &m_mLightView, &m_ShadowLight->GetLightPosition(), &m_ShadowLight->GetLightDirection(), &vUp );
 	//Matrice de projection
-	D3DXMatrixPerspectiveFovLH( &m_mLightProj, m_ShadowLight->GetLightAngle(), 1.f, 2.f, 4000.0f );
+	D3DXMatrixPerspectiveFovLH( &m_mLightProj, m_ShadowLight->GetLightAngle(), 1.f, 2.f, 2000.0f );
 
 	//Shader pour le rendu de la z-map
 	m_pShadowShader=new Shader();

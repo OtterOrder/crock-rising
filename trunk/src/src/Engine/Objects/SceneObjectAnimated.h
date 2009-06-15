@@ -35,7 +35,7 @@ public:
 	void			PauseAnim();
 	void			StopAnim();
 	void			SetAnimFPS(float fps);
-
+	
 protected:
 
 	void			InitObject();

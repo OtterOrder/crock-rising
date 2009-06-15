@@ -37,6 +37,7 @@ protected:
 
 
 	int				m_LightId;
+	float			m_Angle;
 
 public:
 	virtual void SetLightData(Shader * shader);
@@ -48,7 +49,8 @@ public:
 
 	D3DXVECTOR3  GetLightPosition() {return m_LightsPosition[m_LightId];}
 	D3DXVECTOR3  GetLightDirection() {return m_LightsDirection[m_LightId];}
-	float		 GetLightAngle() {return m_LightsAngle[m_LightId];}
+	float		 GetLightScalarDemiAngle() {return m_LightsAngle[m_LightId];}
+	float		 GetLightAngle() {return m_Angle;}
 
 protected:
 	void CommonInit();

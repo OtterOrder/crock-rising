@@ -223,7 +223,6 @@ HRESULT Renderer::Render()
 
 	m_pd3dDevice->BeginScene();
 
-
 	if(m_UseShadowMap)
 		m_ShadowMap->Render();
 	

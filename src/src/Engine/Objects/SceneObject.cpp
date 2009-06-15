@@ -238,10 +238,10 @@ void SceneObject::ApplyTransform(const D3DXMATRIX *world)
 
 void SceneObject::Update()
 {
-	// Si l'objet affecté par la physique
+	// Si l'objet est affecté par la physique
 
 		// Maj de l'objet graphique : On utilise la matrice calculée par le moteur physique
-		// Si controller multiplier par la matrice de rotation
+		// Si controller multiplié par la matrice de rotation
 		// m_WorldMatrix = GetObjectPhysicalMatrix;
 
 	if (IsActor())
@@ -249,21 +249,19 @@ void SceneObject::Update()
 		NxActor* pac = physX::getActor(m_EmpActor);
 		if(!pac->isSleeping()) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
 			pac->getGlobalPose().getColumnMajor44( m_WorldMatrix );
+
 	}
 	else if (IsController())
 	{
-		SetPhysicalTranslation(0.f, -0.1f, 0.f);
+		SetPhysicalTranslation(0.f, -0.1f, 0.0f);
 		NxController* pController = physX::getController(m_EmpController);
 
 		NxExtendedVec3 pos = pController->getPosition();
-		D3DXMATRIX posMat, rotMat;
 		Vector3f reg = m_pMesh->m_ReglagePivot;
-		D3DXMatrixTranslation(&posMat, (float)pos.x - reg.x, (float)pos.y - reg.z, (float)pos.z - reg.y);
-		D3DXMatrixIdentity( &rotMat );
-		rotMat._22=0; rotMat._23=1;
-		rotMat._32=1; rotMat._33=0;
-
-		m_WorldMatrix = rotMat*posMat; 
+ 
+		m_WorldMatrix._41 = (float)pos.x - reg.x,
+		m_WorldMatrix._42 = (float)pos.y - reg.y,
+		m_WorldMatrix._43 = (float)pos.z - reg.z;
 	}
 }
 

@@ -5,9 +5,12 @@
 
 #include		<cmath>
 #include		<vector>
-#include		<Objects/Camera.h>
+#include		<Core/Time.h>
+#include		<Core/System.h>
 #include		<Core/Inputs/InputManager.h>
+#include		<Physics/Physicalizer.h>
 #include		<Objects/SceneObjectAnimated.h>
+#include		<Objects/Camera.h>
 
 //******************************************************************
 typedef SceneObject Weapons;
@@ -20,7 +23,8 @@ enum HeroState
 	RUN,
 	ATTACK,
 	FLIGHT,  //fuite
-	BONUS
+	BONUS,
+	FPS
 };
 
 
@@ -40,6 +44,8 @@ public:
 	void		      changeState( HeroState newState ) { m_currentState = newState; }
 	ResourceResult	  control ( Camera* pCamera ); 
 
+	ResourceResult			  modeFPS( Camera* pCamera );
+
 	//Méthodes pour la gestion de l'inventaire d'armes
 	bool			  addWeapon     ( Weapons* weapon);
 	void			  removeWeapon  ( std::string strMesh );
@@ -53,6 +59,7 @@ protected:
 	SceneObject*			 m_pArme;
 	InputManager*			 m_pInputManager;
 	HeroState				 m_currentState;
+	SceneObject*             m_pWeapon;
 
 };
 

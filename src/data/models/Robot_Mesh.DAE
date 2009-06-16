@@ -4,11 +4,11 @@
     <contributor>
       <author>alchagnole</author>
       <authoring_tool>3dsMax 11 - Feeling ColladaMax v3.05B.</authoring_tool>
-      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=0;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=1;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=0;AnimStart=0;AnimEnd=0.666667;</comments>
-      <source_data>file:///C:/Documents%20and%20Settings/alchagnole/Bureau/robot%2Bbiped%2Bskin%2Bcourse_version2.max</source_data>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=0;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=0;AnimStart=0;AnimEnd=10.0667;</comments>
+      <source_data>file:///C:/Documents%20and%20Settings/alchagnole/Mes%20documents/3dsmax/export/robot%2Bbiped%2Bskin.max</source_data>
     </contributor>
-    <created>2009-06-16T11:34:41Z</created>
-    <modified>2009-06-16T11:34:44Z</modified>
+    <created>2009-06-15T15:10:24Z</created>
+    <modified>2009-06-15T15:10:25Z</modified>
     <unit meter="0.0254" name="inch"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -235,7 +235,7 @@
     </controller>
   </library_controllers>
   <library_visual_scenes>
-    <visual_scene id="robot_biped_skin_course_version2.max" name="robot_biped_skin_course_version2_max">
+    <visual_scene id="robot_biped_skin.max" name="robot_biped_skin_max">
       <node id="corps-node" name="corps" type="NODE">
         <instance_controller url="#corps-mesh-skin">
           <skeleton>#Bip01-node</skeleton>
@@ -249,46 +249,46 @@
         </instance_controller>
       </node>
       <node id="Bip01-node" name="Bip01" sid="Bone1" type="JOINT">
-        <matrix>0.000001 1 0 -0.017718 -1 0.000001 0 1.12132 0 0 1 46.8785 0 0 0 1</matrix>
+        <matrix>0.000001 1 0 -0.017718 -1 0.000001 0 1.12132 0 0 1 48.373 0 0 0 1</matrix>
         <node id="Bip01_Bassin-node" name="Bip01_Bassin" sid="Bone2" type="JOINT">
           <matrix>0 1 -0.000001 0 -0.000001 0.000001 1 0 1 0 0.000001 0 0 0 0 1</matrix>
           <node id="Bip01_Colonne-node" name="Bip01_Colonne" sid="Bone3" type="JOINT">
-            <matrix>0.971628 -0.236516 -0.000003 4.9889 0.236516 0.971628 0.000001 -0.015256 0.000003 -0.000002 1 0.000006 0 0 0 1</matrix>
+            <matrix>1 -0.000796 -0.000001 4.9852 0.000796 1 0.000004 -0.015699 0.000001 -0.000004 1 0.000006 0 0 0 1</matrix>
             <node id="Bip01_Cou-node" name="Bip01_Cou" sid="Bone4" type="JOINT">
-              <matrix>1 0 0 19.719 0 1 0 -0.006821 0 0 1 0 0 0 0 1</matrix>
+              <matrix>0.991051 -0.133487 -0.000000 19.72 0.133487 0.991051 0 -0.006759 0.000000 0 1 0 0 0 0 1</matrix>
               <node id="Bip01_T_te-node" name="Bip01_T_te" sid="Bone5" type="JOINT">
-                <matrix>0.995932 0.090111 0.000002 8.56277 -0.090111 0.995932 0.000001 -0.021892 -0.000002 -0.000001 1 0 0 0 0 1</matrix>
+                <matrix>0.999904 -0.013861 0 8.56573 0.013861 0.999904 0 0.000000 0 0 1 0 0 0 0 1</matrix>
               </node>
               <node id="Bip01_G_Clavicule-node" name="Bip01_G_Clavicule" sid="Bone6" type="JOINT">
-                <matrix>0.120073 -0.000796 0.992765 0 -0.000098 -1 -0.00079 0.006816 0.992765 -0.000002 -0.120073 1.51723 0 0 0 1</matrix>
+                <matrix>0.118986 -0.134276 0.983775 0 -0.016125 -0.990944 -0.133304 0.006816 0.992765 -0.000002 -0.120074 1.51723 0 0 0 1</matrix>
                 <node id="Bip01_G_Membre_sup_rieur_du_bras-node" name="Bip01_G_Membre_sup_rieur_du_bras" sid="Bone7" type="JOINT">
-                  <matrix>0.075245 -0.108113 0.991287 13.3444 0.699156 0.714537 0.024859 -0.000000 -0.710999 0.691194 0.129353 0 0 0 0 1</matrix>
+                  <matrix>0.078263 0.025312 0.996611 13.3444 -0.068494 0.997452 -0.019955 0.000000 -0.994577 -0.0667 0.079798 0 0 0 0 1</matrix>
                   <node id="Bip01_G_Avant_bras-node" name="Bip01_G_Avant_bras" sid="Bone8" type="JOINT">
-                    <matrix>0.753795 0.65711 0 15.9421 -0.657109 0.753795 0 0 0 0 1 0 0 0 0 1</matrix>
+                    <matrix>0.995354 0.096285 0 15.9421 -0.096285 0.995354 0 -0.000000 0 0 1 0 0 0 0 1</matrix>
                     <node id="Bip01_G_Main-node" name="Bip01_G_Main" sid="Bone9" type="JOINT">
                       <matrix>1 0 0 11.2059 0 0.000796 1 0 0 -1 0.000796 0 0 0 0 1</matrix>
                       <node id="Bip01_Doigt_G0-node" name="Bip01_Doigt_G0" sid="Bone10" type="JOINT">
-                        <matrix>0.975046 0.021815 0.22093 5.63338 0.020318 0.982214 -0.186663 -0.183064 -0.221072 0.186494 0.95726 -1.14796 0 0 0 1</matrix>
+                        <matrix>0.975046 0.021815 0.22093 5.63337 0.020318 0.982214 -0.186663 -0.183067 -0.221072 0.186494 0.95726 -1.14796 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_G01-node" name="Bip01_Doigt_G01" sid="Bone11" type="JOINT">
-                          <matrix>0.999389 0.034941 0 1.91714 -0.034941 0.999389 0 0 0 0 1 0.000003 0 0 0 1</matrix>
+                          <matrix>0.999389 0.034941 0 1.91713 -0.034941 0.999389 0 0 0 0 1 0.000001 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_G1-node" name="Bip01_Doigt_G1" sid="Bone12" type="JOINT">
-                        <matrix>0.994995 0 0.099925 5.72519 -0.000079 1 0.000792 0.143093 -0.099925 -0.000796 0.994994 0.201759 0 0 0 1</matrix>
+                        <matrix>0.994995 0 0.099925 5.72519 -0.000079 1 0.000792 0.143089 -0.099925 -0.000796 0.994995 0.201759 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_G11-node" name="Bip01_Doigt_G11" sid="Bone13" type="JOINT">
-                          <matrix>0.999644 -0.026691 0 2.04724 0.026691 0.999644 0 0 0 0 1 0.000001 0 0 0 1</matrix>
+                          <matrix>0.999644 -0.026691 0 2.04724 0.026691 0.999644 0 0 0 0 1 0.000000 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_G2-node" name="Bip01_Doigt_G2" sid="Bone14" type="JOINT">
-                        <matrix>0.9813 0 -0.192485 5.66632 0.000153 1 0.000781 0.306389 0.192485 -0.000796 0.981299 1.33682 0 0 0 1</matrix>
+                        <matrix>0.9813 0 -0.192486 5.66631 0.000153 1 0.000781 0.306383 0.192485 -0.000796 0.9813 1.33682 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_G21-node" name="Bip01_Doigt_G21" sid="Bone15" type="JOINT">
-                          <matrix>0.998333 -0.057714 0 1.90394 0.057714 0.998333 0 0 0 0 1 0 0 0 0 1</matrix>
+                          <matrix>0.998333 -0.057714 0 1.90394 0.057714 0.998333 0 0.000003 0 0 1 0 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_G3-node" name="Bip01_Doigt_G3" sid="Bone16" type="JOINT">
-                        <matrix>0.902943 -0.036913 -0.428171 5.14628 0.042585 0.999086 0.003673 0.530792 0.427644 -0.02155 0.90369 2.36235 0 0 0 1</matrix>
+                        <matrix>0.902943 -0.036913 -0.428171 5.14628 0.042585 0.999086 0.003673 0.530788 0.427644 -0.02155 0.90369 2.36235 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_G31-node" name="Bip01_Doigt_G31" sid="Bone17" type="JOINT">
-                          <matrix>0.992535 -0.12196 0 1.96321 0.12196 0.992535 0 0 0 0 1 0 0 0 0 1</matrix>
+                          <matrix>0.992535 -0.12196 0 1.96321 0.12196 0.992535 0 -0.000001 0 0 1 0 0 0 0 1</matrix>
                         </node>
                       </node>
                     </node>
@@ -296,35 +296,35 @@
                 </node>
               </node>
               <node id="Bip01_D_Clavicule-node" name="Bip01_D_Clavicule" sid="Bone18" type="JOINT">
-                <matrix>0.120073 -0.000796 -0.992765 0 -0.000092 -1 0.00079 0.006826 -0.992765 -0.000002 -0.120073 -1.51723 0 0 0 1</matrix>
+                <matrix>0.118986 -0.134276 -0.983775 0 -0.01612 -0.990944 0.133305 0.006825 -0.992765 -0.000002 -0.120073 -1.51723 0 0 0 1</matrix>
                 <node id="Bip01_D_Membre_sup_rieur_du_bras-node" name="Bip01_D_Membre_sup_rieur_du_bras" sid="Bone19" type="JOINT">
-                  <matrix>0.243553 0.326264 -0.913364 13.3444 -0.179227 0.940643 0.288217 0.000000 0.953184 0.093503 0.287572 0 0 0 0 1</matrix>
+                  <matrix>0.078263 0.025312 -0.996611 13.3444 -0.068494 0.997452 0.019955 0 0.994577 0.0667 0.079798 0.000007 0 0 0 1</matrix>
                   <node id="Bip01_D_Avant_bras-node" name="Bip01_D_Avant_bras" sid="Bone20" type="JOINT">
-                    <matrix>-0.218394 0.975861 0 15.9421 -0.975861 -0.218394 0 -0.000000 0 0 1 0 0 0 0 1</matrix>
+                    <matrix>0.995354 0.096285 0 15.9421 -0.096285 0.995354 0 -0.000000 0 0 1 0 0 0 0 1</matrix>
                     <node id="Bip01_D_Main-node" name="Bip01_D_Main" sid="Bone21" type="JOINT">
-                      <matrix>1 0 0 11.2059 0 0.000796 -1 -0.000003 0 1 0.000796 0 0 0 0 1</matrix>
+                      <matrix>1 0 0 11.2059 0 0.000796 -1 -0.000000 0 1 0.000796 -0.000003 0 0 0 1</matrix>
                       <node id="Bip01_Doigt_D0-node" name="Bip01_Doigt_D0" sid="Bone22" type="JOINT">
-                        <matrix>0.975046 0.021815 -0.22093 5.63337 0.020319 0.982214 0.186663 -0.183064 0.221072 -0.186494 0.95726 1.14796 0 0 0 1</matrix>
+                        <matrix>0.975046 0.021815 -0.22093 5.63338 0.020319 0.982214 0.186663 -0.183065 0.221072 -0.186494 0.95726 1.14796 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_D01-node" name="Bip01_Doigt_D01" sid="Bone23" type="JOINT">
-                          <matrix>0.999389 0.034941 0 1.91713 -0.034941 0.999389 0 0.000003 0 0 1 0 0 0 0 1</matrix>
+                          <matrix>0.999389 0.034941 0 1.91714 -0.034941 0.999389 0 -0.000001 0 0 1 0 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_D1-node" name="Bip01_Doigt_D1" sid="Bone24" type="JOINT">
-                        <matrix>0.994995 0 -0.099925 5.72518 -0.000079 1 -0.000792 0.143089 0.099925 0.000796 0.994995 -0.201763 0 0 0 1</matrix>
+                        <matrix>0.994995 0 -0.099925 5.72519 -0.000079 1 -0.000792 0.143091 0.099925 0.000796 0.994995 -0.201759 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_D11-node" name="Bip01_Doigt_D11" sid="Bone25" type="JOINT">
-                          <matrix>0.999644 -0.026691 0 2.04724 0.026691 0.999644 0 0.000003 0 0 1 -0.000003 0 0 0 1</matrix>
+                          <matrix>0.999644 -0.026691 0 2.04724 0.026691 0.999644 0 -0.000001 0 0 1 -0.000000 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_D2-node" name="Bip01_Doigt_D2" sid="Bone26" type="JOINT">
-                        <matrix>0.9813 0 0.192485 5.66631 0.000153 1 -0.000781 0.306385 -0.192485 0.000796 0.981299 -1.33681 0 0 0 1</matrix>
+                        <matrix>0.9813 0 0.192486 5.66631 0.000153 1 -0.000781 0.306387 -0.192485 0.000796 0.9813 -1.33682 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_D21-node" name="Bip01_Doigt_D21" sid="Bone27" type="JOINT">
-                          <matrix>0.998333 -0.057714 0 1.90395 0.057714 0.998333 0 0 0 0 1 -0.000003 0 0 0 1</matrix>
+                          <matrix>0.998333 -0.057714 0 1.90395 0.057714 0.998333 0 0 0 0 1 0.000000 0 0 0 1</matrix>
                         </node>
                       </node>
                       <node id="Bip01_Doigt_D3-node" name="Bip01_Doigt_D3" sid="Bone28" type="JOINT">
                         <matrix>0.902943 -0.036913 0.428171 5.14628 0.042585 0.999086 -0.003673 0.530792 -0.427644 0.02155 0.90369 -2.36235 0 0 0 1</matrix>
                         <node id="Bip01_Doigt_D31-node" name="Bip01_Doigt_D31" sid="Bone29" type="JOINT">
-                          <matrix>0.992535 -0.12196 0 1.96321 0.12196 0.992535 0 0.000003 0 0 1 -0.000003 0 0 0 1</matrix>
+                          <matrix>0.992535 -0.12196 0 1.96321 0.12196 0.992535 0 0 0 0 1 -0.000000 0 0 0 1</matrix>
                         </node>
                       </node>
                     </node>
@@ -333,11 +333,11 @@
               </node>
             </node>
             <node id="Bip01_G_Cuisse-node" name="Bip01_G_Cuisse" sid="Bone30" type="JOINT">
-              <matrix>-0.954811 0.292654 -0.051867 -4.84373 0.292629 0.956191 0.008252 1.19477 0.05201 -0.007298 -0.99862 5.08824 0 0 0 1</matrix>
+              <matrix>-0.992586 0.114219 -0.041556 -4.98518 0.114406 0.993432 -0.002143 0.019657 0.041038 -0.006881 -0.999134 5.08823 0 0 0 1</matrix>
               <node id="Bip01_G_Mollet-node" name="Bip01_G_Mollet" sid="Bone31" type="JOINT">
-                <matrix>0.376533 0.926403 0 25.3664 -0.926403 0.376534 0 -0.000000 0 0 1 0 0 0 0 1</matrix>
+                <matrix>0.986581 0.163275 0 25.3664 -0.163275 0.986581 0 -0.000000 0 0 1 0.000000 0 0 0 1</matrix>
                 <node id="Bip01_G_Pied-node" name="Bip01_G_Pied" sid="Bone32" type="JOINT">
-                  <matrix>0.993043 -0.114768 -0.026343 18.2251 0.1135 0.992499 -0.045431 -0.000001 0.031359 0.042125 0.99862 0.000000 0 0 0 1</matrix>
+                  <matrix>0.997876 -0.050126 -0.041611 18.2251 0.050173 0.99874 0.000091 0 0.041554 -0.002178 0.999134 -0.000000 0 0 0 1</matrix>
                   <node id="Bip01_Orteil_G0-node" name="Bip01_Orteil_G0" sid="Bone33" type="JOINT">
                     <matrix>0 -1 0 4.98519 1 0 0 6.41572 0 0 1 0.000000 0 0 0 1</matrix>
                   </node>
@@ -345,13 +345,13 @@
               </node>
             </node>
             <node id="Bip01_D_Cuisse-node" name="Bip01_D_Cuisse" sid="Bone34" type="JOINT">
-              <matrix>-0.828058 0.559293 0.038867 -4.84375 0.559461 0.828823 -0.007418 1.19478 -0.036363 0.015601 -0.999217 -5.08822 0 0 0 1</matrix>
+              <matrix>-0.992586 0.114219 0.041556 -4.98518 0.114406 0.993432 0.002148 0.019685 -0.041037 0.006887 -0.999134 -5.08823 0 0 0 1</matrix>
               <node id="Bip01_D_Mollet-node" name="Bip01_D_Mollet" sid="Bone35" type="JOINT">
-                <matrix>0.7799 0.625904 0 25.3664 -0.625904 0.7799 0 -0.000000 0 0 1 -0.000000 0 0 0 1</matrix>
+                <matrix>0.986581 0.163275 0 25.3664 -0.163275 0.986581 0 0 0 0 1 0.000000 0 0 0 1</matrix>
                 <node id="Bip01_D_Pied-node" name="Bip01_D_Pied" sid="Bone36" type="JOINT">
-                  <matrix>0.948113 -0.315639 0.038126 18.2251 0.315467 0.948877 0.010593 0 -0.039521 0.001984 0.999217 0.000000 0 0 0 1</matrix>
+                  <matrix>0.997876 -0.050126 0.041611 18.2251 0.050173 0.99874 -0.000091 0 -0.041554 0.002178 0.999134 -0.000000 0 0 0 1</matrix>
                   <node id="Bip01_Orteil_D0-node" name="Bip01_Orteil_D0" sid="Bone37" type="JOINT">
-                    <matrix>0 -1 0 4.98519 1 0 0 6.41572 0 0 1 -0.000000 0 0 0 1</matrix>
+                    <matrix>0 -1 0 4.98519 1 0 0 6.41572 0 0 1 0.000000 0 0 0 1</matrix>
                   </node>
                 </node>
               </node>
@@ -362,7 +362,7 @@
       <extra>
         <technique profile="FCOLLADA">
           <start_time>0</start_time>
-          <end_time>0.666667</end_time>
+          <end_time>10.0667</end_time>
         </technique>
       </extra>
       <extra>
@@ -373,6 +373,6 @@
     </visual_scene>
   </library_visual_scenes>
   <scene>
-    <instance_visual_scene url="#robot_biped_skin_course_version2.max"/>
+    <instance_visual_scene url="#robot_biped_skin.max"/>
   </scene>
 </COLLADA>

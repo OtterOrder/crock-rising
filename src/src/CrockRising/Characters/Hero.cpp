@@ -1,5 +1,4 @@
 #include "Hero.h"
-#include "Physics/Physicalizer.h"
 
 /***********************************************************
 * Constructeur
@@ -8,14 +7,10 @@ Hero::Hero()
 {
 	m_iLife = 100 ;
 
-	//m_pAnimated = new SceneObjectAnimated("Robot_Mesh.DAE","Robot_Marche.DAE",D3DXVECTOR3(0.f,0.f,0.f));
-	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3( 0.f,1.f,0.f));
+	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3(0.f,1.f,0.f));	
 	m_pAnimated->Init();
-	m_pAnimated->SetControledCharacter(4.f, 18.f, this, GROUP_HERO);
-	
-	/*m_pArme = new SceneObject("BatteM.DAE",D3DXVECTOR3( 0.f,10.f,0.f));
-	m_pArme->Init();
-	m_pArme->SetObjectPhysical("BatteP");*/
+	m_pAnimated->SetRotation(0,0,90);
+	m_pAnimated->SetControledCharacter(4.f,10.f,this,GROUP_HERO);
 
 	m_pInputManager = InputManager::GetInstance();
 	m_pInputManager->HoldMouseAtCenter(true);
@@ -67,66 +62,43 @@ void Hero::removeWeapon( std::string strMesh )
 }
 
 
-ResourceResult Hero::control( Camera *pCamera )
+/*****************************************************************
+* Suivant la touche appuyée, change l'état actuel du Héros ou bien 
+* gère son déplacement. Cette méthode sert également à la mise à jour 
+* de l'orientation de la caméra
+******************************************************************/
+ResourceResult Hero::control( Camera* pCamera )
 {
+	//-- On vérifie tout d'abord suivant la touche tapée si l'on doit
+	//   changer l'état du Héros  
 	if ( m_pInputManager->IsKeyPressed(' '))
+	{
 		changeState(ATTACK);
+		return RES_SUCCEED;
+	}
 	if ( m_pInputManager->IsKeyPressed('X'))
+	{
 		changeState(STATIC);
+		return RES_SUCCEED;
+	}
 	if ( m_pInputManager->IsKeyPressed('V'))
+	{
 		changeState(BOREDOM);
+		return RES_SUCCEED;
+	}
 	if ( m_pInputManager->IsKeyPressed('B'))
+	{
 		changeState(BONUS);
+		return RES_SUCCEED;
+	}
 
-	float sensibilityTranslation = 0.05f;
-	if ( m_pInputManager->IsKeyPressed('Z'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
-		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	if ( m_pInputManager->IsKeyPressed('Q'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	if ( m_pInputManager->IsKeyPressed('S'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	if ( m_pInputManager->IsKeyPressed('D'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	if ( m_pInputManager->IsKeyPressed('F'))
-	{
-		int angleY = int(pCamera->GetOrientationYRad() + 1.f);
-		pCamera->SetOrientationY(angleY);
-	}
-	if ( m_pInputManager->IsKeyPressed('G'))
-	{
-		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
-		pCamera->SetOrientationY(angleY);
-	}
 	
-
+	
+	//Mise à jour de l'orientation de la caméra 
 	Point2f point = m_pInputManager->GetMouseVector();
 	const int sensibiliteSouris = 10;
 
-	//Mouvement de la souris = mouvement camera
+	
 	if( point.x != 0 ) 
 	{
 		int offsetCursor = (int)point.x%sensibiliteSouris; 
@@ -137,6 +109,7 @@ ResourceResult Hero::control( Camera *pCamera )
 		D3DXMATRIX rot;
 		D3DXMatrixRotationZ( &rot, diff );
 		m_pAnimated->ApplyTransform( &rot );
+
 	}
 	if( point.y != 0 ) 
 	{
@@ -144,7 +117,60 @@ ResourceResult Hero::control( Camera *pCamera )
 		pCamera->SetOrientationX( offsetCursor );
 	}
 
-	//m_pArme
+
+	
+	//Gestion du déplacement du Héros
+ 	Time* time = System::GetInstance()->GetTime();
+ 	const float timeF = time->GetDeltaTimeF(); 
+	const float factor = 0.5f;
+	if ( m_pInputManager->IsKeyPressed('Z'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = factor*timeF;
+		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
+		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	else if ( m_pInputManager->IsKeyPressed('Q'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = factor*timeF;
+		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	else if ( m_pInputManager->IsKeyPressed('S'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = factor*timeF;
+		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	else if ( m_pInputManager->IsKeyPressed('D'))
+	{
+		changeState(WALK);
+		float xStep, zStep;
+		float sensibilityTranslation = factor*timeF;
+		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+	}
+	else if ( m_pInputManager->IsKeyPressed('F'))
+	{
+		int angleY = int(pCamera->GetOrientationYRad() + 1.f);
+		pCamera->SetOrientationY(angleY);
+	}
+	else if ( m_pInputManager->IsKeyPressed('G'))
+	{
+		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
+		pCamera->SetOrientationY(angleY);
+	}
+
+
 	return RES_SUCCEED;
 }
 
@@ -152,13 +178,13 @@ ResourceResult Hero::control( Camera *pCamera )
 void Hero::update( Camera* pCamera )
 {
 	control( pCamera );
+
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 
 	switch ( m_currentState )
 	{
 	case WALK : 
 		m_pAnimated->StartAnim();
-		//m_pAnimated->SetAnim("Robot_Marche.DAE");
 		m_pAnimated->SetAnim("Alien_Anim.DAE");
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
@@ -187,11 +213,4 @@ void Hero::update( Camera* pCamera )
 	}
 
 
-}
-
-
-void Hero::OuilleOuilleOuilleCaFaitMal()
-{
-	m_iLife--;
-	m_currentState = BONUS;
 }

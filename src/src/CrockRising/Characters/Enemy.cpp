@@ -16,6 +16,16 @@ Enemy::Enemy()
 	Enemy::listEnemy.push_back(this);
 }
 
+Enemy::Enemy(Vector3f position)
+{
+	m_iLife = 100 ;
+
+	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",position);
+	m_pAnimated->Init();
+
+	Enemy::listEnemy.push_back(this);
+}
+
 /***********************************************************
 * Destructeur
 ***********************************************************/

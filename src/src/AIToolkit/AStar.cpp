@@ -15,39 +15,39 @@ AStar::~AStar(void)
 
 pair<int,int> AStar::findWay( int debutX, int debutY, int finX, int finY )
 {
-	listeOuverte.clear();
-	listeFermee.clear();
+	listOpen.clear();
+	blackList.clear();
 	lastWayPoint.first = -1;
 	lastWayPoint.second = -1;
 
 	// Spécifie le point de départ et d'arrivée
 	pair<int,int> noeudCourant;
-	depart.parent.first		= debutX;
-	depart.parent.second	= debutY;
+	pointStart.parent.first		= debutX;
+	pointStart.parent.second	= debutY;
 	noeudCourant.first		= debutX;
 	noeudCourant.second		= debutY;
-	arrivee.x = finX;
-	arrivee.y = finY;
+	pointEnd.x = finX;
+	pointEnd.y = finY;
 
-	listeOuverte[noeudCourant] = depart;
-	ajouterListeFermee( noeudCourant );
-	ajouterCasesAdjacentes( noeudCourant );
+	listOpen[noeudCourant] = pointStart;
+	addToBlackList( noeudCourant );
+	addSquareAdjacent( noeudCourant );
 
 	// Tant qu'on est pas a la destination et qu'il est possible de trouvé un chemin
-	while( !((noeudCourant.first == arrivee.x) && (noeudCourant.second == arrivee.y)) && (!listeOuverte.empty()) )
+	while( !((noeudCourant.first == pointEnd.x) && (noeudCourant.second == pointEnd.y)) && (!listOpen.empty()) )
 	{
-        // on cherche le meilleur noeud de la liste ouverte, on sait qu'elle n'est pas vide donc il existe
-        noeudCourant = meilleurNoeud( listeOuverte );
+        // on cherche le meilleur node de la liste ouverte, on sait qu'elle n'est pas vide donc il existe
+        noeudCourant = bestNode( listOpen );
 
         // on le passe dans la liste fermee, il ne peut pas déjà y être
-        ajouterListeFermee(noeudCourant);
-        ajouterCasesAdjacentes(noeudCourant);
+        addToBlackList(noeudCourant);
+        addSquareAdjacent(noeudCourant);
     }
 
-	// Si le noeud courant est au meme coordonnes que la destination, on a trouver un chemin
-    if ((noeudCourant.first == arrivee.x) && (noeudCourant.second == arrivee.y))
+	// Si le node courant est au meme coordonnes que la destination, on a trouver un chemin
+    if ((noeudCourant.first == pointEnd.x) && (noeudCourant.second == pointEnd.y))
 	{
-        retrouverChemin();
+        findCompleteWay();
     }
 
 	return lastWayPoint;
@@ -55,24 +55,27 @@ pair<int,int> AStar::findWay( int debutX, int debutY, int finX, int finY )
 
 
 // Calcul de la distance euclidienne entre 2 points
-float AStar::distance(int x1, int y1, int x2, int y2)
+// Version float plus précis mais moins rapide avec la fonction distance 
+// qui retourne un float avec la racine carré de la distance euclidienne
+// return sqrt((float)distanceEuc);
+int AStar::distance(int x1, int y1, int x2, int y2)
 {
 	int distanceEuc = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
-	return sqrt((float)distanceEuc);
+	return distanceEuc;
 }
 
-// Retour true si un noeud est déja présent dans une liste
-bool AStar::presentDansListe(pair<int,int> n, listeNoeud& l)
+// Retour true si un node est déja présent dans une liste
+bool AStar::isInList(pair<int,int> n, listNode& l)
 {
-	listeNoeud::iterator i = l.find(n);
+	listNode::iterator i = l.find(n);
     if (i == l.end())	return false;
     else				return true;
 }
 
-// Recupere les noeud et les ajoutes ou non a la liste ouverte
-void AStar::ajouterCasesAdjacentes(pair <int,int>& n)
+// Recupere les node et les ajoutes ou non a la liste ouverte
+void AStar::addSquareAdjacent(pair <int,int>& n)
 {
-	noeud tmp;
+	node tmp;
 
     // Pour chaque case adjacent
     for (int i = n.first-1; i <= n.first+1; i++)
@@ -84,47 +87,47 @@ void AStar::ajouterCasesAdjacentes(pair <int,int>& n)
 		{
             if ((j < 0) || (j > MAX_TAB-1))				continue;	// En dehors du tableau
             if ((i == n.first) && ( j== n.second))		continue;	// case actuelle n
-            if (tabChemin[i][j] == 1)					continue;	// obstace, terrain non franchissable
+            if (tabChemin[i][j] == 1)					continue;	// obstacle, terrain non franchissable
 
             pair<int,int> it(i,j);
 
-			// Si le noeud n'est pas déjà présent dans la liste fermée
-            if (!presentDansListe(it, listeFermee))
+			// Si le node n'est pas déjà présent dans la liste fermée
+            if (!isInList(it, blackList))
 			{
-				tmp.coutG = listeFermee[n].coutG + distance(i, j, n.first, n.second);
-				tmp.coutH = distance(i, j, arrivee.x, arrivee.y);
-				tmp.coutF = tmp.coutG + tmp.coutH;
+				tmp.costG = blackList[n].costG + distance(i, j, n.first, n.second);
+				tmp.costH = distance(i, j, pointEnd.x, pointEnd.y);
+				tmp.costF = tmp.costG + tmp.costH;
                 tmp.parent = n;
 
-				// Si le noeud est déjà présent dans la liste ouverte, il faut comparer les couts
-                if (presentDansListe(it, listeOuverte))
+				// Si le node est déjà présent dans la liste ouverte, il faut comparer les couts
+                if (isInList(it, listOpen))
 				{
 					// Si le nouveau chemin est meilleur, on update
-					if (tmp.coutF < listeOuverte[it].coutF)		listeOuverte[it] = tmp;
+					if (tmp.costF < listOpen[it].costF)		listOpen[it] = tmp;
 
-                    // le noeud courant a un moins bon chemin, on ne change rien
+                    // le node courant a un moins bon chemin, on ne change rien
                 }
 				else
 				{
-                    // Le noeud n'est pas présent dans la liste ouverte, on l'ajoute
-                    listeOuverte[pair<int,int>(i,j)] = tmp;
+                    // Le node n'est pas présent dans la liste ouverte, on l'ajoute
+                    listOpen[pair<int,int>(i,j)] = tmp;
                 }
             }
         }
     }
 }
 
-// Retourne le meilleur noeud de la liste ouverte (celui qui a le cout le plus faible)
-pair<int,int> AStar::meilleurNoeud(listeNoeud& l)
+// Retourne le meilleur node de la liste ouverte (celui qui a le cout le plus faible)
+pair<int,int> AStar::bestNode(listNode& l)
 {
-    float m_coutf = l.begin()->second.coutF;
+    float m_coutf = l.begin()->second.costF;
     pair<int,int> m_noeud = l.begin()->first;
 
-    for (listeNoeud::iterator i = l.begin(); i!=l.end(); i++)
+    for (listNode::iterator i = l.begin(); i!=l.end(); i++)
 	{
-        if (i->second.coutF< m_coutf)
+        if (i->second.costF< m_coutf)
 		{
-            m_coutf = i->second.coutF;
+            m_coutf = i->second.costF;
             m_noeud = i->first;
         }
 	}
@@ -133,19 +136,19 @@ pair<int,int> AStar::meilleurNoeud(listeNoeud& l)
 }
 
 
-// Passe un noeud de la liste ouverte a la liste fermée
-void AStar::ajouterListeFermee( pair<int,int>& p )
+// Passe un node de la liste ouverte a la liste fermée
+void AStar::addToBlackList( pair<int,int>& p )
 {
-    noeud& n = listeOuverte[p];
-    listeFermee[p] = n;
+    node& n = listOpen[p];
+    blackList[p] = n;
 
     // Suppression de la liste ouverte, ce n'est plus une solution explorable
-	if (listeOuverte.erase(p)==0)	cerr << "Erreur, impossible de supprimer le noeud de la liste ouverte" << endl;
+	if (listOpen.erase(p)==0)	cerr << "Erreur, impossible de supprimer le node de la liste ouverte" << endl;
 }
 
 
 // Retrouve le chemin quand la destination est atteinte
-void AStar::retrouverChemin()
+void AStar::findCompleteWay()
 {
 	// Vide le chemin si il a déjà été rempli
 	if ( !chemin.empty() )	
@@ -155,18 +158,18 @@ void AStar::retrouverChemin()
 	}
 
     // L'arrivée est le dernier élément de la liste fermée
-    noeud& tmp = listeFermee[std::pair<int, int>(arrivee.x,arrivee.y)];
+    node& tmp = blackList[std::pair<int, int>(pointEnd.x,pointEnd.y)];
 
     struct point n;
     pair<int,int> prec;
-    n.x = arrivee.x;
-    n.y = arrivee.y;
+    n.x = pointEnd.x;
+    n.y = pointEnd.y;
     prec.first  = tmp.parent.first;
     prec.second = tmp.parent.second;
     //chemin.push_front(n);					// AVEC LIST
 	chemin.push_back(n);
 
-    while (prec != pair<int,int>(depart.parent.first,depart.parent.second))
+    while (prec != pair<int,int>(pointStart.parent.first,pointStart.parent.second))
 	{
 		cptChemin++;
 
@@ -177,7 +180,7 @@ void AStar::retrouverChemin()
         //chemin.push_front(n);					// AVEC LIST
 		chemin.push_back(n);
 
-        tmp = listeFermee[tmp.parent];
+        tmp = blackList[tmp.parent];
         prec.first  = tmp.parent.first;
         prec.second = tmp.parent.second;
     }

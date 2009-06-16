@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <string>
 #include <math.h>
+#include <map>
+#include <vector>
 using namespace std;
 
 
@@ -71,6 +73,9 @@ private:
     int				padWidth;
 
 	int tabColor[256][256];
+	vector<pair<int,int>>	listSpawnPoint;
+	pair<int,int>			lastSpawnPoint;
+
 	colorAIMap color;
 	int row;
 	int col;

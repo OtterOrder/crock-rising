@@ -59,9 +59,9 @@ bool Bitmap::loadBMP(char *file)
 
 	fclose(in);
     delete[] tempData;
+
     return loaded;
 }
-
 
 
 bool Bitmap::convert24(unsigned char* tempData) 
@@ -76,13 +76,23 @@ bool Bitmap::convert24(unsigned char* tempData)
             if((i+1)%padWidth==0)	i+=offset;
 
             // Le format BMP est sous forme BGR => on transforme en meme temps en RGB
-			color.R = (int)*(tempData+i);
+			color.R = (int)*(tempData+i+2);
 			color.G = (int)*(tempData+i+1);
-			color.B = (int)*(tempData+i+2);
+			color.B = (int)*(tempData+i+0);
 
-			// Test si l'image est bien en noir et blanc
-			if ( (color.R == color.G && color.G == color.B) &&  (color.R == 0 || color.R == 255) )
+			// Test si l'image est bien en noir/blanc/rouge
+			if (	(color.R == 0 || color.R == 255 || color.R == 250) 
+				&&	(color.G == 0 || color.G == 255) 
+				&&	(color.B == 0 || color.B == 255) )
 			{
+				if ( color.R == 250 )
+				{
+					//std::cout << "Zone spawn" << std::endl;
+					//lastSpawnPoint.first = row*500/256;
+					//lastSpawnPoint.second = col*500/256;
+					//listSpawnPoint.push_back(lastSpawnPoint);
+				}
+
 				tabColor[row][col] = color.R;
 				col++;
 				
@@ -102,8 +112,6 @@ bool Bitmap::convert24(unsigned char* tempData)
     return true;
 }
 
-
-
 void Bitmap::convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] )
 {
 	int tmpSize = 256/MAX_TAB;
@@ -111,6 +119,7 @@ void Bitmap::convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] )
 	// Transforme les valeurs 0 et 255 en 0 et 1 et inverse l'image pour qu'elle soit a l'endroit
 	for (int i=0; i<MAX_TAB; i++)
 	for (int j=0; j<MAX_TAB; j++)
-		tabImg[MAX_TAB-i-1][j] = tabColor[i*tmpSize][j*tmpSize]/255;		// Tableau inversé
-		//tabImg[i][j] = tabColor[i*tmpSize][j*tmpSize]/255;		// Tableau non-inversé
+	{
+		tabImg[MAX_TAB-i-1][j] = ceil((float)tabColor[i*tmpSize][j*tmpSize]/255.f);		// Tableau inversé
+	}
 }

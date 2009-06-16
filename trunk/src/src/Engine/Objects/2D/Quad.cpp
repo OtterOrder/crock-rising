@@ -129,6 +129,24 @@ void Quad::SetSize( const Vector2i &size )
 }
 
 //**********************************************************
+// Change la largeur.
+// @param[in]	width : Largeur en px
+//**********************************************************
+void Quad::SetWidth( u32 width )
+{
+	SetSize( width, m_Height );
+}
+
+//**********************************************************
+// Change la hauteur.
+// @param[in]	height : Hauteur en px
+//**********************************************************
+void Quad::SetHeight( u32 height )
+{
+	SetSize( m_Width, height );
+}
+
+//**********************************************************
 // Donne la largeur de l'objet.
 //**********************************************************
 u32 Quad::GetWidth() const

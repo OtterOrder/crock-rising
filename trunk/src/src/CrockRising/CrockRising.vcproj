@@ -278,6 +278,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="2D"
+			>
+			<File
+				RelativePath=".\2D\HUDLife.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\2D\HUDLife.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
 			>

@@ -22,6 +22,8 @@ public:
 	// Taille
 	void SetSize( u32 width, u32 height );
 	void SetSize( const Vector2i &size );
+	void SetWidth( u32 width );
+	void SetHeight( u32 height );
 	u32 GetWidth() const;
 	u32 GetHeight() const;
 

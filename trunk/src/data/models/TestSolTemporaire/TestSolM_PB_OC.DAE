@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>B%E9renger</author>
+      <authoring_tool>3dsMax 9 - Feeling ColladaMax v3.05B.</authoring_tool>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=0;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=3.33333;</comments>
+      <source_data>file:///H:/Documents%20and%20Settings/B%E9renger/Mes%20documents/3dsmax/scenes/Sol.max</source_data>
+    </contributor>
+    <created>2009-06-17T22:09:36Z</created>
+    <modified>2009-06-17T22:09:37Z</modified>
+    <unit meter="0.0254" name="inch"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_materials>
+    <material id="ColorMaterial_E1C65700" name="ColorMaterial_E1C65700">
+      <instance_effect url="#ColorMaterial_E1C65700-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="ColorMaterial_E1C65700-fx">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.882353 0.776471 0.341176 1</color>
+            </ambient>
+            <diffuse>
+              <color>0.882353 0.776471 0.341176 1</color>
+            </diffuse>
+            <specular>
+              <color>1 1 1 1</color>
+            </specular>
+            <shininess>
+              <float>10</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <reflectivity>
+              <float>1</float>
+            </reflectivity>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </phong>
+          <extra>
+            <technique profile="FCOLLADA">
+              <spec_level>
+                <float>0.2</float>
+              </spec_level>
+            </technique>
+          </extra>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="Box02-mesh" name="Box02">
+      <mesh>
+        <source id="Box02-mesh-positions">
+          <float_array id="Box02-mesh-positions-array" count="72">-49.3422 -0.605194 0 49.3422 -0.605194 0 -49.3422 0.605194 0 49.3422 0.605194 0 -49.3422 -0.605194 21.9446 49.3422 -0.605194 21.9446 -49.3422 0.605194 21.9446 49.3422 0.605194 21.9446 -49.6503 -0.348961 -1.2915 50.3497 -0.348961 -1.2915 -49.6503 99.651 -1.2915 50.3497 99.651 -1.2915 -49.6503 -0.348961 -0.291502 50.3497 -0.348961 -0.291502 -49.6503 99.651 -0.291502 50.3497 99.651 -0.291502 -47.1097 79.6439 11.7712 -18.132 79.6439 11.7712 -47.1097 98.8084 11.7712 -18.132 98.8084 11.7712 -47.1097 79.6439 34.0873 -18.132 79.6439 34.0873 -47.1097 98.8084 34.0873 -18.132 98.8084 34.0873</float_array>
+          <technique_common>
+            <accessor source="#Box02-mesh-positions-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Box02-mesh-normals">
+          <float_array id="Box02-mesh-normals-array" count="216">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#Box02-mesh-normals-array" count="72" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Box02-mesh-map-channel1">
+          <float_array id="Box02-mesh-map-channel1-array" count="216">1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
+          <technique_common>
+            <accessor source="#Box02-mesh-map-channel1-array" count="72" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Box02-mesh-vertices">
+          <input semantic="POSITION" source="#Box02-mesh-positions"/>
+        </vertices>
+        <triangles material="ColorMaterial" count="36">
+          <input semantic="VERTEX" source="#Box02-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Box02-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Box02-mesh-map-channel1" offset="2" set="1"/>
+          <p>0 0 0 2 1 2 3 2 3 3 2 3 1 3 1 0 0 0 4 4 4 5 5 5 7 6 7 7 6 7 6 7 6 4 4 4 0 8 8 1 9 9 5 10 11 5 10 11 4 11 10 0 8 8 1 12 12 3 13 13 7 14 15 7 14 15 5 15 14 1 12 12 3 16 16 2 17 17 6 18 19 6 18 19 7 19 18 3 16 16 2 20 20 0 21 21 4 22 23 4 22 23 6 23 22 2 20 20 8 24 24 10 25 26 11 26 27 11 26 27 9 27 25 8 24 24 12 28 28 13 29 29 15 30 31 15 30 31 14 31 30 12 28 28 8 32 32 9 33 33 13 34 35 13 34 35 12 35 34 8 32 32 9 36 36 11 37 37 15 38 39 15 38 39 13 39 38 9 36 36 11 40 40 10 41 41 14 42 43 14 42 43 15 43 42 11 40 40 10 44 44 8 45 45 12 46 47 12 46 47 14 47 46 10 44 44 16 48 48 18 49 50 19 50 51 19 50 51 17 51 49 16 48 48 20 52 52 21 53 53 23 54 55 23 54 55 22 55 54 20 52 52 16 56 56 17 57 57 21 58 59 21 58 59 20 59 58 16 56 56 17 60 60 19 61 61 23 62 63 23 62 63 21 63 62 17 60 60 19 64 64 18 65 65 22 66 67 22 66 67 23 67 66 19 64 64 18 68 68 16 69 69 20 70 71 20 70 71 22 71 70 18 68 68</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Sol.max" name="Sol_max">
+      <node id="Box02-node" name="Box02" type="NODE">
+        <matrix>1 0 0 0.275513 0 1 0 -80.3907 0 0 1 -52.5648 0 0 0 1</matrix>
+        <node id="Box02-node_PIVOT" name="Box02_PIVOT" type="NODE">
+          <matrix>1 0 0 -0.625244 0 1 0 -0.522919 0 0 1 17.2921 0 0 0 1</matrix>
+          <instance_geometry url="#Box02-mesh">
+            <bind_material>
+              <technique_common>
+                <instance_material symbol="ColorMaterial" target="#ColorMaterial_E1C65700"/>
+              </technique_common>
+            </bind_material>
+          </instance_geometry>
+        </node>
+        <extra>
+          <technique profile="FCOLLADA">
+            <user_properties>PhysicsType = 3&#13;
+Mass = 1.0&#13;
+GeometryType = 1&#13;
+MaterialType = 2&#13;
+Friction = 0.3&#13;
+StaticFriction = 0.3&#13;
+Restitution = 0.0&#13;
+InitialVelocityX = 0.0&#13;
+InitialVelocityY = 0.0&#13;
+InitialVelocityZ = 0.0&#13;
+InitialSpinX = 0.0&#13;
+InitialSpinY = 0.0&#13;
+InitialSpinZ = 0.0&#13;
+PutToSleep = false&#13;
+EnableCCD = false&#13;
+</user_properties>
+          </technique>
+        </extra>
+      </node>
+      <extra>
+        <technique profile="FCOLLADA">
+          <start_time>0</start_time>
+          <end_time>3.33333</end_time>
+        </technique>
+      </extra>
+      <extra>
+        <technique profile="MAX3D">
+          <frame_rate>30</frame_rate>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Sol.max"/>
+  </scene>
+</COLLADA>

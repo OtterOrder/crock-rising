@@ -9,7 +9,7 @@
 #include	"Sound/SoundSystem.h"
 #include	"Core/Time.h"
 
-#define		NB_FPS			80
+#define		NB_FPS			120
 #define		FRAME_DELAY		(1.f/NB_FPS)
 
 //******************************************************************

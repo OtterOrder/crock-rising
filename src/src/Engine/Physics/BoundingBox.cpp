@@ -16,7 +16,7 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);												//Dimension
 	boxDesc->mass			= Pb->fMass;																//Masse
 	boxDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
-	//boxDesc->localPose.t	= NxVec3( 0.f, 100.f, 0.f);											//Position
+	//boxDesc->localPose.t	= NxVec3( 10.f, 0.f, 0.f);											//Position
 	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
 	boxDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	boxDesc->localPose.M	= m;																		//Rotation
@@ -221,21 +221,28 @@ void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
 }
 
 
-void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat )
+void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg )
 {	
 	NxActor* pac = getActor(emp);
 	if(!pac->isSleeping() || pac->getGroup() == GROUP_STATIC) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
 	{
+
+		D3DXMATRIX mat_PhysX;
+		D3DXMatrixIdentity(&mat_PhysX);
+
+
 		D3DXMATRIX rotX, test;
 		D3DXMatrixIdentity( &rotX );
 		rotX._22=0; rotX._23=1;
 		rotX._32=1; rotX._33=0;
-		D3DXMatrixTranslation( &test, 0.f, 0.f, 0.f);
 
 		NxVec3 v = pac->getGlobalPosition();
-		pac->getGlobalPose().getColumnMajor44( WorldMat );
-		WorldMat = rotX * WorldMat;
-		WorldMat = test * WorldMat;
+		pac->getGlobalPose().getColumnMajor44( mat_PhysX );
+		mat_PhysX = rotX * mat_PhysX;
+
+
+		D3DXMatrixTranslation(&WorldMat, -reg.x, -reg.y, -reg.z);
+		D3DXMatrixMultiply(&WorldMat, &WorldMat, &mat_PhysX);
 	}
 }
 

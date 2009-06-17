@@ -98,7 +98,7 @@ void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision g
 	{
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
-		m_ListOfBoundingBox.MajPivot(m_pMesh);
+		//m_ListOfBoundingBox.MajPivot(m_pMesh);
 		
 		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox, group );
 	}
@@ -295,13 +295,21 @@ void SceneObject::Update()
 
 	if (IsActor())
 	{
-		physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix );
+		//D3DXMATRIX mat_PhysX;
+		//D3DXMatrixIdentity(&mat_PhysX);
+		physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot );
+
+		//Vector3f  reg =  m_pMesh->m_ReglagePivot;
+		//D3DXMatrixTranslation(&m_WorldMatrix, -reg.x, -reg.y, -reg.z);
+		//D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &mat_PhysX);
+
+		//physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix );
 
 	}
 	else if (IsController())
 	{
 		SetPhysicalTranslation(0.f, -0.01f, 0.f);
-		physX::UpdateObjectFromController( m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot );
+		physX::UpdateObjectFromController( m_iEmpController, m_WorldMatrix, m_pMesh->m_ReglagePivot );
 	}
 }
 

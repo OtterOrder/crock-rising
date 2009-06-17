@@ -119,7 +119,7 @@ namespace physX
 	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
 	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 	* @return		int : l'indice de l'emplacement du controller
-	* Précondition	radius et height ne doivent pas être tous les deux nuls.
+	* Précondition	radius et height ne doivent pas être tous les deux nuls. La pos doit être > 1 en Y.
 	************************************************************************************/
 	int CreateControlledCapsule( Vector3f pos, float radius, float height,
 								 void* Ref, int &empActor, GroupCollision group );
@@ -133,7 +133,7 @@ namespace physX
 	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
 	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 	* @return		int : l'indice de l'emplacement du controller
-	* Précondition	size ne doivent pas être un vecteur nul.
+	* Précondition	size ne doivent pas être un vecteur nul. La pos doit être > 1 en Y.
 	************************************************************************************/
 	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
 							 void* Ref, int &empActor, GroupCollision group ); 
@@ -183,7 +183,7 @@ namespace physX
 	************************************************************************************/
 	void Link( SceneObject* const obj1, SceneObject* const obj2 );
 	
-	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat );
+	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg );
 	void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh);
 }
 

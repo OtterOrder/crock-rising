@@ -54,18 +54,14 @@ void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
 				if(Victime->getGroup() == GROUP_ENEMY)
 				{
 					Enemy* enemy = UserData->GetEnemy();
-					//enemy->OuilleOuilleOuilleCaFaitMal();
 				}
 				//ou le héro
 				else if(Victime->getGroup() == GROUP_HERO)
 				{
 					Hero* hero = UserData->GetHero();
-					hero->OuilleOuilleOuilleCaFaitMal();
 				}//endif hero
 			}//endif weapon
 		}//endif userdata		
-		Hero* hero = UserData->GetHero();
-		hero->OuilleOuilleOuilleCaFaitMal();
 	}//endif actors
 }
 

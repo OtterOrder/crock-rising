@@ -150,7 +150,9 @@ void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ 
 	if(IsActor())
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
-		pActor->setGlobalPosition( NxVec3(dispX, dispY, dispZ));
+		NxVec3 currentPos = pActor->getGlobalPosition();
+		NxVec3 NewPos = currentPos + NxVec3(dispX, dispY, dispZ);
+		pActor->setGlobalPosition( NewPos );
 	}
 	else
 	{
@@ -170,10 +172,11 @@ void SceneObject::SetPhysicalRotation( float angleX, float angleY, float angleZ 
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
 
+		NxQuat quatCurr = pActor->getGlobalOrientationQuat();
 		NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
 		NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
 		NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
-		NxQuat quatResult = quatX * quatY * quatZ;
+		NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
 
 		pActor->setGlobalOrientationQuat(quatResult);
 	}
@@ -292,23 +295,13 @@ void SceneObject::Update()
 
 	if (IsActor())
 	{
-		NxActor* pac = physX::getActor(m_iEmpActor);
-		if(!pac->isSleeping()) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
-			pac->getGlobalPose().getColumnMajor44( m_WorldMatrix );
+		physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix );
 
 	}
 	else if (IsController())
 	{
 		SetPhysicalTranslation(0.f, -0.01f, 0.f);
-		NxController* pController = physX::getController(m_iEmpController);
-
-		NxExtendedVec3 pos = pController->getPosition();
-		Vector3f reg = m_pMesh->m_ReglagePivot;
-
-		m_WorldMatrix._41 = (float)pos.x - reg.x,
-		m_WorldMatrix._42 = (float)pos.y - reg.y,
-		m_WorldMatrix._43 = (float)pos.z - reg.z;
-
+		physX::UpdateObjectFromController( m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot );
 	}
 }
 

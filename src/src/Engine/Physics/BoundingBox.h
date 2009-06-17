@@ -33,6 +33,7 @@ enum PhysicalObjectType
 	NOPHYSICAL
 };
 
+
 //Structure pour récupérer les infos sur le body pendant le loader
 struct PhysicBody
 {
@@ -41,7 +42,8 @@ struct PhysicBody
 						  //SPHERE = Rayon 0 0
 						  //CAPSULE = rayon, hauteur 0
 
-	D3DXVECTOR3 translate; //Position locale de la bounding box
+	D3DXVECTOR3 globalPos; //Position locale de la bounding box
+	D3DXVECTOR3 localPos; //Position locale de la bounding box
 	NxQuat		rotate;    //Rotation locale de la bounding box
 	D3DXVECTOR3 angularVelocity; //Vitesse de rotation à la création
 	D3DXVECTOR3 linearVelocity;	 //Vitesse de déplacement à la création
@@ -49,9 +51,9 @@ struct PhysicBody
 	float		fLinearDamping;
 	float		fAngularDamping;
 	bool		bIsDynamic;
-	float		restitution;
-	float		staticFriction;
-	float		dynamiqueFriction;
+	float		frestitution;
+	float		fstaticFriction;
+	float		fdynamiqueFriction;
 
 	//Fonctions liées aux triggers, à remplir a la création du sceneobj
 	void (*OnEnterFunc)(); 
@@ -180,6 +182,9 @@ namespace physX
 	* @param[in]	obj2 : Pointeur sur le deuxieme objet
 	************************************************************************************/
 	void Link( SceneObject* const obj1, SceneObject* const obj2 );
+	
+	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat );
+	void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh);
 }
 
 #endif

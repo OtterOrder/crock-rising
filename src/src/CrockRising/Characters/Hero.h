@@ -49,7 +49,6 @@ public:
 	//Méthodes pour la gestion de l'inventaire d'armes
 	bool			  addWeapon     ( Weapons* weapon);
 	void			  removeWeapon  ( std::string strMesh );
-	void			  OuilleOuilleOuilleCaFaitMal();
 
 
 protected:

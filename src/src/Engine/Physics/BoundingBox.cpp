@@ -15,9 +15,10 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);												//Dimension
 	boxDesc->mass			= Pb->fMass;																//Masse
-	boxDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
+	boxDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
+	//boxDesc->localPose.t	= NxVec3( 0.f, 100.f, 0.f);											//Position
 	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
-	boxDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
+	boxDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	boxDesc->localPose.M	= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
 		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
@@ -34,10 +35,10 @@ NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 
 	sphereDesc->radius			= (NxReal)Pb->bodySize.x ;													//Rayon
 	sphereDesc->mass			= Pb->fMass;																//Masse
-	sphereDesc->localPose.t		= VecToNxVec( Pb->translate );												//Position
+	sphereDesc->localPose.t		= VecToNxVec( Pb->localPos );												//Position
 	sphereDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
 	//sphereDesc->group			= group;																	//Groupe
-	sphereDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel
+	sphereDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	sphereDesc->localPose.M		= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
 		sphereDesc->shapeFlags	|= NX_TRIGGER_ENABLE;														//Trigger
@@ -55,10 +56,10 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 	capsuleDesc->radius			=(NxReal)Pb->bodySize.x ;													//Rayon
 	capsuleDesc->height			=(NxReal)Pb->bodySize.y ;													//Hauteur
 	capsuleDesc->mass			= Pb->fMass;																//Masse
-	capsuleDesc->localPose.t	= VecToNxVec( Pb->translate );												//Position
-	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
-	//capsuleDesc->group			= group;																	//Groupe
-	capsuleDesc->materialIndex	= GenMaterial(Pb->restitution, Pb->staticFriction, Pb->dynamiqueFriction);	//Materiel			
+	capsuleDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
+	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	//capsuleDesc->group		= group;																	//Groupe
+	capsuleDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel			
 	capsuleDesc->localPose.M	= m;																		//Rotation
 	if(Pb->type == TRIGGER) 
 		capsuleDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
@@ -220,6 +221,35 @@ void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
 }
 
 
+void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat )
+{	
+	NxActor* pac = getActor(emp);
+	if(!pac->isSleeping() || pac->getGroup() == GROUP_STATIC) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
+	{
+		D3DXMATRIX rotX, test;
+		D3DXMatrixIdentity( &rotX );
+		rotX._22=0; rotX._23=1;
+		rotX._32=1; rotX._33=0;
+		D3DXMatrixTranslation( &test, 0.f, 0.f, 0.f);
+
+		NxVec3 v = pac->getGlobalPosition();
+		pac->getGlobalPose().getColumnMajor44( WorldMat );
+		WorldMat = rotX * WorldMat;
+		WorldMat = test * WorldMat;
+	}
+}
+
+
+void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh)
+{
+	NxController* pController = getController(emp);
+	NxExtendedVec3 pos = pController->getPosition();
+
+	WorldMat._41 = (float)pos.x - regPivotMesh.x,
+	WorldMat._42 = (float)pos.y - regPivotMesh.y,
+	WorldMat._43 = (float)pos.z - regPivotMesh.z;
+}
+
 //////////////////////////////////////////////////////////////////////////
 void ListOfBoundingBox::MajPivot(const Mesh* pMesh)
 {
@@ -228,7 +258,7 @@ void ListOfBoundingBox::MajPivot(const Mesh* pMesh)
 	while(it < m_PbList.end())
 	{
 		Pb = *it++;
-		Pb->translate += pMesh->m_ReglagePivot;
+		Pb->globalPos += pMesh->m_ReglagePivot;
 	}
 }
 

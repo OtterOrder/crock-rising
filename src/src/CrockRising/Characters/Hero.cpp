@@ -120,14 +120,15 @@ ResourceResult Hero::control( Camera* pCamera )
 
 	
 	//Gestion du déplacement du Héros
- 	Time* time = System::GetInstance()->GetTime();
- 	const float timeF = time->GetDeltaTimeF(); 
-	const float factor = 0.5f;
+	// PROBLEME = quand le FPS est trop bas, l'input manager ne réagis pas tout de suite à une pression de la touche, du coup le héro avance par à coups
+	float timeF = System::GetInstance()->GetTime()->GetDeltaTimeMs();
+	float vitesse = 0.09f; //[0.01; 0.4]
+	float sensibilityTranslation = vitesse * timeF;
+
 	if ( m_pInputManager->IsKeyPressed('Z'))
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = factor*timeF;
 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -136,7 +137,6 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = factor*timeF;
 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -145,7 +145,6 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = factor*timeF;
 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
@@ -154,7 +153,6 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		changeState(WALK);
 		float xStep, zStep;
-		float sensibilityTranslation = factor*timeF;
 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_pAnimated->SetTranslation(xStep,0.f,zStep);

@@ -81,16 +81,36 @@ ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 	TiXmlNode* node = NodeSave.RigidBodyNode;
 	node = node->FirstChildElement("shape");
 
-	if( getSize(node)				!= RES_SUCCEED ) return RES_FAILED ;
-	if( getMass(node)				!= RES_SUCCEED ) return RES_FAILED ; 
-	if( getDampingAndType(node)		!= RES_SUCCEED ) return RES_FAILED ;
-	if( getVelocity(NodeSave)		!= RES_SUCCEED ) return RES_FAILED ;
-	if( getLocalPos(NodeSave)		!= RES_SUCCEED ) return RES_FAILED ;
-	if( getMaterial(NodeSave)		!= RES_SUCCEED ) return RES_FAILED ;
+	if( getLocalPos(node)				!= RES_SUCCEED ) return RES_FAILED ;
+	if( getSize(node)					!= RES_SUCCEED ) return RES_FAILED ;
+	if( getMass(node)					!= RES_SUCCEED ) return RES_FAILED ; 
+	if( getDampingAndType(node)			!= RES_SUCCEED ) return RES_FAILED ;
+	if( getVelocity(NodeSave)			!= RES_SUCCEED ) return RES_FAILED ;
+	if( getGlobalPosAndRotate(NodeSave)	!= RES_SUCCEED ) return RES_FAILED ;
+	if( getMaterial(NodeSave)			!= RES_SUCCEED ) return RES_FAILED ;
 
 	return RES_SUCCEED;
 }
 
+
+ResourceResult BoundingBoxLoader::getLocalPos ( TiXmlNode* nodeShape )
+{
+	TiXmlNode* node = nodeShape;	
+	node = node->FirstChild("translate");
+	if (node)
+	{
+		if (node)
+		{
+			const char* pValues = node->ToElement()->GetText();
+			float* pfValues = new float[3];
+			ConvertStringToFloatArrayV2(pValues,pfValues,3);	
+			m_vDynamicBody.at(m_vDynamicBody.size()-1)->localPos = D3DXVECTOR3(pfValues[0], pfValues[2], pfValues[1]);
+			delete [] pfValues;
+			return RES_SUCCEED;
+		}
+	}				
+	return RES_FAILED;
+}
 
 ResourceResult BoundingBoxLoader::getVelocity  ( NodeSaver NodeSave )
 {	
@@ -113,18 +133,20 @@ ResourceResult BoundingBoxLoader::getVelocity  ( NodeSaver NodeSave )
 			{
 				node = node->FirstChild("technique_common");
 				if (node)
-				{
-					node = node->FirstChild("angular_velocity");
-					const char* pValues = node->ToElement()->GetText();
+				{					
+					const char* pValues;
 					float* pfValues = new float[3];
+					node = node->FirstChild("angular_velocity");
 					if(node)
 					{
+						pValues = node->ToElement()->GetText();
 						ConvertStringToFloatArrayV2(pValues,pfValues,3);
 						m_vDynamicBody.at(m_vDynamicBody.size()-1)->angularVelocity = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 					}
 					node = node->NextSibling("velocity");
 					if(node)
 					{
+						pValues = node->ToElement()->GetText();
 						ConvertStringToFloatArrayV2(pValues,pfValues,3);
 						m_vDynamicBody.at(m_vDynamicBody.size()-1)->linearVelocity = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 						delete [] pfValues;
@@ -139,7 +161,7 @@ ResourceResult BoundingBoxLoader::getVelocity  ( NodeSaver NodeSave )
 }
 
 
-ResourceResult BoundingBoxLoader::getLocalPos( NodeSaver NodeSave )
+ResourceResult BoundingBoxLoader::getGlobalPosAndRotate( NodeSaver NodeSave )
 {
 	TiXmlNode* node;	
 	node = NodeSave.library_visual_scenes;
@@ -169,7 +191,7 @@ ResourceResult BoundingBoxLoader::getLocalPos( NodeSaver NodeSave )
 			// TRANSLATE
 			pValues = node->ToElement()->GetText();
 			ConvertStringToFloatArrayV2(pValues,pfValues,3);
-			m_vDynamicBody.at(m_vDynamicBody.size()-1)->translate = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
+			m_vDynamicBody.at(m_vDynamicBody.size()-1)->globalPos = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 			node = node->NextSibling("rotate");
 			if(node)
@@ -177,9 +199,9 @@ ResourceResult BoundingBoxLoader::getLocalPos( NodeSaver NodeSave )
 				// ROTATION
 				pValues = node->ToElement()->GetText();
 				ConvertStringToFloatArrayV2(pValues,pfValues,4);
-				//NxQuat rotX(90.f, NxVec3(1.f, 0.f, 0.f)); //For Max
+				NxQuat rotX(-90.f, NxVec3(1.f, 0.f, 0.f)); //For Max
 				NxQuat quat(pfValues[3], NxVec3(pfValues[0], pfValues[1], pfValues[2]));
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = quat;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = rotX * quat;
 			}	
 		}		
 		delete [] pfValues;
@@ -216,21 +238,21 @@ ResourceResult BoundingBoxLoader::getMaterial( NodeSaver NodeSave )
 			{
 				pValues = node->ToElement()->GetText();
 				ConvertStringToFloatArrayV2(pValues,pfValues,1);
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->dynamiqueFriction = pfValues[0];
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->fdynamiqueFriction = pfValues[0];
 
 				node = node->NextSibling("restitution");
 				if(node)
 				{
 					pValues = node->ToElement()->GetText();
 					ConvertStringToFloatArrayV2(pValues,pfValues,1);
-					m_vDynamicBody.at(m_vDynamicBody.size()-1)->restitution = pfValues[0];
+					m_vDynamicBody.at(m_vDynamicBody.size()-1)->frestitution = pfValues[0];
 
 					node = node->NextSibling("static_friction");
 					if(node)
 					{
 						pValues = node->ToElement()->GetText();
 						ConvertStringToFloatArrayV2(pValues,pfValues,1);
-						m_vDynamicBody.at(m_vDynamicBody.size()-1)->staticFriction = pfValues[0];
+						m_vDynamicBody.at(m_vDynamicBody.size()-1)->fstaticFriction = pfValues[0];
 					}	
 				}	
 			}		

@@ -39,7 +39,7 @@ public:
 
 	Vector3f GetPosition();
 	void SetTranslation( float x, float y, float z );
-	void SetRotation( int angleX, int angleY, int angleZ );
+	void SetRotation( float angleX, float angleY, float angleZ );
 	
 	D3DXMATRIX* GetWorldMatrix ()	{ return &m_WorldMatrix; };
 protected:

@@ -93,6 +93,7 @@ void SceneObject::SetShader(const std::string& strShader)
 void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision group )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	Pos += m_pMesh->m_ReglagePivot;
 	BoundingBoxLoader Loader;
 	if( Loader.Load(physic) == RES_SUCCEED)
 	{

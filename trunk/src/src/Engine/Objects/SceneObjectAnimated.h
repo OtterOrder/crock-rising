@@ -35,6 +35,7 @@ public:
 	void			PauseAnim();
 	void			StopAnim();
 	void			SetAnimFPS(float fps);
+	D3DXMATRIX      GetMatrixTransformBone(int indBone);
 	
 protected:
 

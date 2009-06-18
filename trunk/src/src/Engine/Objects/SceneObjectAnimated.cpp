@@ -309,6 +309,11 @@ void SceneObjectAnimated::SetAnimFPS(float fps)
 	m_fAnimFPS=fps;
 }
 
+D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)
+{
+	return m_matrices[indBone];
+}
+
 void SceneObjectAnimated::SetAnim(const std::string& anim)
 {
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(anim);

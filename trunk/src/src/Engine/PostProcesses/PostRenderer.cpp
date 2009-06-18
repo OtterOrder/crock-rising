@@ -49,8 +49,6 @@ void PostRenderer::RenderPostEffects ()
 			m_pPostEffects[postEffect]->Apply(&SceneObject::RefList);
 	}
 
-	m_pDevice->EndScene();
-
 	if (! (m_pSceneRenderTarget && m_pBackBuffer))
 		return;
 
@@ -61,6 +59,7 @@ void PostRenderer::RenderPostEffects ()
 	windowRect.bottom	= Renderer::GetInstance()->GetWindowHeight();
 	m_pDevice->StretchRect(m_pSceneRenderTarget->GetSurface(), NULL, m_pBackBuffer, &windowRect, D3DTEXF_NONE);
 
+	m_pDevice->EndScene();
 }
 
 //----------------------------------------------------------------------------------------------

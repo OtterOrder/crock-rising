@@ -8,20 +8,22 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb );
 void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, GroupCollision group);
 NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );
 
+
 NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 {
-	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;
-	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);					
+	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;	
+	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);			
+	boxDesc->localPose.M	= m;																			//Rotation
 
-	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);												//Dimension
-	boxDesc->mass			= Pb->fMass;																//Masse
-	boxDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
-	//boxDesc->localPose.t	= NxVec3( 10.f, 0.f, 0.f);											//Position
-	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;						//Groupe
-	boxDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
-	boxDesc->localPose.M	= m;																		//Rotation
+	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);													//Dimension
+	boxDesc->mass			= Pb->fMass;																	//Masse
+	boxDesc->localPose.t	= NxVec3( Pb->localPos.x, Pb->localPos.z, Pb->localPos.y );	
+	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
+	boxDesc->materialIndex	= GenMaterial(Pb->frestitution,
+										  Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
+	//boxDesc->localPose.M	= m;																			//Rotation
 	if(Pb->type == TRIGGER) 
-		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
+		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;															//Trigger
 	assert(boxDesc->isValid());
 
 	ActorDesc.shapes.push_back(boxDesc);
@@ -100,6 +102,9 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 	NxActor* pActor = scene->createActor( ActorDesc );
 	pActor->setGroup( group );
 	assert(pActor);
+	//NxMat33 m; m.id(); m.fromQuat(Pb->rotate);	
+	//NxQuat quat(45.0, NxVec3(1.f, 0.f, 0.f));	
+	//pActor->setGlobalOrientationQuat(Pb->rotate);
 }
 
 
@@ -221,17 +226,16 @@ void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
 }
 
 
-void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg )
+void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg, bool UpdateStatic )
 {	
 	NxActor* pac = getActor(emp);
-	if(!pac->isSleeping() || pac->getGroup() == GROUP_STATIC) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
+	if( !pac->isSleeping() || UpdateStatic ) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
 	{
-
 		D3DXMATRIX mat_PhysX;
 		D3DXMatrixIdentity(&mat_PhysX);
 
 
-		D3DXMATRIX rotX, test;
+		D3DXMATRIX rotX;
 		D3DXMatrixIdentity( &rotX );
 		rotX._22=0; rotX._23=1;
 		rotX._32=1; rotX._33=0;
@@ -246,6 +250,9 @@ void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const
 	}
 }
 
+void Update( NxActor* const pActor, D3DXMATRIX &WorldMat, Vector3f const reg )
+{
+}
 
 void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh)
 {
@@ -255,18 +262,6 @@ void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f 
 	WorldMat._41 = (float)pos.x - regPivotMesh.x,
 	WorldMat._42 = (float)pos.y - regPivotMesh.y,
 	WorldMat._43 = (float)pos.z - regPivotMesh.z;
-}
-
-//////////////////////////////////////////////////////////////////////////
-void ListOfBoundingBox::MajPivot(const Mesh* pMesh)
-{
-	PhysicBody* Pb;
-	std::vector<PhysicBody*>::iterator it = m_PbList.begin();
-	while(it < m_PbList.end())
-	{
-		Pb = *it++;
-		Pb->globalPos += pMesh->m_ReglagePivot;
-	}
 }
 
 void ListOfBoundingBox::ReleaseList()

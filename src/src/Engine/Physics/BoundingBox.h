@@ -71,7 +71,6 @@ private:
 
 public:
 	void ReleaseList();					//Permet la libération des descripteur qui st créés dynamiquement
-	void MajPivot(const Mesh* pMesh);	
 
 	inline std::vector<PhysicBody*> getPbList(){ return m_PbList; }
 	inline Vector3f					getInitialWorldPos(){ return m_InitialWorldPos; }
@@ -183,7 +182,7 @@ namespace physX
 	************************************************************************************/
 	void Link( SceneObject* const obj1, SceneObject* const obj2 );
 	
-	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg );
+	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg, bool UpdateStatic = false );
 	void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh);
 }
 

@@ -313,14 +313,6 @@
 					RelativePath=".\Objects\2D\Object2D.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Objects\2D\Text.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Objects\2D\Text.h"
-					>
-				</File>
 				<Filter
 					Name="SceneObject2D"
 					>
@@ -346,6 +338,14 @@
 					</File>
 					<File
 						RelativePath=".\Objects\2D\Sprite.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\Text.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\2D\Text.h"
 						>
 					</File>
 				</Filter>

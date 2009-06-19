@@ -59,7 +59,7 @@ bool Physicalizer::InitPhysX()
 	defaultMaterial->setDynamicFriction(0.5f);
 
 	// Lance la première frame
-	if (m_Scene)  StartPhysics();
+	if (m_Scene)  StartPhysics(0.015);
 
 	return true;
 }
@@ -81,9 +81,9 @@ bool Physicalizer::ReloadPhysX()
 	return InitPhysX();
 }
 
-void Physicalizer::StartPhysics()
+void Physicalizer::StartPhysics(float DeltaTime)
 {
-	m_Scene->simulate( NxReal(0.0125) );
+	m_Scene->simulate( DeltaTime );
 	m_Scene->flushStream();
 	
 }
@@ -93,13 +93,13 @@ void Physicalizer::GetPhysicsResults()
 	m_Scene->fetchResults(NX_ALL_FINISHED, true); //ou NX_RIGID_BODY_FINISHED
 }
 
-PhysXResult Physicalizer::RunPhysics()
+PhysXResult Physicalizer::RunPhysics(float DeltaTime)
 {
 	if( m_Scene )
 	{
 		m_ControllerManager->updateControllers();
 
-		StartPhysics();
+		StartPhysics(DeltaTime);
 		GetPhysicsResults();
 		return PHYSX_SUCCEED;
 	}

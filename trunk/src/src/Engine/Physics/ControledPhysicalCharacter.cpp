@@ -80,7 +80,7 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 
 	desc.upDirection	= NX_Y;
 	//		desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
-	desc.slopeLimit		= 0.707f;
+	desc.slopeLimit		= 10.0;//0.707f;
 	desc.skinWidth		= 0.01f;
 	desc.stepOffset		= 0.5f;
 	//desc.stepOffset	= gInitialRadius * 0.5 * scale;

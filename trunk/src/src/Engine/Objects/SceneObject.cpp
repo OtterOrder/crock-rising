@@ -99,12 +99,11 @@ void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision g
 	{
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
-		//m_ListOfBoundingBox.MajPivot(m_pMesh);
 		
 		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox, group );
 	}
 	if(!IsDynamic())
-		physX::getActor(m_iEmpActor)->getGlobalPose().getColumnMajor44( m_WorldMatrix );
+		physX::UpdateObjectFromActor(m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot, true);
 }
 
 void SceneObject::SetControledCharacter( float radius, float height, void* Ref, GroupCollision group )
@@ -127,7 +126,6 @@ void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, voi
 	{
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
-		m_ListOfBoundingBox.MajPivot(m_pMesh);
 
 		m_iEmpActor = physX::CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
 	}

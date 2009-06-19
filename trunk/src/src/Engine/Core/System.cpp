@@ -6,7 +6,6 @@
 #include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
 #include	"Physics/Physicalizer.h"
-#include	"Sound/SoundSystem.h"
 #include	"Core/Time.h"
 
 #define		NB_FPS			120
@@ -45,7 +44,6 @@ int System::MainLoop( void )
 	PostRenderer	*postRenderer;
 	Game			*game;
 	Physicalizer	*physX;
-	SoundSystem		*soundSystem;
 
 	bool			bGotMsg;
 	MSG				msg;
@@ -55,7 +53,6 @@ int System::MainLoop( void )
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
-	soundSystem		= SoundSystem::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	game			= Game::GetInstance();
 
@@ -84,11 +81,11 @@ int System::MainLoop( void )
 			// Update de la scene
 			game->Update();
 			
+			// Update de physX
+			physX->RunPhysics( m_Time->GetDeltaTime() );
+
 			if( m_Time->GetDeltaTimeF() >= FRAME_DELAY )
-			{
-				// Update de physX
-				physX->RunPhysics();
-				
+			{				
 				// Rendu de de la scene
 				renderer->Run();
 				
@@ -111,7 +108,6 @@ int System::MainLoop( void )
 	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
 	postRenderer->Destroy();
-	soundSystem->Destroy();
 	inputManager->Destroy();
 	resourceManager->Destroy();
 

@@ -81,7 +81,6 @@ ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 	TiXmlNode* node = NodeSave.RigidBodyNode;
 	node = node->FirstChildElement("shape");
 
-	if( getLocalPos(node)				!= RES_SUCCEED ) return RES_FAILED ;
 	if( getSize(node)					!= RES_SUCCEED ) return RES_FAILED ;
 	if( getMass(node)					!= RES_SUCCEED ) return RES_FAILED ; 
 	if( getDampingAndType(node)			!= RES_SUCCEED ) return RES_FAILED ;
@@ -90,26 +89,6 @@ ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 	if( getMaterial(NodeSave)			!= RES_SUCCEED ) return RES_FAILED ;
 
 	return RES_SUCCEED;
-}
-
-
-ResourceResult BoundingBoxLoader::getLocalPos ( TiXmlNode* nodeShape )
-{
-	TiXmlNode* node = nodeShape;	
-	node = node->FirstChild("translate");
-	if (node)
-	{
-		if (node)
-		{
-			const char* pValues = node->ToElement()->GetText();
-			float* pfValues = new float[3];
-			ConvertStringToFloatArrayV2(pValues,pfValues,3);	
-			m_vDynamicBody.at(m_vDynamicBody.size()-1)->localPos = D3DXVECTOR3(pfValues[0], pfValues[2], pfValues[1]);
-			delete [] pfValues;
-			return RES_SUCCEED;
-		}
-	}				
-	return RES_FAILED;
 }
 
 ResourceResult BoundingBoxLoader::getVelocity  ( NodeSaver NodeSave )
@@ -191,7 +170,7 @@ ResourceResult BoundingBoxLoader::getGlobalPosAndRotate( NodeSaver NodeSave )
 			// TRANSLATE
 			pValues = node->ToElement()->GetText();
 			ConvertStringToFloatArrayV2(pValues,pfValues,3);
-			m_vDynamicBody.at(m_vDynamicBody.size()-1)->globalPos = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
+			m_vDynamicBody.at(m_vDynamicBody.size()-1)->localPos = D3DXVECTOR3(pfValues[0],pfValues[1],pfValues[2]);
 
 			node = node->NextSibling("rotate");
 			if(node)
@@ -200,7 +179,7 @@ ResourceResult BoundingBoxLoader::getGlobalPosAndRotate( NodeSaver NodeSave )
 				pValues = node->ToElement()->GetText();
 				ConvertStringToFloatArrayV2(pValues,pfValues,4);
 				NxQuat rotX(-90.f, NxVec3(1.f, 0.f, 0.f)); //For Max
-				NxQuat quat(pfValues[3], NxVec3(pfValues[0], pfValues[1], pfValues[2]));
+				NxQuat quat(pfValues[3], NxVec3(-1*pfValues[0], pfValues[1], -1*pfValues[2]));
 				m_vDynamicBody.at(m_vDynamicBody.size()-1)->rotate = rotX * quat;
 			}	
 		}		

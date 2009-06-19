@@ -34,7 +34,6 @@ class BoundingBoxLoader
 	ResourceResult fillPhysicBody		( NodeSaver NodeSave, bool Dyn ); //numShape est utilisé pour la pos
 	ResourceResult getVelocity			( NodeSaver NodeSave ); 
 	ResourceResult getGlobalPosAndRotate( NodeSaver NodeSave ); 
-	ResourceResult getLocalPos			( TiXmlNode* nodeShape ); 
 	ResourceResult getMaterial			( NodeSaver NodeSave ); 
 	ResourceResult getSize				( TiXmlNode* nodeShape ); 
 	ResourceResult getDampingAndType	( TiXmlNode* nodeShape ); 

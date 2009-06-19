@@ -47,6 +47,33 @@
 			</effect>
 	 </library_effects>
 	<library_geometries>
+		<geometry	id="TriangleMesh_0-Mesh" name="TriangleMesh_0-Mesh">
+			<mesh>
+				<source	id="TriangleMesh_0-Position">
+					<float_array count="24"	id="TriangleMesh_0-Position-array">
+						-50 -50	0	-50 50	0	50 50	0	50 -50	0	
+						-50 -50	1	50 -50	1	50 50	1	-50 50	1	
+					</float_array>
+					<technique_common>
+						<accessor	count="8" source="#TriangleMesh_0-Position-array" stride="3">
+							<param name="X"	type="float"/>
+							<param name="Y"	type="float"/>
+							<param name="Z"	type="float"/>
+						</accessor>
+					 </technique_common>
+				 </source>
+				<vertices	id="TriangleMesh_0-Vertex">
+					<input semantic="POSITION" source="#TriangleMesh_0-Position"/>
+				</vertices>
+				<triangles material="Material" count="12">
+					<input offset="0"	semantic="VERTEX"	source="#TriangleMesh_0-Vertex"/>
+				 <p>2 3	0	4 5	6	0 3	5	3 2	6	
+				 6 5	3	7 6	2	6 7	4	0 1	2	
+				 2 1	7	5 4	0	1 0	4	4 7	1	
+				 </p>
+				</triangles>
+			</mesh>
+		</geometry>
 	</library_geometries>
 	<library_visual_scenes>
 		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
@@ -78,7 +105,7 @@
 				<technique_common>
 					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0 -5</translate>
+            <translate>0	0 -1</translate>
             <rotate>1 0	0	 0</rotate>
 						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					 <mass>1</mass>
@@ -89,9 +116,7 @@
 							 <disable_collision>false</disable_collision>
 						 </technique>
 					 </extra>
-						<box>
-							<half_extents>2866.41015625 1542.8984375	5</half_extents>
-						</box>
+						<instance_geometry url="#TriangleMesh_0-Mesh"/>
 					 </shape>
 					<dynamic>false</dynamic>
 					<mass>1</mass>

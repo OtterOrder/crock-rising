@@ -1,4 +1,5 @@
 #include "Culling.h"
+#include "Physics/Physicalizer.h"
 
 void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, list<SceneObject*>& _SortedList)
 {
@@ -8,15 +9,22 @@ void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, l
 	while (scnObjPhysics != _SceneObjectList.end())
 	{
 		// parcours des points de la géometrie englobante
+		/*
+		ShapeType type = (*(*scnObjPhysics)->getPhysicBodyList().begin())->type;
+		NxActor* pActor = physX::getActor( (*scnObjPhysics)->getEmpActor() );
+		NxVec3 position = pActor->getGlobalPosition();
+		NxMat33 orientation = pActor->getGlobalOrientation();
+		NxShape*const* shapes = pActor->getShapes();
+		u32 nbShapes = pActor->getNbShapes();
+		*/
+		// BOX : (largeur, hauteur, profondeur)
+		// SPHERE : (rayon, 0, 0)
+		// CAPSULE : (rayon, hauteur, 0)
+
 		//for (u32 i=0; i<nbPoints; i++)
 		{
 			//if ( PointInsideFrustrum(currentPoint))
 			{
-				//(*(*scnObjPhysics)->getPhysicBodyList().begin())->bodySize;
-				//(*(*scnObjPhysics)->getPhysicBodyList().begin())->type;
-				// BOX : (largeur, hauteur, profondeur)
-				// SPHERE : (rayon, 0, 0)
-				// CAPSULE : (rayon, hauteur, 0)
 				_SortedList.push_back(*scnObjPhysics);
 				continue;
 			}
@@ -83,13 +91,26 @@ void Culling3D::ComputeCameraFustrumShape (Camera* _Camera)
 	m_fustrumShape[5].SetPositionAndNormal(nc+(X*nw), normal);		//pl[RIGHT].setNormalAndPoint(normal,nc+X*nw);
 }
 
-BOOL Culling3D::PointInsideFrustrum (Vector3f _Point)
+bool Culling3D::PointInsideFrustrum (Vector3f _Point)
 {
 	for (u8 frustrumPlane = 0; frustrumPlane < 6; frustrumPlane ++ )
 	{
-		if (D3DXVec3Dot(&(m_fustrumShape[frustrumPlane].m_normal), &(_Point - m_fustrumShape[frustrumPlane].m_position)) < 0.f)
-			return FALSE;
+		float NDotV = D3DXVec3Dot(&(m_fustrumShape[frustrumPlane].m_normal), &(_Point - m_fustrumShape[frustrumPlane].m_position));
+		if (NDotV < 0.f)
+			return false;
 	}
 
-	return TRUE;
+	return true;
+}
+
+bool Culling3D::SphereInsideFrustrum (Vector3f _Center, float _Radius)
+{
+	for (u8 frustrumPlane = 0; frustrumPlane < 6; frustrumPlane ++ )
+	{
+		float NDotV = D3DXVec3Dot(&(m_fustrumShape[frustrumPlane].m_normal), &(_Center - m_fustrumShape[frustrumPlane].m_position));
+		if (NDotV < -_Radius)
+			return false;
+	}
+
+	return true;
 }

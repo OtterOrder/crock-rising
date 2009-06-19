@@ -38,5 +38,6 @@ private:
 	Plane m_fustrumShape [6];
 
 	void ComputeCameraFustrumShape (Camera* _Camera);
-	BOOL PointInsideFrustrum (Vector3f _Point);
+	bool PointInsideFrustrum (Vector3f _Point);
+	bool SphereInsideFrustrum (Vector3f _Center, float _Radius);
 };

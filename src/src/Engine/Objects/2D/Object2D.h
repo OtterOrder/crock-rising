@@ -9,7 +9,7 @@
 //******************************************************************
 
 // Flags des objets 2D
-//#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
+#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
 #define		O2D_RELATIVE_SIZE			(1<<1)		// Taille relative aux dimensions de la fenêtre
 
 //******************************************************************
@@ -34,6 +34,9 @@ public:
 	void SetPosition( const Vector2i &position );
 	void SetPosition( const Vector2f &position );
 	Vector2i GetPosition() const;
+
+	//void SetPositionToAbsolute();
+	//void SetPositionToRelative();
 	
 	// Echelle
 	void SetScale( float scaleX, float scaleY );

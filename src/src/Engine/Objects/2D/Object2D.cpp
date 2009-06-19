@@ -82,6 +82,22 @@ Vector2i Object2D::GetPosition() const
 }
 
 //**********************************************************
+// Change le mode de positionnement en absolu (par défaut).
+//**********************************************************
+/*void Object2D::SetPositionToAbsolute()
+{
+	UnsetFlag( O2D_RELATIVE_POS );
+}*/
+
+//**********************************************************
+// Change le mode de positionnement en relatif.
+//**********************************************************
+/*void Object2D::SetPositionToRelative()
+{
+	SetFlag( O2D_RELATIVE_POS );
+}*/
+
+//**********************************************************
 // Change l'échelle.
 // @param[in]	scaleX : Echelle sur l'axe OX
 // @param[in]	scaleY : Echelle sur l'axe OY

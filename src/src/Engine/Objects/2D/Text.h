@@ -4,36 +4,42 @@
 //******************************************************************
 
 #include	<string>
-#include	"Object2D.h"
+#include	"SceneObject2D.h"
 
 //******************************************************************
 
-class Text : public Object2D
+class Text : public SceneObject2D
 {
 public:
 
 	//-- Méthodes publiques
 	
-	Text( const char *text );
+	Text( const std::string &text = "" );
 	virtual ~Text();
 
-	virtual void Draw();		// Affiche l'objet
+	// Affichage
+	virtual void Draw();
 
-	void SetText( const char *text );
+	// Propriétés du texte
+	void SetText( const std::string &text );
+	void SetFont( const std::string &fontName );
+	void SetFontHeight( u32 height );
+	void SetFontWeight( u32 weight );
 
-	//-- Méthodes spécifiques pour DirectX (utilisées dans le Renderer)
-	
-	virtual void InitDxData();		// Initialise les données Dx
-	virtual void ClearDxData();		// Libère les données Dx
-	virtual bool IsDxReady() const;	// Vérifie si les données Dx sont prètes
+	// Gestion des entités DirectX
+	virtual void OnCreateDevice();
+	virtual void OnResetDevice();
+	virtual void OnLostDevice();
+	virtual void OnDestroyDevice();
+	virtual bool IsDrawable() const;
 
 protected:
 
 	//-- Données protégées
 
 	std::string		m_Text;
-	ID3DXFont		*m_pFont;
-	RECT			m_Rect;
+	D3DXFONT_DESC	m_Desc;
+	LPD3DXFONT		m_Font;
 
 };
 

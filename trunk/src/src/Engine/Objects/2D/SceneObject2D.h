@@ -51,6 +51,9 @@ public:
 	const std::string& GetShaderName() const;
 	Shader* const GetShader() const;
 
+	// Collision. A surcharger
+	virtual bool IsCollide( s32 posX, s32 posY ) { return false; }
+
 	// Compare les priorités, utile pour trier la liste
 	static bool	ComparePriority( const SceneObject2D *pObj1, const SceneObject2D *pObj2 );
 

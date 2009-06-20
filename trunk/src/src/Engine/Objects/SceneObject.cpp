@@ -108,6 +108,7 @@ void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision g
 
 void SceneObject::SetControledCharacter( float radius, float height, void* Ref, GroupCollision group )
 {
+	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, group);
 }
@@ -118,10 +119,11 @@ void SceneObject::SetControledCharacter(float width, float height, float depth, 
 	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, group);
 }
 
-void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)() )
+void SceneObject::SetObjectTrigger( const std::string& physic, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)() )
 {
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	Pos += m_pMesh->m_ReglagePivot;
 	BoundingBoxLoader Loader;
-	ListOfBoundingBox BB_List;
 	if( Loader.Load(physic) == RES_SUCCEED)
 	{
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
@@ -129,8 +131,6 @@ void SceneObject::SetObjectTrigger( const std::string& physic, Vector3f Pos, voi
 
 		m_iEmpActor = physX::CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
 	}
-	if(!IsDynamic())
-		physX::getActor(m_iEmpActor)->getGlobalPose().getColumnMajor44( m_WorldMatrix );
 }
 
 
@@ -293,21 +293,10 @@ void SceneObject::Update()
 		// m_WorldMatrix = GetObjectPhysicalMatrix;
 
 	if (IsActor())
-	{
-		//D3DXMATRIX mat_PhysX;
-		//D3DXMatrixIdentity(&mat_PhysX);
 		physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot );
-
-		//Vector3f  reg =  m_pMesh->m_ReglagePivot;
-		//D3DXMatrixTranslation(&m_WorldMatrix, -reg.x, -reg.y, -reg.z);
-		//D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &mat_PhysX);
-
-		//physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix );
-
-	}
 	else if (IsController())
 	{
-		SetPhysicalTranslation(0.f, -0.01f, 0.f);
+		SetPhysicalTranslation(0.f, -0.05f, 0.f);
 		physX::UpdateObjectFromController( m_iEmpController, m_WorldMatrix, m_pMesh->m_ReglagePivot );
 	}
 }

@@ -13,16 +13,15 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 {
 	NxBoxShapeDesc *boxDesc = new NxBoxShapeDesc;	
 	NxMat33 m; m.id(); m.fromQuat(Pb->rotate);			
-	boxDesc->localPose.M	= m;																			//Rotation
 
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);													//Dimension
 	boxDesc->mass			= Pb->fMass;																	//Masse
 	boxDesc->localPose.t	= NxVec3( Pb->localPos.x, Pb->localPos.z, Pb->localPos.y );	
-	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
+	//boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
 	boxDesc->materialIndex	= GenMaterial(Pb->frestitution,
 										  Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
-	//boxDesc->localPose.M	= m;																			//Rotation
-	if(Pb->type == TRIGGER) 
+	boxDesc->localPose.M	= m;																			//Rotation
+	if(Pb->bIsTrigger) 
 		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;															//Trigger
 	assert(boxDesc->isValid());
 
@@ -39,10 +38,9 @@ NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 	sphereDesc->mass			= Pb->fMass;																//Masse
 	sphereDesc->localPose.t		= VecToNxVec( Pb->localPos );												//Position
 	sphereDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
-	//sphereDesc->group			= group;																	//Groupe
 	sphereDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	sphereDesc->localPose.M		= m;																		//Rotation
-	if(Pb->type == TRIGGER) 
+	if(Pb->bIsTrigger) 
 		sphereDesc->shapeFlags	|= NX_TRIGGER_ENABLE;														//Trigger
 	assert(sphereDesc->isValid());
 
@@ -60,10 +58,9 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 	capsuleDesc->mass			= Pb->fMass;																//Masse
 	capsuleDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
 	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
-	//capsuleDesc->group		= group;																	//Groupe
 	capsuleDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel			
 	capsuleDesc->localPose.M	= m;																		//Rotation
-	if(Pb->type == TRIGGER) 
+	if(Pb->bIsTrigger) 
 		capsuleDesc->shapeFlags |= NX_TRIGGER_ENABLE;														//Trigger
 	assert(capsuleDesc->isValid());
 
@@ -76,7 +73,7 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 	ActorDesc.density		= 1.0f;
 	ActorDesc.globalPose.t	= VecToNxVec(Pos);
 
-	if(Pb->type == TRIGGER)
+	if(Pb->bIsTrigger) 
 	{
 		SetTriggerFunctions(ActorDesc, Pb->OnEnterFunc, Pb->OnLeaveFunc, Pb->OnStayFunc);
 	}
@@ -102,9 +99,6 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 	NxActor* pActor = scene->createActor( ActorDesc );
 	pActor->setGroup( group );
 	assert(pActor);
-	//NxMat33 m; m.id(); m.fromQuat(Pb->rotate);	
-	//NxQuat quat(45.0, NxVec3(1.f, 0.f, 0.f));	
-	//pActor->setGlobalOrientationQuat(Pb->rotate);
 }
 
 
@@ -130,6 +124,8 @@ int physX::CreateBoundingBox( ListOfBoundingBox &BBList, GroupCollision group )
 	while(it < PbList.end())
 	{
 		Pb = *it++;
+		Pb->bIsTrigger = false;
+
 		switch( Pb->type )
 		{
 			case BOX	 : BBList.pushShapeRef( CreateBox(actorDesc, Pb) );		break;
@@ -159,6 +155,7 @@ int physX::CreateTrigger(ListOfBoundingBox &BBList,
 		Pb->OnEnterFunc = OnEnterFunc;
 		Pb->OnLeaveFunc = OnLeaveFunc;
 		Pb->OnStayFunc = OnStayFunc;
+		Pb->bIsTrigger = true;
 
 		switch( Pb->type )
 		{
@@ -259,9 +256,9 @@ void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f 
 	NxController* pController = getController(emp);
 	NxExtendedVec3 pos = pController->getPosition();
 
-	WorldMat._41 = (float)pos.x - regPivotMesh.x,
-	WorldMat._42 = (float)pos.y - regPivotMesh.y,
-	WorldMat._43 = (float)pos.z - regPivotMesh.z;
+	WorldMat._41 = (float)pos.x + regPivotMesh.x,
+	WorldMat._42 = (float)pos.y + regPivotMesh.y,
+	WorldMat._43 = (float)pos.z + regPivotMesh.z ;
 }
 
 void ListOfBoundingBox::ReleaseList()

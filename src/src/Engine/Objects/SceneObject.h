@@ -64,14 +64,11 @@ public:
 	void SetObjectPhysical( const std::string& physic, GroupCollision group );		
 	void SetControledCharacter(float radius, float height, void* Ref, GroupCollision group );	
 	void SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group );	
-	void SetObjectTrigger( const std::string& physic, Vector3f Pos,
-						void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); 
+	void SetObjectTrigger( const std::string& physic, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); 
 	void SetObjectUnPhysical();												// Retire la physique à un objet si besoin
 	
 	int  getEmpActor()				{ return m_iEmpActor; }
 	int  getEmpController()			{ return m_iEmpController; }
-	void setEmpActor(int Emp)		{ m_iEmpActor = Emp; }
-	void setEmpController(int Emp)	{ m_iEmpController = Emp; }
 	std::vector<PhysicBody*> getPhysicBodyList();
 
 	bool IsController()	{ return m_iEmpController != -1; }			//Le controleur est un acteur ET un controleur

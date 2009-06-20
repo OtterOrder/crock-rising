@@ -79,14 +79,10 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	desc.position.z = pos.z ;
 
 	desc.upDirection	= NX_Y;
-	//		desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
-	desc.slopeLimit		= 10.0;//0.707f;
-	desc.skinWidth		= 0.01f;
-	desc.stepOffset		= 0.5f;
-	//desc.stepOffset	= gInitialRadius * 0.5 * scale;
-	//desc.stepOffset	= 0.01f;
-	//desc.stepOffset	= 0;	// Fixes some issues
-	//desc.stepOffset	= 10;
+	desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
+	desc.skinWidth		= 0.1f;
+	desc.stepOffset		= 1.0f;
+	desc.climbingMode	= CLIMB_CONSTRAINED;
 
 	desc.callback		= gCharacterControllerCallback;
 
@@ -110,15 +106,10 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 	desc.position.x		= pos.x, desc.position.y = pos.y, desc.position.z = pos.z;
 
 	desc.upDirection	= NX_Y;
-	desc.slopeLimit		= 0;
-	//	desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
+	desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
 	desc.skinWidth		= 0.2f;
-	desc.stepOffset		= 0.5;
-	//	desc.stepOffset	= 0.01f;
-	//	desc.stepOffset	= 0;
-	//	desc.stepOffset	= 10;
+	desc.stepOffset		= 1.0f;
 
-//	desc.callback		= gAlienCallBackTest; 
 
 	NxActor* pActor = physX::getActor( empActor );
 	pActor->setGroup( group );

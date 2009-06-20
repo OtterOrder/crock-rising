@@ -51,9 +51,11 @@ struct PhysicBody
 	float		fLinearDamping;
 	float		fAngularDamping;
 	bool		bIsDynamic;
+	bool		bIsTrigger;
 	float		frestitution;
 	float		fstaticFriction;
 	float		fdynamiqueFriction;
+
 
 	//Fonctions liées aux triggers, à remplir a la création du sceneobj
 	void (*OnEnterFunc)(); 

@@ -349,6 +349,7 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 
 		//----------------------------------- Physic ----------------------------------//
 		node =  rootNode->FirstChild( "library_visual_scenes" );
+		bool isPivot_modified = false;
 		if(node) 
 		{
 			node =  node->FirstChild( "visual_scene" );
@@ -374,17 +375,16 @@ ResourceResult MeshLoader::FillArrays	(TiXmlNode* rootNode,  VertexBuffer& _Vert
 								pValues = node->ToElement()->GetText();
 								ConvertStringToFloatArray(pValues,pfValues,16);
 								m_ReglagePivot = D3DXVECTOR3(-pfValues[3], -pfValues[7], -pfValues[11]);
+								isPivot_modified = true;
 							}
 						}
-					}
-					else
-					{
-						m_ReglagePivot = D3DXVECTOR3(0.f, 0.f, 0.f);
 					}
 
 				}
 			}
 		}
+		if(!isPivot_modified)
+			m_ReglagePivot = D3DXVECTOR3(0.f, 0.f, 0.f);
 
 
 	}

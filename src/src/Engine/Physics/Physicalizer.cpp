@@ -35,7 +35,6 @@ bool Physicalizer::InitPhysX()
 
 	connectToVRD();
 
-	gTriggerReport->scene = m_Scene;
 
     NxSceneDesc sceneDesc;
  	sceneDesc.simType				= NX_SIMULATION_SW; //avec carte accé PhysX	
@@ -50,7 +49,8 @@ bool Physicalizer::InitPhysX()
 		m_Scene = m_PhysicsSDK->createScene(sceneDesc);	
 		assert( m_Scene );
 	}
-	
+
+	gTriggerReport->scene = m_Scene;	
 	
 	// Set default material
 	NxMaterial* defaultMaterial = m_Scene->getMaterialFromIndex(0);

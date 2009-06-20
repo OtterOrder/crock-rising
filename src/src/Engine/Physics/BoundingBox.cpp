@@ -17,7 +17,7 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb )
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);													//Dimension
 	boxDesc->mass			= Pb->fMass;																	//Masse
 	boxDesc->localPose.t	= NxVec3( Pb->localPos.x, Pb->localPos.z, Pb->localPos.y );	
-	//boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
+	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
 	boxDesc->materialIndex	= GenMaterial(Pb->frestitution,
 										  Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	boxDesc->localPose.M	= m;																			//Rotation

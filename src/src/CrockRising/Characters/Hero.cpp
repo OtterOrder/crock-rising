@@ -7,16 +7,17 @@ Hero::Hero()
 {
 	m_iLife = 100 ;
 
-	m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3(0.f,1.f,0.f));	
+	//m_pAnimated = new SceneObjectAnimated("Alien_Mesh.DAE","Alien_Anim.DAE",D3DXVECTOR3(0.f,1.f,-20.f));	
+	m_pAnimated = new SceneObjectAnimated("Robot_Mesh2.DAE","Robot_Anim_Run.DAE",D3DXVECTOR3(0.f,1.f,-20.f));	
 	m_pAnimated->Init();
-	m_pAnimated->SetRotation(0,0,90);
-	m_pAnimated->SetControledCharacter(4.f,10.f,this,GROUP_HERO);
+	m_pAnimated->SetRotation(0,180,0);
+	m_pAnimated->SetControledCharacter(0.1f,0.5f,this,GROUP_HERO);
 
 	m_pInputManager = InputManager::GetInstance();
-	m_pInputManager->HoldMouseAtCenter(true);
+	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_inventory.reserve(10);
-	m_currentState = WALK;
+	m_currentState = STATIC;
 
 }
 
@@ -125,48 +126,49 @@ ResourceResult Hero::control( Camera* pCamera )
 	float vitesse = 0.09f; //[0.01; 0.4]
 	float sensibilityTranslation = vitesse * timeF;
 
-	if ( m_pInputManager->IsKeyPressed('Z'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
-		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	else if ( m_pInputManager->IsKeyPressed('Q'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	else if ( m_pInputManager->IsKeyPressed('S'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	else if ( m_pInputManager->IsKeyPressed('D'))
-	{
-		changeState(WALK);
-		float xStep, zStep;
-		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-	}
-	else if ( m_pInputManager->IsKeyPressed('F'))
-	{
-		int angleY = int(pCamera->GetOrientationYRad() + 1.f);
-		pCamera->SetOrientationY(angleY);
-	}
-	else if ( m_pInputManager->IsKeyPressed('G'))
-	{
-		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
-		pCamera->SetOrientationY(angleY);
-	}
+// 	if ( m_pInputManager->IsKeyPressed('Z'))
+// 	{
+// 		changeState(WALK);
+// 		float xStep, zStep;
+// 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
+// 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+// 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+// 	}
+// 	else if ( m_pInputManager->IsKeyPressed('Q'))
+// 	{
+// 		changeState(WALK);
+// 		float xStep, zStep;
+// 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+// 	}
+// 	else if ( m_pInputManager->IsKeyPressed('S'))
+// 	{
+// 		changeState(WALK);
+// 		float xStep, zStep;
+// 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+// 	}
+// 	else if ( m_pInputManager->IsKeyPressed('D'))
+// 	{
+// 		changeState(WALK);
+// 		float xStep, zStep;
+// 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+// 		m_pAnimated->SetTranslation(xStep,0.f,zStep);
+// 	}
+// 
+// 	else if ( m_pInputManager->IsKeyPressed('F'))
+// 	{
+// 		int angleY = int(pCamera->GetOrientationYRad() + 1.f);
+// 		pCamera->SetOrientationY(angleY);
+// 	}
+// 	else if ( m_pInputManager->IsKeyPressed('G'))
+// 	{
+// 		int angleY = int(pCamera->GetOrientationYRad() - 1.f);
+// 		pCamera->SetOrientationY(angleY);
+// 	}
 
 
 	return RES_SUCCEED;

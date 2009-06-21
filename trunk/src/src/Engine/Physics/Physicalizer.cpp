@@ -59,7 +59,7 @@ bool Physicalizer::InitPhysX()
 	defaultMaterial->setDynamicFriction(0.5f);
 
 	// Lance la première frame
-	if (m_Scene)  StartPhysics(0.015);
+	if (m_Scene)  StartPhysics(0.015f);
 
 	return true;
 }

@@ -90,7 +90,7 @@ public:
 	virtual void	ApplyTransform(const D3DXMATRIX* world);
 	virtual void    Update(); // Méthode appelée chaque tour moteur
 	virtual void    SetTranslation( float x, float y, float z );
-	virtual void    SetRotation( int angleX, int angleY, int angleZ );
+	virtual void    SetRotation( float angleX, float angleY, float angleZ );
 	
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero

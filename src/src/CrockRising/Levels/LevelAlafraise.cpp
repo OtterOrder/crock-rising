@@ -13,6 +13,7 @@
 #define		LEVEL_mainmenu			0x56b55f63
 
 #define		LOGO_APPEARANCE_TIME	1.f		// Temps d'apparition du logo en sec
+#define		NEXT_LEVEL_TIME			5.f		// Temps avant de passer au level suivant
 
 /***********************************************************
  * Constructeur.
@@ -56,6 +57,8 @@ void LevelAlafraise::Init( void )
 	m_pLogo = new Sprite( "alafraiseprod.png" );
 	m_pLogo->Init();
 	m_pLogo->SetAlpha( 0.f );
+	m_pLogo->SetHotPoint( m_pLogo->GetWidth()/2, m_pLogo->GetHeight()/2 ); // Point chaud au centre
+	
 	m_LogoTimer = 0.f;
 }
 
@@ -64,9 +67,13 @@ void LevelAlafraise::Init( void )
  **********************************************************/
 void LevelAlafraise::Update( void )
 {
-	if( InputManager::GetInstance()->IsKeyReleased( VK_SPACE ) )
+	m_LogoTimer += System::GetInstance()->GetTime()->GetDeltaTime();
+
+	if( InputManager::GetInstance()->IsKeyReleased( VK_RETURN )	||
+		m_LogoTimer >= NEXT_LEVEL_TIME							)
 	{
-		// On passe au level suivant dès qu'on appuie sur Espace..
+		// Si on a appuyé sur Entrée ou si le temps est
+		// écoulé, on passe au menu principal..
 		Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 		return;
 	}
@@ -74,17 +81,14 @@ void LevelAlafraise::Update( void )
 	if( m_LogoTimer < LOGO_APPEARANCE_TIME )
 	{
 		// Le logo apparait progressivement..
-		m_LogoTimer += System::GetInstance()->GetTime()->GetDeltaTime();
 		float alpha = m_LogoTimer / LOGO_APPEARANCE_TIME;
 		m_pLogo->SetAlpha( MATH_Clamp( alpha, 0.f, 1.f ) );
 	}
 	
-	int logoX, logoY;
-	Renderer *pRenderer = Renderer::GetInstance();
-	
 	// Positionnement au centre (on le fait dans l'update
 	// pour rester au centre même en cas de redimmentionnement)
-	logoX = pRenderer->GetWindowWidth()/2 - m_pLogo->GetWidth()/2;
-	logoY = pRenderer->GetWindowHeight()/2 - m_pLogo->GetHeight()/2;
-	m_pLogo->SetPosition( logoX, logoY );
+	m_pLogo->SetPosition(
+		Renderer::GetInstance()->GetWindowWidth()/2,
+		Renderer::GetInstance()->GetWindowHeight()/2
+	);
 }

@@ -97,7 +97,6 @@ void SceneObject::SetShader(const std::string& strShader)
 * @param[in]	physic	: DAE contenant toutes les bounding box et leurs infos.
 * @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
 *				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
-* @return		int : l'indice de l'emplacement de l'acteur
 ************************************************************************************/
 void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision group )
 {
@@ -115,22 +114,21 @@ void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision g
 		physX::UpdateObjectFromActor(m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot, true);
 }
 
-void SceneObject::SetControledCharacter( float radius, float height, void* Ref, GroupCollision group )
-{
-	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
-	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, group);
-}
-
-void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group )
-{
-	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, group);
-}
-
+/*************************************************************************************
+* Affecte un trigger au SceneObj. Il sera par ensuite géré par le moteur physique
+* @param[in]	physic	: DAE contenant toutes les bounding box et leurs infos.
+* @param[in]	OnEnterFunc	: Fonction lancée quand un objet RENTRE dans le trigger
+* @param[in]	OnLeaveFunc	: Fonction lancée quand un objet SORT du le trigger
+* @param[in]	OnStayFunc	: Fonction lancée quand un objet EST dans le trigger
+* @param[in]	paramEnter	: paramêtre de la fonction enter.
+* @param[in]	paramLeave	: paramêtre de la fonction leave.
+* @param[in]	paramStay	: paramêtre de la fonction stay.
+* @prec			Les fonctions passées doivent obligatoirement prendre un void* en param
+*				ou être NULL evidemment
+************************************************************************************/
 void SceneObject::SetObjectTrigger(const std::string& physic,
-					  void (*OnEnterFunc)(void* param), void (*OnStayFunc)(void* param), void (*OnLeaveFunc)(void* param),
-					  void* paramEnter, void* paramLeave, void* paramStay)
+								   void (*OnEnterFunc)(void* param), void (*OnStayFunc)(void* param), void (*OnLeaveFunc)(void* param),
+								   void* paramEnter, void* paramLeave, void* paramStay)
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	Pos += m_pMesh->m_ReglagePivot;
@@ -144,7 +142,39 @@ void SceneObject::SetObjectTrigger(const std::string& physic,
 	}
 }
 
+/************************************************************************************
+* Affecte une capsule controller au SceneObj. Il sera par ensuite géré par le moteur physique
+* @param[in]	radius	: Rayon de la capsule du controller
+* @param[in]	height	: hauteur de la capsule du controller
+* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
+* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
+************************************************************************************/
+void SceneObject::SetControledCharacter( float radius, float height, void* Ref, GroupCollision group )
+{
+	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, group);
+}
 
+/************************************************************************************
+* Affecte une box controller au SceneObj. Il sera par ensuite géré par le moteur physique
+* @param[in]	width	: largeur de la box du controller
+* @param[in]	height	: hauteur de la box du controller
+* @param[in]	depth	: profondeur de la box du controller
+* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
+* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
+************************************************************************************/
+void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group )
+{
+	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, group);
+}
+
+/************************************************************************************
+* Retire un objet du moteur physique si besoin
+************************************************************************************/
 void SceneObject::SetObjectUnPhysical()
 {
 	if(IsActor())
@@ -324,12 +354,12 @@ void SceneObject::SetTranslation( float x, float y, float z )
 		Object::SetTranslation(x, y, z);
 }
 
-void SceneObject::SetRotation( int angleX, int angleY, int angleZ )
+void SceneObject::SetRotation( float angleX, float angleY, float angleZ )
 {
 	// Si l'objet est affecté par la physique
 	if(IsPhysical())
 		// On transmet la transformation à la physique
-		SetPhysicalRotation((float)angleX, (float)angleY, (float)angleZ);
+		SetPhysicalRotation(angleX, angleY, angleZ);
 
 	// Sinon on transforme l'objet graphique
 	else		

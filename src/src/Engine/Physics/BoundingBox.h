@@ -88,54 +88,13 @@ inline NxVec3 VecToNxVec(Vector3f V){ return NxVec3(V.x, V.y, V.z); }
 
 namespace physX
 {
-	/************************************************************************************
-	* Fonction de création d'une bounding box.
-	* @param[in]	ListOfBoundingBox	: Liste des bounding box du DAE avec leurs param
-	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
-	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
-	* @return		int : l'indice de l'emplacement de l'acteur
-	************************************************************************************/
 	int CreateBoundingBox(ListOfBoundingBox &BBList, GroupCollision group );
-
-	/*************************************************************************************
-	* Fonction de création d'un trigger.
-	* @param[in]	ListOfBoundingBox	: Liste des bounding box du DAE avec leurs param
-	* @param[in]	OnEnterFunc	: Fonction lancée quand un objet RENTRE dans le trigger
-	* @param[in]	OnLeaveFunc	: Fonction lancée quand un objet SORT du le trigger
-	* @param[in]	OnStayFunc	: Fonction lancée quand un objet EST dans le trigger
-	* @return		int : l'indice de l'emplacement du trigger
-	************************************************************************************/
 	int CreateTrigger(ListOfBoundingBox &BBList,
-		void (*OnEnterFunc)(void* param),
-		void (*OnLeaveFunc)(void* param), 
-		void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
-
-	/************************************************************************************
-	* Fonction de création d'une capsule controller
-	* @param[in]	pos	: Position initiale en world, provient du SceneObject
-	* @param[in]	radius	: Rayon de la capsule du controller
-	* @param[in]	height	: hauteur du controller
-	* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
-	* @param[out]	empActor: Emplacement de l'actor qui sera crée
-	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
-	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
-	* @return		int : l'indice de l'emplacement du controller
-	* Précondition	radius et height ne doivent pas être tous les deux nuls. La pos doit être > 1 en Y.
-	************************************************************************************/
+						void (*OnEnterFunc)(void* param),
+						void (*OnLeaveFunc)(void* param), 
+						void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
 	int CreateControlledCapsule( Vector3f pos, float radius, float height,
 								 void* Ref, int &empActor, GroupCollision group );
-
-	/************************************************************************************
-	* Fonction de création d'une box controller
-	* @param[in]	pos	: Position initiale en world, provient du SceneObject
-	* @param[in]	size: largeur, hauteur et profondeur de la box 
-	* @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
-	* @param[out]	empActor: Emplacement de l'actor qui sera crée
-	* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
-	*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
-	* @return		int : l'indice de l'emplacement du controller
-	* Précondition	size ne doivent pas être un vecteur nul. La pos doit être > 1 en Y.
-	************************************************************************************/
 	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
 							 void* Ref, int &empActor, GroupCollision group ); 
 

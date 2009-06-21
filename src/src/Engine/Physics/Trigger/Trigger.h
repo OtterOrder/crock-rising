@@ -24,19 +24,16 @@ public:
 			NxU32 nbActors = scene->getNbActors();
 			while (nbActors--)
 			{
-				actors = scene->getActors(); //Si les fonctions ci dessous créeent des acteurs
-											 //la liste actors n'est plus valide. Donc, il faut la recharger.
-				NxActor* actor = actors[nbActors];
-				ActorUserData *ud = (ActorUserData*)(actor->userData);
+				ActorUserData *ud = (ActorUserData*)(triggerShape.userData);
 				if(ud)
 				{
 					switch( status )
 					{
-						case NX_TRIGGER_ON_ENTER : if(ud->OnEnterFunc) ud->OnEnterFunc();
+						case NX_TRIGGER_ON_ENTER : if(ud->OnEnterFunc) ud->OnEnterFunc(ud->paramEnter);
 							break;
-						case NX_TRIGGER_ON_LEAVE : if(ud->OnLeaveFunc) ud->OnLeaveFunc();
+						case NX_TRIGGER_ON_LEAVE : if(ud->OnLeaveFunc) ud->OnLeaveFunc(ud->paramLeave);
 							break;
-						case NX_TRIGGER_ON_STAY :  if(ud->OnStayFunc) ud->OnStayFunc();
+						case NX_TRIGGER_ON_STAY :  if(ud->OnStayFunc) ud->OnStayFunc(ud->paramStay);
 							break;
 						default: break;
 					}

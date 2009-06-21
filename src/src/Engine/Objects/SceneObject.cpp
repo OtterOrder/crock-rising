@@ -61,6 +61,7 @@ SceneObject::SceneObject(const std::string& mesh,
 SceneObject::~SceneObject()
 {
 	m_ListOfBoundingBox.ReleaseList(); // suppression dans la liste
+	SetObjectUnPhysical();
 	if(m_pMaterial)
 		delete m_pMaterial;
 }
@@ -90,6 +91,14 @@ void SceneObject::SetShader(const std::string& strShader)
 //===========================================================================//
 // Physique de l'objet														 //
 //===========================================================================//
+
+/************************************************************************************
+* Affecte une boundingbox au SceneObj. Il sera par ensuite géré par le moteur physique
+* @param[in]	physic	: DAE contenant toutes les bounding box et leurs infos.
+* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
+*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
+* @return		int : l'indice de l'emplacement de l'acteur
+************************************************************************************/
 void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision group )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
@@ -119,7 +128,9 @@ void SceneObject::SetControledCharacter(float width, float height, float depth, 
 	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, group);
 }
 
-void SceneObject::SetObjectTrigger( const std::string& physic, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)() )
+void SceneObject::SetObjectTrigger(const std::string& physic,
+					  void (*OnEnterFunc)(void* param), void (*OnStayFunc)(void* param), void (*OnLeaveFunc)(void* param),
+					  void* paramEnter, void* paramLeave, void* paramStay)
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	Pos += m_pMesh->m_ReglagePivot;
@@ -129,7 +140,7 @@ void SceneObject::SetObjectTrigger( const std::string& physic, void (*OnEnterFun
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 
-		m_iEmpActor = physX::CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc);
+		m_iEmpActor = physX::CreateTrigger( m_ListOfBoundingBox, OnEnterFunc, OnLeaveFunc, OnStayFunc, paramEnter, paramLeave, paramStay);
 	}
 }
 

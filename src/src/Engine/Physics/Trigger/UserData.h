@@ -36,19 +36,23 @@ enum UserDataFlag
 // structure qui permet de passer des informations dans le userdata d'un nxActor
 
 void SetPersoRef(NxActor* pActor, void* Ref);
-void SetTriggerFunctions(NxActorDesc &ActorDesc,
-						 void (*OnEnterFunc)(), 
-						 void (*OnLeaveFunc)(), 
-						 void (*OnStayFunc)() );
+void SetTriggerFunctions(NxShapeDesc &ShapeDesc,
+						 void (*OnEnterFunc)(void* param), void* paramE,
+						 void (*OnLeaveFunc)(void* param), void* paramL, 
+						 void (*OnStayFunc)(void* param), void* paramS );
 
 struct ActorUserData
 {
 	ActorUserData();	
 	void *PersoRef; //Pointeur sur un ennemis ou un hero
 
-	void (*OnEnterFunc)(); 
-	void (*OnLeaveFunc)(); 
-	void (*OnStayFunc)(); 
+	void *paramEnter; //parametre a passer au trigger
+	void *paramLeave;
+	void *paramStay;
+
+	void (*OnEnterFunc)(void* param); 
+	void (*OnLeaveFunc)(void* param); 
+	void (*OnStayFunc)(void* param); 
 
 	Hero* GetHero();
 	Enemy* GetEnemy();

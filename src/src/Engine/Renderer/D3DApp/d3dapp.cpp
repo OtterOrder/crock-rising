@@ -562,17 +562,6 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
         {
             switch( wParam )
             {
-                case VK_ESCAPE:
-                {
-                    //SendMessage( hWnd, WM_CLOSE, 0, 0 );
-					Cleanup3DEnvironment();
-					SAFE_RELEASE( m_pD3D );
-					AfterDestroyDevice();
-					DestroyWindow( hWnd );
-					PostQuitMessage(0);
-					m_hWnd = NULL;
-                    break;
-                }
                 case VK_PAUSE:
                 {
                     /*bool bTimePaused = DXUTIsTimePaused();
@@ -1179,6 +1168,7 @@ void CD3DApplication::Close()
     SAFE_RELEASE( m_pD3D );
     AfterDestroyDevice();
     DestroyWindow( m_hWnd );
+	PostQuitMessage(0);
     m_hWnd = NULL;
 
 }

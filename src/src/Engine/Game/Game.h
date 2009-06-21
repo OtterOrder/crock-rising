@@ -58,6 +58,7 @@ protected:
 	Backup					*m_Backup;			// Sauvegarde du jeu (ce qu'on veut)
 	
 	Level					*m_CurrentLevel;	// Niveau courant
+	Level					*m_PrevLevel;		// Niveau à supprimer après un changement de niveau
 	crc32					m_PrevLevelID;		// ID du niveau précédent
 	crc32					m_StartLevelID;		// ID du niveau de départ
 

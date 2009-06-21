@@ -64,7 +64,9 @@ public:
 	void SetObjectPhysical( const std::string& physic, GroupCollision group );		
 	void SetControledCharacter(float radius, float height, void* Ref, GroupCollision group );	
 	void SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group );	
-	void SetObjectTrigger( const std::string& physic, void (*OnEnterFunc)(), void (*OnStayFunc)(), void (*OnLeaveFunc)()); 
+	void SetObjectTrigger( const std::string& physic,
+							void (*OnEnterFunc)(void* param), void (*OnStayFunc)(void* param), void (*OnLeaveFunc)(void* param),
+							void* paramEnter, void* paramLeave, void* paramStay); 
 	void SetObjectUnPhysical();												// Retire la physique à un objet si besoin
 	
 	int  getEmpActor()				{ return m_iEmpActor; }

@@ -23,15 +23,18 @@ void SetPersoRef(NxActor* pActor, void* Ref)
 	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
 }
 
-void SetTriggerFunctions(NxActorDesc &ActorDesc,
-						 void (*OnEnterFunc)(), 
-						 void (*OnLeaveFunc)(), 
-						 void (*OnStayFunc)() )
+void SetTriggerFunctions(NxShapeDesc &ShapeDesc,
+						 void (*OnEnterFunc)(void* param), void* paramE,
+						 void (*OnLeaveFunc)(void* param), void* paramL, 
+						 void (*OnStayFunc)(void* param), void* paramS )
 {
-	ActorDesc.userData = new ActorUserData;
-	((ActorUserData*)(ActorDesc.userData))->OnEnterFunc = OnEnterFunc ;
-	((ActorUserData*)(ActorDesc.userData))->OnLeaveFunc = OnLeaveFunc ;
-	((ActorUserData*)(ActorDesc.userData))->OnStayFunc  = OnStayFunc  ;
+	ShapeDesc.userData = new ActorUserData;
+	((ActorUserData*)(ShapeDesc.userData))->OnEnterFunc = OnEnterFunc ;
+	((ActorUserData*)(ShapeDesc.userData))->paramEnter	= paramE;
+	((ActorUserData*)(ShapeDesc.userData))->paramLeave	= paramL;
+	((ActorUserData*)(ShapeDesc.userData))->paramStay	= paramS;
+	((ActorUserData*)(ShapeDesc.userData))->OnLeaveFunc = OnLeaveFunc ;
+	((ActorUserData*)(ShapeDesc.userData))->OnStayFunc  = OnStayFunc  ;
 }
 
 ////////////////////////////////////////////////////////////////////////

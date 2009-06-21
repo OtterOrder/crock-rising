@@ -58,9 +58,9 @@ struct PhysicBody
 
 
 	//Fonctions liées aux triggers, à remplir a la création du sceneobj
-	void (*OnEnterFunc)(); 
-	void (*OnLeaveFunc)(); 
-	void (*OnStayFunc)(); 
+	void (*OnEnterFunc)(void* param); 
+	void (*OnLeaveFunc)(void* param); 
+	void (*OnStayFunc)(void* param); 
 };
 
 //Liste des bounding box d'un sceneobj
@@ -106,9 +106,9 @@ namespace physX
 	* @return		int : l'indice de l'emplacement du trigger
 	************************************************************************************/
 	int CreateTrigger(ListOfBoundingBox &BBList,
-		void (*OnEnterFunc)(), 
-		void (*OnLeaveFunc)(), 
-		void (*OnStayFunc)());
+		void (*OnEnterFunc)(void* param),
+		void (*OnLeaveFunc)(void* param), 
+		void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
 
 	/************************************************************************************
 	* Fonction de création d'une capsule controller

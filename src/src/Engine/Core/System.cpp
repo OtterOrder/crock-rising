@@ -3,6 +3,7 @@
 #include	"Core/Inputs/InputManager.h"
 #include	"Renderer/Renderer.h"
 #include	"PostProcesses/PostRenderer.h"
+#include	"Sound/SoundSystem.h"
 #include	"Resources/ResourceManager.h"
 #include	"Game/Game.h"
 #include	"Physics/Physicalizer.h"
@@ -42,6 +43,7 @@ int System::MainLoop( void )
 	InputManager	*inputManager;
 	Renderer		*renderer;
 	PostRenderer	*postRenderer;
+	SoundSystem		*soundSystem;
 	Game			*game;
 	Physicalizer	*physX;
 
@@ -53,6 +55,7 @@ int System::MainLoop( void )
 	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
+	soundSystem		= SoundSystem::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	game			= Game::GetInstance();
 
@@ -108,6 +111,7 @@ int System::MainLoop( void )
 	game->Destroy(); // Game à détruire en premier !
 	renderer->Destroy();
 	postRenderer->Destroy();
+	soundSystem->Destroy();
 	inputManager->Destroy();
 	resourceManager->Destroy();
 

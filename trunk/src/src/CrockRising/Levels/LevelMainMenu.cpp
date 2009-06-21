@@ -1,12 +1,18 @@
 #include	"LevelMainMenu.h"
 
 #include	<Core/Inputs/InputManager.h>
+#include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Objects/2D/Sprite.h>
 #include	<Objects/2D/Text.h>
+#include	<Sound/SoundObject.h>
 
 //******************************************************************
+
+#define		LEVEL_gamemenu			0x2b3430ac
+#define		LEVEL_highscores		0x59f26d0
+#define		LEVEL_settings			0xe545a0c5
 
 #define		MAINMENU_X				64
 #define		MAINMENU_Y				48
@@ -44,9 +50,12 @@ static u32 g_BubblesWidth[LevelMainMenu::NB_LINKS] =
 LevelMainMenu::LevelMainMenu( crc32 levelID )
 : Level( levelID )
 {
-	m_Camera = NULL;
-	m_Background = NULL;
+	m_Camera		= NULL;
+	m_Background	= NULL;
+	m_Plop			= NULL;
+
 	memset( m_Menu, NULL, NB_LINKS*sizeof(Text*) );
+	m_CurrentLink = NONE;
 }
 
 /***********************************************************
@@ -59,6 +68,9 @@ LevelMainMenu::~LevelMainMenu( void )
 
 	if( m_Background )
 		delete m_Background;
+
+	if( m_Plop )
+		delete m_Plop;
 	
 	for( int link = 0; link < NB_LINKS; link++ )
 		if( m_Menu[link] )
@@ -85,6 +97,9 @@ void LevelMainMenu::Init( void )
 	m_Background->Init();
 	m_Background->SetAsBackground( true );
 
+	// Plop
+	m_Plop = new SoundObject( "plop.ogg" );
+
 	// Menu principal
 	for( int link = 0; link < NB_LINKS; link++ )
 	{
@@ -104,35 +119,65 @@ void LevelMainMenu::Update( void )
 	InputManager *inputMgr = InputManager::GetInstance();
 	Vector2f mousePos = inputMgr->GetMousePosition();
 	
+	// Parcours des liens..
 	for( int link = 0; link < NB_LINKS; link++ )
 	{
 		m_Menu[link]->SetColor( MAINMENU_COLOR );
+		
+		// Si la souris survole le lien..
 		if( m_Menu[link]->IsCollide( (s32)mousePos.x, (s32)mousePos.y ) )
 		{
+			if( link != m_CurrentLink )
+			{
+				m_Plop->Play();
+			}
+
+			m_CurrentLink = (Link)link;
 			m_Menu[link]->SetColor( MAINMENU_COLOR_HOVER );
 
+			// Si on clique..
 			if( inputMgr->IsMouseReleased( MOUSE_LEFT ) )
 			{
-				switch( link )
-				{
-					case PLAY:
-						//TODO
-						break;
-
-					case HIGHSCORES:
-						//TODO
-						break;
-
-					case SETTINGS:
-						//TODO
-						break;
-
-					case QUIT:
-						// Fermeture de l'appli..
-						Renderer::GetInstance()->Close();
-						break;
-				}
+				OnClic( m_CurrentLink );
+				return;
 			}
+			return;
 		}
+	}
+
+	// Si on arrive jusqu'ici, c'est qu'aucun lien n'est survolé
+	m_CurrentLink = NONE;
+}
+
+/***********************************************************
+ * Exécute une action en fonction du lien cliqué.
+ * @param[in]	link : Index du lien
+ **********************************************************/
+void LevelMainMenu::OnClic( Link link ) const
+{
+	switch( link )
+	{
+		case PLAY:
+			// Menu de jeu..
+			Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
+			return;
+		
+		case HIGHSCORES:
+			// Highscores..
+			Game::GetInstance()->ChangeLevel( LEVEL_highscores );
+			return;
+		
+		case SETTINGS:
+			// Menu d'options..
+			Game::GetInstance()->ChangeLevel( LEVEL_settings );
+			return;
+		
+		case QUIT:
+			// Fermeture de l'appli..
+			Renderer::GetInstance()->Close();
+			return;
+
+		//default:
+			// Rien..
 	}
 }

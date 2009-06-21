@@ -167,37 +167,74 @@ u32 Quad::GetHeight() const
 // @param[in]	relWidth	: Largeur relative (0->1)
 // @param[in]	relHeight	: Hauteur relative (0->1)
 //**********************************************************
-void Quad::SetRelSize( float relWidth, float relHeight )
+/*void Quad::SetRelSize( float relWidth, float relHeight )
 {
 	SetSize(
 		(u32)( (RENDERER->GetWindowWidth()*relWidth)+0.5f ),
 		(u32)( (RENDERER->GetWindowHeight()*relHeight)+0.5f )
 	);
-}
+}*/
 
 //**********************************************************
 // Change la taille relative.
 // @param[in]	relSize	: { largeur, hauteur } relatives (0->1)
 //**********************************************************
-void Quad::SetRelSize( const Vector2f &relSize )
+/*void Quad::SetRelSize( const Vector2f &relSize )
 {
 	SetRelSize( relSize.x, relSize.y );
-}
+}*/
 
 //**********************************************************
 // Donne la largeur relative de l'objet.
 //**********************************************************
-float Quad::GetRelWidth() const
+/*float Quad::GetRelWidth() const
 {
 	return (float)m_Width / RENDERER->GetWindowWidth();
-}
+}*/
 
 //**********************************************************
 // Donne la hauteur relative de l'objet.
 //**********************************************************
-float Quad::GetRelHeight() const
+/*float Quad::GetRelHeight() const
 {
 	return (float)m_Height / RENDERER->GetWindowHeight();
+}*/
+
+//**********************************************************
+// Définie l'objet comme background, càd l'objet est de la
+// taille de la fenêtre et a la priorité minimum.
+// @param[in]	background : Vrai = background
+//**********************************************************
+void Quad::SetAsBackground( bool background )
+{
+	if( background )
+	{
+		SetFlag( O2D_BACKGROUND );
+		
+		// Aucune transformation, point chaud
+		// en (0,0) et priorité minimum..
+		SetPosition( 0, 0 );
+		SetScale( 1.f, 1.f );
+		SetRotation( 0.f );
+		SetHotPoint( 0, 0 );
+		SetPriority( 255 );
+	}
+	else
+	{
+		UnsetFlag( O2D_BACKGROUND );
+	}
+}
+
+//**********************************************************
+// Vérifie si le point est en collision avec l'objet.
+// @param[in]	posX : Coordonnée x (px)
+// @param[in]	posY : Coordonnée y (px)
+// @return	Vrai si le point est en collision
+//**********************************************************
+bool Quad::IsCollide( s32 posX, s32 posY )
+{
+	//TODO
+	return false;
 }
 
 //**********************************************************
@@ -214,6 +251,13 @@ float Quad::GetRelHeight() const
 //**********************************************************
 void Quad::dirty_Refresh()
 {
+	// 0. Gestion des flags
+	if( IsFlagSet( O2D_BACKGROUND ) )
+	{
+		m_Width = Renderer::GetInstance()->GetWindowWidth();
+		m_Height = Renderer::GetInstance()->GetWindowHeight();
+	}
+	
 	// 1. On réinitialise les sommets
 	for( int i = 0; i < m_NbVertices; i++ )
 	{

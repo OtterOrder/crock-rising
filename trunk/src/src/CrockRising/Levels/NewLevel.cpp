@@ -11,6 +11,9 @@
 #include	"LevelSettings.h"
 #include	"LevelVictory.h"
 
+// Jeux
+#include	"LevelCanyon.h"
+
 //******************************************************************
 
 /***********************************************************
@@ -20,8 +23,8 @@
  **********************************************************/
 Level* Level::NewLevel( crc32 levelID )
 {
-	Level *pLevel;
-	
+	Level *pLevel = NULL;
+
 	switch( levelID )
 	{
 		// Logos
@@ -34,6 +37,9 @@ Level* Level::NewLevel( crc32 levelID )
 		case LEVEL_mainmenu:	pLevel = new LevelMainMenu( levelID );		break;
 		case LEVEL_settings:	pLevel = new LevelSettings( levelID );		break;
 		case LEVEL_victory:		pLevel = new LevelVictory( levelID );		break;
+
+		// Jeux
+		case LEVEL_canyon:		pLevel = new LevelCanyon( levelID );		break;
 		
 		default:				pLevel = new Level( LEVEL_level );
 	}

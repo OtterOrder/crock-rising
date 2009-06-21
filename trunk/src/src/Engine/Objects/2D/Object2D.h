@@ -9,8 +9,9 @@
 //******************************************************************
 
 // Flags des objets 2D
-#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
-#define		O2D_RELATIVE_SIZE			(1<<1)		// Taille relative aux dimensions de la fenêtre
+//#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
+//#define		O2D_RELATIVE_SIZE			(1<<1)		// Taille relative aux dimensions de la fenêtre
+#define		O2D_BACKGROUND				(1<<2)		// L'objet est un background
 
 //******************************************************************
 

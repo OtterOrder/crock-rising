@@ -29,7 +29,6 @@ public:
 protected:
 	
 	Camera	*m_pCamera;
-	
 	Sprite	*m_pLogo;		// Logo à la fraise
 	float	m_LogoTimer;
 

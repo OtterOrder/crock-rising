@@ -28,10 +28,16 @@ public:
 	u32 GetHeight() const;
 
 	// Taille relative aux dimensions de la fenêtre
-	void SetRelSize( float relWidth, float relHeight );
+	/*void SetRelSize( float relWidth, float relHeight );
 	void SetRelSize( const Vector2f &relSize );
 	float GetRelWidth() const;
-	float GetRelHeight() const;
+	float GetRelHeight() const;*/
+
+	// Flags
+	void SetAsBackground( bool background );
+
+	// Collision (pas implémenté)
+	virtual bool IsCollide( s32 posX, s32 posY );
 
 	// Gestion des entités DirectX
 	// ..

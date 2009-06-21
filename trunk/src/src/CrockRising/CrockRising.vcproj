@@ -244,6 +244,14 @@
 			<Filter
 				Name="Games"
 				>
+				<File
+					RelativePath=".\Levels\LevelCanyon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelCanyon.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

@@ -14,6 +14,7 @@
 class Camera;
 class Sprite;
 class Text;
+class SoundObject;
 
 class LevelMainMenu : public Level
 {
@@ -21,6 +22,7 @@ public:
 
 	enum Link
 	{
+		NONE = -1,
 		PLAY = 0,
 		HIGHSCORES,
 		SETTINGS,
@@ -38,9 +40,14 @@ public:
 
 protected:
 	
-	Camera	*m_Camera;
-	Sprite	*m_Background;
-	Text	*m_Menu[NB_LINKS];
+	Camera		*m_Camera;
+	Sprite		*m_Background;
+	SoundObject	*m_Plop;
+	
+	Text		*m_Menu[NB_LINKS];
+	Link		m_CurrentLink;
+
+	void OnClic( Link link ) const;
 
 };
 

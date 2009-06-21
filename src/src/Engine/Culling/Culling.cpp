@@ -8,26 +8,12 @@ void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, l
 	std::list<SceneObject*>::iterator scnObjPhysics = _SceneObjectList.begin();
 	while (scnObjPhysics != _SceneObjectList.end())
 	{
-		// parcours des points de la géometrie englobante
-		/*
 		ShapeType type = (*(*scnObjPhysics)->getPhysicBodyList().begin())->type;
 		NxActor* pActor = physX::getActor( (*scnObjPhysics)->getEmpActor() );
-		NxVec3 position = pActor->getGlobalPosition();
-		NxMat33 orientation = pActor->getGlobalOrientation();
-		NxShape*const* shapes = pActor->getShapes();
-		u32 nbShapes = pActor->getNbShapes();
-		*/
-		// BOX : (largeur, hauteur, profondeur)
-		// SPHERE : (rayon, 0, 0)
-		// CAPSULE : (rayon, hauteur, 0)
 
-		//for (u32 i=0; i<nbPoints; i++)
+		if ( ActorInsideFrustrum(pActor) )
 		{
-			//if ( PointInsideFrustrum(currentPoint))
-			{
-				_SortedList.push_back(*scnObjPhysics);
-				continue;
-			}
+			_SortedList.push_back(*scnObjPhysics);
 		}
 
 		scnObjPhysics ++;
@@ -91,6 +77,46 @@ void Culling3D::ComputeCameraFustrumShape (Camera* _Camera)
 	m_fustrumShape[5].SetPositionAndNormal(nc+(X*nw), normal);		//pl[RIGHT].setNormalAndPoint(normal,nc+X*nw);
 }
 
+bool Culling3D::ActorInsideFrustrum (NxActor* _pActor)
+{
+	NxShape*const* shapes = _pActor->getShapes();
+	u32 nbShapes = _pActor->getNbShapes();
+
+	NxShapeType shapeType;
+
+	for (u32 shape = 0; shape < nbShapes; shape++)
+	{
+		shapeType = shapes[shape]->getType();
+
+		if (shapeType == NX_SHAPE_SPHERE)
+		{
+			NxSphereShape* sphereShape = shapes[shape]->isSphere();
+			Vector3f center = NxVec3ToVecotr3f(sphereShape->getGlobalPosition());
+
+			if (SphereInsideFrustrum(center, sphereShape->getRadius()))
+				return true;
+		}
+		else
+		if (shapeType == NX_SHAPE_BOX)
+		{
+			NxBoxShape* boxShape = shapes[shape]->isBox();
+
+			if (BoxInsideFrsutrum(boxShape->getGlobalPosition(), boxShape->getGlobalOrientation(), boxShape->getDimensions()))
+				return true;
+		}
+		else
+		if (shapeType == NX_SHAPE_CAPSULE)
+		{
+			NxCapsuleShape* capsuleShape = shapes[shape]->isCapsule();
+
+			if (CapsuleInsideFrustrum(capsuleShape->getGlobalPosition(), capsuleShape->getGlobalOrientation(), capsuleShape->getHeight(), capsuleShape->getRadius()))
+				return true;
+		}
+	}
+
+	return false;
+}
+
 bool Culling3D::PointInsideFrustrum (Vector3f _Point)
 {
 	for (u8 frustrumPlane = 0; frustrumPlane < 6; frustrumPlane ++ )
@@ -113,4 +139,36 @@ bool Culling3D::SphereInsideFrustrum (Vector3f _Center, float _Radius)
 	}
 
 	return true;
+}
+
+bool Culling3D::BoxInsideFrsutrum (NxVec3 _Center, NxMat33 _Orientation, NxVec3 _Dimensions)
+{
+	NxVec3 boxPoints [8];
+
+	_Dimensions /= 2.f;
+
+	boxPoints[0] = _Center + NxVec3(-_Dimensions.x, -_Dimensions.y, -_Dimensions.x);
+	boxPoints[1] = _Center + NxVec3( _Dimensions.x, -_Dimensions.y, -_Dimensions.x);
+	boxPoints[2] = _Center + NxVec3(-_Dimensions.x,  _Dimensions.y, -_Dimensions.x);
+	boxPoints[3] = _Center + NxVec3( _Dimensions.x,  _Dimensions.y, -_Dimensions.x);
+	boxPoints[4] = _Center + NxVec3(-_Dimensions.x, -_Dimensions.y,  _Dimensions.x);
+	boxPoints[5] = _Center + NxVec3( _Dimensions.x, -_Dimensions.y,  _Dimensions.x);
+	boxPoints[6] = _Center + NxVec3(-_Dimensions.x,  _Dimensions.y,  _Dimensions.x);
+	boxPoints[7] = _Center + NxVec3( _Dimensions.x,  _Dimensions.y,  _Dimensions.x);
+
+	for (u32 i=0; i<8; i++)
+	{
+		_Orientation.multiply(boxPoints[i], boxPoints[i]);
+		if (PointInsideFrustrum( NxVec3ToVecotr3f(boxPoints[i]) ))
+			return true;
+	}
+
+	return false;
+}
+
+bool Culling3D::CapsuleInsideFrustrum (NxVec3 _Center, NxMat33 _Orientation, float _Height, float _Radius)
+{
+	NxVec3 dimensions (_Radius, _Height, _Radius);
+
+	return BoxInsideFrsutrum(_Center, _Orientation, dimensions);
 }

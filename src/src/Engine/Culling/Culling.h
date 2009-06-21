@@ -16,7 +16,7 @@ public:
 };
 
 /*******************************************************************************************************/
-struct Plane 
+struct Plane
 {
 	Vector3f m_position;
 	Vector3f m_normal;
@@ -38,6 +38,11 @@ private:
 	Plane m_fustrumShape [6];
 
 	void ComputeCameraFustrumShape (Camera* _Camera);
+
+	bool ActorInsideFrustrum (NxActor* _pActor);
+
 	bool PointInsideFrustrum (Vector3f _Point);
 	bool SphereInsideFrustrum (Vector3f _Center, float _Radius);
+	bool BoxInsideFrsutrum (NxVec3 _Center, NxMat33 _Orientation, NxVec3 _Dimensions);
+	bool CapsuleInsideFrustrum (NxVec3 _Center, NxMat33 _Orientation, float _Height, float _Radius);
 };

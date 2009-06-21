@@ -4,6 +4,8 @@
 #include	"Core/Types/Types.h"
 #include	<d3dx9math.h>
 
+#include	"NxPhysics.h"
+
 //******************************************************************
 
 #define		VEC_PRECISION		0.00001f		// Précision pour les vecteurs
@@ -50,4 +52,8 @@ struct Vector2i
 
 
 //******************************************************************
+// Vector3f to NxVec3
+
+Vector3f NxVec3ToVecotr3f (const NxVec3& _v);
+
 #endif		// _Vector_H

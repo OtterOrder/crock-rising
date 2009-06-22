@@ -11,20 +11,17 @@
 #include		<Physics/Physicalizer.h>
 #include		<Objects/SceneObjectAnimated.h>
 #include		<Objects/Camera.h>
+#include		"../2D/HUDLife.h"
+
 
 //******************************************************************
-typedef SceneObject Weapons;
 
 enum HeroState 
 {
 	STATIC,	
-	BOREDOM, //ennui
 	WALK, 
 	RUN,
-	ATTACK,
-	FLIGHT,  //fuite
-	BONUS,
-	FPS
+	ATTACK
 };
 
 
@@ -34,8 +31,7 @@ public:
 	Hero();
 	~Hero();
 
-	int				  getLife () const { return m_iLife; }
-	void			  setLife ( const int life ) { m_iLife += life; }   // La variable life représentant un bonus ou malus 
+	void			  Init();
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
 
@@ -44,21 +40,19 @@ public:
 	void		      changeState( HeroState newState ) { m_currentState = newState; }
 	ResourceResult	  control ( Camera* pCamera ); 
 
-	ResourceResult			  modeFPS( Camera* pCamera );
-
-	//Méthodes pour la gestion de l'inventaire d'armes
-	bool			  addWeapon     ( Weapons* weapon);
-	void			  removeWeapon  ( std::string strMesh );
+	//Méthodes liées aux triggers (essentiellement bonus de vie pour l'instant...)
+	static void		  contactWithTrigger(void* param);
+	static void		  intoTrigger(){}
+	static void		  outOfTrigger(){} 
 
 
 protected:
-	int					     m_iLife;
-	std::vector<Weapons*>    m_inventory; //Inventaire de ses armes
 	SceneObjectAnimated*	 m_pAnimated;
 	SceneObject*			 m_pArme;
 	InputManager*			 m_pInputManager;
 	HeroState				 m_currentState;
 	SceneObject*             m_pWeapon;
+	static HUDLife*			 m_pLifeBar;
 
 };
 

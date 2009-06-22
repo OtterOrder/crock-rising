@@ -290,6 +290,14 @@
 			Name="2D"
 			>
 			<File
+				RelativePath=".\2D\ButtonText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\2D\ButtonText.h"
+				>
+			</File>
+			<File
 				RelativePath=".\2D\HUDLife.cpp"
 				>
 			</File>

@@ -4,6 +4,7 @@
 //******************************************************************
 
 #include	<Game/Level.h>
+#include	"../2D/ButtonText.h"
 
 //******************************************************************
 
@@ -13,7 +14,6 @@
 
 class Camera;
 class Sprite;
-class Text;
 class SoundObject;
 
 class LevelMainMenu : public Level
@@ -39,15 +39,20 @@ public:
 
 
 protected:
-	
-	Camera		*m_Camera;
-	Sprite		*m_Background;
-	SoundObject	*m_Plop;
-	
-	Text		*m_Menu[NB_LINKS];
-	Link		m_CurrentLink;
 
-	void OnClic( Link link ) const;
+	// Boutons du menu principal
+	struct MMButton : public ButtonText
+	{
+		Link linkID;
+
+		MMButton( Link _linkID );
+		void OnClic();
+	};
+	
+	Camera			*m_Camera;
+	Sprite			*m_Background;
+	SoundObject		*m_Plop;
+	MMButton		*m_Menu[NB_LINKS];
 
 };
 

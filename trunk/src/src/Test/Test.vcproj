@@ -214,6 +214,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Obj2d"
+			>
+			<File
+				RelativePath="..\CrockRising\2D\HUDLife.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CrockRising\2D\HUDLife.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\Main.cpp"
 			>

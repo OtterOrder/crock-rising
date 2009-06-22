@@ -20,23 +20,18 @@ public:
 	{
 		if(scene)
 		{
-			NxActor** actors = scene->getActors();
-			NxU32 nbActors = scene->getNbActors();
-			while (nbActors--)
+			ActorUserData *ud = (ActorUserData*)(triggerShape.userData);
+			if(ud)
 			{
-				ActorUserData *ud = (ActorUserData*)(triggerShape.userData);
-				if(ud)
+				switch( status )
 				{
-					switch( status )
-					{
-						case NX_TRIGGER_ON_ENTER : if(ud->OnEnterFunc) ud->OnEnterFunc(ud->paramEnter);
-							break;
-						case NX_TRIGGER_ON_LEAVE : if(ud->OnLeaveFunc) ud->OnLeaveFunc(ud->paramLeave);
-							break;
-						case NX_TRIGGER_ON_STAY :  if(ud->OnStayFunc) ud->OnStayFunc(ud->paramStay);
-							break;
-						default: break;
-					}
+					case NX_TRIGGER_ON_ENTER : if(ud->OnEnterFunc) ud->OnEnterFunc(ud->paramEnter);
+						break;
+					case NX_TRIGGER_ON_LEAVE : if(ud->OnLeaveFunc) ud->OnLeaveFunc(ud->paramLeave);
+						break;
+					case NX_TRIGGER_ON_STAY :  if(ud->OnStayFunc) ud->OnStayFunc(ud->paramStay);
+						break;
+					default: break;
 				}
 			}
 		}

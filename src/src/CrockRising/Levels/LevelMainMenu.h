@@ -51,8 +51,8 @@ protected:
 	
 	Camera			*m_Camera;
 	Sprite			*m_Background;
-	SoundObject		*m_Plop;
 	MMButton		*m_Menu[NB_LINKS];
+	SoundObject		*m_Sound;
 
 };
 

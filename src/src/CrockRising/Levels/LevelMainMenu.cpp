@@ -1,11 +1,9 @@
 #include	"LevelMainMenu.h"
 
-#include	<Core/Inputs/InputManager.h>
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Objects/2D/Sprite.h>
-#include	<Objects/2D/Text.h>
 #include	<Sound/SoundObject.h>
 
 //******************************************************************
@@ -44,9 +42,9 @@ LevelMainMenu::LevelMainMenu( crc32 levelID )
 {
 	m_Camera		= NULL;
 	m_Background	= NULL;
-	m_Plop			= NULL;
+	m_Sound			= NULL;
 
-	memset( m_Menu, NULL, NB_LINKS*sizeof(Text*) );
+	memset( m_Menu, NULL, NB_LINKS*sizeof(MMButton*) );
 }
 
 /***********************************************************
@@ -64,8 +62,8 @@ LevelMainMenu::~LevelMainMenu( void )
 		if( m_Menu[link] )
 			delete m_Menu[link];
 
-	if( m_Plop )
-		delete m_Plop;
+	if( m_Sound )
+		delete m_Sound;
 }
 
 /***********************************************************
@@ -88,8 +86,8 @@ void LevelMainMenu::Init( void )
 	m_Background->Init();
 	m_Background->SetAsBackground( true );
 
-	// Plop
-	m_Plop = new SoundObject( "plop.ogg" );
+	// Son
+	m_Sound = new SoundObject( "twt.ogg" );
 
 	// Menu principal
 	for( int link = 0; link < NB_LINKS; link++ )
@@ -98,7 +96,7 @@ void LevelMainMenu::Init( void )
 		m_Menu[link]->Init();
 		m_Menu[link]->SetPosition( MAINMENU_X, MAINMENU_Y + link*MAINMENU_MARGIN );
 		m_Menu[link]->SetBubbleWidth( g_ButtonsWidth[link] );
-		m_Menu[link]->SetSound( m_Plop );
+		m_Menu[link]->SetSound( m_Sound );
 	}
 }
 

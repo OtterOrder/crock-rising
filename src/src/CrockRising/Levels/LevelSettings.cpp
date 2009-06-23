@@ -12,7 +12,7 @@
 LevelSettings::LevelSettings( crc32 levelID )
 : Level( levelID )
 {
-	m_pCamera = NULL;
+	m_Camera = NULL;
 }
 
 /***********************************************************
@@ -20,8 +20,8 @@ LevelSettings::LevelSettings( crc32 levelID )
  **********************************************************/
 LevelSettings::~LevelSettings( void )
 {
-	if( m_pCamera )
-		delete m_pCamera;
+	if( m_Camera )
+		delete m_Camera;
 }
 
 /***********************************************************
@@ -35,9 +35,9 @@ void LevelSettings::Init( void )
 	pRenderer->SetClearColor( Color4f( 0.f, 0.f, 0.f, 1.f ) );
 	
 	// Initialisation de la caméra
-	m_pCamera = new Camera( Vector3f( 0.0f, 10.0f, -100.0f ) );
-	m_pCamera->SetTarget( Vector3f( 10.0f, 10.0f, 0.0f ) );
-	pRenderer->SetCamera( m_pCamera );
+	m_Camera = new Camera( Vector3f( 0.0f, 10.0f, -100.0f ) );
+	m_Camera->SetTarget( Vector3f( 10.0f, 10.0f, 0.0f ) );
+	pRenderer->SetCamera( m_Camera );
 }
 
 /***********************************************************

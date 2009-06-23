@@ -5,6 +5,7 @@
 #include	<Objects/Camera.h>
 #include	<Objects/2D/Sprite.h>
 #include	<Sound/SoundObject.h>
+#include	"../2D/ButtonText.h"
 
 //******************************************************************
 
@@ -91,9 +92,6 @@ void LevelHighScores::Init( void )
 
 	//m_Scores = new Text( "", "Arial", 17, true, false );
 	//m_Scores->Init();
-	/*m_Scores->SetBubbleSize( 300, 300 );
-	m_Scores->SetText( "OLOL, pouf tagada pouet lol.\nBonjour ça fart, yoho cool\npouf, mohahaha.." );
-	m_Scores->SetFormat( DT_TOP | DT_CENTER );*/
 }
 
 /***********************************************************
@@ -103,22 +101,3 @@ void LevelHighScores::Update( void )
 {
 	//TODO
 }
-
-/***********************************************************
- * Constructeur de BackButton.
- **********************************************************/
-LevelHighScores::BackButton::BackButton()
-: ButtonText( "RETOUR" )
-{
-	SetBubbleWidth( 60 );
-}
-
-/***********************************************************
- * Action au clic sur un bouton.
- **********************************************************/
-void LevelHighScores::BackButton::OnClic()
-{
-	// Retour au menu principal..
-	Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
-}
-

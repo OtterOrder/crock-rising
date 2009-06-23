@@ -46,4 +46,16 @@ protected:
 };
 
 //******************************************************************
+
+// Bouton retour au mainmenu générique
+class BackButton : public ButtonText
+{
+public:
+
+	BackButton();
+	void OnClic();
+
+};
+
+//******************************************************************
 #endif		//_2D_BUTTONTEXT_H_

@@ -83,6 +83,10 @@ Text::~Text()
 //**********************************************************
 void Text::Draw()
 {
+	LPDIRECT3DDEVICE9 pDevice = Renderer::GetInstance()->m_pd3dDevice;
+	pDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC );
+	pDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC );
+	
 	// Rendu..
 	m_Font->DrawText(
 		NULL,
@@ -92,6 +96,9 @@ void Text::Draw()
 		m_Format,
 		D3DCOLOR_COLOR4F( m_Color )
 	);
+
+	pDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+	pDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
 }
 
 //**********************************************************
@@ -101,6 +108,25 @@ void Text::Draw()
 void Text::SetText( const std::string &text )
 {
 	m_Text = text;
+}
+
+//**********************************************************
+// Ajoute le texte à la suite.
+// @param[in]	text : Texte à ajouter
+//**********************************************************
+void Text::AddText( const std::string &text )
+{
+	m_Text += text;
+}
+
+//**********************************************************
+// Change le formatage du texte. Cf. winuser.h.
+// Par défaut : DT_TOP|DT_LEFT.
+// @param[in]	format : Flags de formatage
+//**********************************************************
+void Text::SetFormat( u32 format )
+{
+	m_Format = format;
 }
 
 //**********************************************************

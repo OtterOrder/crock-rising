@@ -14,6 +14,7 @@
 
 class Camera;
 class Sprite;
+class Quad;
 class SoundObject;
 
 class LevelHighScores : public Level
@@ -38,8 +39,12 @@ protected:
 	
 	Camera			*m_Camera;
 	Sprite			*m_Background;
+	
 	BackButton		*m_BackButton;
 	SoundObject		*m_Sound;
+
+	Quad			*m_ScoresBG;
+	Text			*m_Scores;
 
 };
 

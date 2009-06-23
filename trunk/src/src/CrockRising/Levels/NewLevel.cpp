@@ -2,6 +2,7 @@
 
 // Logos
 #include	"LevelAlafraise.h"
+#include	"LevelQuote.h"
 
 // Menus
 #include	"levelDefeat.h"
@@ -29,6 +30,7 @@ Level* Level::NewLevel( crc32 levelID )
 	{
 		// Logos
 		case LEVEL_alafraise:	pLevel = new LevelAlafraise( levelID );		break;
+		case LEVEL_quote:		pLevel = new LevelQuote( levelID );			break;
 		
 		// Menus
 		case LEVEL_defeat:		pLevel = new LevelDefeat( levelID );		break;

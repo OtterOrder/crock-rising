@@ -188,6 +188,14 @@
 					RelativePath=".\Levels\LevelAlafraise.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Levels\LevelQuote.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelQuote.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Menus"

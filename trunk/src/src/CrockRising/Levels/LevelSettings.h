@@ -14,13 +14,24 @@
 
 class Camera;
 class Sprite;
-class Quad;
 class SoundObject;
-class BackButton;
 
 class LevelSettings : public Level
 {
 public:
+
+	enum Link
+	{
+		RATIO = 0,
+		RESOLUTION,
+
+		NB_SETTINGS,
+		
+		APPLY = NB_SETTINGS,
+		BACK,
+
+		NB_LINKS
+	};
 
 	LevelSettings				( crc32 levelID );			// Constructeur
 	virtual ~LevelSettings		( void );					// Destructeur
@@ -30,8 +41,23 @@ public:
 
 
 protected:
+
+	// Boutons de menu d'options
+	struct SettingButton : public ButtonText
+	{
+		Link linkID;
+
+		SettingButton( Link _linkID );
+		void OnClic();
+	};
 	
-	Camera	*m_Camera;
+	Camera			*m_Camera;
+	Sprite			*m_Background;
+	SoundObject		*m_Sound;
+
+	SettingButton	*m_Menu[NB_LINKS];
+	Text			*m_Values[NB_SETTINGS];
+	std::string		m_Settings[NB_SETTINGS];
 
 };
 

@@ -109,7 +109,7 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 #ifdef DEVCAMERA
-	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.0f, 4000.f);
+	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.f, 4000.f);
 #endif
 
 	DEFAULT_VERTEX sommets[]=
@@ -388,7 +388,7 @@ HRESULT Renderer::OnDestroyDevice()
 		delete m_ShadowMap;
 	}
 
-	PostRenderer::GetInstance()->Destroy();
+	PostRenderer::GetInstance()->DestroyPostEffects();
 
 	return S_OK;
 }

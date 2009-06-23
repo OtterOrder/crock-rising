@@ -49,7 +49,7 @@ public:
 
 	HRESULT Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height);
 	void Release ();
-	void Destroy ();
+	void DestroyPostEffects ();
 
 	void SwapSceneRender ();
 

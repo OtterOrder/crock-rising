@@ -31,6 +31,16 @@ PostRenderer::~PostRenderer(void)
 }
 
 //----------------------------------------------------------------------------------------------
+void PostRenderer::DestroyPostEffects ()
+{
+	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
+	{
+		if (m_pPostEffects[postEffect])
+			m_pPostEffects[postEffect]->Destroy();
+	}
+}
+
+//----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
 void PostRenderer::SetBackBuffer (LPDIRECT3DSURFACE9 _pBackBuffer)
 {
@@ -91,36 +101,24 @@ void PostRenderer::Release ()
 }
 
 //----------------------------------------------------------------------------------------------
-void PostRenderer::Destroy ()
-{
-	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
-	{
-		if (m_pPostEffects[postEffect])
-			m_pPostEffects[postEffect]->Destroy();
-	}
-}
-
-//----------------------------------------------------------------------------------------------
 HRESULT PostRenderer::Create (LPDIRECT3DDEVICE9 _pDevice, u32 _width, u32 _height)
 {
-
-	//// ToDo : Change return value
 	assert (_pDevice);
-	
-	//HRESULT renderTargetCrateation;
 
-	m_pSceneRenderTarget		= new RenderTarget(_width, _height);
-	m_pSceneRenderTarget->Create(_pDevice);
+	m_pSceneRenderTarget = new RenderTarget(_width, _height);
+	if (FAILED(m_pSceneRenderTarget->Create(_pDevice)))
+		return E_FAIL;
 
-	m_pSceneRenderTargetTemp	= new RenderTarget(_width, _height);
-	m_pSceneRenderTargetTemp->Create(_pDevice);
-//*
+	m_pSceneRenderTargetTemp = new RenderTarget(_width, _height);
+	if (FAILED(m_pSceneRenderTargetTemp->Create(_pDevice)))
+		return E_FAIL;
+
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
 		if (m_pPostEffects[postEffect])
 			m_pPostEffects[postEffect]->Create(_pDevice, _width, _height);
 	}
-//*/
+
 	return S_OK;
 }
 

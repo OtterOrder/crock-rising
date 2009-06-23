@@ -5,7 +5,7 @@
 
 
 
-ResourceResult AnimLoader::Load(const char* sAnimPath, std::list < Bone* > &Bones, D3DXMATRIX &BindShape, int * &ArrayOrder, int &Nbframes)
+ResourceResult AnimLoader::Load(const char* sAnimPath, std::vector < Bone* > &Bones, D3DXMATRIX &BindShape, int * &ArrayOrder, int &Nbframes)
 {
 
 	TiXmlDocument animFile( sAnimPath );
@@ -40,7 +40,7 @@ ResourceResult AnimLoader::Load(const char* sAnimPath, std::list < Bone* > &Bone
 }
 
 
-ResourceResult AnimLoader::LoadBones(std::list<Bone*> &Bones, TiXmlElement *rootNode, Bone * parent)
+ResourceResult AnimLoader::LoadBones(std::vector<Bone*> &Bones, TiXmlElement *rootNode, Bone * parent)
 {
 	TiXmlElement* Node=NULL;
 	TiXmlElement* Childnode=NULL; 
@@ -79,7 +79,7 @@ ResourceResult AnimLoader::LoadBones(std::list<Bone*> &Bones, TiXmlElement *root
 	return RES_SUCCEED;
 }
 
-ResourceResult AnimLoader::FillNodeBone(std::list < Bone *> &Bones, TiXmlElement *boneNode, Bone * ParentBone)
+ResourceResult AnimLoader::FillNodeBone(std::vector < Bone *> &Bones, TiXmlElement *boneNode, Bone * ParentBone)
 {
 	const char* StringArray;
 	D3DXMATRIX matrix;
@@ -109,7 +109,7 @@ ResourceResult AnimLoader::FillNodeBone(std::list < Bone *> &Bones, TiXmlElement
 }
 
 
-ResourceResult AnimLoader::LoadBindMatrices(std::list<Bone*> &Bones, TiXmlNode *rootNode, D3DXMATRIX &BindShape, int * &ArrayOrder)
+ResourceResult AnimLoader::LoadBindMatrices(std::vector<Bone*> &Bones, TiXmlNode *rootNode, D3DXMATRIX &BindShape, int * &ArrayOrder)
 {
 	TiXmlElement* Node = rootNode->FirstChildElement("library_controllers");
 	Node = Node->FirstChildElement("controller");
@@ -147,7 +147,7 @@ ResourceResult AnimLoader::LoadBindMatrices(std::list<Bone*> &Bones, TiXmlNode *
 		strName=stringArray.substr(0,found);
 
 		// Pour chaque bone
-		std::list< Bone* >::iterator it=Bones.begin();
+		std::vector< Bone* >::iterator it=Bones.begin();
 		while( it != Bones.end() )
 		{
 			if((*it)->Sid==strName)
@@ -170,7 +170,7 @@ ResourceResult AnimLoader::LoadBindMatrices(std::list<Bone*> &Bones, TiXmlNode *
 		const char * charArray=ChildNode->ToElement()->GetText();
 		fArray=new float[16*Bones.size()];
 		ConvertStringToFloatArray(charArray, fArray, 16*(int)Bones.size());
-		std::list< Bone* >::iterator it;
+		std::vector< Bone* >::iterator it;
 		
 		for(int i=0; i<(int)Bones.size(); i++)
 		{
@@ -185,7 +185,7 @@ ResourceResult AnimLoader::LoadBindMatrices(std::list<Bone*> &Bones, TiXmlNode *
 }
 
 
-ResourceResult AnimLoader::LoadAnimation(std::list<Bone*> &Bones, TiXmlNode *rootNode)
+ResourceResult AnimLoader::LoadAnimation(std::vector<Bone*> &Bones, TiXmlNode *rootNode)
 {
 
 	TiXmlElement* Node = rootNode->ToElement();
@@ -214,7 +214,7 @@ ResourceResult AnimLoader::LoadAnimation(std::list<Bone*> &Bones, TiXmlNode *roo
 	return RES_SUCCEED;
 }
 
-ResourceResult AnimLoader::LoadBoneAnimation(std::list < Bone * > &Bones, TiXmlNode *rootNode, TiXmlElement* Node)
+ResourceResult AnimLoader::LoadBoneAnimation(std::vector < Bone * > &Bones, TiXmlNode *rootNode, TiXmlElement* Node)
 {
 
 	std::string AnimationName=rootNode->ToElement()->Attribute("id");
@@ -263,7 +263,7 @@ ResourceResult AnimLoader::LoadBoneAnimation(std::list < Bone * > &Bones, TiXmlN
 	float * Array=new float[count];
 	ConvertStringToFloatArray(charArray, Array, count);
 
-	std::list< Bone* >::iterator it=Bones.begin();
+	std::vector< Bone* >::iterator it=Bones.begin();
 
 	while( it != Bones.end() )
 	{
@@ -281,10 +281,10 @@ ResourceResult AnimLoader::LoadBoneAnimation(std::list < Bone * > &Bones, TiXmlN
 	return RES_SUCCEED;
 }
 
-ResourceResult AnimLoader::FillEmptyAnimation(std::list < Bone * > &Bones)
+ResourceResult AnimLoader::FillEmptyAnimation(std::vector < Bone * > &Bones)
 {
 
-	std::list< Bone* >::iterator it=Bones.begin();
+	std::vector< Bone* >::iterator it=Bones.begin();
 	while( it != Bones.end() )
 	{
 		if((*it)->animationMatrix==NULL)

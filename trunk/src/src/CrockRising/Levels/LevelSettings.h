@@ -1,9 +1,10 @@
-#ifndef		_LevelSettings_H_
-#define		_LevelSettings_H_
+#ifndef		_LEVEL_SETTINGS_H_
+#define		_LEVEL_SETTINGS_H_
 
 //******************************************************************
 
 #include	<Game/Level.h>
+#include	"../2D/ButtonText.h"
 
 //******************************************************************
 
@@ -12,6 +13,10 @@
 //******************************************************************
 
 class Camera;
+class Sprite;
+class Quad;
+class SoundObject;
+class BackButton;
 
 class LevelSettings : public Level
 {
@@ -26,9 +31,9 @@ public:
 
 protected:
 	
-	Camera	*m_pCamera;
+	Camera	*m_Camera;
 
 };
 
 //******************************************************************
-#endif		//_LevelSettings_H_
+#endif		//_LEVEL_SETTINGS_H_

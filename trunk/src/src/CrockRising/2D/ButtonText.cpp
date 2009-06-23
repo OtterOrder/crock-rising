@@ -2,9 +2,12 @@
 
 #include	<assert.h>
 #include	<Core/Inputs/InputManager.h>
+#include	<Game/Game.h>
 #include	<Sound/SoundObject.h>
 
 //******************************************************************
+
+#define		LEVEL_mainmenu			0x56b55f63
 
 #define		BT_DEFAULT_FONT			"Arial"
 #define		BT_DEFAULT_SIZE			17
@@ -113,4 +116,22 @@ void ButtonText::SetState( State state )
 			// Pas d'autre cas possible..
 			assert( false );
 	}
+}
+
+//**********************************************************
+// Constructeur de BackButton.
+//**********************************************************
+BackButton::BackButton()
+: ButtonText( "RETOUR" )
+{
+	SetBubbleWidth( 60 );
+}
+
+//**********************************************************
+// Action au clic sur un bouton.
+//**********************************************************
+void BackButton::OnClic()
+{
+	// Retour au menu principal..
+	Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 }

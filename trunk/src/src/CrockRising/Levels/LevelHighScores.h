@@ -4,7 +4,6 @@
 //******************************************************************
 
 #include	<Game/Level.h>
-#include	"../2D/ButtonText.h"
 
 //******************************************************************
 
@@ -15,7 +14,9 @@
 class Camera;
 class Sprite;
 class Quad;
+class Text;
 class SoundObject;
+class BackButton;
 
 class LevelHighScores : public Level
 {
@@ -30,13 +31,6 @@ public:
 
 protected:
 
-	// Bouton retour
-	struct BackButton : public ButtonText
-	{
-		BackButton();
-		void OnClic();
-	};
-	
 	Camera			*m_Camera;
 	Sprite			*m_Background;
 	

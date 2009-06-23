@@ -32,6 +32,7 @@ System::System( void )
  **********************************************************/
 System::~System( void )
 {
+	delete m_Time;
 }
 
 /***********************************************************
@@ -113,6 +114,7 @@ int System::MainLoop( void )
 	postRenderer->Destroy();
 	soundSystem->Destroy();
 	inputManager->Destroy();
+	physX->Destroy();
 	resourceManager->Destroy();
 
 	return (int)msg.wParam;

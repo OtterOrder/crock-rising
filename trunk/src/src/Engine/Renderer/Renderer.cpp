@@ -418,6 +418,8 @@ HRESULT Renderer::AfterDestroyDevice()
 
 	m_LightList->clear();
 
+	delete m_pStatsFont;
+
 	return S_OK;
 }
 

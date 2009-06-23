@@ -180,6 +180,8 @@ ResourceResult AnimLoader::LoadBindMatrices(std::vector<Bone*> &Bones, TiXmlNode
 		}
 	}
 
+	delete [] fArray;
+
 
 	return RES_SUCCEED;
 }
@@ -277,6 +279,8 @@ ResourceResult AnimLoader::LoadBoneAnimation(std::vector < Bone * > &Bones, TiXm
 		}
 		++it;
 	}
+
+	delete [] Array;
 
 	return RES_SUCCEED;
 }

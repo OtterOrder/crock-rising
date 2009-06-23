@@ -13,6 +13,13 @@
 #define		BACKBUTTON_X			64
 #define		BACKBUTTON_Y			48
 
+#define		SCORESBG_X				64
+#define		SCORESBG_Y				(BACKBUTTON_Y+24)
+
+#define		SCORE_X					10	// Relatif à SCORESBG_X
+#define		SCORE_Y					10	// Relatif à SCORESBG_Y
+#define		SCORE_MARGIN			24
+
 //******************************************************************
 
 /***********************************************************
@@ -26,6 +33,7 @@ LevelHighScores::LevelHighScores( crc32 levelID )
 	m_Background	= NULL;
 	m_BackButton	= NULL;
 	m_Sound			= NULL;
+	m_ScoresBG		= NULL;
 }
 
 /***********************************************************
@@ -33,17 +41,13 @@ LevelHighScores::LevelHighScores( crc32 levelID )
  **********************************************************/
 LevelHighScores::~LevelHighScores( void )
 {
-	if( m_Camera )
-		delete m_Camera;
+	if( m_Camera )		delete m_Camera;
+	if( m_Background )	delete m_Background;
+	if( m_BackButton )	delete m_BackButton;
+	if( m_Sound )		delete m_Sound;
+	if( m_ScoresBG )	delete m_ScoresBG;
 
-	if( m_Background )
-		delete m_Background;
-
-	if( m_BackButton )
-		delete m_BackButton;
-
-	if( m_Sound )
-		delete m_Sound;
+	//delete m_Scores;
 }
 
 /***********************************************************
@@ -74,6 +78,22 @@ void LevelHighScores::Init( void )
 	m_BackButton->Init();
 	m_BackButton->SetPosition( BACKBUTTON_X, BACKBUTTON_Y );
 	m_BackButton->SetSound( m_Sound );
+
+	// Fond des scores
+	u32 bgWidth = Renderer::GetInstance()->GetWindowWidth() - SCORESBG_X*2;
+	u32 bgHeight = Renderer::GetInstance()->GetWindowHeight() - SCORESBG_Y*2;
+
+	m_ScoresBG = new Quad( bgWidth, bgHeight, Color4f( 1.f, 1.f, 1.f, 0.75f ) );
+	m_ScoresBG->Init();
+	m_ScoresBG->SetPosition( SCORESBG_X, SCORESBG_Y );
+
+	//TODO: récupérer les highscores dans la backup ?
+
+	//m_Scores = new Text( "", "Arial", 17, true, false );
+	//m_Scores->Init();
+	/*m_Scores->SetBubbleSize( 300, 300 );
+	m_Scores->SetText( "OLOL, pouf tagada pouet lol.\nBonjour ça fart, yoho cool\npouf, mohahaha.." );
+	m_Scores->SetFormat( DT_TOP | DT_CENTER );*/
 }
 
 /***********************************************************

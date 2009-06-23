@@ -10,10 +10,10 @@
 
 //******************************************************************
 
-#define		LEVEL_mainmenu			0x56b55f63
+#define		LEVEL_quote				0x6b71cbf4
 
 #define		LOGO_APPEARANCE_TIME	1.f		// Temps d'apparition du logo en sec
-#define		NEXT_LEVEL_TIME			5.f		// Temps avant de passer au level suivant
+#define		NEXT_LEVEL_TIME			3.f		// Temps avant de passer au level suivant
 
 /***********************************************************
  * Constructeur.
@@ -73,8 +73,8 @@ void LevelAlafraise::Update( void )
 		m_LogoTimer >= NEXT_LEVEL_TIME							)
 	{
 		// Si on a appuyé sur Entrée ou si le temps est
-		// écoulé, on passe au menu principal..
-		Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
+		// écoulé, on passe au level suivant..
+		Game::GetInstance()->ChangeLevel( LEVEL_quote );
 		return;
 	}
 

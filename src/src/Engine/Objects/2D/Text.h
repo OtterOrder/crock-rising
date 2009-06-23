@@ -27,6 +27,8 @@ public:
 
 	// Propriétés du texte
 	void SetText( const std::string &text );
+	void AddText( const std::string &text );
+	void SetFormat( u32 format );
 
 	// Bulle d'affichage
 	void SetBubbleSize( u32 width, u32 height );

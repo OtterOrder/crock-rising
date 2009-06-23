@@ -73,6 +73,8 @@ void Physicalizer::ExitPhysX()
 		NxReleasePhysicsSDK(m_PhysicsSDK);
 		m_PhysicsSDK = NULL;
 	}
+	delete m_Allocator;
+
 }
 
 bool Physicalizer::ReloadPhysX()

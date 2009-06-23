@@ -15,6 +15,7 @@ class PostEffect
 {
 protected:
 	Shader*	m_pShader;
+
 public:
 	PostEffect(void);
 	virtual ~PostEffect(void);

@@ -55,6 +55,7 @@ void MotionBlur::Release ()
 void MotionBlur::Destroy ()
 {
 	ResourceManager::GetInstance()->Remove<Shader>("motionBlurVelocity.fx");
+	m_pShader = NULL;
 
 	VectorialBlur::GetInstance()->Destroy();
 }

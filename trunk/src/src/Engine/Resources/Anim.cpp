@@ -36,7 +36,7 @@ Anim::~Anim()
 {
 	delete [] m_BoneArrayOrder;
 	
-	std::list< Bone* >::iterator iter = m_Bones.begin() ;
+	std::vector< Bone* >::iterator iter = m_Bones.begin() ;
 	while ( iter != m_Bones.end() ) 
 	{
 		delete *iter;
@@ -60,7 +60,7 @@ ResourceResult Anim::Load(std::string resource , ResourceParam param)
 
 void Anim::CalculateAbsoluteBoneMatrices()
 {
-	std::list< Bone* >::iterator it=m_Bones.begin();
+	std::vector< Bone* >::iterator it=m_Bones.begin();
 
 	while( it != m_Bones.end() )
 	{

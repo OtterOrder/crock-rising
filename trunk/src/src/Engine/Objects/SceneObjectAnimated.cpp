@@ -84,7 +84,7 @@ void SceneObjectAnimated::UpdateAnimation()
 		return;
 	m_CurrentFrame=uCurrentFrame;
 
-	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
 	// Pour chaque bones
 	while( it != m_pAnim->m_Bones.end() )
@@ -112,7 +112,7 @@ void SceneObjectAnimated::Draw()
 	if(m_bIsRunning)
 		UpdateAnimation();
 
-	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
 	// Pour chaque bones
 	while( it != m_pAnim->m_Bones.end() )
@@ -126,6 +126,8 @@ void SceneObjectAnimated::Draw()
 	m_pMaterial->SetGraphicalData();
 
 	m_pDevice->SetVertexDeclaration(m_pMesh->m_decl);
+
+	m_pShader->GetEffect()->SetBool("g_bShowBone", false);
 
 	if(m_bReceiveShadow)
 	{
@@ -204,14 +206,12 @@ void SceneObjectAnimated::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX*
 	if(m_bShowBone)
 	{
 		//D3DXMatrixIdentity(&m_WorldMatrix);
-		std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+		std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
 		// Pour chaque bones
 		while( it != m_pAnim->m_Bones.end() )
 		{
-
-			// Matrice de départ du bone
-			D3DXMATRIX boneWorld=m_pAnim->m_BindShape*(*it)->FinalMatrix*m_WorldMatrix;
+			D3DXMATRIX boneWorld=(*it)->FinalMatrix*m_WorldMatrix;
 			D3DXMatrixMultiply(&MatWorldView, &boneWorld, view);
 			D3DXMatrixMultiply(&mWorldViewProjection, &MatWorldView, proj);
 			D3DXMatrixMultiply(&mViewProjection, view, proj);
@@ -287,7 +287,7 @@ void SceneObjectAnimated::PauseAnim()
 
 void SceneObjectAnimated::StopAnim()
 {
-	std::list< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
 	// Pour chaque bones
 	while( it != m_pAnim->m_Bones.end() )
@@ -311,7 +311,8 @@ void SceneObjectAnimated::SetAnimFPS(float fps)
 
 D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)
 {
-	return m_matrices[indBone];
+	D3DXMATRIX BoneTransform=m_pAnim->m_Bones[indBone]->FinalMatrix*m_WorldMatrix;
+	return BoneTransform;
 }
 
 void SceneObjectAnimated::SetAnim(const std::string& anim)

@@ -17,20 +17,20 @@ public :
 	virtual ~AnimLoader() {} 
 
 	// Chargement de l'animation
-	ResourceResult Load(const char* sAnimPath, std::list < Bone * > &Bones, D3DXMATRIX &BindShape, int * &ArrayOrder, int &Nbframes); 
+	ResourceResult Load(const char* sAnimPath, std::vector < Bone * > &Bones, D3DXMATRIX &BindShape, int * &ArrayOrder, int &Nbframes); 
 
 	// Chargement des bones
-	ResourceResult LoadBones(std::list < Bone * > &Bones, TiXmlElement *rootNode, Bone * parent);
-	ResourceResult FillNodeBone(std::list < Bone * > &Bones, TiXmlElement *boneNode, Bone * ParentBone);
+	ResourceResult LoadBones(std::vector < Bone * > &Bones, TiXmlElement *rootNode, Bone * parent);
+	ResourceResult FillNodeBone(std::vector < Bone * > &Bones, TiXmlElement *boneNode, Bone * ParentBone);
 
 	// Chargement des bind matrices
-	ResourceResult LoadBindMatrices(std::list < Bone * > &Bones, TiXmlNode *rootNode, D3DXMATRIX &BindShape, int * &ArrayOrder);
+	ResourceResult LoadBindMatrices(std::vector < Bone * > &Bones, TiXmlNode *rootNode, D3DXMATRIX &BindShape, int * &ArrayOrder);
 
 	// Chargement de l'animation
-	ResourceResult LoadAnimation(std::list < Bone * > &Bones, TiXmlNode *rootNode);
-	ResourceResult LoadBoneAnimation(std::list < Bone * > &Bones, TiXmlNode *rootNode, TiXmlElement* Node);
+	ResourceResult LoadAnimation(std::vector < Bone * > &Bones, TiXmlNode *rootNode);
+	ResourceResult LoadBoneAnimation(std::vector < Bone * > &Bones, TiXmlNode *rootNode, TiXmlElement* Node);
 
-	ResourceResult FillEmptyAnimation(std::list < Bone * > &Bones);
+	ResourceResult FillEmptyAnimation(std::vector < Bone * > &Bones);
 
 private :
 	int m_Nbframes;

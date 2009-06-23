@@ -42,6 +42,7 @@ public:
 	void SetRotation( float angleX, float angleY, float angleZ );
 	
 	D3DXMATRIX* GetWorldMatrix ()	{ return &m_WorldMatrix; };
+	void		SetWorldMatrix (D3DXMATRIX _worldmatrix)   {m_WorldMatrix=_worldmatrix;}
 protected:
 	
 	D3DXMATRIX			m_WorldMatrix;

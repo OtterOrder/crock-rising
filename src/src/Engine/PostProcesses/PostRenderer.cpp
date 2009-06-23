@@ -21,8 +21,6 @@ PostRenderer::PostRenderer(void)
 //----------------------------------------------------------------------------------------------
 PostRenderer::~PostRenderer(void)
 {
-	Release ();
-
 	for (u32 postEffect = 0; postEffect < m_pPostEffects.size(); postEffect++)
 	{
 		if (m_pPostEffects[postEffect])

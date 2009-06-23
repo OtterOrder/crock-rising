@@ -63,12 +63,17 @@ void LevelQuote::Init( void )
 	m_Camera->SetTarget( Vector3f( 10.0f, 10.0f, 0.0f ) );
 	pRenderer->SetCamera( m_Camera );
 
+	Vector2i quotePos;
+	quotePos.x = Renderer::GetInstance()->GetWindowWidth()/2;
+	quotePos.y = Renderer::GetInstance()->GetWindowHeight()/2;
+
 	// Quote
 	m_Quote = new Text( "", QUOTE_TEXT_FONT, QUOTE_TEXT_SIZE, true, false );
 	m_Quote->Init();
 	m_Quote->SetColor( QUOTE_TEXT_COLOR );
 	m_Quote->SetBubbleSize( QUOTE_WIDTH, QUOTE_HEIGHT );
 	m_Quote->SetHotPoint( QUOTE_WIDTH/2, QUOTE_HEIGHT/2 );
+	m_Quote->SetPosition( quotePos.x, quotePos.y );
 
 	// Signature
 	m_Signature = new Text( "", QUOTE_TEXT_FONT, QUOTE_TEXT_SIZE, true, false );
@@ -76,6 +81,7 @@ void LevelQuote::Init( void )
 	m_Signature->SetColor( QUOTE_TEXT_COLOR );
 	m_Signature->SetBubbleSize( SIGNATURE_WIDTH, QUOTE_TEXT_SIZE );
 	m_Signature->SetHotPoint( SIGNATURE_WIDTH, 0 );
+	m_Signature->SetPosition( quotePos.x + QUOTE_WIDTH/2, quotePos.y + QUOTE_HEIGHT/2 );
 
 	// Textes
 	m_Texts[0] = "\"L'espace.\n";
@@ -104,38 +110,44 @@ void LevelQuote::Update( void )
 		return;
 	}
 
-	// Positionnement au centre
-	m_Quote->SetPosition(
-		Renderer::GetInstance()->GetWindowWidth()/2,
-		Renderer::GetInstance()->GetWindowHeight()/2
-	);
-	m_Signature->SetPosition(
-		m_Quote->GetPosition().x + QUOTE_WIDTH/2,
-		m_Quote->GetPosition().y + QUOTE_HEIGHT/2
-	);
-
-	// Gestion de l'apparition du texte
-	if( m_CurrentText < NB_TEXTS && m_Timer <= 0 )
+	if( m_CurrentText < NB_TEXTS )
 	{
-		char addedChar[2] = { ' ', '\0' };
-		Text *pText = ( m_CurrentText == SIGNATURE ) ? m_Signature : m_Quote;
-		
-		// On ajoute un caractère
-		addedChar[0] = m_Texts[m_CurrentText][m_CurrentChar++];
-		pText->AddText( addedChar );
-
-		// Si on est à la fin du texte courant..
-		if( m_CurrentChar >= (s32)m_Texts[m_CurrentText].size() )
+		// Si on clique, le texte apparait directement..
+		if( InputManager::GetInstance()->IsMouseReleased( MOUSE_LEFT ) )
 		{
-			if( ++m_CurrentText == NB_TEXTS )
-			{
-				m_Timer = NEXT_LEVEL_TIME;
-				return;
-			}
-			m_CurrentChar = 0;
-			m_Timer = TEXT_DELAY;
+			m_Quote->SetText( m_Texts[QUOTE_LINE1] );
+			m_Quote->AddText( m_Texts[QUOTE_LINE2] );
+			m_Quote->AddText( m_Texts[QUOTE_LINE3] );
+			m_Signature->SetText( m_Texts[SIGNATURE] );
+			
+			m_CurrentText = NB_TEXTS;
+			m_Timer = NEXT_LEVEL_TIME;
 			return;
 		}
-		m_Timer = CHAR_DELAY;
+
+		// Gestion de l'apparition du texte
+		if( m_Timer <= 0 )
+		{
+			char addedChar[2] = { ' ', '\0' };
+			Text *pText = ( m_CurrentText == SIGNATURE ) ? m_Signature : m_Quote;
+			
+			// On ajoute un caractère
+			addedChar[0] = m_Texts[m_CurrentText][m_CurrentChar++];
+			pText->AddText( addedChar );
+
+			// Si on est à la fin du texte courant..
+			if( m_CurrentChar >= (int)m_Texts[m_CurrentText].size() )
+			{
+				if( ++m_CurrentText == NB_TEXTS )
+				{
+					m_Timer = NEXT_LEVEL_TIME;
+					return;
+				}
+				m_CurrentChar = 0;
+				m_Timer = TEXT_DELAY;
+				return;
+			}
+			m_Timer = CHAR_DELAY;
+		}
 	}
 }

@@ -10,6 +10,8 @@
 #include "Renderer/Renderer.h"
 #include "Resources/Material.h"
 #include "Renderer/Shadow Map/ShadowMap.h"
+#include "Core/System.h"
+#include "Core/Time.h"
 
 //===========================================================================//
 // Constructeur SceneAnimObject                                              //
@@ -31,6 +33,8 @@ SceneObjectAnimated::SceneObjectAnimated(const std::string& mesh,
 	m_bShowBone=false;
 	m_bIsRunning=true;
 	m_fAnimFPS=50.f;
+
+	m_AnimPlayer.SetFps(m_fAnimFPS);
 }
 
 //===========================================================================//
@@ -49,6 +53,7 @@ void SceneObjectAnimated::InitObject()
 
 	m_matrices=new D3DXMATRIX[m_pAnim->m_Bones.size()];
 
+	m_AnimPlayer.SetNbFrames(m_pAnim->m_NbFrames);
 }
 
 void SceneObjectAnimated::Init()
@@ -77,19 +82,19 @@ void SceneObjectAnimated::SetShader(const std::string &strShader)
 //===========================================================================//
 void SceneObjectAnimated::UpdateAnimation()
 {
-	int uCurrentFrame=(int)(m_Instance->m_fTime*m_fAnimFPS)%m_pAnim->m_NbFrames;
-	if(uCurrentFrame<0)
-		uCurrentFrame=0;
+	m_AnimPlayer.Update(System::GetInstance()->GetTime()->GetDeltaTime());
+
+	u32 uCurrentFrame = m_AnimPlayer.GetCurrentFrame();
 	if(uCurrentFrame==m_CurrentFrame)
 		return;
-	m_CurrentFrame=uCurrentFrame;
+	m_CurrentFrame = uCurrentFrame;
 
 	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
 	// Pour chaque bones
 	while( it != m_pAnim->m_Bones.end() )
 	{
-		(*it)->FinalMatrix=(*it)->animationMatrix[uCurrentFrame];
+		(*it)->FinalMatrix=(*it)->animationMatrix[m_CurrentFrame];
 
 		if((*it)->Parent!=NULL)
 			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
@@ -307,6 +312,8 @@ void SceneObjectAnimated::StopAnim()
 void SceneObjectAnimated::SetAnimFPS(float fps)
 {
 	m_fAnimFPS=fps;
+
+	m_AnimPlayer.SetFps(m_fAnimFPS);
 }
 
 D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)

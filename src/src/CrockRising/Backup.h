@@ -3,6 +3,7 @@
 
 //******************************************************************
 
+#include	<Core/Types/Vector.h>
 #include	<Game/Game.h>
 
 //******************************************************************
@@ -14,9 +15,14 @@ public:
 	CRBackup			( void );	// Constructeur
 	virtual ~CRBackup	( void );	// Destructeur
 
+	void ReadFromFile( const std::string &fileName );
+
+	void SetResolution( const Vector2i &resolution );
+	const Vector2i& GetResolution() const;
+
 protected:
 
-	//TODO
+	Vector2i	m_Resolution;
 
 };
 

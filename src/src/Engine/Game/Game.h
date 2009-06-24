@@ -42,10 +42,11 @@ public:
 	const std::string&	GetGameName		( void ) const;			// Donne le nom du jeu
 
 	void				StoreBackup		( Backup *pBackup );
-	Backup*				GetBackup		( void ) const;
+	Backup* const		GetBackup		( void ) const;
 	
 	void				SetStartLevel	( crc32 levelID );		// Positionne le niveau de départ
 	void				ChangeLevel		( crc32 levelID );		// Change de niveau
+	Level* const		GetLevel		( void ) const;			// Donne le niveau courant
 	crc32				GetLevelID		( void ) const;			// Donne l'ID du niveau courant
 	crc32				GetPrevLevelID	( void ) const;			// Donne l'ID du niveau précédent
 

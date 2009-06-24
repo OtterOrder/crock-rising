@@ -4,6 +4,7 @@
 // Include                                                                   //
 //===========================================================================//
 #include "SceneObject.h"
+#include "Objects/AnimPlayer.h"
 
 class Texture;
 class Shader;
@@ -56,5 +57,7 @@ private:
 	bool			m_bShowBone;
 	bool			m_bIsRunning;
 	float			m_fAnimFPS;
+
+	AnimPlayer		m_AnimPlayer;
 };
 

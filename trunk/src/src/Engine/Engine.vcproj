@@ -301,6 +301,18 @@
 					RelativePath=".\Objects\SceneObjectAnimated.h"
 					>
 				</File>
+				<Filter
+					Name="AnimPlayer"
+					>
+					<File
+						RelativePath=".\Objects\AnimPlayer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Objects\AnimPlayer.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="2D"

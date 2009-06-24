@@ -104,8 +104,9 @@ int System::MainLoop( void )
 			
 			// Update des inputs
 			inputManager->Update();
+
+			m_Time->EndE();	// Fin du tour moteur
 		}
-		m_Time->EndE();	// Fin du tour moteur
 	}
 
 	// Destruction des singletons

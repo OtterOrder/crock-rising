@@ -111,7 +111,7 @@ void Game::StoreBackup( Backup *pBackup )
 // Donne la sauvegarde du jeu.
 // @return	pointeur sur la sauvegarde du jeu
 //**********************************************************
-Game::Backup* Game::GetBackup( void ) const
+Game::Backup* const Game::GetBackup( void ) const
 {
 	assert( m_Backup );
 	return m_Backup;
@@ -153,6 +153,15 @@ void Game::ChangeLevel( crc32 levelID )
 
 	m_CurrentLevel = Level::NewLevel( levelID );
 	m_CurrentLevel->Init();
+}
+
+//**********************************************************
+// Donne le niveau courant.
+// @return	Pointeur sur le level courant
+//**********************************************************
+Level* const Game::GetLevel( void ) const
+{
+	return m_CurrentLevel;
 }
 
 //**********************************************************

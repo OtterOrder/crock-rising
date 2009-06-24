@@ -98,7 +98,7 @@ void SceneObject::SetShader(const std::string& strShader)
 * @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
 *				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 ************************************************************************************/
-void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision group )
+void SceneObject::SetObjectPhysical( const std::string& physic, PhysicalObjectType type )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	Pos += m_pMesh->m_ReglagePivot;
@@ -108,7 +108,7 @@ void SceneObject::SetObjectPhysical( const std::string& physic, GroupCollision g
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		
-		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox, group );
+		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox, type );
 	}
 	if(!IsDynamic())
 		physX::UpdateObjectFromActor(m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot, true);
@@ -147,14 +147,13 @@ void SceneObject::SetObjectTrigger(const std::string& physic,
 * @param[in]	radius	: Rayon de la capsule du controller
 * @param[in]	height	: hauteur de la capsule du controller
 * @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
-* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
-*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
+* @param[in]	type	: Type du controller. Peut être	ENEMY ou HERO
 ************************************************************************************/
-void SceneObject::SetControledCharacter( float radius, float height, void* Ref, GroupCollision group )
+void SceneObject::SetControledCharacter( float radius, float height, void* Ref, PhysicalObjectType type )
 {
 	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, group);
+	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, type);
 }
 
 /************************************************************************************
@@ -163,13 +162,12 @@ void SceneObject::SetControledCharacter( float radius, float height, void* Ref, 
 * @param[in]	height	: hauteur de la box du controller
 * @param[in]	depth	: profondeur de la box du controller
 * @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
-* @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
-*				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
+* @param[in]	type	: Type du controller. Peut être	ENEMY ou HERO
 ************************************************************************************/
-void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref, GroupCollision group )
+void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref, PhysicalObjectType type )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, group);
+	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, type);
 }
 
 /************************************************************************************
@@ -208,18 +206,15 @@ void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ 
 
 void SceneObject::SetPhysicalRotation( float angleX, float angleY, float angleZ )
 {
-	if(IsActor())
-	{
-		NxActor* pActor = physX::getActor( m_iEmpActor );
+	NxActor* pActor = physX::getActor( m_iEmpActor );
+	NxQuat quatCurr = pActor->getGlobalOrientationQuat();
+	NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
+	NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
+	NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
+	NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
 
-		NxQuat quatCurr = pActor->getGlobalOrientationQuat();
-		NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
-		NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
-		NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
-		NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
-
-		pActor->setGlobalOrientationQuat(quatResult);
-	}
+	pActor->setGlobalOrientationQuat(quatResult);
+	Physicalizer::GetInstance()->getControllerManager()->updateControllers();
 }
 
 void SceneObject::SetPhysicalTransform( const D3DXMATRIX* world )
@@ -337,8 +332,9 @@ void SceneObject::Update()
 		physX::UpdateObjectFromActor( m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot );
 	else if (IsController())
 	{
-		SetPhysicalTranslation(0.f, -0.05f, 0.f);
-		physX::UpdateObjectFromController( m_iEmpController, m_WorldMatrix, m_pMesh->m_ReglagePivot );
+		SetPhysicalTranslation(0.f, -0.5f, 0.f);
+		physX::UpdateObjectFromController( m_iEmpController, m_WorldMatrix, m_pMesh->m_ReglagePivot,
+			Vector3f(m_vAngleX, m_vAngleY, m_vAngleZ));
 	}
 }
 
@@ -357,7 +353,7 @@ void SceneObject::SetTranslation( float x, float y, float z )
 void SceneObject::SetRotation( float angleX, float angleY, float angleZ )
 {
 	// Si l'objet est affecté par la physique
-	if(IsPhysical())
+	if(IsActor())
 		// On transmet la transformation à la physique
 		SetPhysicalRotation(angleX, angleY, angleZ);
 

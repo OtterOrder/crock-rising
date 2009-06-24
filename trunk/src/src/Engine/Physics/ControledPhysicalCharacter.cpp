@@ -35,30 +35,30 @@ NxControllerAction HeroHitReport::onControllerHit(const NxControllersHit& hit)
 
 void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
 {
-	ActorUserData *UserData;
+	ActorUserData *UserDataA, *UserDataV;
 	NxActor* Arme = pair.actors[0], *Victime = pair.actors[1];
 
 	//Vérification de la présence des acteurs
 	if(Arme && Victime)
 	{
-		UserData = (ActorUserData*)(Victime->userData);
+		UserDataA = (ActorUserData*)(Arme->userData);
+		UserDataV = (ActorUserData*)(Victime->userData);
 		//Si l'objet a bien un userdata
-		if(UserData)
+		if(UserDataA && UserDataV)
 		{
 			//Si l'objet qui frappe est une arme
-			NxActorGroup group = Arme->getGroup();
-			if( Arme->getGroup() == GROUP_WEAPON )
+			//if( Arme->getGroup() == GROUP_WEAPON )
+			if( UserDataA->type == PHYS_WEAPON )
 			{
 				//Si l'objet frappé est une enemy
-				group = Victime->getGroup();
-				if(Victime->getGroup() == GROUP_ENEMY)
+				if(UserDataV->type == PHYS_ENEMY)
 				{
-					Enemy* enemy = UserData->GetEnemy();
+					Enemy* enemy = UserDataV->GetEnemy();
 				}
 				//ou le héro
-				else if(Victime->getGroup() == GROUP_HERO)
+				else if(UserDataV->type == PHYS_HERO)
 				{
-					Hero* hero = UserData->GetHero();
+					Hero* hero = UserDataV->GetHero();
 				}//endif hero
 			}//endif weapon
 		}//endif userdata		
@@ -66,7 +66,7 @@ void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
 }
 
 int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
-								   void* Ref, int &empActor, GroupCollision group )
+								   void* Ref, int &empActor, PhysicalObjectType objType )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxCapsuleControllerDesc desc;
@@ -81,7 +81,7 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	desc.upDirection	= NX_Y;
 	desc.slopeLimit		= cosf(NxMath::degToRad(45.0f));
 	desc.skinWidth		= 0.1f;
-	desc.stepOffset		= 1.0f;
+	desc.stepOffset		= 2.0f;
 	desc.climbingMode	= CLIMB_CONSTRAINED;
 
 	desc.callback		= gCharacterControllerCallback;
@@ -91,14 +91,15 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	empActor = physX::getPhysicScene()->getNbActors() -1;
 
 	NxActor* pActor = physX::getActor( empActor );
-	pActor->setGroup( group );
-	SetPersoRef(pActor, Ref);
+	pActor->userData = new ActorUserData;
+	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
+	((ActorUserData*)(pActor->userData))->type = objType ;
 
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
 
 int physX::CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							   void* Ref, int &empActor, GroupCollision group )
+							   void* Ref, int &empActor, PhysicalObjectType objType )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxBoxControllerDesc desc;
@@ -110,13 +111,14 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 	desc.skinWidth		= 0.2f;
 	desc.stepOffset		= 1.0f;
 
-
-	NxActor* pActor = physX::getActor( empActor );
-	pActor->setGroup( group );
-	SetPersoRef(pActor, Ref);
-
 	physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
 	empActor = physX::getPhysicScene()->getNbActors() -1;
+
+	NxActor* pActor = physX::getActor( empActor );
+	pActor->userData = new ActorUserData;
+	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
+	((ActorUserData*)(pActor->userData))->type = objType ;
+
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
 

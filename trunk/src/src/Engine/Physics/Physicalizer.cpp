@@ -110,7 +110,7 @@ PhysXResult Physicalizer::RunPhysics(float DeltaTime)
 
 void Physicalizer::connectToVRD()
 { 	
-#if defined( _DEBUG ) && defined( CONNECT_VRD )
+#if /*defined( _DEBUG ) &&*/ defined( CONNECT_VRD )
 	m_PhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect( "localhost");
 
 	bool connectToVisualRemoteDebugger;

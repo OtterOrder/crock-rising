@@ -5,7 +5,7 @@
 NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
 NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
 NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
-void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, GroupCollision group);
+void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb);
 NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );
 
 
@@ -17,11 +17,11 @@ NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* para
 	boxDesc->dimensions		= VecToNxVec( Pb->bodySize);													//Dimension
 	boxDesc->mass			= Pb->fMass;																	//Masse
 	boxDesc->localPose.t	= NxVec3( Pb->localPos.x, Pb->localPos.z, Pb->localPos.y );	
-	boxDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;								//Groupe
+	boxDesc->group			= Pb->physObjType != PHYS_STATIC ? GROUP_DYNAMIQUE : GROUP_STATIC;//Groupe
 	boxDesc->materialIndex	= GenMaterial(Pb->frestitution,
 										  Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	boxDesc->localPose.M	= m;																			//Rotation
-	if(Pb->bIsTrigger) 
+	if(Pb->physObjType == PHYS_TRIGGER) 
 	{
 		boxDesc->shapeFlags |= NX_TRIGGER_ENABLE;															//Trigger
 		SetTriggerFunctions(*boxDesc, Pb->OnEnterFunc, paramE, Pb->OnLeaveFunc, paramL, Pb->OnStayFunc, paramS);
@@ -40,10 +40,10 @@ NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* p
 	sphereDesc->radius			= (NxReal)Pb->bodySize.x ;													//Rayon
 	sphereDesc->mass			= Pb->fMass;																//Masse
 	sphereDesc->localPose.t		= VecToNxVec( Pb->localPos );												//Position
-	sphereDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	sphereDesc->group			= Pb->physObjType != PHYS_STATIC ? GROUP_DYNAMIQUE : GROUP_STATIC;//Groupe
 	sphereDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel
 	sphereDesc->localPose.M		= m;																		//Rotation
-	if(Pb->bIsTrigger) 
+	if(Pb->physObjType == PHYS_TRIGGER) 
 	{
 		sphereDesc->shapeFlags |= NX_TRIGGER_ENABLE;															//Trigger
 		SetTriggerFunctions(*sphereDesc, Pb->OnEnterFunc, paramE, Pb->OnLeaveFunc, paramL, Pb->OnStayFunc, paramS);
@@ -62,11 +62,11 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* 
 	capsuleDesc->radius			=(NxReal)Pb->bodySize.x ;													//Rayon
 	capsuleDesc->height			=(NxReal)Pb->bodySize.y ;													//Hauteur
 	capsuleDesc->mass			= Pb->fMass;																//Masse
-	capsuleDesc->localPose.t	= VecToNxVec( Pb->localPos );											//Position
-	capsuleDesc->group			= Pb->bIsDynamic ? GROUP_DYNAMIQUE : GROUP_STATIC;							//Groupe
+	capsuleDesc->localPose.t	= VecToNxVec( Pb->localPos );												//Position
+	capsuleDesc->group			= Pb->physObjType != PHYS_STATIC ? GROUP_DYNAMIQUE : GROUP_STATIC;//Groupe
 	capsuleDesc->materialIndex	= GenMaterial(Pb->frestitution, Pb->fstaticFriction, Pb->fdynamiqueFriction);	//Materiel			
 	capsuleDesc->localPose.M	= m;																		//Rotation
-	if(Pb->bIsTrigger) 
+	if(Pb->physObjType == PHYS_TRIGGER) 
 	{
 		capsuleDesc->shapeFlags |= NX_TRIGGER_ENABLE;															//Trigger
 		SetTriggerFunctions(*capsuleDesc, Pb->OnEnterFunc, paramE, Pb->OnLeaveFunc, paramL, Pb->OnStayFunc, paramS);
@@ -77,14 +77,14 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb, void* 
 	return capsuleDesc;
 }
 
-void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, GroupCollision group)
+void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb)
 {
 	ActorDesc.density		= 1.0f;
 	ActorDesc.globalPose.t	= VecToNxVec(Pos);
 
-	if(!Pb->bIsTrigger) 
+	if(Pb->physObjType != PHYS_TRIGGER) 
 	{
-		if(!Pb->bIsDynamic || group == GROUP_STATIC)
+		if(Pb->physObjType == PHYS_STATIC)
 			ActorDesc.body = NULL;
 		else
 		{
@@ -92,7 +92,7 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 			bodyDesc.angularDamping = 0.5f;
 			bodyDesc.linearVelocity = VecToNxVec( Pb->linearVelocity );
 			bodyDesc.angularVelocity = VecToNxVec( Pb->angularVelocity );
-			if( group == GROUP_WEAPON) bodyDesc.flags |= NX_BF_FROZEN;
+			if( Pb->physObjType == PHYS_WEAPON) bodyDesc.flags |= NX_BF_FROZEN;
 			assert(bodyDesc.isValid());
 			ActorDesc.body = &bodyDesc;
 		}
@@ -102,7 +102,6 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 
 	NxScene* scene = physX::getPhysicScene();
 	NxActor* pActor = scene->createActor( ActorDesc );
-	pActor->setGroup( group );
 	assert(pActor);
 }
 
@@ -119,7 +118,7 @@ NxMaterialIndex GenMaterial( const float restitution, const float staticFriction
 }
 
 //////////////////////////////////////////////////////////////////////////
-int physX::CreateBoundingBox( ListOfBoundingBox &BBList, GroupCollision group )
+int physX::CreateBoundingBox( ListOfBoundingBox &BBList, PhysicalObjectType objType)
 {
 	NxActorDesc actorDesc;
 	PhysicBody* Pb;
@@ -129,9 +128,9 @@ int physX::CreateBoundingBox( ListOfBoundingBox &BBList, GroupCollision group )
 	while(it < PbList.end())
 	{
 		Pb = *it++;
-		Pb->bIsTrigger = false;
+		Pb->physObjType = objType;
 
-		switch( Pb->type )
+		switch( Pb->shapeType )
 		{
 			case BOX	 : BBList.pushShapeRef( CreateBox(actorDesc, Pb) );		break;
 			case SPHERE	 : BBList.pushShapeRef( CreateSphere(actorDesc, Pb) );	break;
@@ -139,7 +138,7 @@ int physX::CreateBoundingBox( ListOfBoundingBox &BBList, GroupCollision group )
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, group);
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
 	return physX::getPhysicScene()->getNbActors() - 1;
 }
 
@@ -161,9 +160,9 @@ int physX::CreateTrigger(ListOfBoundingBox &BBList,
 		Pb->OnEnterFunc = OnEnterFunc;
 		Pb->OnLeaveFunc = OnLeaveFunc;
 		Pb->OnStayFunc = OnStayFunc;
-		Pb->bIsTrigger = true;
+		Pb->physObjType = PHYS_TRIGGER;
 
-		switch( Pb->type )
+		switch( Pb->shapeType )
 		{
 			case BOX	 : BBList.pushShapeRef( CreateBox(actorDesc, Pb, paramEnter, paramLeave, paramStay) );		break;
 			case SPHERE	 : BBList.pushShapeRef( CreateSphere(actorDesc, Pb, paramEnter, paramLeave, paramStay) );	break;
@@ -171,7 +170,7 @@ int physX::CreateTrigger(ListOfBoundingBox &BBList,
 		}
 	}
 
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, GROUP_DYNAMIQUE);
+	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb);
 	return physX::getPhysicScene()->getNbActors() - 1;
 }
 
@@ -236,19 +235,18 @@ void physX::UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const
 		D3DXMATRIX mat_PhysX;
 		D3DXMatrixIdentity(&mat_PhysX);
 
-
-		D3DXMATRIX rotX;
+		//Rotation pour redresser l'objet GRAPHIQUE
+		D3DXMATRIX rotX, rotY, trans;
 		D3DXMatrixIdentity( &rotX );
+		D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
+		NxVec3 v = pac->getGlobalPosition();
+		pac->getGlobalPose().getColumnMajor44( mat_PhysX );
+
 		rotX._22=0; rotX._23=1;
 		rotX._32=1; rotX._33=0;
 
-		NxVec3 v = pac->getGlobalPosition();
-		pac->getGlobalPose().getColumnMajor44( mat_PhysX );
 		mat_PhysX = rotX * mat_PhysX;
-
-
-		D3DXMatrixTranslation(&WorldMat, -reg.x, -reg.y, -reg.z);
-		D3DXMatrixMultiply(&WorldMat, &WorldMat, &mat_PhysX);
+		D3DXMatrixMultiply(&WorldMat, &trans, &mat_PhysX);
 	}
 }
 
@@ -256,14 +254,24 @@ void Update( NxActor* const pActor, D3DXMATRIX &WorldMat, Vector3f const reg )
 {
 }
 
-void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh)
+void physX::UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh, Vector3f ObjectRot)
 {
 	NxController* pController = getController(emp);
-	NxExtendedVec3 pos = pController->getPosition();
 
-	WorldMat._41 = (float)pos.x + regPivotMesh.x,
-	WorldMat._42 = (float)pos.y + regPivotMesh.y,
-	WorldMat._43 = (float)pos.z + regPivotMesh.z ;
+	NxExtendedVec3 NxPos = pController->getPosition();
+	Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
+	pos += regPivotMesh;
+
+	D3DXMATRIX trans, rotX, rotY, rotZ, rot, result;
+	D3DXMatrixTranslation( &trans, pos.x, pos.y, pos.z);
+	D3DXMatrixRotationX( &rotX, ObjectRot.x);
+	D3DXMatrixRotationY( &rotY, ObjectRot.y);
+	D3DXMatrixRotationZ( &rotZ, ObjectRot.z);
+
+	D3DXMatrixMultiply( &rot, &rotX, &rotY);
+	D3DXMatrixMultiply( &rot, &rot, &rotZ);
+
+	D3DXMatrixMultiply( &WorldMat, &rot, &trans);
 }
 
 void ListOfBoundingBox::ReleaseList()

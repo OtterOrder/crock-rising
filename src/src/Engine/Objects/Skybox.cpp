@@ -27,46 +27,46 @@ Skybox::~Skybox()
 	delete m_pSkyShader;
 }
 
-HRESULT Skybox::Init()
+HRESULT Skybox::Init(float _size)
 {
 	m_pDevice=Renderer::GetInstance()->m_pd3dDevice;
 	SKYBOX_VERTEX sommets[24]=
 	{
 		// Front quad, NOTE: All quads face inward
-		{-10.0f, -10.0f,  10.0f},
-		{-10.0f,  10.0f,  10.0f},
-		{ 10.0f, -10.0f,  10.0f},
-		{ 10.0f,  10.0f,  10.0f},
+		{-_size, -_size,  _size},
+		{-_size,  _size,  _size},
+		{ _size, -_size,  _size},
+		{ _size,  _size,  _size},
 		
 		// Back quad
-		{ 10.0f, -10.0f, -10.0f},
-		{ 10.0f,  10.0f, -10.0f},
-		{-10.0f, -10.0f, -10.0f},
-		{-10.0f,  10.0f, -10.0f},
+		{ _size, -_size, -_size},
+		{ _size,  _size, -_size},
+		{-_size, -_size, -_size},
+		{-_size,  _size, -_size},
 		
 		// Left quad
-		{-10.0f, -10.0f, -10.0f},
-		{-10.0f,  10.0f, -10.0f},
-		{-10.0f, -10.0f,  10.0f},
-		{-10.0f,  10.0f,  10.0f},
+		{-_size, -_size, -_size},
+		{-_size,  _size, -_size},
+		{-_size, -_size,  _size},
+		{-_size,  _size,  _size},
 		
 		// Right quad
-		{ 10.0f, -10.0f,  10.0f},
-		{ 10.0f,  10.0f,  10.0f},
-		{ 10.0f, -10.0f, -10.0f},
-		{ 10.0f,  10.0f, -10.0f},
+		{ _size, -_size,  _size},
+		{ _size,  _size,  _size},
+		{ _size, -_size, -_size},
+		{ _size,  _size, -_size},
 
 		// Top quad
-		{-10.0f,  10.0f,  10.0f},
-		{-10.0f,  10.0f, -10.0f},
-		{ 10.0f,  10.0f,  10.0f},
-		{ 10.0f,  10.0f, -10.0f},
+		{-_size,  _size,  _size},
+		{-_size,  _size, -_size},
+		{ _size,  _size,  _size},
+		{ _size,  _size, -_size},
 		
 		// Bottom quad
-		{-10.0f, -10.0f, -10.0f},
-		{-10.0f, -10.0f,  10.0f},
-		{ 10.0f, -10.0f, -10.0f},
-		{ 10.0f, -10.0f,  10.0f}
+		{-_size, -_size, -_size},
+		{-_size, -_size,  _size},
+		{ _size, -_size, -_size},
+		{ _size, -_size,  _size}
 
 
 	};

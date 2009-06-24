@@ -10,7 +10,7 @@ public:
 	Skybox();
 	~Skybox();
 
-	HRESULT Init();
+	HRESULT Init(float _size=10);
 	void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	HRESULT Draw();
 	HRESULT LostDevice();

@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>H:\Documents and Settings\Bérenger\Bureau\Crock Rising\src\data\models\CubeP.dae</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising\src\data\models\CubeP.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -74,7 +74,7 @@
 	</library_physics_materials>
 	<library_physics_models>
 		<physics_model id="Scene0-PhysicsModel">
-			<rigid_body	sid="Actor0-RigidBody" name="Box01">
+			<rigid_body	sid="Actor0-RigidBody" name="Boîte01">
 				<technique_common>
 					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					<shape>

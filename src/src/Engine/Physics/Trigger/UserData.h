@@ -10,28 +10,10 @@
 
 #include "NxPhysics.h"
 
+
 class Hero;
 class Enemy;
-
-enum DataType
-{
-	HERO,
-	ENEMY,
-	ARME
-};
-
-enum UserDataFlag
-{
-	UD_IS_HW_ACTOR					= (1<<0),
-	UD_IS_TRIGGER			        = (1<<1),
-    UD_IS_INSIDE_TRIGGER            = (1<<2),
-    UD_PASSES_INTERSECTION_TEST     = (1<<3),
-    UD_HIT_BY_RAYCAST               = (1<<4),
-    UD_NO_RENDER                    = (1<<5),
-    UD_IS_DRAIN                     = (1<<6),
-	UD_IS_ASLEEP				    = (1<<7),
-	UD_RENDER_USING_LIGHT1			= (1<<8),
-};
+enum PhysicalObjectType;
 
 // structure qui permet de passer des informations dans le userdata d'un nxActor
 
@@ -56,6 +38,7 @@ struct ActorUserData
 
 	Hero* GetHero();
 	Enemy* GetEnemy();
+	PhysicalObjectType type;
 };
 
 

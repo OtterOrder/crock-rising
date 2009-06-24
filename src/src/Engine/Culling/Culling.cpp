@@ -8,7 +8,7 @@ void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, l
 	std::list<SceneObject*>::iterator scnObjPhysics = _SceneObjectList.begin();
 	while (scnObjPhysics != _SceneObjectList.end())
 	{
-		ShapeType type = (*(*scnObjPhysics)->getPhysicBodyList().begin())->type;
+		ShapeType type = (*(*scnObjPhysics)->getPhysicBodyList().begin())->shapeType;
 		NxActor* pActor = physX::getActor( (*scnObjPhysics)->getEmpActor() );
 
 		if ( ActorInsideFrustrum(pActor) )
@@ -91,7 +91,7 @@ bool Culling3D::ActorInsideFrustrum (NxActor* _pActor)
 		if (shapeType == NX_SHAPE_SPHERE)
 		{
 			NxSphereShape* sphereShape = shapes[shape]->isSphere();
-			Vector3f center = NxVec3ToVecotr3f(sphereShape->getGlobalPosition());
+			Vector3f center = NxVec3ToVector3f(sphereShape->getGlobalPosition());
 
 			if (SphereInsideFrustrum(center, sphereShape->getRadius()))
 				return true;
@@ -159,7 +159,7 @@ bool Culling3D::BoxInsideFrsutrum (NxVec3 _Center, NxMat33 _Orientation, NxVec3 
 	for (u32 i=0; i<8; i++)
 	{
 		_Orientation.multiply(boxPoints[i], boxPoints[i]);
-		if (PointInsideFrustrum( NxVec3ToVecotr3f(boxPoints[i]) ))
+		if (PointInsideFrustrum( NxVec3ToVector3f(boxPoints[i]) ))
 			return true;
 	}
 

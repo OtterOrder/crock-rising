@@ -49,18 +49,13 @@ ResourceResult BoundingBoxLoader::Load(const std::string resource)
 						node = node->FirstChild("dynamic");
 						if (node)
 						{
-						   const char* pTypeObject = node->FirstChild()->Value();
-						   if ( strcmp(pTypeObject,"true") == 0) 
-						   {
-							   m_vDynamicBody.push_back(new PhysicBody());
-							   fillPhysicBody(NodeSave, true);
-						   }
-						   else
-						   {
-							   m_vDynamicBody.push_back(new PhysicBody());
-							   fillPhysicBody(NodeSave, false);
-						   }
-						   
+							const char* pTypeObject = node->FirstChild()->Value();
+							m_vDynamicBody.push_back(new PhysicBody());
+
+							if ( strcmp(pTypeObject,"true") == 0) 
+								fillPhysicBody(NodeSave, true);
+							else
+								fillPhysicBody(NodeSave, false);						   
 						}
 					}
 				    nbRigidBody--;
@@ -77,7 +72,7 @@ ResourceResult BoundingBoxLoader::Load(const std::string resource)
 
 ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 {
-	m_vDynamicBody.at(m_vDynamicBody.size()-1)->bIsDynamic = Dyn;
+	m_vDynamicBody.at(m_vDynamicBody.size()-1)->physObjType = Dyn ? PHYS_DYNAMIQUE : PHYS_STATIC;
 	TiXmlNode* node = NodeSave.RigidBodyNode;
 	node = node->FirstChildElement("shape");
 
@@ -277,7 +272,7 @@ ResourceResult BoundingBoxLoader::getSize( TiXmlNode* nodeShape )
 
 			if ( strcmp(pTypeShape,"box") == 0)
 			{
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = BOX;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->shapeType = BOX;
 				node = node->FirstChild();
 				if (node)
 				{ 
@@ -290,7 +285,7 @@ ResourceResult BoundingBoxLoader::getSize( TiXmlNode* nodeShape )
 
 			else if ( strcmp(pTypeShape,"sphere") == 0)
 			{
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = SPHERE;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->shapeType = SPHERE;
 				node = node->FirstChild();
 				if (node)
 				{ 
@@ -304,7 +299,7 @@ ResourceResult BoundingBoxLoader::getSize( TiXmlNode* nodeShape )
 
 			else if ( strcmp(pTypeShape,"capsule") == 0)
 			{
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = CAPSULE;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->shapeType = CAPSULE;
 				node = node->FirstChild();
 				if (node)
 				{ 
@@ -323,7 +318,7 @@ ResourceResult BoundingBoxLoader::getSize( TiXmlNode* nodeShape )
 			}
 			else
 			{
-				m_vDynamicBody.at(m_vDynamicBody.size()-1)->type = LOAD_ERROR;
+				m_vDynamicBody.at(m_vDynamicBody.size()-1)->shapeType = LOAD_ERROR;
 			}
 		}
 	}

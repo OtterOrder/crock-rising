@@ -4,20 +4,20 @@
     <contributor>
       <author>bemantoue</author>
       <authoring_tool>3dsMax 11 - Feeling ColladaMax v3.05B.</authoring_tool>
-      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=0;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=3.33333;</comments>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=1;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=0.666667;</comments>
     </contributor>
-    <created>2009-06-11T18:00:01Z</created>
-    <modified>2009-06-11T18:00:02Z</modified>
+    <created>2009-06-24T17:06:43Z</created>
+    <modified>2009-06-24T17:06:44Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_materials>
-    <material id="ColorMaterial_E4D69900" name="ColorMaterial_E4D69900">
-      <instance_effect url="#ColorMaterial_E4D69900-fx"/>
+    <material id="ColorMaterial_D6E5A600" name="ColorMaterial_D6E5A600">
+      <instance_effect url="#ColorMaterial_D6E5A600-fx"/>
     </material>
   </library_materials>
   <library_effects>
-    <effect id="ColorMaterial_E4D69900-fx">
+    <effect id="ColorMaterial_D6E5A600-fx">
       <profile_COMMON>
         <technique sid="common">
           <phong>
@@ -25,10 +25,10 @@
               <color>0 0 0 1</color>
             </emission>
             <ambient>
-              <color>0.894118 0.839216 0.6 1</color>
+              <color>0.839216 0.898039 0.65098 1</color>
             </ambient>
             <diffuse>
-              <color>0.894118 0.839216 0.6 1</color>
+              <color>0.839216 0.898039 0.65098 1</color>
             </diffuse>
             <specular>
               <color>1 1 1 1</color>
@@ -64,7 +64,7 @@
     <geometry id="Bo_te01-mesh" name="Bo_te01">
       <mesh>
         <source id="Bo_te01-mesh-positions">
-          <float_array id="Bo_te01-mesh-positions-array" count="24">-50 -0.5 50.5 50 -0.5 50.5 -50 -0.5 -49.5 50 -0.5 -49.5 -50 0.5 50.5 50 0.5 50.5 -50 0.5 -49.5 50 0.5 -49.5</float_array>
+          <float_array id="Bo_te01-mesh-positions-array" count="24">-50 -50 0 50 -50 0 -50 50 0 50 50 0 -50 -50 1 50 -50 1 -50 50 1 50 50 1</float_array>
           <technique_common>
             <accessor source="#Bo_te01-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -74,7 +74,7 @@
           </technique_common>
         </source>
         <source id="Bo_te01-mesh-normals">
-          <float_array id="Bo_te01-mesh-normals-array" count="72">0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 0 0 0 -1 0 0 -1 0 0 -1 0 0 -1 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <float_array id="Bo_te01-mesh-normals-array" count="72">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
           <technique_common>
             <accessor source="#Bo_te01-mesh-normals-array" count="24" stride="3">
               <param name="X" type="float"/>
@@ -84,9 +84,9 @@
           </technique_common>
         </source>
         <source id="Bo_te01-mesh-map-channel1">
-          <float_array id="Bo_te01-mesh-map-channel1-array" count="72">1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
+          <float_array id="Bo_te01-mesh-map-channel1-array" count="36">0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
           <technique_common>
-            <accessor source="#Bo_te01-mesh-map-channel1-array" count="24" stride="3">
+            <accessor source="#Bo_te01-mesh-map-channel1-array" count="12" stride="3">
               <param name="S" type="float"/>
               <param name="T" type="float"/>
               <param name="P" type="float"/>
@@ -100,7 +100,7 @@
           <input semantic="VERTEX" source="#Bo_te01-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Bo_te01-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#Bo_te01-mesh-map-channel1" offset="2" set="1"/>
-          <p>0 0 0 2 1 2 3 2 3 3 2 3 1 3 1 0 0 0 4 4 4 5 5 5 7 6 7 7 6 7 6 7 6 4 4 4 0 8 8 1 9 9 5 10 11 5 10 11 4 11 10 0 8 8 1 12 12 3 13 13 7 14 15 7 14 15 5 15 14 1 12 12 3 16 16 2 17 17 6 18 19 6 18 19 7 19 18 3 16 16 2 20 20 0 21 21 4 22 23 4 22 23 6 23 22 2 20 20</p>
+          <p>0 0 9 2 1 11 3 2 10 3 2 10 1 3 8 0 0 9 4 4 8 5 5 9 7 6 11 7 6 11 6 7 10 4 4 8 0 8 4 1 9 5 5 10 7 5 10 7 4 11 6 0 8 4 1 12 0 3 13 1 7 14 3 7 14 3 5 15 2 1 12 0 3 16 4 2 17 5 6 18 7 6 18 7 7 19 6 3 16 4 2 20 0 0 21 1 4 22 3 4 22 3 6 23 2 2 20 0</p>
         </triangles>
       </mesh>
     </geometry>
@@ -110,40 +110,20 @@
       <node id="Bo_te01-node" name="Bo_te01" type="NODE">
         <matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <node id="Bo_te01-node_PIVOT" name="Bo_te01_PIVOT" type="NODE">
-          <matrix>1 0 0 0 0 1 0 0 0 0 1 -0.5 0 0 0 1</matrix>
+          <matrix>1 0 0 0 0 1 0 0 0 0 1 -1 0 0 0 1</matrix>
           <instance_geometry url="#Bo_te01-mesh">
             <bind_material>
               <technique_common>
-                <instance_material symbol="ColorMaterial" target="#ColorMaterial_E4D69900"/>
+                <instance_material symbol="ColorMaterial" target="#ColorMaterial_D6E5A600"/>
               </technique_common>
             </bind_material>
           </instance_geometry>
         </node>
-        <extra>
-          <technique profile="FCOLLADA">
-            <user_properties>PhysicsType = 3&#13;
-Mass = 1.0&#13;
-GeometryType = 1&#13;
-MaterialType = 2&#13;
-Friction = 0.3&#13;
-StaticFriction = 0.3&#13;
-Restitution = 0.0&#13;
-InitialVelocityX = 0.0&#13;
-InitialVelocityY = 0.0&#13;
-InitialVelocityZ = 0.0&#13;
-InitialSpinX = 0.0&#13;
-InitialSpinY = 0.0&#13;
-InitialSpinZ = 0.0&#13;
-PutToSleep = false&#13;
-EnableCCD = false&#13;
-</user_properties>
-          </technique>
-        </extra>
       </node>
       <extra>
         <technique profile="FCOLLADA">
           <start_time>0</start_time>
-          <end_time>3.33333</end_time>
+          <end_time>0.666667</end_time>
         </technique>
       </extra>
       <extra>

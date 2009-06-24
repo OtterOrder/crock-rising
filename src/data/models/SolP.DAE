@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Nouveau dossier\SolP.DAE</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising\src\data\models\SolP.DAE</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -51,8 +51,8 @@
 	<library_visual_scenes>
 		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
 			<node	id="Actor0-Node" name="Actor0" type="NODE">
-        <translate>0	0 10</translate>
-        <rotate>-1 0	0	 90</rotate>
+        <translate>0	0 0</translate>
+        <rotate>1 0	0	 0</rotate>
 			</node>
 			</visual_scene>
 	</library_visual_scenes>
@@ -78,7 +78,7 @@
 				<technique_common>
 					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0 20</translate>
+            <translate>0	0 -0.5</translate>
             <rotate>1 0	0	 0</rotate>
 						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					 <mass>1</mass>
@@ -90,7 +90,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>75 75	0.5</half_extents>
+							<half_extents>50 50	0.5</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>

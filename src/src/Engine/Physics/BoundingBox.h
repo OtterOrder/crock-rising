@@ -21,26 +21,30 @@ enum ShapeType
 	BOX,
 	SPHERE,
 	CAPSULE,
-	TRIGGER,
 	LOAD_ERROR
 };
 
 //Type de l'objet
 enum PhysicalObjectType
 {
-	ACTOR,
-	CONTROLLER,
-	NOPHYSICAL
+	PHYS_DYNAMIQUE,
+	PHYS_STATIC,
+	PHYS_TRIGGER,
+	PHYS_WEAPON,
+	PHYS_HERO,
+	PHYS_ENEMY,
+	PHYS_NOPHYSICAL
 };
 
 
 //Structure pour récupérer les infos sur le body pendant le loader
 struct PhysicBody
 {
-	ShapeType   type;
-	D3DXVECTOR3 bodySize; //BOX = largeur hauteur longueur
-						  //SPHERE = Rayon 0 0
-						  //CAPSULE = rayon, hauteur 0
+	ShapeType			shapeType;
+	PhysicalObjectType	physObjType;
+	D3DXVECTOR3			bodySize; //BOX = largeur hauteur longueur
+								  //SPHERE = Rayon 0 0
+								  //CAPSULE = rayon, hauteur 0
 
 	D3DXVECTOR3 globalPos; //Position locale de la bounding box
 	D3DXVECTOR3 localPos; //Position locale de la bounding box
@@ -50,8 +54,6 @@ struct PhysicBody
 	float		fMass;			 //Masse
 	float		fLinearDamping;
 	float		fAngularDamping;
-	bool		bIsDynamic;
-	bool		bIsTrigger;
 	float		frestitution;
 	float		fstaticFriction;
 	float		fdynamiqueFriction;
@@ -88,15 +90,15 @@ inline NxVec3 VecToNxVec(Vector3f V){ return NxVec3(V.x, V.y, V.z); }
 
 namespace physX
 {
-	int CreateBoundingBox(ListOfBoundingBox &BBList, GroupCollision group );
+	int CreateBoundingBox(ListOfBoundingBox &BBList, PhysicalObjectType objType );
 	int CreateTrigger(ListOfBoundingBox &BBList,
 						void (*OnEnterFunc)(void* param),
 						void (*OnLeaveFunc)(void* param), 
 						void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
 	int CreateControlledCapsule( Vector3f pos, float radius, float height,
-								 void* Ref, int &empActor, GroupCollision group );
+								 void* Ref, int &empActor, PhysicalObjectType objType );
 	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							 void* Ref, int &empActor, GroupCollision group ); 
+							 void* Ref, int &empActor, PhysicalObjectType objType ); 
 
 	/************************************************************************************
 	* Détruit un acteur ainsi que son userdata
@@ -144,7 +146,7 @@ namespace physX
 	void Link( SceneObject* const obj1, SceneObject* const obj2 );
 	
 	void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg, bool UpdateStatic = false );
-	void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh);
+	void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh, Vector3f ObjectRot);
 }
 
 #endif

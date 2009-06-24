@@ -260,6 +260,14 @@
 					RelativePath=".\Levels\LevelCanyon.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Levels\LevelSphinx.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Levels\LevelSphinx.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

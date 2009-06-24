@@ -92,7 +92,7 @@ Vector2i::operator Vector2f()
 // Cast un NxVect3 en Vector3f.
 // @return	Le vecteur sous forme de Vector3f
 //**********************************************************
-Vector3f NxVec3ToVecotr3f (const NxVec3& _v)
+Vector3f NxVec3ToVector3f (const NxVec3& _v)
 {
 	return Vector3f(_v.x, _v.y, _v.z);
 }

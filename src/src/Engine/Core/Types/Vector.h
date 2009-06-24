@@ -54,6 +54,6 @@ struct Vector2i
 //******************************************************************
 // Vector3f to NxVec3
 
-Vector3f NxVec3ToVecotr3f (const NxVec3& _v);
+Vector3f NxVec3ToVector3f (const NxVec3& _v);
 
 #endif		// _Vector_H

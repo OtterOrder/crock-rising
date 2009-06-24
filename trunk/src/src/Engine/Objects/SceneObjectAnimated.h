@@ -28,6 +28,8 @@ public:
 	virtual void	SetTransform(const D3DXMATRIX* view, const D3DXMATRIX* proj, const D3DXVECTOR3 CamPos);
 	virtual void	SetTransform(const D3DXMATRIX* world);
 
+	virtual void	Update();
+
 	virtual void	SetVisible(bool value);
 	virtual bool	GetVisible();
 

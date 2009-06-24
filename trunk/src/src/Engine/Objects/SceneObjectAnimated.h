@@ -37,6 +37,11 @@ public:
 	void			StopAnim();
 	void			SetAnimFPS(float fps);
 	D3DXMATRIX      GetMatrixTransformBone(int indBone);
+
+	inline bool		IsAtEnd ()	{ return m_AnimPlayer.IsAtEnd(); };
+	inline float	GetSpeed ()	{ return m_AnimPlayer.GetSpeed(); };
+	inline void		SetSpeed (float _speed)		{ m_AnimPlayer.SetSpeed(_speed); };
+	inline void		SetLoop (bool _loop)	{ m_AnimPlayer.SetLoop(_loop); };
 	
 protected:
 

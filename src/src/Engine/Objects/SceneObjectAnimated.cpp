@@ -82,7 +82,7 @@ void SceneObjectAnimated::SetShader(const std::string &strShader)
 //===========================================================================//
 void SceneObjectAnimated::UpdateAnimation()
 {
-	m_AnimPlayer.Update(System::GetInstance()->GetTime()->GetDeltaTime());
+	m_AnimPlayer.Update( System::GetInstance()->GetTime()->GetDeltaTime() );
 
 	u32 uCurrentFrame = m_AnimPlayer.GetCurrentFrame();
 	if(uCurrentFrame==m_CurrentFrame)
@@ -112,10 +112,6 @@ void SceneObjectAnimated::Draw()
 	// Si il ne faut pas afficher
 	if(!m_bVisible)
 		return;
-
-	// Mise à jour animation
-	if(m_bIsRunning)
-		UpdateAnimation();
 
 	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
@@ -260,6 +256,18 @@ void SceneObjectAnimated::SetTransform(const D3DXMATRIX* view, const D3DXMATRIX*
 void SceneObjectAnimated::SetTransform(const D3DXMATRIX* world)
 {
 	SceneObject::SetTransform(world);
+}
+
+//===========================================================================//
+// Update de l'objet.                                                        //
+//===========================================================================//
+void SceneObjectAnimated::Update()
+{
+	SceneObject::Update();
+	
+	// Mise à jour animation..
+	if( m_bIsRunning )
+		UpdateAnimation();
 }
 
 

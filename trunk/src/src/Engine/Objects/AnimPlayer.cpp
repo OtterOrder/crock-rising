@@ -19,18 +19,21 @@ AnimPlayer::AnimPlayer()
 
 void AnimPlayer::Update (float _Dt)
 {
-	m_Flags &= ~AtEnd;
+	if (m_Flags & Flag_Pause)
+		return;
+
+	m_Flags &= ~Flag_AtEnd;
 
 	m_Time += _Dt*m_Speed;
 	m_CurrentFrame = (u32) (m_Time*m_Fps);
 
 	if (m_CurrentFrame >= m_NbFrames)
 	{
-		m_Flags |= AtEnd;
+		m_Flags |= Flag_AtEnd;
 		m_CurrentFrame = m_NbFrames -1;
 		m_Time = (float)m_CurrentFrame / (float)m_NbFrames;
 
-		if (m_Flags & Loop)
+		if (m_Flags & Flag_Loop)
 			m_Time = 0.f;
 	}
 }

@@ -13,8 +13,9 @@ class AnimPlayer
 {
 	enum AnimFlag
 	{
-		Loop	= 1 << 0,
-		AtEnd	= 1 << 1
+		Flag_Loop	= 1 << 0,
+		Flag_AtEnd	= 1 << 1,
+		Flag_Pause	= 1 << 2
 	};
 
 	u32			m_Flags;
@@ -31,7 +32,7 @@ public:
 
 	void Update (float _Dt);	// seconds
 
-	inline bool		IsAtEnd ()	{ return (m_Flags & AtEnd? true : false); };
+	inline bool		IsAtEnd ()	{ return (m_Flags & Flag_AtEnd? true : false); };
 
 	inline float	GetFps()	{ return m_Fps; };
 	inline void		SetFps (float _fps)		{ m_Fps = _fps; };
@@ -44,5 +45,9 @@ public:
 
 	inline u32		GetCurrentFrame ()	{ return m_CurrentFrame; };
 
-	inline void		SetLoop (bool _loop)	{ if (_loop) m_Flags |= Loop; };
+	inline void		SetLoop (bool _loop)	{ if (_loop) m_Flags |= Flag_Loop; };
+
+	inline void		Play	()		{ m_Flags &= ~Flag_Pause; };
+	inline void		Pause	()		{ m_Flags |= Flag_Pause; };
+	inline bool		IsPlaying ()	{ return (m_Flags & Flag_Pause? false : true); };
 };

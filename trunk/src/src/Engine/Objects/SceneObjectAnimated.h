@@ -44,6 +44,9 @@ public:
 	inline float	GetSpeed ()	{ return m_AnimPlayer.GetSpeed(); };
 	inline void		SetSpeed (float _speed)		{ m_AnimPlayer.SetSpeed(_speed); };
 	inline void		SetLoop (bool _loop)	{ m_AnimPlayer.SetLoop(_loop); };
+	inline void		Play	()		{ m_AnimPlayer.Play(); };
+	inline void		Pause	()		{ m_AnimPlayer.Pause(); };
+	inline bool		IsPlaying ()	{ return m_AnimPlayer.IsPlaying(); };
 	
 protected:
 

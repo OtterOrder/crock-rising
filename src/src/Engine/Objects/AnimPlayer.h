@@ -44,5 +44,5 @@ public:
 
 	inline u32		GetCurrentFrame ()	{ return m_CurrentFrame; };
 
-	inline void		SetLoop (bool _loop)	{ if (_loop) m_Flags |= Loop; }
+	inline void		SetLoop (bool _loop)	{ if (_loop) m_Flags |= Loop; };
 };

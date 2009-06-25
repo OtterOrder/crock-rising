@@ -28,6 +28,7 @@ public:
 	// Action au clic. A surchager
 	virtual void OnClic() {}
 
+	void Activate( bool isActive );
 	void SetWaitColor( const Color4f &color );
 	void SetHoverColor( const Color4f &color );
 	void SetSound( SoundObject *pSound );
@@ -37,6 +38,7 @@ public:
 protected:
 
 	State			m_State;
+	bool			m_IsActive;
 	Color4f			m_WaitColor;
 	Color4f			m_HoverColor;
 	SoundObject		*m_pSound;

@@ -28,7 +28,7 @@ void Hero::Init()
 {
 	m_pAnimated->Init();
 	m_pAnimated->SetRotation(0,180,0);
-	m_pAnimated->SetControledCharacter(4.f,10.f,this,GROUP_HERO);
+	m_pAnimated->SetControledCharacter(4.f,10.f,this,PHYS_HERO);
 
 	m_pInputManager->HoldMouseAtCenter(true);
 

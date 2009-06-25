@@ -1,4 +1,6 @@
-#include "Object.h"
+#include	"Object.h"
+
+#include	"Game/Game.h"
 
 using namespace std;
 
@@ -83,4 +85,25 @@ Vector3f Object::GetPosition()
 	float z=m_WorldMatrix._43;
 	return Vector3f(x, y, z);
 
+}
+
+/***********************************************************
+ * Update toute la 3D : appelle l'Update de tous les
+ * objets, etc.
+ **********************************************************/
+void Object::FullUpdate()
+{
+	Object *pObj;
+	std::list<Object*>::iterator it = RefList.begin();
+	bool isGamePaused = Game::GetInstance()->IsPaused();
+	
+	while( it != RefList.end() )
+	{
+		pObj = *it;
+
+		if( !isGamePaused )
+			pObj->Update();
+		
+		++it;
+	}
 }

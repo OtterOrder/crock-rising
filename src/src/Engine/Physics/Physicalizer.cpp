@@ -2,9 +2,10 @@
 //
 //
 // ===============================================================================
-#include "Physicalizer.h"
-#include "Trigger/Trigger.h"
-#include "Physics/ControledPhysicalCharacter.h"
+#include	"Physicalizer.h"
+#include	"Trigger/Trigger.h"
+#include	"Physics/ControledPhysicalCharacter.h"
+#include	"Game/Game.h"
 
 TriggerReport*  gTriggerReport					= new TriggerReport;
 
@@ -95,14 +96,20 @@ void Physicalizer::GetPhysicsResults()
 	m_Scene->fetchResults(NX_ALL_FINISHED, true); //ou NX_RIGID_BODY_FINISHED
 }
 
+//**********************************************************
+// Fait des trucs..?
+//**********************************************************
 PhysXResult Physicalizer::RunPhysics(float DeltaTime)
 {
 	if( m_Scene )
 	{
-		m_ControllerManager->updateControllers();
-
-		StartPhysics(DeltaTime);
-		GetPhysicsResults();
+		// On update pas si le jeu est en pause..
+		if( !Game::GetInstance()->IsPaused() )
+		{
+			m_ControllerManager->updateControllers();
+			StartPhysics(DeltaTime);
+			GetPhysicsResults();
+		}
 		return PHYSX_SUCCEED;
 	}
 	return PHYSX_FAILED;

@@ -9,9 +9,8 @@
 //******************************************************************
 
 // Flags des objets 2D
-//#define		O2D_RELATIVE_POS			(1<<0)		// Position relative à la fenêtre
-//#define		O2D_RELATIVE_SIZE			(1<<1)		// Taille relative aux dimensions de la fenêtre
-#define		O2D_BACKGROUND				(1<<2)		// L'objet est un background
+#define		O2D_UNPAUSABLE				(1<<0)		// L'objet est insensible à la pause
+#define		O2D_BACKGROUND				(1<<1)		// L'objet est un background
 
 //******************************************************************
 
@@ -30,14 +29,15 @@ public:
 	// Update. A surcharger
 	virtual void Update() {}
 
+	// Pause
+	void SetAsPausable( bool isPausable );
+	inline bool IsPausable() const { return !IsFlagSet( O2D_UNPAUSABLE ); }
+
 	// Position
 	void SetPosition( s32 posX, s32 posY );
 	void SetPosition( const Vector2i &position );
 	void SetPosition( const Vector2f &position );
 	Vector2i GetPosition() const;
-
-	//void SetPositionToAbsolute();
-	//void SetPositionToRelative();
 	
 	// Echelle
 	void SetScale( float scaleX, float scaleY );
@@ -74,7 +74,7 @@ protected:
 	// Gestion des flags
 	void SetFlag( u32 flag );
 	void UnsetFlag( u32 flag );
-	bool IsFlagSet( u32 flag ) const;
+	inline bool IsFlagSet( u32 flag ) const { return FLAG_IsSet( m_Flags, flag ); }
 
 };
 

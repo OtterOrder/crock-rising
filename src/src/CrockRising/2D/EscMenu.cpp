@@ -240,7 +240,8 @@ void EscMenu::EscButton::OnClic()
 			return;
 
 		case MAINMENU:
-			// Menu principal..
+			// Menu principal (sans oublier de désactiver la pause)..
+			Game::GetInstance()->Resume();
 			Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 			return;
 

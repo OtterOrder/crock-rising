@@ -1,8 +1,8 @@
 #include "AIEnemy.h"
 
-AIEnemy::AIEnemy()
+AIEnemy::AIEnemy( int scaleMap, int precision )
 	:	direcEnemy(Vector3f(0, 0, 0)), transEnemy(Vector3f(0, 0, 0)), timeBetFindPath(0.f), 
-		oldDirecEnemy(Vector3f(0, 0, 0)), dotAngle(0.f), angleRotEnemy(0)
+		oldDirecEnemy(Vector3f(0, 0, 0)), dotAngle(0.f), scale(scaleMap), preci(precision)
 {
 }
 
@@ -10,16 +10,31 @@ AIEnemy::~AIEnemy(void)
 {
 }
 
-void AIEnemy::enemyAIAttack()
-{
+void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angleRot )
+{/*
+	oldDirecEnemy = direcEnemy;
+	direcEnemy = posPlayer - positEnemy;
+	D3DXVec3Normalize(&oldDirecEnemy, &oldDirecEnemy);
+	D3DXVec3Normalize(&direcEnemy, &direcEnemy);
+	dotAngle = D3DXVec3Dot(&direcEnemy, &oldDirecEnemy);
+	D3DXVec3Cross(&crossAngle, &direcEnemy, &oldDirecEnemy );
+
+	if (dotAngle > 0.001f && dotAngle < 0.9999f)
+	{
+		angleRot = (int)D3DXToDegree(acos(dotAngle));
+		if ( crossAngle.y < 0 )		angleRot = -angleRot;
+	}*/
 }
 
 void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, int &angleRot )
-{	
-	posPlayer2D_X = (int)floor(posPlayer.x*36.0f/500.0f);
-	posPlayer2D_Y = (int)floor(posPlayer.z*36.0f/500.0f);
-	posEnemy2D_X = (int)floor(positEnemy.x*36.0f/500.0f);
-	posEnemy2D_Y = (int)floor(positEnemy.z*36.0f/500.0f);
+{
+	posPlayer2D_X = (int)floor((posPlayer.x*preci/scale)+preci/2);
+	posPlayer2D_Y = (int)floor((posPlayer.z*preci/scale)+preci/2);
+	posEnemy2D_X = (int)floor((positEnemy.x*preci/scale)+preci/2);
+	posEnemy2D_Y = (int)floor((positEnemy.z*preci/scale)+preci/2);
+
+	//std::cout << "PlX: " << posPlayer2D_X << " , PlY: " << posPlayer2D_Y << " , EnX: ";
+	//std::cout << posEnemy2D_X << " , EnY: " << posEnemy2D_Y << std::endl;
 
 	// Execute le pathfinding toutes les 50 milliSecondes pour optimiser (pathfind couteux en calcul)
 	// ATTENTION : MiniBlocage si l'ennemi arrive avant que le nouveau point soit calculé.
@@ -27,6 +42,8 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 	//{
 		nextWayPoint = aPath.findWay( posEnemy2D_X, posEnemy2D_Y, posPlayer2D_X, posPlayer2D_Y );
 		timeBetFindPath = 0;
+
+		//std::cout << "1: " << nextWayPoint.first << " , 2: " << nextWayPoint.second << std::endl;
 	//}
 	//else	
 		timeBetFindPath += elapsedTime;
@@ -35,15 +52,14 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 	if ( nextWayPoint.first != -1 )
 	{
 		// Calcul les vecteurs de direction
-		float tmpPosEXScale	= floor((nextWayPoint.first*500.0f)/36.0f);
-		float tmpPosEZScale	= floor((nextWayPoint.second*500.0f)/36.0f);
+		float tmpPosEXScale	= floor(float((nextWayPoint.first*scale)/preci)-scale/2);
+		float tmpPosEZScale	= floor(float((nextWayPoint.second*scale)/preci)-scale/2);
 		
 		Vector3f tmpPla = Vector3f( positEnemy.x, 0, positEnemy.z );
 		Vector3f tmpDir = Vector3f( tmpPosEXScale, 0, tmpPosEZScale );
 		
 		// Calcul l'angle pour la rotation de l'ennemi
-		dotAngle = 0.f;
-		angleRotEnemy = 0;
+		/*dotAngle = 0.f;
 		oldDirecEnemy = direcEnemy;
 		direcEnemy = tmpDir - tmpPla;
 		D3DXVec3Normalize(&oldDirecEnemy, &oldDirecEnemy);
@@ -55,9 +71,9 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 
 		if (dotAngle > 0.001f && dotAngle < 0.9999f)
 		{
-			angleRot = D3DXToDegree(acos(dotAngle));
-			if ( crossAngle.y < 0 )		angleRot = -angleRotEnemy;
-		}
+			angleRot = (int)D3DXToDegree(acos(dotAngle));
+			if ( crossAngle.y < 0 )		angleRot = -angleRot;
+		}*/
 
 		// Calcul le déplacement de l'ennemi
 		newPos = tmpDir - tmpPla;

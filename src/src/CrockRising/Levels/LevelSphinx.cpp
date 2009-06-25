@@ -34,7 +34,7 @@ void LevelSphinx::Init( void )
 	Renderer *pRenderer = Renderer::GetInstance();
 
 	// Initialisation de la caméra
-	m_pCamera = new Camera(Vector3f(0.f,14.f,-35.f));
+	m_pCamera = new Camera(Vector3f(0.f,14.f,-60.f));
 	float ratio = (float)pRenderer->GetWindowWidth() / pRenderer->GetWindowHeight();
 	m_pCamera->SetRatio( ratio );
 	m_pCamera->SetZNearFar(2.f, 3000.f);
@@ -47,6 +47,11 @@ void LevelSphinx::Init( void )
 	Skybox * s=new Skybox("desert2.dds");
 	s->Init();
 	pRenderer->SetSkybox(s);
+
+	SceneObject* m_pCanyon_part1 = new SceneObject("planAI.DAE", D3DXVECTOR3(0.f, 1.0f, 0.f) );
+	m_pCanyon_part1->Init();
+	m_pCanyon_part1->GetMaterial()->SetTexture("levelSphynx.bmp", Texture::DIFFUSE );
+
 //
 ////DESERT
 	SceneObject* Desert = new SceneObject("desert.DAE", D3DXVECTOR3(0.f,0.f,0.f));
@@ -109,7 +114,16 @@ void LevelSphinx::Init( void )
 	sphinx->SetShader("default_normalmap.fx");
 
 	//Initialisation du Héro
-	m_pJanotLapin->Init();		
+	m_pJanotLapin->Init();
+
+	// Création de l'AI
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 4000, 2, 3100, 256 );
+
+	// Création des ennemies
+	for (int i=0; i<50; i++)
+	{
+		m_pEnemy[i] = new Enemy( Vector3f(0.f,8.f,0.f) );
+	}
 }
 
 /***********************************************************
@@ -117,6 +131,13 @@ void LevelSphinx::Init( void )
  **********************************************************/
 void LevelSphinx::Update( void )
 {
+	// Mise a jour de l'AI avec les ennemies en paramètre
+	deltaTime = System::GetInstance()->GetTime()->GetDeltaTimeMs();
+	Vector3f posHero = m_pJanotLapin->getSceneObjectAnimated()->GetPosition();
+	m_pManagerAI->update( posHero, deltaTime, m_pEnemy[0]->listEnemy );
+
+	//std::cout << "X: " << posHero.x << "Y: " << posHero.y << "Z: " << posHero.z << std::endl;
+
 	m_pJanotLapin->update(m_pCamera);
 		
 	InputManager* pInputManager = InputManager::GetInstance();

@@ -3,7 +3,7 @@
 AStar::AStar()
 {
 	Bitmap loadBmp;
-	bool loadOk = loadBmp.loadBMP("../../data/mapAI/level1AI.bmp");
+	bool loadOk = loadBmp.loadBMP("../../data/mapAI/levelSphynx.bmp");
 
 	if (loadOk)		loadBmp.convertImgToMatrix( tabChemin );
 	else			std::cout << "Erreur chargement AIMap" << std::endl;
@@ -24,8 +24,8 @@ pair<int,int> AStar::findWay( int debutX, int debutY, int finX, int finY )
 	pair<int,int> noeudCourant;
 	pointStart.parent.first		= debutX;
 	pointStart.parent.second	= debutY;
-	noeudCourant.first		= debutX;
-	noeudCourant.second		= debutY;
+	noeudCourant.first			= debutX;
+	noeudCourant.second			= debutY;
 	pointEnd.x = finX;
 	pointEnd.y = finY;
 
@@ -190,10 +190,10 @@ void AStar::findCompleteWay()
 		lastWayPoint.first = chemin[cptChemin-1].x;
 		lastWayPoint.second = chemin[cptChemin-1].y;
 	}
-
-	/*for (int i=0; i<36; i++)
+/*
+	for (int i=0; i<MAX_TAB; i++)
 	{
-		for (int j=0; j<36; j++)	
+		for (int j=0; j<MAX_TAB; j++)	
 		{
 			switch (tabChemin[i][j])
 			{

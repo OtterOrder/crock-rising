@@ -314,6 +314,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\2D\EscMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\2D\EscMenu.h"
+				>
+			</File>
+			<File
 				RelativePath=".\2D\HUDLife.cpp"
 				>
 			</File>

@@ -22,6 +22,7 @@
 ButtonText::ButtonText( const std::string &text )
 : Text( text, BT_DEFAULT_FONT, BT_DEFAULT_SIZE, true, false )
 {
+	m_IsActive = true;
 	m_WaitColor = BT_DEFAULT_WAIT_COLOR;
 	m_HoverColor = BT_DEFAULT_HOVER_COLOR;
 	m_pSound = NULL;
@@ -48,7 +49,8 @@ void ButtonText::Update()
 	InputManager *inputMgr = InputManager::GetInstance();
 	Vector2f mousePos = inputMgr->GetMousePosition();
 
-	if( IsCollide( (s32)mousePos.x, (s32)mousePos.y ) )
+	if( m_IsActive										&&
+		IsCollide( (s32)mousePos.x, (s32)mousePos.y )	)
 	{
 		SetState( HOVER );
 		if( inputMgr->IsMouseReleased( MOUSE_LEFT ) )
@@ -61,12 +63,22 @@ void ButtonText::Update()
 }
 
 //**********************************************************
+// Active/désactive le bouton.
+// @param[in]	isActive : Vrai = bouton actif
+//**********************************************************
+void ButtonText::Activate( bool isActive )
+{
+	m_IsActive = isActive;
+}
+
+//**********************************************************
 // Change la couleur d'attente.
 // @param[in]	color : Couleur du texte
 //**********************************************************
 void ButtonText::SetWaitColor( const Color4f &color )
 {
 	m_WaitColor = color;
+	SetColor( m_WaitColor );
 }
 
 //**********************************************************

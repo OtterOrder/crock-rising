@@ -82,10 +82,7 @@ void SceneObjectAnimated::UpdateAnimation()
 {
 	m_AnimPlayer.Update( System::GetInstance()->GetTime()->GetDeltaTime() );
 
-	u32 uCurrentFrame = m_AnimPlayer.GetCurrentFrame();
-	if(uCurrentFrame==m_CurrentFrame)
-		return;
-	m_CurrentFrame = uCurrentFrame;
+	m_CurrentFrame = m_AnimPlayer.GetCurrentFrame();
 
 	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
 
@@ -97,7 +94,7 @@ void SceneObjectAnimated::UpdateAnimation()
 		if((*it)->Parent!=NULL)
 			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
 
-		m_matrices[(*it)->Num]=m_pAnim->m_BindShape*(*it)->invBoneSkinMatrix*(*it)->FinalMatrix*m_WorldMatrix;
+		m_matrices[(*it)->Num]=m_pAnim->m_BindShape*(*it)->invBoneSkinMatrix*(*it)->FinalMatrix;
 
 		++it;
 	}
@@ -112,7 +109,8 @@ void SceneObjectAnimated::Draw()
 	if(!m_bVisible)
 		return;
 
-	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
+	for (u32 i=0 ; i < m_pAnim->m_Bones.size(); i++)
+		m_matrices[i]*= m_WorldMatrix;
 
 	m_pShader->GetEffect()->SetMatrixArray("g_skinningMatrices", m_matrices, (int)m_pAnim->m_Bones.size());
 
@@ -293,6 +291,8 @@ void SceneObjectAnimated::SetAnim(const std::string& anim)
 {
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(anim);
 	m_AnimPlayer.Init();
+
+	m_AnimPlayer.SetNbFrames(m_pAnim->m_NbFrames);
 }
 
 

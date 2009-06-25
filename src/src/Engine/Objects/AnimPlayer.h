@@ -30,6 +30,8 @@ public:
 	AnimPlayer  ();
 	~AnimPlayer ()	{};
 
+	void Init ();
+
 	void Update (float _Dt);	// seconds
 
 	inline bool		IsAtEnd ()	{ return (m_Flags & Flag_AtEnd? true : false); };
@@ -49,5 +51,6 @@ public:
 
 	inline void		Play	()		{ m_Flags &= ~Flag_Pause; };
 	inline void		Pause	()		{ m_Flags |= Flag_Pause; };
+		   void		Stop	();
 	inline bool		IsPlaying ()	{ return (m_Flags & Flag_Pause? false : true); };
 };

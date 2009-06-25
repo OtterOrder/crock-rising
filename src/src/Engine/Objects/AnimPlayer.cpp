@@ -8,6 +8,11 @@
 //===========================================================================//
 AnimPlayer::AnimPlayer()
 {
+	Init ();
+}
+
+void AnimPlayer::Init ()
+{
 	m_Flags = 0;
 
 	m_Time = 0.f;
@@ -36,4 +41,12 @@ void AnimPlayer::Update (float _Dt)
 		if (m_Flags & Flag_Loop)
 			m_Time = 0.f;
 	}
+}
+
+void AnimPlayer::Stop ()
+{
+	Pause ();
+
+	m_Time = 0.f;
+	m_CurrentFrame = 0;
 }

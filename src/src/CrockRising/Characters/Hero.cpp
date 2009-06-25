@@ -150,19 +150,16 @@ void Hero::update( Camera* pCamera )
 	switch ( m_currentState )
 	{
 	case WALK : 
-		m_pAnimated->StartAnim();
 		m_pAnimated->SetAnim("Robot_Anim_Run.DAE");
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	case RUN :
 		break;
 	case ATTACK : 
-		m_pAnimated->StartAnim();
 		m_pAnimated->SetAnim("robot_attack_anim.DAE");
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	case STATIC :
-		m_pAnimated->StopAnim();
 		break;
 	}
 }

@@ -48,6 +48,9 @@ protected:
     bool              m_bDeviceObjectsInited;
     bool              m_bDeviceObjectsRestored;
 	bool			  m_bShowFPS;
+	int				  m_FullScreenWidth;
+	int				  m_FullScreenHeight;
+	int				  m_FullScreenRefreshRate;
 
 	//===========================================================================//
     // Variables internes pour le timing									     //
@@ -143,6 +146,7 @@ public:
     virtual void    	Run();
 	virtual void		Close();
     virtual LRESULT 	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+	virtual void		SetFullScreenResolution(int width, int height, int RefreshRate=60);
     virtual void    	Pause( bool bPause );
     virtual         	~CD3DApplication() { }
 

@@ -382,8 +382,13 @@ HRESULT CD3DApplication::ChooseInitialD3DSettings()
     bool bFoundFullscreen = FindBestFullscreenMode( false, false );
     bool bFoundWindowed = FindBestWindowedMode( false, false );
 
-    if( m_bStartFullscreen && bFoundFullscreen )
-        m_d3dSettings.IsWindowed = false;
+	if( m_bStartFullscreen && bFoundFullscreen )
+	{
+		m_d3dSettings.IsWindowed = false;
+		m_d3dSettings.Fullscreen_DisplayMode.Width = m_FullScreenWidth;
+		m_d3dSettings.Fullscreen_DisplayMode.Height = m_FullScreenHeight;
+		m_d3dSettings.Fullscreen_DisplayMode.RefreshRate = m_FullScreenRefreshRate;
+	}
     if( !bFoundWindowed && bFoundFullscreen )
         m_d3dSettings.IsWindowed = false;
 
@@ -596,6 +601,7 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
 
 		case WM_CLOSE:
             Cleanup3DEnvironment();
+			SAFE_RELEASE(m_pd3dDevice);
             SAFE_RELEASE( m_pD3D );
             AfterDestroyDevice();
 	        DestroyWindow( hWnd );
@@ -1488,4 +1494,14 @@ HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
     } ; 
 
     return hr;
+}
+
+void CD3DApplication::SetFullScreenResolution(int width, int height, int RefreshRate)
+{
+	m_bStartFullscreen=true;
+
+	m_FullScreenWidth=width;
+	m_FullScreenHeight=height;
+	m_FullScreenRefreshRate=RefreshRate;
+
 }

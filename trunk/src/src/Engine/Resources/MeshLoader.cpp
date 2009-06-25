@@ -105,6 +105,8 @@ MeshLoader::~MeshLoader()
 	// Faces
 	if (m_Faces)
 		delete [] m_Faces;
+
+	DxElements.clear();
 }
 
 //===========================================================================//

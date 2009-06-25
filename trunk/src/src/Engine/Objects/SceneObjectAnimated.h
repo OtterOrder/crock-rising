@@ -34,9 +34,6 @@ public:
 	virtual bool	GetVisible();
 
 	void			SetAnim(const std::string& anim);
-	void			StartAnim();
-	void			PauseAnim();
-	void			StopAnim();
 	void			SetAnimFPS(float fps);
 	D3DXMATRIX      GetMatrixTransformBone(int indBone);
 
@@ -46,6 +43,7 @@ public:
 	inline void		SetLoop (bool _loop)	{ m_AnimPlayer.SetLoop(_loop); };
 	inline void		Play	()		{ m_AnimPlayer.Play(); };
 	inline void		Pause	()		{ m_AnimPlayer.Pause(); };
+	inline void		Stop	()		{ m_AnimPlayer.Stop(); }
 	inline bool		IsPlaying ()	{ return m_AnimPlayer.IsPlaying(); };
 	
 protected:
@@ -58,15 +56,13 @@ protected:
 	void			UpdateAnimation();
 
 private:
-	int				m_CurrentFrame;
+	u32				m_CurrentFrame;
 	std::string		m_strAnim;
 	Anim*			m_pAnim;
 	Mesh*			m_pBoneMesh;
 	D3DXMATRIX*		m_matrices;
 	Renderer*		m_Instance;
 	bool			m_bShowBone;
-	bool			m_bIsRunning;
-	float			m_fAnimFPS;
 
 	AnimPlayer		m_AnimPlayer;
 };

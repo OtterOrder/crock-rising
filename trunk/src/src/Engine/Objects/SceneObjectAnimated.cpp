@@ -31,10 +31,8 @@ SceneObjectAnimated::SceneObjectAnimated(const std::string& mesh,
 	m_strShader="default_skinning.fx";
 	m_CurrentFrame=0;
 	m_bShowBone=false;
-	m_bIsRunning=true;
-	m_fAnimFPS=50.f;
 
-	m_AnimPlayer.SetFps(m_fAnimFPS);
+	m_AnimPlayer.SetFps(50.f);
 }
 
 //===========================================================================//
@@ -99,9 +97,10 @@ void SceneObjectAnimated::UpdateAnimation()
 		if((*it)->Parent!=NULL)
 			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
 
+		m_matrices[(*it)->Num]=m_pAnim->m_BindShape*(*it)->invBoneSkinMatrix*(*it)->FinalMatrix*m_WorldMatrix;
+
 		++it;
 	}
-
 }
 
 //===========================================================================//
@@ -114,13 +113,6 @@ void SceneObjectAnimated::Draw()
 		return;
 
 	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
-
-	// Pour chaque bones
-	while( it != m_pAnim->m_Bones.end() )
-	{
-		m_matrices[(*it)->Num]=m_pAnim->m_BindShape*(*it)->invBoneSkinMatrix*(*it)->FinalMatrix*m_WorldMatrix;
-		++it;
-	}
 
 	m_pShader->GetEffect()->SetMatrixArray("g_skinningMatrices", m_matrices, (int)m_pAnim->m_Bones.size());
 
@@ -266,8 +258,7 @@ void SceneObjectAnimated::Update()
 	SceneObject::Update();
 	
 	// Mise à jour animation..
-	if( m_bIsRunning )
-		UpdateAnimation();
+	UpdateAnimation();
 }
 
 
@@ -287,41 +278,9 @@ bool SceneObjectAnimated::GetVisible()				{return m_bVisible;}
 //===========================================================================//
 // Fonction de contrôle de l'animation                                       //
 //===========================================================================//
-
-void SceneObjectAnimated::StartAnim()
-{
-	m_bIsRunning=true;
-}
-
-void SceneObjectAnimated::PauseAnim()
-{
-	m_bIsRunning=!m_bIsRunning;
-}
-
-void SceneObjectAnimated::StopAnim()
-{
-	std::vector< Bone* >::iterator it=m_pAnim->m_Bones.begin();
-
-	// Pour chaque bones
-	while( it != m_pAnim->m_Bones.end() )
-	{
-		(*it)->FinalMatrix=(*it)->animationMatrix[0];
-
-		if((*it)->Parent!=NULL)
-			(*it)->FinalMatrix *= (*it)->Parent->FinalMatrix;
-
-		++it;
-
-	}
-	m_bIsRunning=false;
-
-}
-
 void SceneObjectAnimated::SetAnimFPS(float fps)
 {
-	m_fAnimFPS=fps;
-
-	m_AnimPlayer.SetFps(m_fAnimFPS);
+	m_AnimPlayer.SetFps(fps);
 }
 
 D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)
@@ -333,6 +292,7 @@ D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)
 void SceneObjectAnimated::SetAnim(const std::string& anim)
 {
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(anim);
+	m_AnimPlayer.Init();
 }
 
 

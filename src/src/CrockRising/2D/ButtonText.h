@@ -43,6 +43,7 @@ protected:
 	Color4f			m_HoverColor;
 	SoundObject		*m_pSound;
 
+	void CommonInit();
 	void SetState( State state );
 
 };

@@ -32,9 +32,9 @@ ResourceResult Shader::Load( std::string resource, ResourceParam param )
 		char* pError = reinterpret_cast<char*>(err->GetBufferPointer());
 		OutputDebugString(pError);
 		MessageBox(0, pError, "ERROR", MB_OK);
-		err->Release();
 		return RES_FAILED;
 	}
+	SAFE_RELEASE(err);
 
 	return RES_SUCCEED;
 }

@@ -9,7 +9,7 @@
 
 #define		O2D_DEFAULT_HOT_POINT		(Vector2i( 0, 0 ))
 #define		O2D_DEFAULT_COLOR			(Color4f( 1.f, 1.f, 1.f, 1.f ))
-#define		O2D_DEFAULT_PRIORITY		(0)
+#define		O2D_DEFAULT_PRIORITY		(128)
 
 //******************************************************************
 

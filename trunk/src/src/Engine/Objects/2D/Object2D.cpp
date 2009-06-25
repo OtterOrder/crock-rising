@@ -1,5 +1,7 @@
 #include	"Object2D.h"
 
+#include	"Game/Game.h"
+
 //******************************************************************
 
 #define		O2D_DEFAULT_POSITION		(Vector3f( 0.f, 0.f, 0.f ))
@@ -34,6 +36,20 @@ Object2D::~Object2D()
 {
 	// Suppression de la liste
 	Object2D::RefList.remove( this );
+}
+
+//**********************************************************
+// Rend l'objet sensible ou non à la pause.
+// @param[in]	isPausable : Vrai = objet pausable
+//**********************************************************
+void Object2D::SetAsPausable( bool isPausable )
+{
+	if( isPausable )
+	{
+		UnsetFlag( O2D_UNPAUSABLE );
+		return;
+	}
+	SetFlag( O2D_UNPAUSABLE );
 }
 
 //**********************************************************
@@ -80,22 +96,6 @@ Vector2i Object2D::GetPosition() const
 {
 	return Vector2i( (s32)m_Position.x, (s32)m_Position.y );
 }
-
-//**********************************************************
-// Change le mode de positionnement en absolu (par défaut).
-//**********************************************************
-/*void Object2D::SetPositionToAbsolute()
-{
-	UnsetFlag( O2D_RELATIVE_POS );
-}*/
-
-//**********************************************************
-// Change le mode de positionnement en relatif.
-//**********************************************************
-/*void Object2D::SetPositionToRelative()
-{
-	SetFlag( O2D_RELATIVE_POS );
-}*/
 
 //**********************************************************
 // Change l'échelle.
@@ -172,16 +172,6 @@ void Object2D::UnsetFlag( u32 flag )
 }
 
 //**********************************************************
-// Vérifie si le flag est activé.
-// @param[in]	flag : Flag à vérifier
-// @return	Vrai si le flag est activé
-//**********************************************************
-bool Object2D::IsFlagSet( u32 flag ) const
-{
-	return FLAG_IsSet( m_Flags, flag );
-}
-
-//**********************************************************
 // Update toute la 2D : appelle l'Update de tous les
 // objets 2d, gère le "dirty", etc.
 //**********************************************************
@@ -189,11 +179,14 @@ void Object2D::FullUpdate()
 {
 	Object2D *pObj;
 	std::list<Object2D*>::iterator it = RefList.begin();
+	bool isGamePaused = Game::GetInstance()->IsPaused();
 	
 	while( it != RefList.end() )
 	{
 		pObj = *it;
-		pObj->Update();
+
+		if( !( isGamePaused && pObj->IsPausable() ) )
+			pObj->Update();
 		
 		if( pObj->m_Dirty )
 		{

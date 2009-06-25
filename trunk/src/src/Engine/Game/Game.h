@@ -11,7 +11,6 @@
 //******************************************************************
 
 class Level;
-class Object;
 
 class Game : public Singleton< Game >
 {
@@ -50,6 +49,10 @@ public:
 	crc32				GetLevelID		( void ) const;			// Donne l'ID du niveau courant
 	crc32				GetPrevLevelID	( void ) const;			// Donne l'ID du niveau précédent
 
+	void				Pause			( void );
+	void				Resume			( void );
+	bool				IsPaused		( void ) const;
+
 protected:
 
 	//-- Données protégées
@@ -63,7 +66,7 @@ protected:
 	crc32					m_PrevLevelID;		// ID du niveau précédent
 	crc32					m_StartLevelID;		// ID du niveau de départ
 
-	std::list< Object* >	*m_ObjList;			// Liste des objets 3d
+	bool					m_IsPaused;			// Si le jeu est en pause
 
 	//-- Méthodes protégées
 

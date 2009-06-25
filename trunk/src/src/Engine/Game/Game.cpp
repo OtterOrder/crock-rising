@@ -19,7 +19,7 @@ Game::Game( void )
 	m_PrevLevel		= NULL;
 	m_PrevLevelID	= CRC32_NULL;
 	m_StartLevelID	= CRC32_NULL;
-	m_ObjList		= &Object::RefList;
+	m_IsPaused		= false;
 }
 
 //**********************************************************
@@ -47,20 +47,10 @@ void Game::Start( void )
 //**********************************************************
 void Game::Update( void )
 {
-	std::list<Object*>::iterator obj, lastObj;
-	
-	// Update des objets 3D
-	
-	obj = m_ObjList->begin();
-	lastObj = m_ObjList->end();
+	// Update des objets 3D..
+	Object::FullUpdate();
 
-	while( obj != lastObj )
-	{
-		(*obj)->Update();
-		++obj;
-	}
-
-	// Update des objets 2D
+	// Update des objets 2D..
 	Object2D::FullUpdate();
 	
 	if( m_CurrentLevel )
@@ -183,4 +173,29 @@ crc32 Game::GetLevelID( void ) const
 crc32 Game::GetPrevLevelID( void ) const
 {
 	return m_PrevLevelID;
+}
+
+//**********************************************************
+// Pause le jeu.
+//**********************************************************
+void Game::Pause( void )
+{
+	m_IsPaused = true;
+}
+
+//**********************************************************
+// Relance le jeu.
+//**********************************************************
+void Game::Resume( void )
+{
+	m_IsPaused = false;
+}
+
+//**********************************************************
+// Vérifie si le jeu est en pause.
+// @return	Vrai si le jeu est en pause
+//**********************************************************
+bool Game::IsPaused( void ) const
+{
+	return m_IsPaused;
 }

@@ -43,6 +43,10 @@ public:
 	
 	D3DXMATRIX* GetWorldMatrix ()	{ return &m_WorldMatrix; };
 	void		SetWorldMatrix (D3DXMATRIX _worldmatrix)   {m_WorldMatrix=_worldmatrix;}
+
+	// Update toute la 3D
+	static void FullUpdate();
+
 protected:
 	
 	D3DXMATRIX			m_WorldMatrix;

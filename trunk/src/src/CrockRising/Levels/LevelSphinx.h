@@ -15,6 +15,7 @@
 #include	<Physics/Physicalizer.h>
 #include	<Objects/Light.h>
 #include	<PostProcesses/PostRenderer.h>
+#include	<AIManager.h>
 
 #include	<iostream>
 
@@ -39,9 +40,13 @@ public:
 
 protected:
 	
-	Camera* m_pCamera;
-	Hero*   m_pJanotLapin;
+	Camera*		m_pCamera;
+	Hero*		m_pJanotLapin;
 
+	AIManager*	m_pManagerAI;
+	Enemy*		m_pEnemy[100];
+
+	float		deltaTime;
 };
 
 //******************************************************************

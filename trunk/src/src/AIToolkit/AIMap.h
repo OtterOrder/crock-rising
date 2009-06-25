@@ -51,7 +51,7 @@ struct colorAIMap
 class Bitmap
 {
 private:
-	static const int MAX_TAB = 36;
+	static const int MAX_TAB = 256;
 
 public:
     Bitmap();

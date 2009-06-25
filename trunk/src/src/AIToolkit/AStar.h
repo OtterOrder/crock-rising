@@ -35,12 +35,12 @@ public:
 
 	pair<int,int> findWay( int debutX, int debutY, int finX, int finY );
 
-	pair<int,int>	bestNode(listNode& l);			// Retourne le meilleur node de la liste ouverte
+	pair<int,int>	bestNode(listNode& l);				// Retourne le meilleur node de la liste ouverte
 	int	distance( int x1, int y1, int x2, int y2 );		// Calcul de la distance euclidienne entre 2 points
-	bool	isInList(pair<int,int> n, listNode& l);	// Retour true si un node est déja présent dans une liste
-	void	addSquareAdjacent(pair <int,int>& n);			// Recupere les node et les ajoutes ou non a la liste ouverte	
-	void	addToBlackList(pair<int,int>& p);				// Passe un node de la liste ouverte a la liste fermée
-	void	findCompleteWay();									// Retrouve le chemin quand la destination est atteinte
+	bool	isInList(pair<int,int> n, listNode& l);		// Retour true si un node est déja présent dans une liste
+	void	addSquareAdjacent(pair <int,int>& n);		// Recupere les node et les ajoutes ou non a la liste ouverte	
+	void	addToBlackList(pair<int,int>& p);			// Passe un node de la liste ouverte a la liste fermée
+	void	findCompleteWay();							// Retrouve le chemin quand la destination est atteinte
 
 	point pointEnd;
 	node pointStart;
@@ -51,7 +51,7 @@ public:
 	vector<point> chemin;
 	int cptChemin;
 
-	static const int MAX_TAB = 36;
+	static const int MAX_TAB = 256;
 	int tabChemin[MAX_TAB][MAX_TAB];
 
 	pair<int,int> lastWayPoint;

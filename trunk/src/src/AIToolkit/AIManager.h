@@ -1,7 +1,7 @@
 #ifndef _crockAI_H_
 #define _crockAI_H_
 
-#include	<Characters/Enemy.h>
+#include	"../CrockRising/Characters/Enemy.h"
 #include	"AIEnemy.h"
 #include	<iostream>
 #include	<math.h>
@@ -17,7 +17,7 @@ public:
 	enum typeAI	{	AI_NORMAL, AI_ONLY_ATTACK, AI_ONLY_EVADE	};
 
 public:
-	AIManager( bool spawn, int comportementAI );
+	AIManager( bool spawn, int comportementAI, int fovEnemy, int rangeAttack, int scaleMap, int precise );
 	~AIManager();
 
 	void	update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> listEnemy );
@@ -27,23 +27,21 @@ protected:
 
 protected:
 	static const int NB_GROUP_MAX = 1;
-	static const int FIELD_OF_VIEW = 2000;
-	static const int DISTANCE_ATTACK = 20;
 
 	Enemy*		listAIEnemy;
 	Vector3f	newPos;
 	int			newAngle;
 
-	bool	spawnInfini;
-	int		nbGroup;
-	int		typeAI;
+	bool spawnInfini;
+	int	nbGroup;
+	int	typeAI;
+	int fieldOfView;
+	int attackRange;
+	int	distance;
+	int	hpsGroup;
+	int	cptGeneral;
 
-	int		distance;
-	int		hpsGroup;
-
-	int		cptGeneral;
-
-	AIEnemy	aiEnemy;
+	AIEnemy* aiEnemy;
 };
 
 #endif //_crockAI_H_

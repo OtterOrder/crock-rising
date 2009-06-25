@@ -17,16 +17,26 @@
 //******************************************************************
 
 //**********************************************************
-// Constructeur.
+// Initialisation commune à tous les constructeurs.
 //**********************************************************
-ButtonText::ButtonText( const std::string &text )
-: Text( text, BT_DEFAULT_FONT, BT_DEFAULT_SIZE, true, false )
+void ButtonText::CommonInit()
 {
 	m_IsActive = true;
 	m_WaitColor = BT_DEFAULT_WAIT_COLOR;
 	m_HoverColor = BT_DEFAULT_HOVER_COLOR;
 	m_pSound = NULL;
+
+	SetColor( m_WaitColor );
 	SetState( WAIT );
+}
+
+//**********************************************************
+// Constructeur.
+//**********************************************************
+ButtonText::ButtonText( const std::string &text )
+: Text( text, BT_DEFAULT_FONT, BT_DEFAULT_SIZE, true, false )
+{
+	CommonInit();
 }
 
 //**********************************************************
@@ -35,10 +45,7 @@ ButtonText::ButtonText( const std::string &text )
 ButtonText::ButtonText( const std::string &text, const std::string &fontName, u32 size, bool bold, bool italic )
 : Text( text, fontName, size, bold, italic )
 {
-	m_WaitColor = BT_DEFAULT_WAIT_COLOR;
-	m_HoverColor = BT_DEFAULT_HOVER_COLOR;
-	m_pSound = NULL;
-	SetState( WAIT );
+	CommonInit();
 }
 
 //**********************************************************

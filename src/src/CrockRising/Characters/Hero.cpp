@@ -11,14 +11,13 @@ HUDLife* Hero::m_pLifeBar = NULL;
 **********************************************************/
 Hero::Hero()
 {
-	m_pAnimated = new SceneObjectAnimated("Robot_Mesh.DAE","Robot_Anim_Run.DAE",D3DXVECTOR3(0.f,8.f,0.f));	
+	m_pAnimated = NULL;	
 	
 	m_currentState = STATIC;
 	
 	m_pLifeBar = new HUDLife();
 	
 	m_pInputManager = InputManager::GetInstance();
-	
 }
 
 /**********************************************************
@@ -26,9 +25,12 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,8.f,0.f)); //robot_attack_anim
 	m_pAnimated->Init();
-	m_pAnimated->SetRotation(0,180,0);
-	m_pAnimated->SetControledCharacter(4.f,10.f,this,PHYS_HERO);
+	m_pAnimated->SetRotation(0.f, 180.f,0.f);
+	//m_pAnimated->SetControledCharacter(4.f,10.f,this,PHYS_HERO);
+	m_pAnimated->SetLoop(true);
+	m_pAnimated->SetAnimFPS(50.f);
 
 	m_pInputManager->HoldMouseAtCenter(true);
 
@@ -55,7 +57,7 @@ Hero::~Hero()
 ******************************************************************/
 ResourceResult Hero::control( Camera* pCamera )
 {
-	bool isTouchPressed = false;
+	changeState(STATIC);
 
 	//-- On vérifie tout d'abord suivant la touche tapée si l'on doit
 	//   changer l'état du Héros  
@@ -99,69 +101,89 @@ ResourceResult Hero::control( Camera* pCamera )
 
 	if ( m_pInputManager->IsKeyPressed('Z'))
 	{
-		changeState(WALK);
 		float xStep, zStep;
 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-		isTouchPressed = true;
+		m_Translate = Vector3f(xStep,0.f,zStep);
+		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('Q'))
 	{
-		changeState(WALK);
 		float xStep, zStep;
 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-		isTouchPressed = true;
+		m_Translate = Vector3f(xStep,0.f,zStep);
+		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('S'))
 	{
-		changeState(WALK);
 		float xStep, zStep;
 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-		isTouchPressed = true;
+		m_Translate = Vector3f(xStep,0.f,zStep);
+		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('D'))
 	{
-		changeState(WALK);
 		float xStep, zStep;
 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_pAnimated->SetTranslation(xStep,0.f,zStep);
-		isTouchPressed = true;
+		m_Translate = Vector3f(xStep,0.f,zStep);
+		changeState(RUN);
 	}
-	if (!isTouchPressed)
-		changeState(STATIC);
-
+	
 
 	return RES_SUCCEED;
 }
 
+/********************************************************************
+* En fonction du nouvel état, cette méthode configure les nouvelles 
+* animations à lancer 
+*********************************************************************/
+void Hero::changeState( HeroState newState )
+{
+	if ( (m_currentState != STATIC && !m_pAnimated->IsAtEnd())
+		 || newState == m_currentState )
+		return;
 
+	m_currentState = newState;
+
+	switch ( m_currentState )
+	{
+	case WALK :
+		break;
+	case RUN :
+		m_pAnimated->SetAnim("Anim_Robot_Run.DAE");
+		m_pAnimated->Play();
+		m_pAnimated->SetLoop(true);
+		m_pAnimated->SetAnimFPS(50.f);
+		break;
+	case ATTACK : 
+		//m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
+		//m_pAnimated->Play();
+		//m_pAnimated->SetLoop(true);
+		//m_pAnimated->SetAnimFPS(50.f);
+		break;
+	case STATIC :
+		m_pAnimated->Stop();
+		break;
+	}
+}
+
+/*********************************************************************
+* Mise à jour du Héros
+* Une fois les contrôles éventuels vérifiés plus les changements d'état,
+* la position du Héros est modifiée
+*********************************************************************/
 void Hero::update( Camera* pCamera )
 {
 	control( pCamera );
 
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 
-	switch ( m_currentState )
-	{
-	case WALK : 
-		m_pAnimated->SetAnim("Robot_Anim_Run.DAE");
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case RUN :
-		break;
-	case ATTACK : 
-		m_pAnimated->SetAnim("robot_attack_anim.DAE");
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case STATIC :
-		break;
-	}
+	if(m_currentState == RUN || m_currentState == WALK)
+		m_pAnimated->SetTranslation(m_Translate.x, m_Translate.y, m_Translate.z);
+
 }
 
 /******************************************************************************

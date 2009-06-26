@@ -51,6 +51,7 @@ void SceneObjectAnimated::InitObject()
 
 	m_matrices=new D3DXMATRIX[m_pAnim->m_Bones.size()];
 
+	m_AnimPlayer.Init();
 	m_AnimPlayer.SetNbFrames(m_pAnim->m_NbFrames);
 }
 

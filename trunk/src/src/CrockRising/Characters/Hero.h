@@ -37,7 +37,7 @@ public:
 
 	//Méthodes pour gérer l'état courant du Héros
 	void			  update( Camera* pCamera ); 
-	void		      changeState( HeroState newState ) { m_currentState = newState; }
+	void		      changeState( HeroState newState );
 	ResourceResult	  control ( Camera* pCamera ); 
 
 	//Méthodes liées aux triggers (essentiellement bonus de vie pour l'instant...)
@@ -48,12 +48,11 @@ public:
 
 protected:
 	SceneObjectAnimated*	 m_pAnimated;
-	SceneObject*			 m_pArme;
-	InputManager*			 m_pInputManager;
-	HeroState				 m_currentState;
-	SceneObject*             m_pWeapon;
 	static HUDLife*			 m_pLifeBar;
+	HeroState				 m_currentState;
+	InputManager*			 m_pInputManager;
 
+	Vector3f				 m_Translate;
 };
 
 //******************************************************************

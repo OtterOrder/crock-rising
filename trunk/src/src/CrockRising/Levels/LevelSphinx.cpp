@@ -47,11 +47,11 @@ void LevelSphinx::Init( void )
 	Skybox * s=new Skybox("desert2.dds");
 	s->Init();
 	pRenderer->SetSkybox(s);
-
+/*
 	SceneObject* m_pCanyon_part1 = new SceneObject("planAI.DAE", D3DXVECTOR3(0.f, 1.0f, 0.f) );
 	m_pCanyon_part1->Init();
 	m_pCanyon_part1->GetMaterial()->SetTexture("levelSphynx.bmp", Texture::DIFFUSE );
-
+*/
 //
 ////DESERT
 	SceneObject* Desert = new SceneObject("desert.DAE", D3DXVECTOR3(0.f,0.f,0.f));
@@ -120,7 +120,7 @@ void LevelSphinx::Init( void )
 	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 4000, 2, 3100, 256 );
 
 	// Création des ennemies
-	for (int i=0; i<50; i++)
+	for (int i=0; i<30; i++)
 	{
 		m_pEnemy[i] = new Enemy( Vector3f(0.f,8.f,0.f) );
 	}

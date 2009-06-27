@@ -60,6 +60,8 @@ public:
     bool loadBMP(char *);
 	void convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] );
 
+	vector<pair<int,int>> getRandomSpawn()	{	 return listSpawnPoint;	}
+
 private:
     BitmapFileHeader bmfh;
     BitmapInfoHeader bmih;
@@ -73,14 +75,16 @@ private:
     int				padWidth;
 
 	int tabColor[256][256];
-	vector<pair<int,int>>	listSpawnPoint;
-	pair<int,int>			lastSpawnPoint;
+	
 
 	colorAIMap color;
 	int row;
 	int col;
 
     bool convert24(unsigned char*);
+
+	vector<pair<int,int>>	listSpawnPoint;
+	pair<int,int>			lastSpawnPoint;
 };
 
 #endif //_BITMAP_H

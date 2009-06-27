@@ -3,9 +3,11 @@
 
 #include	"../CrockRising/Characters/Enemy.h"
 #include	"AIEnemy.h"
+#include	"AIMap.h"
 #include	<iostream>
 #include	<math.h>
 #include	<vector>
+#include	<map>
 
 using namespace std;
 
@@ -17,13 +19,12 @@ public:
 	enum typeAI	{	AI_NORMAL, AI_ONLY_ATTACK, AI_ONLY_EVADE	};
 
 public:
-	AIManager( bool spawn, int comportementAI, int fovEnemy, int rangeAttack, int scaleMap, int precise );
+	AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precise );
 	~AIManager();
 
 	void	update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> listEnemy );
+	void	updateSpawn();
 
-protected:
-	void	spawn( int nbSpawn = -1 );
 
 protected:
 	static const int NB_GROUP_MAX = 1;
@@ -33,6 +34,7 @@ protected:
 	int			newAngle;
 
 	bool spawnInfini;
+	int nbEnemy;
 	int	nbGroup;
 	int	typeAI;
 	int fieldOfView;
@@ -40,8 +42,11 @@ protected:
 	int	distance;
 	int	hpsGroup;
 	int	cptGeneral;
+	int scaleCurrMap;
+	int precCurrMap;
 
-	AIEnemy* aiEnemy;
+	AIEnemy*	aiEnemy;
+	Bitmap		mapSpawn;
 };
 
 #endif //_crockAI_H_

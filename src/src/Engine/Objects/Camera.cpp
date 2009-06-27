@@ -5,7 +5,8 @@ Camera::Camera( Vector3f pos, Vector3f target, Vector3f up )
 { 
 	InitAngle();
 
-	SetPosition( pos );
+	//SetPosition( pos );
+	m_Offset = pos;
 
 	SetUp( up );
 	SetTarget( target );
@@ -76,39 +77,42 @@ void  Camera::SetPosition( Vector3f pos )
 
 void Camera::UpdateMatrixView()
 {
-	D3DXMATRIX position, target, rotY, rotX;
+	D3DXMATRIX offset, target, rotY, rotX;
 	
-	D3DXMatrixRotationY( &rotY, D3DXToRadian( m_angleY ) );	//selon axeY
-	D3DXMatrixRotationX( &rotX, D3DXToRadian( m_angleX ) );	//selon axeX
+	D3DXMatrixRotationY( &rotY, D3DXToRadian( m_vAngleY ) );	//selon axeY
+	D3DXMatrixRotationX( &rotX, D3DXToRadian( m_vAngleX ) );	//selon axeX
 
-	Vector3f vPosition = GetPosition();
 	Vector3f vTarget = GetTarget();
 
-	D3DXMatrixTranslation( &position, -vPosition.x, -vPosition.y, -vPosition.z );
-	D3DXMatrixTranslation( &target, -vTarget.x, -vTarget.y, -vTarget.z );
+	D3DXMatrixTranslation( &offset, -m_Offset.x, -m_Offset.y, -m_Offset.z );
+	D3DXMatrixTranslation( &target, -m_Target.x, -m_Target.y, -m_Target.z );
 
 	D3DXMatrixIdentity( &m_MatrixView );
-	m_MatrixView = target * rotY * rotX * position; 
+	m_MatrixView = target * rotY * rotX * offset; 
+
+	D3DXMatrixInverse( &m_WorldMatrix, NULL, &m_MatrixView );
 
 }
 
-void Camera::SetOrientationY( int angleY )	//en degres
+void Camera::SetOrientationY( float fAngleY )	//en degres
 { 
-	m_angleY += angleY;
+	m_vAngleY += fAngleY;
 
-	if( abs(m_angleY) > 359 )	//limitation de l'angleY
-		m_angleY = 0;
+	if( abs(m_vAngleY) > 359 )	//limitation de l'angleY
+		m_vAngleY = 0;
 }
 
-void Camera::SetOrientationX( int angleX )	//en degres
+void Camera::SetOrientationX( float fAngleX )	//en degres
 { 
-	m_angleX += angleX;
+	m_vAngleX += fAngleX;
 
-	if( m_angleX > 0 )			//limitation de l'angleY
-		m_angleX = 0;
+	if( m_vAngleX > 0 )			//limitation de l'angleY
+		m_vAngleX = 0.f;
 	else
-		if( m_angleX < -60 )
-			m_angleX = -60;
+	{
+		if( m_vAngleX < -60.f )
+			m_vAngleX = -60.f;
+	}
 }
 
 Vector3f Camera::GetPosition()
@@ -118,5 +122,5 @@ Vector3f Camera::GetPosition()
 
 void Camera::InitAngle()
 { 
-	m_angleX = m_angleY = 0; 
+	m_vAngleX = m_vAngleY = 0; 
 }

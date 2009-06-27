@@ -99,12 +99,14 @@ ResourceResult Hero::control( Camera* pCamera )
 	float vitesse = 0.09f; //[0.01; 0.4]
 	float sensibilityTranslation = vitesse * timeF;
 
+	m_Translate = Vector3f (0.f, 0.f, 0.f);
+
 	if ( m_pInputManager->IsKeyPressed('Z'))
 	{
 		float xStep, zStep;
 		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
 		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
-		m_Translate = Vector3f(xStep,0.f,zStep);
+		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('Q'))
@@ -112,7 +114,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		float xStep, zStep;
 		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_Translate = Vector3f(xStep,0.f,zStep);
+		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('S'))
@@ -120,7 +122,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		float xStep, zStep;
 		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_Translate = Vector3f(xStep,0.f,zStep);
+		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('D'))
@@ -128,7 +130,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		float xStep, zStep;
 		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		m_Translate = Vector3f(xStep,0.f,zStep);
+		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
 	

@@ -4,10 +4,12 @@ AIEnemy::AIEnemy( int scaleMap, int precision )
 	:	direcEnemy(Vector3f(0, 0, 0)), transEnemy(Vector3f(0, 0, 0)), timeBetFindPath(0.f), 
 		oldDirecEnemy(Vector3f(0, 0, 0)), dotAngle(0.f), scale(scaleMap), preci(precision)
 {
+	aPath = new AStar();
 }
 
 AIEnemy::~AIEnemy(void)
 {
+	if(aPath)	delete aPath;
 }
 
 void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angleRot )
@@ -33,20 +35,7 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 	posEnemy2D_X = (int)floor((positEnemy.x*preci/scale)+preci/2);
 	posEnemy2D_Y = (int)floor((positEnemy.z*preci/scale)+preci/2);
 
-	//std::cout << "PlX: " << posPlayer2D_X << " , PlY: " << posPlayer2D_Y << " , EnX: ";
-	//std::cout << posEnemy2D_X << " , EnY: " << posEnemy2D_Y << std::endl;
-
-	// Execute le pathfinding toutes les 50 milliSecondes pour optimiser (pathfind couteux en calcul)
-	// ATTENTION : MiniBlocage si l'ennemi arrive avant que le nouveau point soit calculé.
-	//if (timeBetFindPath > 50.0f)
-	//{
-		nextWayPoint = aPath.findWay( posEnemy2D_X, posEnemy2D_Y, posPlayer2D_X, posPlayer2D_Y );
-		timeBetFindPath = 0;
-
-		//std::cout << "1: " << nextWayPoint.first << " , 2: " << nextWayPoint.second << std::endl;
-	//}
-	//else	
-		timeBetFindPath += elapsedTime;
+	nextWayPoint = aPath->findWay( posEnemy2D_X, posEnemy2D_Y, posPlayer2D_X, posPlayer2D_Y );
 
 	// Si il a trouvé un chemin
 	if ( nextWayPoint.first != -1 )

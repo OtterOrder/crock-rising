@@ -7,6 +7,10 @@ AStar::AStar()
 
 	if (loadOk)		loadBmp.convertImgToMatrix( tabChemin );
 	else			std::cout << "Erreur chargement AIMap" << std::endl;
+
+	listSpawn = loadBmp.getRandomSpawn();
+
+	srand( (unsigned)time(NULL) );
 }
 
 AStar::~AStar(void)
@@ -19,6 +23,7 @@ pair<int,int> AStar::findWay( int debutX, int debutY, int finX, int finY )
 	blackList.clear();
 	lastWayPoint.first = -1;
 	lastWayPoint.second = -1;
+	maxIteration = 0;
 
 	// Spécifie le point de départ et d'arrivée
 	pair<int,int> noeudCourant;
@@ -42,9 +47,14 @@ pair<int,int> AStar::findWay( int debutX, int debutY, int finX, int finY )
         // on le passe dans la liste fermee, il ne peut pas déjà y être
         addToBlackList(noeudCourant);
         addSquareAdjacent(noeudCourant);
+
+		maxIteration++;
+
+		// evite de faire ramer l'AI si les AI ne trouve pas de chemin
+		if (maxIteration > 20)	break;
     }
 
-	// Si le node courant est au meme coordonnes que la destination, on a trouver un chemin
+	// Si le node courant est au meme coordonnes que la destination, on a trouvé un chemin
     if ((noeudCourant.first == pointEnd.x) && (noeudCourant.second == pointEnd.y))
 	{
         findCompleteWay();
@@ -95,7 +105,7 @@ void AStar::addSquareAdjacent(pair <int,int>& n)
             if (!isInList(it, blackList))
 			{
 				tmp.costG = blackList[n].costG + distance(i, j, n.first, n.second);
-				tmp.costH = distance(i, j, pointEnd.x, pointEnd.y);
+				tmp.costH = (float)distance(i, j, pointEnd.x, pointEnd.y);
 				tmp.costF = tmp.costG + tmp.costH;
                 tmp.parent = n;
 
@@ -190,18 +200,17 @@ void AStar::findCompleteWay()
 		lastWayPoint.first = chemin[cptChemin-1].x;
 		lastWayPoint.second = chemin[cptChemin-1].y;
 	}
-/*
-	for (int i=0; i<MAX_TAB; i++)
-	{
-		for (int j=0; j<MAX_TAB; j++)	
-		{
-			switch (tabChemin[i][j])
-			{
-			case 0:		cout << "." << " ";	break;
-			case 1:		cout << "I" << " ";	break;
-			case 2:		cout << "*" << " ";	break;
-			}
-		}
-		cout << endl;	
-	}*/
+}
+
+
+
+pair<int,int> AStar::randomSpawn()
+{
+	int nbRand = (rand()%listSpawn.size());
+	pair<int,int> xySpawn;
+
+	xySpawn.first = listSpawn[nbRand].first;
+	xySpawn.second = listSpawn[nbRand].second;
+
+	return xySpawn;
 }

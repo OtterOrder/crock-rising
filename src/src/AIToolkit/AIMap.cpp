@@ -72,7 +72,7 @@ bool Bitmap::convert24(unsigned char* tempData)
        
         for(unsigned int i=0; i<dataSize; i+=3) 
 		{
-            //jump over the padding at the start of a new line
+			// Réajuste le padding des bitmap
             if((i+1)%padWidth==0)	i+=offset;
 
             // Le format BMP est sous forme BGR => on transforme en meme temps en RGB
@@ -87,10 +87,9 @@ bool Bitmap::convert24(unsigned char* tempData)
 			{
 				if ( color.R == 250 )
 				{
-					//std::cout << "Zone spawn" << std::endl;
-					//lastSpawnPoint.first = row*500/256;
-					//lastSpawnPoint.second = col*500/256;
-					//listSpawnPoint.push_back(lastSpawnPoint);
+					lastSpawnPoint.first = row;
+					lastSpawnPoint.second = col;
+					listSpawnPoint.push_back(lastSpawnPoint);
 				}
 
 				tabColor[row][col] = color.R;

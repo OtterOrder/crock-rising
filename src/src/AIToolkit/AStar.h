@@ -5,7 +5,8 @@
 #include <map>
 #include <math.h>
 #include <iostream>
-#include <list>
+#include <stdlib.h>
+#include <time.h>
 #include <vector>
 using namespace std;
 
@@ -34,7 +35,9 @@ public:
 	~AStar(void);
 
 	pair<int,int> findWay( int debutX, int debutY, int finX, int finY );
+	pair<int,int> randomSpawn();
 
+protected:
 	pair<int,int>	bestNode(listNode& l);				// Retourne le meilleur node de la liste ouverte
 	int	distance( int x1, int y1, int x2, int y2 );		// Calcul de la distance euclidienne entre 2 points
 	bool	isInList(pair<int,int> n, listNode& l);		// Retour true si un node est déja présent dans une liste
@@ -49,12 +52,14 @@ public:
 	listNode blackList;
 
 	vector<point> chemin;
+	int maxIteration;
 	int cptChemin;
 
 	static const int MAX_TAB = 256;
 	int tabChemin[MAX_TAB][MAX_TAB];
 
 	pair<int,int> lastWayPoint;
+	vector<pair<int,int>>	listSpawn;
 };
 
 

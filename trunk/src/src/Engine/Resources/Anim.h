@@ -7,6 +7,7 @@
 #include <vector>
 
 
+
 //===========================================================================//
 // Classe comprenant toutes les données utiles pour un bone                  //
 //===========================================================================//
@@ -30,6 +31,22 @@ public:
 
 	D3DXMATRIX GetMatrixRecursively();
 
+	// Surcharge de l'opérateur <
+	//friend bool operator < (const Bone & lhs, const Bone & rhs)
+	//{
+	//	return (lhs.Num < rhs.Num ? true : false);
+	//}
+
+};
+
+struct BoneSort
+{
+	bool operator ()(Bone * a1, Bone * a2) const
+	{
+		if (a1 != NULL && a2 != NULL) 
+			return a1->Num < a2->Num;
+		else return false;
+	}
 };
 
 //===========================================================================//

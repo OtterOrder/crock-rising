@@ -2,6 +2,8 @@
 // Include                                                                   //
 //===========================================================================//
 #include "AnimLoader.h"
+#include <algorithm>
+
 
 
 
@@ -26,6 +28,8 @@ ResourceResult AnimLoader::Load(const char* sAnimPath, std::vector < Bone* > &Bo
 
 	// Chargement bind matrices (bind shape, inv bind pose)
 	LoadBindMatrices(Bones, rootNode, BindShape, ArrayOrder);
+
+	std::sort (Bones.begin(), Bones.end(), BoneSort());
 
 	// Chargement animation (transformation des bones)
 	Node = rootNode->FirstChildElement("library_animations");
@@ -94,7 +98,9 @@ ResourceResult AnimLoader::FillNodeBone(std::vector < Bone *> &Bones, TiXmlEleme
 		StringArray = Node->ToElement()->GetText();
 		float * fArray=new float[16];
 		ConvertStringToFloatArray(StringArray, fArray, 16);
-		Bone * bone = new Bone(LoadMatrix(fArray, 0), ParentBone, (int)Bones.size(), sid );
+		std::string num=sid.substr(4);
+		int n=atoi(num.c_str());
+		Bone * bone = new Bone(LoadMatrix(fArray, 0), ParentBone, n-1, sid );
 		bone->id=id;
 		delete [] fArray;
 		Bones.push_back(bone);
@@ -170,13 +176,13 @@ ResourceResult AnimLoader::LoadBindMatrices(std::vector<Bone*> &Bones, TiXmlNode
 		const char * charArray=ChildNode->ToElement()->GetText();
 		fArray=new float[16*Bones.size()];
 		ConvertStringToFloatArray(charArray, fArray, 16*(int)Bones.size());
-		std::vector< Bone* >::iterator it;
+		std::vector< Bone* >::iterator it=Bones.begin();
 		
 		for(int i=0; i<(int)Bones.size(); i++)
 		{
-			it=Bones.begin();
-			std::advance(it, ArrayOrder[i]);
-			(*it)->invBoneSkinMatrix=LoadMatrix(fArray, i*16);
+			int num=(*it)->Num;
+			(*it)->invBoneSkinMatrix=LoadMatrix(fArray, num*16);
+			it++;
 		}
 	}
 

@@ -161,10 +161,10 @@ void Hero::changeState( HeroState newState )
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	case ATTACK : 
-		//m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
-		//m_pAnimated->Play();
-		//m_pAnimated->SetLoop(true);
-		//m_pAnimated->SetAnimFPS(50.f);
+		m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
+		m_pAnimated->Play();
+		m_pAnimated->SetLoop(true);
+		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	case STATIC :
 		m_pAnimated->Stop();
@@ -181,10 +181,13 @@ void Hero::update( Camera* pCamera )
 {
 	control( pCamera );
 
-	pCamera->SetTarget(m_pAnimated->GetPosition());
 
 	if(m_currentState == RUN || m_currentState == WALK)
 		m_pAnimated->SetTranslation(m_Translate.x, m_Translate.y, m_Translate.z);
+
+
+	pCamera->SetTarget(m_pAnimated->GetPosition());
+	pCamera->Update();
 
 }
 

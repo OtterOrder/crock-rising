@@ -27,12 +27,15 @@ void Hero::Init()
 {
 	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,8.f,0.f)); //robot_attack_anim
 	m_pAnimated->Init();
+	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
+	m_pAnimated->GetMaterial()->SetTexture("robot_normal.png", Texture::NORMALMAP);
+	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
 	//m_pAnimated->SetControledCharacter(4.f,10.f,this,PHYS_HERO);
 	m_pAnimated->SetLoop(true);
 	m_pAnimated->SetAnimFPS(50.f);
 
-	m_pInputManager->HoldMouseAtCenter(true);
+	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
@@ -46,7 +49,7 @@ void Hero::Init()
 **********************************************************/
 Hero::~Hero()
 {
-	delete m_pAnimated;
+
 }
 
 

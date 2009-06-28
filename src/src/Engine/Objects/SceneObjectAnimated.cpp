@@ -44,8 +44,7 @@ void SceneObjectAnimated::InitObject()
 
 	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(m_strAnim);
 	SceneObject::InitObject();
-	m_pMesh->OrderIndices(m_pAnim->m_BoneArrayOrder);
-
+	
 	if(m_bShowBone)
 		m_pBoneMesh=ResourceManager::GetInstance()->Load<Mesh>("showbone.DAE");
 

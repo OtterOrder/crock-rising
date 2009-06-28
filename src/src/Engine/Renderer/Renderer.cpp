@@ -5,7 +5,7 @@
 #define		NOMINMAX
 #endif
 
-#define		DEVCAMERA
+//#define		DEVCAMERA
 
 #include	"Renderer.h"
 #include	"Physics/Physicalizer.h"

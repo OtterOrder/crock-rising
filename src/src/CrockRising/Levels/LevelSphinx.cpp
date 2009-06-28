@@ -117,7 +117,7 @@ void LevelSphinx::Init( void )
 	m_pJanotLapin->Init();
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 4000, 2, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 100, 4000, 2, 3100, 256 );
 
 	// Création des ennemies
 	for (int i=0; i<30; i++)

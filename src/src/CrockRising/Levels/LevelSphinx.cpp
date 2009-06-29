@@ -57,7 +57,8 @@ void LevelSphinx::Init( void )
 	SceneObject* Desert = new SceneObject("desert.DAE", D3DXVECTOR3(0.f,0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
-	Desert->SetObjectPhysical( "desert_physique.DAE", PHYS_STATIC );
+	Desert->SetObjectPhysical( "desert_physique.DAE"
+		);
 //	
 ////STATUES
 	SceneObject* statue = new SceneObject("statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));

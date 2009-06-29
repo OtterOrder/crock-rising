@@ -7,14 +7,9 @@ ActorUserData::ActorUserData()
 	OnStayFunc  = NULL; 
 }
 
-Hero* ActorUserData::GetHero()
+ActorUserData::~ActorUserData()
 {
-	return (Hero*)(PersoRef);
-}
 
-Enemy* ActorUserData::GetEnemy()
-{
-	return (Enemy*)(PersoRef);
 }
 
 void SetPersoRef(NxActor* pActor, void* Ref)

@@ -98,7 +98,7 @@ void SceneObject::SetShader(const std::string& strShader)
 * @param[in]	group	: Groupe de collision ayant chacun leur propriété. Peut être
 *				GROUP_STATIC, GROUP_DYNAMIC, GROUP_WEAPON, GROUP_ENEMY ou GROUP_HERO
 ************************************************************************************/
-void SceneObject::SetObjectPhysical( const std::string& physic, PhysicalObjectType type )
+void SceneObject::SetObjectPhysical( const std::string& physic )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
 	Pos += m_pMesh->m_ReglagePivot;
@@ -108,7 +108,7 @@ void SceneObject::SetObjectPhysical( const std::string& physic, PhysicalObjectTy
 		m_ListOfBoundingBox.setPbList( Loader.getvDynamicBody() );
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		
-		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox, type );
+		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox );
 	}
 	if(!IsDynamic())
 		physX::UpdateObjectFromActor(m_iEmpActor, m_WorldMatrix, m_pMesh->m_ReglagePivot, true);
@@ -149,11 +149,11 @@ void SceneObject::SetObjectTrigger(const std::string& physic,
 * @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
 * @param[in]	type	: Type du controller. Peut être	ENEMY ou HERO
 ************************************************************************************/
-void SceneObject::SetControledCharacter( float radius, float height, void* Ref, PhysicalObjectType type )
+void SceneObject::SetControledCharacter( float radius, float height, void* Ref )
 {
 	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor, type);
+	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor);
 }
 
 /************************************************************************************
@@ -164,10 +164,10 @@ void SceneObject::SetControledCharacter( float radius, float height, void* Ref, 
 * @param[in]	Ref		: Pointeur sur le Hero ou l'ennemi
 * @param[in]	type	: Type du controller. Peut être	ENEMY ou HERO
 ************************************************************************************/
-void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref, PhysicalObjectType type )
+void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor, type);
+	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor);
 }
 
 /************************************************************************************

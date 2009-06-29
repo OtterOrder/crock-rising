@@ -6,10 +6,11 @@
 #include		<vector>
 #include		<Objects/SceneObjectAnimated.h>
 #include		<Core/Types/Vector.h>
+#include		<../CrockRising/Characters/Perso.h>
 
 //******************************************************************
 
-class Enemy 
+class Enemy : public Perso
 {
 public:
 	static std::vector<Enemy*>  listEnemy;
@@ -18,16 +19,13 @@ public:
 	Enemy(Vector3f position);
 	~Enemy();
 	
-
-	int			 getLife () const { return m_iLife; }
-	void	     setLife ( const int life ) { m_iLife += life; }   // La variable life représentant un bonus ou malus 
+	virtual void			  Init();
+	virtual void		      changeState( PersoState newState );
 
 	void					update( );
 	SceneObjectAnimated*	getSceneObjectAnimated()	{	return m_pAnimated;	}
 
 protected:
-	int				      m_iLife;
-	SceneObjectAnimated*  m_pAnimated;
 };
 
 //******************************************************************

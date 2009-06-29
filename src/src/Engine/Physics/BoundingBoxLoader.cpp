@@ -72,7 +72,7 @@ ResourceResult BoundingBoxLoader::Load(const std::string resource)
 
 ResourceResult BoundingBoxLoader::fillPhysicBody( NodeSaver NodeSave, bool Dyn )
 {
-	m_vDynamicBody.at(m_vDynamicBody.size()-1)->physObjType = Dyn ? PHYS_DYNAMIQUE : PHYS_STATIC;
+	m_vDynamicBody.at(m_vDynamicBody.size()-1)->IsDynamic = Dyn ;
 	TiXmlNode* node = NodeSave.RigidBodyNode;
 	node = node->FirstChildElement("shape");
 

@@ -26,6 +26,8 @@ void SetTriggerFunctions(NxShapeDesc &ShapeDesc,
 struct ActorUserData
 {
 	ActorUserData();	
+	~ActorUserData();
+
 	void *PersoRef; //Pointeur sur un ennemis ou un hero
 
 	void *paramEnter; //parametre a passer au trigger
@@ -36,9 +38,7 @@ struct ActorUserData
 	void (*OnLeaveFunc)(void* param); 
 	void (*OnStayFunc)(void* param); 
 
-	Hero* GetHero();
-	Enemy* GetEnemy();
-	PhysicalObjectType type;
+	int type;
 };
 
 

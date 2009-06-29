@@ -81,6 +81,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	void setScene		  (NxScene*		aScene)			{ m_Scene = aScene;			}	
 	void setGravity		  (Vector3f		aGravity)		{ m_Gravity = aGravity;		}	
+	void setControllerCallback( ContactReport* callback );
 
 protected:
 	

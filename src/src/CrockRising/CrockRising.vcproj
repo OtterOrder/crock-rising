@@ -301,6 +301,14 @@
 				RelativePath=".\Characters\Hero.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Characters\Perso.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\Perso.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="2D"

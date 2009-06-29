@@ -1,15 +1,18 @@
 #include "Hero.h"
 
+#include	<Resources/Material.h>
+#include <../CrockRising/Characters/Perso.h>
+
 #define MAX_LIFE   100
 #define LIFE_BONUS 10
 
 HUDLife* Hero::m_pLifeBar = NULL;
 
-
 /***********************************************************
 * Constructeur
 **********************************************************/
 Hero::Hero()
+	:Perso()
 {
 	m_pAnimated = NULL;	
 	
@@ -25,23 +28,21 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,8.f,0.f)); //robot_attack_anim
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f, 0.f, 0.f)); //robot_attack_anim
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.png", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
-	m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	//m_pAnimated->SetControledCharacter(4.f,10.f,this,PHYS_HERO);
-	m_pAnimated->SetLoop(true);
-	m_pAnimated->SetAnimFPS(50.f);
+	//m_pAnimated->SetRotation(0.f, 180.f,0.f);
+	m_pAnimated->SetControledCharacter(4.f,10.f,this);
+	//m_pAnimated->SetLoop(true);
+	//m_pAnimated->SetAnimFPS(50.f);
 
 	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
 	m_pLifeBar->SetLife(50);
-	
-
 }
 
 /***********************************************************
@@ -69,7 +70,6 @@ ResourceResult Hero::control( Camera* pCamera )
 		changeState(ATTACK);
 		return RES_SUCCEED;
 	}
-
 	
 	
 	//Mise à jour de l'orientation de la caméra 
@@ -87,6 +87,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		D3DXMATRIX rot;
 		D3DXMatrixRotationZ( &rot, diff );
 		m_pAnimated->ApplyTransform( &rot );
+		m_pAnimated->SetRotation( 0.f, diff, 0.f );
 
 	}
 	if( point.y != 0 ) 
@@ -97,7 +98,6 @@ ResourceResult Hero::control( Camera* pCamera )
 
 
 	//Gestion du déplacement du Héros
-	// PROBLEME = quand le FPS est trop bas, l'input manager ne réagis pas tout de suite à une pression de la touche, du coup le héro avance par à coups
 	float timeF = System::GetInstance()->GetTime()->GetDeltaTimeMs();
 	float vitesse = 0.09f; //[0.01; 0.4]
 	float sensibilityTranslation = vitesse * timeF;
@@ -145,7 +145,7 @@ ResourceResult Hero::control( Camera* pCamera )
 * En fonction du nouvel état, cette méthode configure les nouvelles 
 * animations à lancer 
 *********************************************************************/
-void Hero::changeState( HeroState newState )
+void Hero::changeState( PersoState newState )
 {
 	if ( (m_currentState != STATIC && !m_pAnimated->IsAtEnd())
 		 || newState == m_currentState )

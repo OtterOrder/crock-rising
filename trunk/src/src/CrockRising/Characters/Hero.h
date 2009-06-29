@@ -13,32 +13,24 @@
 #include		<Objects/Camera.h>
 #include		<Resources/Material.h>
 #include		"../2D/HUDLife.h"
+#include		<../CrockRising/Characters/Perso.h>
 
 
 //******************************************************************
 
-enum HeroState 
-{
-	STATIC,	
-	WALK, 
-	RUN,
-	ATTACK
-};
-
-
-class Hero 
+class Hero : public Perso
 {
 public:
 	Hero();
 	~Hero();
 
-	void			  Init();
+	virtual void			  Init();
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
 
 	//Méthodes pour gérer l'état courant du Héros
 	void			  update( Camera* pCamera ); 
-	void		      changeState( HeroState newState );
+	void		      changeState( PersoState newState );
 	ResourceResult	  control ( Camera* pCamera ); 
 
 	//Méthodes liées aux triggers (essentiellement bonus de vie pour l'instant...)
@@ -48,11 +40,8 @@ public:
 
 
 protected:
-	SceneObjectAnimated*	 m_pAnimated;
 	static HUDLife*			 m_pLifeBar;
-	HeroState				 m_currentState;
 	InputManager*			 m_pInputManager;
-
 	Vector3f				 m_Translate;
 };
 

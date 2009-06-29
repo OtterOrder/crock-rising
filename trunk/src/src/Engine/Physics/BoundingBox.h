@@ -25,7 +25,7 @@ enum ShapeType
 };
 
 //Type de l'objet
-enum PhysicalObjectType
+/*enum PhysicalObjectType
 {
 	PHYS_DYNAMIQUE,
 	PHYS_STATIC,
@@ -34,15 +34,15 @@ enum PhysicalObjectType
 	PHYS_HERO,
 	PHYS_ENEMY,
 	PHYS_NOPHYSICAL
-};
+};*/
 
 
 //Structure pour récupérer les infos sur le body pendant le loader
 struct PhysicBody
 {
-	ShapeType			shapeType;
-	PhysicalObjectType	physObjType;
-	D3DXVECTOR3			bodySize; //BOX = largeur hauteur longueur
+	ShapeType	shapeType;
+	bool		IsDynamic;
+	D3DXVECTOR3	bodySize; //BOX = largeur hauteur longueur
 								  //SPHERE = Rayon 0 0
 								  //CAPSULE = rayon, hauteur 0
 
@@ -90,15 +90,15 @@ inline NxVec3 VecToNxVec(Vector3f V){ return NxVec3(V.x, V.y, V.z); }
 
 namespace physX
 {
-	int CreateBoundingBox(ListOfBoundingBox &BBList, PhysicalObjectType objType );
+	int CreateBoundingBox(ListOfBoundingBox &BBList);
 	int CreateTrigger(ListOfBoundingBox &BBList,
 						void (*OnEnterFunc)(void* param),
 						void (*OnLeaveFunc)(void* param), 
 						void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
 	int CreateControlledCapsule( Vector3f pos, float radius, float height,
-								 void* Ref, int &empActor, PhysicalObjectType objType );
+								 void* Ref, int &empActor );
 	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							 void* Ref, int &empActor, PhysicalObjectType objType ); 
+							 void* Ref, int &empActor ); 
 
 	/************************************************************************************
 	* Détruit un acteur ainsi que son userdata

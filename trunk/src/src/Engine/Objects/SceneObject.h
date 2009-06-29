@@ -61,9 +61,9 @@ public:
 	//===========================================================================//
 	// Physique de l'objet														 //
 	//===========================================================================//
-	void SetObjectPhysical( const std::string& physic, PhysicalObjectType type = PHYS_DYNAMIQUE );		
-	void SetControledCharacter(float radius, float height, void* Ref, PhysicalObjectType type = PHYS_HERO );	
-	void SetControledCharacter(float width, float height, float depth, void* Ref, PhysicalObjectType type = PHYS_HERO );	
+	void SetObjectPhysical( const std::string& physic );		
+	void SetControledCharacter(float radius, float height, void* Ref );	
+	void SetControledCharacter(float width, float height, float depth, void* Ref );	
 	void SetObjectTrigger( const std::string& physic,
 							void (*OnEnterFunc)(void* param), void (*OnStayFunc)(void* param), void (*OnLeaveFunc)(void* param),
 							void* paramEnter, void* paramLeave, void* paramStay); 
@@ -76,7 +76,7 @@ public:
 	bool IsController()	{ return m_iEmpController != -1; }			//Le controleur est un acteur ET un controleur
 	bool IsActor()		{ return m_iEmpActor != -1 && !IsController(); }	//L'acteur n'est qu'un acteur.
 	bool IsPhysical()	{ return IsActor() ||IsController(); }
-	bool IsDynamic()	{ return (*getPhysicBodyList().begin())->physObjType == PHYS_DYNAMIQUE; }
+	bool IsDynamic()	{ return (*getPhysicBodyList().begin())->IsDynamic; }
 public:
 
 	//===========================================================================//

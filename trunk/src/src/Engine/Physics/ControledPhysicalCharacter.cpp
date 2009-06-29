@@ -35,38 +35,10 @@ NxControllerAction HeroHitReport::onControllerHit(const NxControllersHit& hit)
 
 void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
 {
-	ActorUserData *UserDataA, *UserDataV;
-	NxActor* Arme = pair.actors[0], *Victime = pair.actors[1];
-
-	//Vérification de la présence des acteurs
-	if(Arme && Victime)
-	{
-		UserDataA = (ActorUserData*)(Arme->userData);
-		UserDataV = (ActorUserData*)(Victime->userData);
-		//Si l'objet a bien un userdata
-		if(UserDataA && UserDataV)
-		{
-			//Si l'objet qui frappe est une arme
-			//if( Arme->getGroup() == GROUP_WEAPON )
-			if( UserDataA->type == PHYS_WEAPON )
-			{
-				//Si l'objet frappé est une enemy
-				if(UserDataV->type == PHYS_ENEMY)
-				{
-					Enemy* enemy = UserDataV->GetEnemy();
-				}
-				//ou le héro
-				else if(UserDataV->type == PHYS_HERO)
-				{
-					Hero* hero = UserDataV->GetHero();
-				}//endif hero
-			}//endif weapon
-		}//endif userdata		
-	}//endif actors
 }
 
 int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
-								   void* Ref, int &empActor, PhysicalObjectType objType )
+								   void* Ref, int &empActor )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxCapsuleControllerDesc desc;
@@ -93,13 +65,12 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	NxActor* pActor = physX::getActor( empActor );
 	pActor->userData = new ActorUserData;
 	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
-	((ActorUserData*)(pActor->userData))->type = objType ;
 
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
 
 int physX::CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							   void* Ref, int &empActor, PhysicalObjectType objType )
+							   void* Ref, int &empActor )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxBoxControllerDesc desc;
@@ -117,7 +88,6 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 	NxActor* pActor = physX::getActor( empActor );
 	pActor->userData = new ActorUserData;
 	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
-	((ActorUserData*)(pActor->userData))->type = objType ;
 
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }

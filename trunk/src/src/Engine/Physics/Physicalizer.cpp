@@ -127,3 +127,8 @@ void Physicalizer::connectToVRD()
 	}
 #endif
 }
+
+void Physicalizer::setControllerCallback( ContactReport* callback )
+{
+	m_Scene->setUserContactReport( callback );
+}

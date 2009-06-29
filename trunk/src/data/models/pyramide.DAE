@@ -4,11 +4,11 @@
     <contributor>
       <author>bemantoue</author>
       <authoring_tool>3dsMax 11 - Feeling ColladaMax v3.05B.</authoring_tool>
-      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=0;ExportAnimations=0;SampleAnim=1;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=0.666667;</comments>
-      <source_data>file:///C:/Documents%20and%20Settings/bemantoue/Mes%20documents/3dsmax/scenes/Map%20sphinx/Sphinx.max</source_data>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=1;ExportTangents=1;ExportAnimations=0;SampleAnim=1;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=0.666667;</comments>
+      <source_data>file:///C:/Documents%20and%20Settings/bemantoue/Bureau/Crock%20Rising2/Ressources/3dsmax/Sphinx/Pyramide.max</source_data>
     </contributor>
-    <created>2009-06-24T16:07:00Z</created>
-    <modified>2009-06-24T16:07:01Z</modified>
+    <created>2009-06-29T13:43:33Z</created>
+    <modified>2009-06-29T13:44:13Z</modified>
     <unit meter="0.01" name="centimeter"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -17,7 +17,7 @@
       <init_from>../../../../LoamWalls0019_1_S.jpg</init_from>
     </image>
     <image id="pyramide_normal.jpg" name="pyramide_normal_jpg">
-      <init_from>../texture/pyramide_normal.jpg</init_from>
+      <init_from>../../../../Crock%20Rising/src/data/texture/pyramide_normal.jpg</init_from>
     </image>
   </library_images>
   <library_materials>
@@ -220,6 +220,26 @@
             </accessor>
           </technique_common>
         </source>
+        <source id="Big_Pyramide01-mesh-map-channel1-tangents">
+          <float_array id="Big_Pyramide01-mesh-map-channel1-tangents-array" count="27">-1 0 0 0 -1 0 0.5 0 0 0 0 0 1 0 0 0 1 0.000000 0.999998 -0.000226 -0.002067 1 -0.000228 0 0.999998 -0.00023 0.00207</float_array>
+          <technique_common>
+            <accessor source="#Big_Pyramide01-mesh-map-channel1-tangents-array" count="9" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Big_Pyramide01-mesh-map-channel1-binormals">
+          <float_array id="Big_Pyramide01-mesh-map-channel1-binormals-array" count="33">0 -0.354729 -0.934969 0.403668 0 -0.914906 0.000000 0.354729 -0.934969 1 0 0 -0.403668 0.000000 -0.914906 0 0.013557 -0.999908 0 -0.924534 -0.3811 0 0 -1 -0.000223 -0.999999 0.001287 -0.000228 -1 0 -0.000228 -0.999969 -0.007926</float_array>
+          <technique_common>
+            <accessor source="#Big_Pyramide01-mesh-map-channel1-binormals-array" count="11" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
         <vertices id="Big_Pyramide01-mesh-vertices">
           <input semantic="POSITION" source="#Big_Pyramide01-mesh-positions"/>
         </vertices>
@@ -227,17 +247,19 @@
           <input semantic="VERTEX" source="#Big_Pyramide01-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Big_Pyramide01-mesh-normals" offset="1"/>
           <input semantic="TEXCOORD" source="#Big_Pyramide01-mesh-map-channel1" offset="2" set="1"/>
-          <p>0 0 6 5 1 8 6 2 30 0 3 9 6 4 10 7 5 22 7 6 2 10 7 11 12 8 12 0 9 0 7 6 2 12 8 12 0 9 0 12 8 12 8 10 37 0 11 4 8 12 5 5 13 7 5 1 8 1 14 31 19 15 32 5 1 8 19 15 32 20 16 33 5 1 8 20 16 33 2 17 34 5 1 8 2 17 34 6 2 30 6 4 10 2 18 27 18 19 28 6 4 10 18 19 28 3 20 29 6 4 10 3 20 29 7 5 22 7 6 2 3 21 38 9 22 39 9 22 39 10 7 11 7 6 2 17 23 35 1 24 36 5 13 7 4 25 13 17 23 35 5 13 7 8 12 5 4 25 13 5 13 7 11 26 40 4 27 41 8 10 37 8 10 37 12 8 12 11 26 40 14 28 48 15 29 49 16 30 50 16 30 50 13 31 51 14 28 48 10 32 52 13 33 53 16 34 54 16 35 54 12 36 55 10 37 52 11 38 16 12 39 17 16 40 20 16 41 20 15 42 21 11 43 16 17 44 3 15 45 23 19 46 24 19 47 24 1 48 1 17 49 3 4 50 25 11 51 26 15 52 23 15 53 23 17 54 3 4 55 25 14 56 42 20 57 43 19 58 24 19 59 24 15 60 23 14 61 42 14 62 42 18 63 44 2 64 45 2 65 45 20 66 43 14 67 42 9 68 46 3 69 47 18 70 44 18 71 44 14 72 42 9 73 46 10 74 14 9 75 15 14 76 18 14 77 18 13 78 19 10 79 14</p>
+          <input semantic="TEXTANGENT" source="#Big_Pyramide01-mesh-map-channel1-tangents" offset="3" set="1"/>
+          <input semantic="TEXBINORMAL" source="#Big_Pyramide01-mesh-map-channel1-binormals" offset="4" set="1"/>
+          <p>0 0 6 0 0 5 1 8 0 0 6 2 30 0 0 0 3 9 1 1 6 4 10 1 1 7 5 22 1 1 7 6 2 2 2 10 7 11 3 3 12 8 12 2 2 0 9 0 4 2 7 6 2 2 2 12 8 12 2 2 0 9 0 4 2 12 8 12 2 2 8 10 37 4 2 0 11 4 5 4 8 12 5 5 4 5 13 7 5 4 5 1 8 0 0 1 14 31 0 0 19 15 32 0 0 5 1 8 0 0 19 15 32 0 0 20 16 33 0 0 5 1 8 0 0 20 16 33 0 0 2 17 34 0 0 5 1 8 0 0 2 17 34 0 0 6 2 30 0 0 6 4 10 1 1 2 18 27 1 1 18 19 28 1 1 6 4 10 1 1 18 19 28 1 1 3 20 29 1 1 6 4 10 1 1 3 20 29 1 1 7 5 22 1 1 7 6 2 2 2 3 21 38 4 2 9 22 39 4 2 9 22 39 4 2 10 7 11 3 3 7 6 2 2 2 17 23 35 5 4 1 24 36 5 4 5 13 7 5 4 4 25 13 5 4 17 23 35 5 4 5 13 7 5 4 8 12 5 5 4 4 25 13 5 4 5 13 7 5 4 11 26 40 4 2 4 27 41 4 2 8 10 37 4 2 8 10 37 4 2 12 8 12 2 2 11 26 40 4 2 14 28 48 4 5 15 29 49 4 5 16 30 50 4 5 16 30 50 4 5 13 31 51 4 5 14 28 48 4 5 10 32 52 4 6 13 33 53 4 6 16 34 54 4 6 16 35 54 4 6 12 36 55 4 6 10 37 52 4 6 11 38 16 1 7 12 39 17 1 7 16 40 20 1 7 16 41 20 1 7 15 42 21 1 7 11 43 16 1 7 17 44 3 6 8 15 45 23 6 8 19 46 24 6 8 19 47 24 7 9 1 48 1 7 9 17 49 3 7 9 4 50 25 7 10 11 51 26 7 10 15 52 23 7 10 15 53 23 6 9 17 54 3 6 9 4 55 25 6 9 14 56 42 7 8 20 57 43 7 8 19 58 24 7 8 19 59 24 7 8 15 60 23 7 8 14 61 42 7 8 14 62 42 8 9 18 63 44 8 9 2 64 45 8 9 2 65 45 7 8 20 66 43 7 8 14 67 42 7 8 9 68 46 7 9 3 69 47 7 9 18 70 44 7 9 18 71 44 8 10 14 72 42 8 10 9 73 46 8 10 10 74 14 5 7 9 75 15 5 7 14 76 18 5 7 14 77 18 5 7 13 78 19 5 7 10 79 14 5 7</p>
         </triangles>
       </mesh>
     </geometry>
   </library_geometries>
   <library_visual_scenes>
-    <visual_scene id="Sphinx.max" name="Sphinx_max">
+    <visual_scene id="Pyramide.max" name="Pyramide_max">
       <node id="Big_Pyramide01-node" name="Big_Pyramide01" type="NODE">
-        <matrix>1 0 0 806.766 0 1 0 -117.767 0 0 1 0 0 0 0 1</matrix>
+        <matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <node id="Big_Pyramide01-node_PIVOT" name="Big_Pyramide01_PIVOT" type="NODE">
-          <matrix>1 0 0 0.095808 0 1 0 108.991 0 0 1 82.9288 0 0 0 1</matrix>
+          <matrix>1 0 0 0.095808 0 1 0 108.991 0 0 1 32.8894 0 0 0 1</matrix>
           <instance_geometry url="#Big_Pyramide01-mesh">
             <bind_material>
               <technique_common>
@@ -263,6 +285,6 @@
     </visual_scene>
   </library_visual_scenes>
   <scene>
-    <instance_visual_scene url="#Sphinx.max"/>
+    <instance_visual_scene url="#Pyramide.max"/>
   </scene>
 </COLLADA>

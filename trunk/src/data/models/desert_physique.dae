@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising\src\data\models\desert_physique.dae</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\desert_physique.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -55,7 +55,7 @@
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor1-Node" name="Actor1" type="NODE">
-        <translate>0	0 0</translate>
+        <translate>752.357788086	-1081.126708984 93.292678833</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor2-Node" name="Actor2" type="NODE">
@@ -99,23 +99,23 @@
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor12-Node" name="Actor12" type="NODE">
-        <translate>752.357788086	-1081.126708984 93.292678833</translate>
+        <translate>112.88861084	-1797.749145508 500</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor13-Node" name="Actor13" type="NODE">
-        <translate>114.63494873	1372.473388672 0</translate>
-        <rotate>1 0	0	 0</rotate>
-			</node>
-			<node	id="Actor14-Node" name="Actor14" type="NODE">
         <translate>-452.290740967	522.243103027 81.595046997</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
-			<node	id="Actor15-Node" name="Actor15" type="NODE">
+			<node	id="Actor14-Node" name="Actor14" type="NODE">
         <translate>452	522.243103027 81.595046997</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
+			<node	id="Actor15-Node" name="Actor15" type="NODE">
+        <translate>0	0 -10</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
 			<node	id="Actor16-Node" name="Actor16" type="NODE">
-        <translate>112.88861084	-1797.749145508 500</translate>
+        <translate>114.63494873	1372.473388672 210.891021729</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
 			</visual_scene>
@@ -252,11 +252,11 @@
 		<physics_model id="Scene0-PhysicsModel">
 			<rigid_body	sid="Actor0-RigidBody" name="Boîte01">
 				<technique_common>
-					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 4.274475098</translate>
             <rotate>1 0	0	 0</rotate>
-						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+						<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
 						 <technique	profile="PhysX">
@@ -281,13 +281,13 @@
 				</technique>
 			</extra>
 			 </rigid_body>
-			<rigid_body	sid="Actor1-RigidBody" name="Boîte02">
+			<rigid_body	sid="Actor1-RigidBody" name="Boîte20">
 				<technique_common>
-					<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0 -10</translate>
+            <translate>0	0 0</translate>
             <rotate>1 0	0	 0</rotate>
-						<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+						<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
 						 <technique	profile="PhysX">
@@ -297,7 +297,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>1706.495727539 2059.280761719	10</half_extents>
+							<half_extents>15.259155273 15.4296875	93.292678833</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>
@@ -622,13 +622,13 @@
 				</technique>
 			</extra>
 			 </rigid_body>
-			<rigid_body	sid="Actor12-RigidBody" name="Boîte20">
+			<rigid_body	sid="Actor12-RigidBody" name="Boîte15">
 				<technique_common>
-					<instance_physics_material url="#pmat18_0-PhysicsMaterial"/>
+					<instance_physics_material url="#pmat13_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
             <rotate>1 0	0	 0</rotate>
-						<instance_physics_material url="#pmat18_0-PhysicsMaterial"/>
+						<instance_physics_material url="#pmat13_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
 						 <technique	profile="PhysX">
@@ -638,7 +638,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>15.259155273 15.4296875	93.292678833</half_extents>
+							<half_extents>1145 268.642700195	500</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>
@@ -653,13 +653,13 @@
 				</technique>
 			</extra>
 			 </rigid_body>
-			<rigid_body	sid="Actor13-RigidBody" name="Boîte06">
+			<rigid_body	sid="Actor13-RigidBody" name="Boîte18">
 				<technique_common>
-					<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
+					<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0 210.891021729</translate>
+            <translate>0	0 0</translate>
             <rotate>1 0	0	 0</rotate>
-						<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
+						<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
 						 <technique	profile="PhysX">
@@ -669,7 +669,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>1140.052001953 681.053894043	210.891021729</half_extents>
+							<half_extents>33.372833252 33.985183716	81.595046997</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>
@@ -684,7 +684,7 @@
 				</technique>
 			</extra>
 			 </rigid_body>
-			<rigid_body	sid="Actor14-RigidBody" name="Boîte18">
+			<rigid_body	sid="Actor14-RigidBody" name="Boîte19">
 				<technique_common>
 					<instance_physics_material url="#pmat15_0-PhysicsMaterial"/>
 					<shape>
@@ -715,7 +715,38 @@
 				</technique>
 			</extra>
 			 </rigid_body>
-			<rigid_body	sid="Actor15-RigidBody" name="Boîte19">
+			<rigid_body	sid="Actor15-RigidBody" name="Boîte02">
+				<technique_common>
+					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>1706.495727539 2059.280761719	10</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor16-RigidBody" name="Boîte06">
 				<technique_common>
 					<instance_physics_material url="#pmat16_0-PhysicsMaterial"/>
 					<shape>
@@ -731,38 +762,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>33.372833252 33.985183716	81.595046997</half_extents>
-						</box>
-					 </shape>
-					<dynamic>false</dynamic>
-					<mass>1</mass>
-					</technique_common>
-			<extra>
-				<technique profile="PhysX">
-					<group>0</group>
-					<disable_collision>false</disable_collision>
-					<disable_response>false</disable_response>
-					<lock_com>false</lock_com>
-				</technique>
-			</extra>
-			 </rigid_body>
-			<rigid_body	sid="Actor16-RigidBody" name="Boîte15">
-				<technique_common>
-					<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
-					<shape>
-            <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
-						<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
-					 <mass>1</mass>
-					 <extra>
-						 <technique	profile="PhysX">
-							 <group>0</group>
-							 <skinWidth>0.025</skinWidth>
-							 <disable_collision>false</disable_collision>
-						 </technique>
-					 </extra>
-						<box>
-							<half_extents>1145 268.642700195	500</half_extents>
+							<half_extents>1140.052001953 681.053894043	210.891021729</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>

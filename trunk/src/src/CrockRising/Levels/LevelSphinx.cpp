@@ -14,7 +14,9 @@ LevelSphinx::LevelSphinx( crc32 levelID )
 : Level( levelID )
 {
 	m_pCamera = NULL;
-	m_pJanotLapin = new Hero();
+	m_pHero = new Hero();
+	m_EscMenu = new EscMenu();
+	
 }
 
 /***********************************************************
@@ -24,6 +26,9 @@ LevelSphinx::~LevelSphinx( void )
 {
 	if( m_pCamera )
 		delete m_pCamera;
+
+	if(m_EscMenu)
+		delete m_EscMenu;
 }
 
 /***********************************************************
@@ -37,16 +42,20 @@ void LevelSphinx::Init( void )
 	m_pCamera = new Camera(Vector3f(0.f,14.f,-60.f));
 	float ratio = (float)pRenderer->GetWindowWidth() / pRenderer->GetWindowHeight();
 	m_pCamera->SetRatio( ratio );
-	m_pCamera->SetZNearFar(2.f, 3000.f);
+	m_pCamera->SetZNearFar(2.f, 6000.f);
 	pRenderer->SetCamera(m_pCamera);
 
+	m_EscMenu->Init();
+
 	//Lumière
-	DirectionalLight* dirLight = new DirectionalLight();
+	DirectionalLight* spot = new SpotLight();
+	spot->SetLightPosition(D3DXVECTOR3(0.f, 2000.f, 20.f));
+	spot->SetLightAngle(2.1f);
 
 	//Skybox
-	Skybox * s=new Skybox("desert2.dds");
-	s->Init();
-	pRenderer->SetSkybox(s);
+	m_pSkybox=new Skybox("redday.dds");
+	m_pSkybox->Init(35);
+	pRenderer->SetSkybox(m_pSkybox);
 /*
 	SceneObject* m_pCanyon_part1 = new SceneObject("planAI.DAE", D3DXVECTOR3(0.f, 1.0f, 0.f) );
 	m_pCanyon_part1->Init();
@@ -57,8 +66,7 @@ void LevelSphinx::Init( void )
 	SceneObject* Desert = new SceneObject("desert.DAE", D3DXVECTOR3(0.f,0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
-	Desert->SetObjectPhysical( "desert_physique.DAE"
-		);
+	Desert->SetObjectPhysical( "desert_physique.DAE");
 //	
 ////STATUES
 	SceneObject* statue = new SceneObject("statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
@@ -115,16 +123,16 @@ void LevelSphinx::Init( void )
 	sphinx->SetShader("default_normalmap.fx");
 
 	//Initialisation du Héro
-	m_pJanotLapin->Init();
+	m_pHero->Init();
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 100, 4000, 2, 3100, 256 );
+	//m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 100, 4000, 2, 3100, 256 );
 
 	// Création des ennemies
-	for (int i=0; i<30; i++)
+	/*for (int i=0; i<30; i++)
 	{
 		m_pEnemy[i] = new Enemy( Vector3f(0.f,8.f,0.f) );
-	}
+	}*/
 }
 
 /***********************************************************
@@ -134,17 +142,17 @@ void LevelSphinx::Update( void )
 {
 	// Mise a jour de l'AI avec les ennemies en paramètre
 	deltaTime = System::GetInstance()->GetTime()->GetDeltaTimeMs();
-	Vector3f posHero = m_pJanotLapin->getSceneObjectAnimated()->GetPosition();
-	m_pManagerAI->update( posHero, deltaTime, m_pEnemy[0]->listEnemy );
+	Vector3f posHero = m_pHero->getSceneObjectAnimated()->GetPosition();
+	//m_pManagerAI->update( posHero, deltaTime, m_pEnemy[0]->listEnemy );
 
 	//std::cout << "X: " << posHero.x << "Y: " << posHero.y << "Z: " << posHero.z << std::endl;
 
-	m_pJanotLapin->update(m_pCamera);
+	m_pHero->update(m_pCamera);
 		
 	InputManager* pInputManager = InputManager::GetInstance();
 
 	if( pInputManager->IsKeyTriggered(' ') )
 	{	
-		m_pJanotLapin->getSceneObjectAnimated()->SetRotation(0.f, 1.f, 0.f);
+		m_pHero->getSceneObjectAnimated()->SetRotation(0.f, 1.f, 0.f);
 	}
 }

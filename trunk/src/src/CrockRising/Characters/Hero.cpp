@@ -30,11 +30,12 @@ void Hero::Init()
 {
 	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f, 0.f, 0.f)); //robot_attack_anim
 	m_pAnimated->Init();
+	m_pAnimated->SetRotation(0.f, 180.f, 0.f);
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
-	m_pAnimated->GetMaterial()->SetTexture("robot_normal.png", Texture::NORMALMAP);
+	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	//m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	m_pAnimated->SetControledCharacter(4.f,10.f,this);
+	//m_pAnimated->SetControledCharacter(4.f,10.f,this);
 	//m_pAnimated->SetLoop(true);
 	//m_pAnimated->SetAnimFPS(50.f);
 

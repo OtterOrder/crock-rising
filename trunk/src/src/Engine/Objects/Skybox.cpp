@@ -24,49 +24,50 @@ Skybox::Skybox()
 
 Skybox::~Skybox()
 {
-	delete m_pSkyShader;
+	
 }
 
-HRESULT Skybox::Init(float _size)
+HRESULT Skybox::ResetDevice()
 {
-	m_pDevice=Renderer::GetInstance()->m_pd3dDevice;
+	m_pSkyShader->GetEffect()->OnResetDevice();
+
 	SKYBOX_VERTEX sommets[24]=
 	{
 		// Front quad, NOTE: All quads face inward
-		{-_size, -_size,  _size},
-		{-_size,  _size,  _size},
-		{ _size, -_size,  _size},
-		{ _size,  _size,  _size},
-		
+		{-m_size, -m_size,  m_size},
+		{-m_size,  m_size,  m_size},
+		{ m_size, -m_size,  m_size},
+		{ m_size,  m_size,  m_size},
+
 		// Back quad
-		{ _size, -_size, -_size},
-		{ _size,  _size, -_size},
-		{-_size, -_size, -_size},
-		{-_size,  _size, -_size},
-		
+		{ m_size, -m_size, -m_size},
+		{ m_size,  m_size, -m_size},
+		{-m_size, -m_size, -m_size},
+		{-m_size,  m_size, -m_size},
+
 		// Left quad
-		{-_size, -_size, -_size},
-		{-_size,  _size, -_size},
-		{-_size, -_size,  _size},
-		{-_size,  _size,  _size},
-		
+		{-m_size, -m_size, -m_size},
+		{-m_size,  m_size, -m_size},
+		{-m_size, -m_size,  m_size},
+		{-m_size,  m_size,  m_size},
+
 		// Right quad
-		{ _size, -_size,  _size},
-		{ _size,  _size,  _size},
-		{ _size, -_size, -_size},
-		{ _size,  _size, -_size},
+		{ m_size, -m_size,  m_size},
+		{ m_size,  m_size,  m_size},
+		{ m_size, -m_size, -m_size},
+		{ m_size,  m_size, -m_size},
 
 		// Top quad
-		{-_size,  _size,  _size},
-		{-_size,  _size, -_size},
-		{ _size,  _size,  _size},
-		{ _size,  _size, -_size},
-		
+		{-m_size,  m_size,  m_size},
+		{-m_size,  m_size, -m_size},
+		{ m_size,  m_size,  m_size},
+		{ m_size,  m_size, -m_size},
+
 		// Bottom quad
-		{-_size, -_size, -_size},
-		{-_size, -_size,  _size},
-		{ _size, -_size, -_size},
-		{ _size, -_size,  _size}
+		{-m_size, -m_size, -m_size},
+		{-m_size, -m_size,  m_size},
+		{ m_size, -m_size, -m_size},
+		{ m_size, -m_size,  m_size}
 
 
 	};
@@ -78,7 +79,7 @@ HRESULT Skybox::Init(float _size)
 		D3DPOOL_DEFAULT,
 		&m_pSkyVB,
 		NULL))
-	)
+		)
 		return E_FAIL;
 
 	void * psommets;
@@ -89,6 +90,16 @@ HRESULT Skybox::Init(float _size)
 	memcpy(psommets,sommets,sizeof(sommets));
 
 	m_pSkyVB->Unlock();
+
+	return S_OK;
+
+}
+
+HRESULT Skybox::Init(float _size)
+{
+	m_size=_size;
+	m_pDevice=Renderer::GetInstance()->m_pd3dDevice;
+	
 
 	// Shader Skybox
 	m_pSkyShader=new Shader();
@@ -102,6 +113,8 @@ HRESULT Skybox::Init(float _size)
 		return E_FAIL;
 
 	}
+
+	ResetDevice();
 
 	return S_OK;
 
@@ -160,10 +173,17 @@ HRESULT Skybox::Draw()
 
 HRESULT Skybox::LostDevice()
 {
+	
+	m_pSkyShader->GetEffect()->OnLostDevice();
 	m_pSkyVB->Release();
-	m_pSkyShader->GetEffect()->Release();
-	m_pEnvTex->Release();
-
+	
 	return S_OK;
+
+}
+
+void Skybox::DeleteData()
+{
+	m_pEnvTex->Release();
+	delete m_pSkyShader;
 
 }

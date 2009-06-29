@@ -33,7 +33,7 @@ void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> li
 
 		if ( distance <= attackRange )		//**** TODO **** Rajouter champ de vision ****
 		{
-			if (listEnemy[cptGeneral]->getLife() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+			if (listEnemy[cptGeneral]->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
 				aiEnemy->enemyAIAttack( posPlayer, listEnemy[cptGeneral]->getSceneObjectAnimated()->GetPosition(), newAngle );
 			}
@@ -44,7 +44,7 @@ void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> li
 		}
 		else if ( distance <= fieldOfView )
 		{
-			if (listEnemy[cptGeneral]->getLife() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+			if (listEnemy[cptGeneral]->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
 				aiEnemy->enemyAIMoveTo( posPlayer, listEnemy[cptGeneral]->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
 			}

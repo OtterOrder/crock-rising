@@ -15,6 +15,7 @@
 #include	<Physics/Physicalizer.h>
 #include	<Objects/Light.h>
 #include	<PostProcesses/PostRenderer.h>
+#include    "../2D/EscMenu.h"
 #include	<AIManager.h>
 
 #include	<iostream>
@@ -41,10 +42,12 @@ public:
 protected:
 	
 	Camera*		m_pCamera;
-	Hero*		m_pJanotLapin;
+	Hero*		m_pHero;
+	Skybox *    m_pSkybox;
 
 	AIManager*	m_pManagerAI;
 	Enemy*		m_pEnemy[100];
+	EscMenu*	m_EscMenu;
 
 	float		deltaTime;
 };

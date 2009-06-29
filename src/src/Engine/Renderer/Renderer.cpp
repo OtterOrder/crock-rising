@@ -109,7 +109,7 @@ HRESULT Renderer::OnResetDevice()
 	m_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 #ifdef DEVCAMERA
-	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.f, 4000.f);
+	m_DevCamera.SetProjParams(D3DX_PI/4, (float)m_d3dsdBackBuffer.Width/m_d3dsdBackBuffer.Height, 2.f, 6000.f);
 #endif
 
 	DEFAULT_VERTEX sommets[]=
@@ -190,7 +190,7 @@ HRESULT Renderer::OnResetDevice()
 	}
 
 	if(m_Skybox)
-		m_Skybox->Init();
+		m_Skybox->ResetDevice();
 
 	if(m_UseShadowMap)
 		m_ShadowMap->ResetDevice();
@@ -365,6 +365,11 @@ HRESULT Renderer::OnDestroyDevice()
 	m_pStatsFont->DeleteDeviceObjects();
 
 	//-- Objets 3D
+
+	if(m_Skybox)
+	{
+		m_Skybox->DeleteData();
+	}
 	
 	scobj = m_ScObjList->begin();
 	while( scobj != m_ScObjList->end() )
@@ -419,6 +424,11 @@ HRESULT Renderer::AfterDestroyDevice()
 	m_LightList->clear();
 
 	delete m_pStatsFont;
+
+	if(m_Skybox)
+	{
+		delete m_Skybox;
+	}
 
 	return S_OK;
 }

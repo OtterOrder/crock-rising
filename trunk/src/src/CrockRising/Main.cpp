@@ -27,9 +27,6 @@ int WINAPI WinMain(
 {
 	int loopResult;
 
-	// Création du System
-	System::GetInstance();
-
 	// Nom du jeu
 	Game::GetInstance()->SetGameName( "Crock Rising" );
 
@@ -39,6 +36,10 @@ int WINAPI WinMain(
 	
 	// On indique le niveau de démarrage
 	Game::GetInstance()->SetStartLevel( LEVEL_alafraise );
+
+	// Création et initialisation du System
+	System::GetInstance()->SetFullScreen( true, pBackup->GetResolution().x, pBackup->GetResolution().y );
+	System::GetInstance()->Init();
 
 	// On lance la boucle principale..
 	loopResult = System::GetInstance()->MainLoop();

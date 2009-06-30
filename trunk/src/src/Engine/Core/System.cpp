@@ -19,12 +19,10 @@
  **********************************************************/
 System::System( void )
 {
-	// Création du device, initialisation D3D, création de la fenêtre
-	if( FAILED( InitWindow() ) )
-		MessageBox(NULL, "Initialisation de la fenetre impossible", "Erreur System", MB_ICONERROR);
-
-	// Gestion du temps
-	m_Time = new Time;
+	m_Time				= NULL;
+	m_FullScreen		= false;
+	m_FullScreenWidth	= 0;
+	m_FullScreenHeight	= 0;
 }
 
 /***********************************************************
@@ -32,7 +30,35 @@ System::System( void )
  **********************************************************/
 System::~System( void )
 {
-	delete m_Time;
+	if( m_Time )
+		delete m_Time;
+}
+
+/***********************************************************
+ * Initialise le System.
+ **********************************************************/
+void System::Init( void )
+{
+	// Gestion du temps
+	m_Time = new Time;
+	
+	// Création du device, initialisation D3D, création de la fenêtre
+	if( FAILED( InitRenderer() ) )
+	{
+		MessageBox( NULL, "Initialisation du Renderer impossible", "Erreur System", MB_ICONERROR );
+	}
+}
+
+/***********************************************************
+ * Set les propriétés de plein écran. Cette méthode n'est
+ * valable qu'avant l'appel de System::Init (c'est du bricolage
+ * mais bon on fait ce qu'on peut).
+ **********************************************************/
+void System::SetFullScreen( bool fullScreen, int width, int height )
+{
+	m_FullScreen		= fullScreen;
+	m_FullScreenWidth	= width;
+	m_FullScreenHeight	= height;
 }
 
 /***********************************************************
@@ -153,9 +179,10 @@ LRESULT CALLBACK System::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 }
 
 /***********************************************************
- * Initialise la fenêtre.
+ * Initialise le Renderer. Normalement cette fonction
+ * doit être la PREMIERE du programme à appeler le Renderer.
  **********************************************************/
-HRESULT System::InitWindow()
+HRESULT System::InitRenderer( void )
 {
 	WNDCLASS wndClass;
 
@@ -171,5 +198,16 @@ HRESULT System::InitWindow()
 	wndClass.lpszMenuName	= NULL;
 	wndClass.lpszClassName	= "Direct3DWindowClass";
 
+	if( m_FullScreen )
+	{
+		// Il faut initialiser la résolution de plein écran
+		// avant la création de la fenêtre, et pis c'est tout !
+		Renderer::GetInstance()->SetFullScreenResolution(
+			m_FullScreenWidth,
+			m_FullScreenHeight
+			);
+	}
+
+	// Création de tout le bordel du Renderer..
 	return Renderer::GetInstance()->Create( m_Instance, wndClass );
 }

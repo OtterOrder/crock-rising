@@ -1,5 +1,6 @@
 #include	"LevelMainMenu.h"
 
+#include	<Core/System.h>
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
@@ -141,7 +142,7 @@ void LevelMainMenu::MMButton::OnClic()
 		
 		case QUIT:
 			// Fermeture de l'appli..
-			Renderer::GetInstance()->Close();
+			System::GetInstance()->Shutdown();
 			return;
 
 		//default:

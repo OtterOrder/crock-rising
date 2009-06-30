@@ -247,7 +247,7 @@ void EscMenu::EscButton::OnClic()
 
 		case QUITGAME:
 			// Fermeture de l'appli..
-			Renderer::GetInstance()->Close();
+			System::GetInstance()->Shutdown();
 			return;
 	}
 }

@@ -31,10 +31,11 @@ public:
 	// Méthodes publiques
 
 	void	Init		( void );	// Initialise le System
-	void	SetFullScreen( bool fullScreen, int width = FULLS_DEFAULT_WIDTH, int height = FULLS_DEFAULT_HEIGHT );
-	
+	void	Shutdown	( void );	// Termine l'appli
 	int		MainLoop	( void );	// Boucle principale de l'appli
 	
+	void	SetFullScreen( bool fullScreen, int width = FULLS_DEFAULT_WIDTH, int height = FULLS_DEFAULT_HEIGHT );
+
 	Time* const GetTime() const;	// Donne le gestionnaire de temps
 
 	static LRESULT CALLBACK	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );// Fonction de rappel des événements

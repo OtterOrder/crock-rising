@@ -50,6 +50,15 @@ void System::Init( void )
 }
 
 /***********************************************************
+ * Termine l'appli. Sort de la main loop proprement.
+ **********************************************************/
+void System::Shutdown( void )
+{
+	// Evenement de sortie de la boucle..
+	PostQuitMessage( 0 );
+}
+
+/***********************************************************
  * Set les propriétés de plein écran. Cette méthode n'est
  * valable qu'avant l'appel de System::Init (c'est du bricolage
  * mais bon on fait ce qu'on peut).
@@ -137,12 +146,16 @@ int System::MainLoop( void )
 
 	// Destruction des singletons
 	game->Destroy(); // Game à détruire en premier !
-	renderer->Destroy();
-	postRenderer->Destroy();
+	physX->Destroy();
 	soundSystem->Destroy();
 	inputManager->Destroy();
-	physX->Destroy();
-	resourceManager->Destroy();
+
+	postRenderer->Destroy();
+	
+	renderer->Close();
+	renderer->Destroy();
+
+	resourceManager->Destroy(); // Normalement il est vide
 
 	return (int)msg.wParam;
 }

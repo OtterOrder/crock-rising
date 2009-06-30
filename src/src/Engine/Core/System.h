@@ -12,6 +12,11 @@
 
 //******************************************************************
 
+#define		FULLS_DEFAULT_WIDTH			800
+#define		FULLS_DEFAULT_HEIGHT		600
+
+//******************************************************************
+
 class Time;
 
 class System : public Singleton< System >
@@ -25,6 +30,9 @@ public:
 	// =========================================================
 	// Méthodes publiques
 
+	void	Init		( void );	// Initialise le System
+	void	SetFullScreen( bool fullScreen, int width = FULLS_DEFAULT_WIDTH, int height = FULLS_DEFAULT_HEIGHT );
+	
 	int		MainLoop	( void );	// Boucle principale de l'appli
 	
 	Time* const GetTime() const;	// Donne le gestionnaire de temps
@@ -37,10 +45,10 @@ protected:
 	// =========================================================
 	// Méthodes protégées
 	
-	System				( void );		// Constructeur
-	virtual ~System		( void );		// Destructeur
+	System					( void );	// Constructeur
+	virtual ~System			( void );	// Destructeur
 	
-	HRESULT	InitWindow	( void );		// Initialisation fenêtre windows
+	HRESULT	InitRenderer	( void );	// Initialise le Renderer
 
 	
 	// =========================================================
@@ -49,6 +57,10 @@ protected:
 	HINSTANCE		m_Instance;			// Instance de l'application
 	HICON			m_Icon;
 	Time			*m_Time;			// Gestion du temps
+
+	bool			m_FullScreen;
+	int				m_FullScreenWidth;
+	int				m_FullScreenHeight;
 
 };
 

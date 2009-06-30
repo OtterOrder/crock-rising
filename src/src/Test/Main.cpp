@@ -27,7 +27,7 @@ int WINAPI WinMain(
 	int loopResult;
 
 	// Création du System
-	System::GetInstance();
+	System::GetInstance()->Init();
 	
 	// On indique le niveau de démarrage
 	Game::GetInstance()->SetStartLevel( LEVEL_start );

@@ -600,13 +600,7 @@ LRESULT CD3DApplication::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam,
         }
 
 		case WM_CLOSE:
-            Cleanup3DEnvironment();
-			SAFE_RELEASE(m_pd3dDevice);
-            SAFE_RELEASE( m_pD3D );
-            AfterDestroyDevice();
-	        DestroyWindow( hWnd );
-            PostQuitMessage(0);
-            m_hWnd = NULL;
+			PostQuitMessage(0);
             break;
 
     }
@@ -1166,17 +1160,16 @@ void CD3DApplication::Run()
 }
 
 //============================================================================//
-// Fonction qui stoppe le moteur                                              //
+// Clean tout le bordel, détruit le device, détruit la fenêtre.               //
 //============================================================================//
 void CD3DApplication::Close()
 {
 	Cleanup3DEnvironment();
+	SAFE_RELEASE( m_pd3dDevice );
     SAFE_RELEASE( m_pD3D );
     AfterDestroyDevice();
     DestroyWindow( m_hWnd );
-	PostQuitMessage(0);
     m_hWnd = NULL;
-
 }
 
 //============================================================================//

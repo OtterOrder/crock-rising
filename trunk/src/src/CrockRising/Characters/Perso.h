@@ -25,18 +25,20 @@ enum SolidType
 class Perso
 {
 public:	
-	Perso(){ m_iLife = 100; }
+	Perso(){ }
 	~Perso(){}
 
 	virtual void		    changeState( PersoState newState ){}
 	virtual void			Init(){}
 	
 	SceneObjectAnimated* 	getSceneObjectAnimated () const { return m_pAnimated; }
-	int						&Life(){	return m_iLife;	}
+	
+	int						&Life() { return m_iLife; }
+	void					setLife ( const int decreaseLife ); 
 	
 protected:
 	SceneObjectAnimated*	m_pAnimated;
-	int				    	m_iLife;
+	int					    m_iLife;
 	PersoState				m_currentState;
 };
 

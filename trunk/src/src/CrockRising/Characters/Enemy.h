@@ -24,9 +24,13 @@ public:
 	virtual void		    changeState( PersoState newState );
 
 	void					update( );
+
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
+	
+	
 
 protected:
+	
 	InputManager* m_pInputManager;
 	Vector3f      m_position;
 };

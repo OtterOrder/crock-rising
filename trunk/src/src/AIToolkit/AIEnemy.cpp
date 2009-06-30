@@ -46,24 +46,22 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 		
 		Vector3f tmpPla = Vector3f( positEnemy.x, 0, positEnemy.z );
 		Vector3f tmpDir = Vector3f( tmpPosEXScale, 0, tmpPosEZScale );
-		
+		/*
 		// Calcul l'angle pour la rotation de l'ennemi
-		/*dotAngle = 0.f;
+		dotAngle = 0.f;
 		oldDirecEnemy = direcEnemy;
 		direcEnemy = tmpDir - tmpPla;
 		D3DXVec3Normalize(&oldDirecEnemy, &oldDirecEnemy);
 		D3DXVec3Normalize(&direcEnemy, &direcEnemy);
 		dotAngle = D3DXVec3Dot(&direcEnemy, &oldDirecEnemy);
-		//std::cout << "OldDir : " << oldDirecEnemy.x << " , "<< oldDirecEnemy.y << " , " << oldDirecEnemy.z << std::endl;
-		//std::cout << "Dir : " << direcEnemy.x << " , "<< direcEnemy.y << " , " << direcEnemy.z << std::endl;
 		D3DXVec3Cross(&crossAngle, &direcEnemy, &oldDirecEnemy );
 
 		if (dotAngle > 0.001f && dotAngle < 0.9999f)
 		{
 			angleRot = (int)D3DXToDegree(acos(dotAngle));
 			if ( crossAngle.y < 0 )		angleRot = -angleRot;
-		}*/
-
+		}
+		*/
 		// Calcul le déplacement de l'ennemi
 		newPos = tmpDir - tmpPla;
 		D3DXVec3Normalize(&newPos, &newPos);

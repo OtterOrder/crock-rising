@@ -1,5 +1,5 @@
 #include "Perso.h"
-
+#include <iostream>
 
 void ContactReportCR::onContactNotify( NxContactPair& pair, NxU32 events )
 {
@@ -22,4 +22,15 @@ void ContactReportCR::onContactNotify( NxContactPair& pair, NxU32 events )
 			}//endif weapon
 		}//endif userdata		
 	}//endif actors
+}
+
+
+void Perso::setLife( const int decreaseLife ) 
+{
+	 
+	std::cout << "vie = " << m_iLife << std::endl;
+	if ( (m_iLife - decreaseLife) <= 0 )
+		changeState(DIE);
+	else 
+		m_iLife -= decreaseLife;
 }

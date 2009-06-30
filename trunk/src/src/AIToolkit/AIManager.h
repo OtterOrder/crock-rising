@@ -1,6 +1,7 @@
 #ifndef _crockAI_H_
 #define _crockAI_H_
 
+#include	"../CrockRising/Characters/Perso.h"   
 #include	"../CrockRising/Characters/Enemy.h"
 #include	"AIEnemy.h"
 #include	"AIMap.h"
@@ -41,7 +42,6 @@ protected:
 	int attackRange;
 	int	distance;
 	int	hpsGroup;
-	int	cptGeneral;
 	int scaleCurrMap;
 	int precCurrMap;
 

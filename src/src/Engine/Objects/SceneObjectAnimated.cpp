@@ -109,8 +109,11 @@ void SceneObjectAnimated::Draw()
 	if(!m_bVisible)
 		return;
 
-	for (u32 i=0 ; i < m_pAnim->m_Bones.size(); i++)
-		m_matrices[i]*= m_WorldMatrix;
+	if(!m_bCastShadow)
+	{
+		for (u32 i=0 ; i < m_pAnim->m_Bones.size(); i++)
+			m_matrices[i]*= m_WorldMatrix;
+	}
 
 	m_pShader->GetEffect()->SetMatrixArray("g_skinningMatrices", m_matrices, (int)m_pAnim->m_Bones.size());
 
@@ -158,6 +161,9 @@ void SceneObjectAnimated::DrawShadow()
 		return;
 
 	m_pShadowShader=Renderer::GetInstance()->GetShadowMap()->GetDepthShader();
+
+	for (u32 i=0 ; i < m_pAnim->m_Bones.size(); i++)
+		m_matrices[i]*= m_WorldMatrix;	
 
 	m_pShadowShader->GetEffect()->SetMatrixArray("g_skinningMatrices", m_matrices, (int)m_pAnim->m_Bones.size());
 

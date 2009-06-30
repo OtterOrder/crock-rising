@@ -5,13 +5,15 @@
 #include		<Objects/SceneObjectAnimated.h>
 #include		<Core/Types/Vector.h>
 #include		<Physics/Physicalizer.h>
+#include		<Resources/Material.h>
 
 enum PersoState 
 {
 	STATIC,	
-	WALK, 
 	RUN,
-	ATTACK
+	ATTACK,
+	DIE,
+	HIT
 };
 
 enum SolidType

@@ -29,9 +29,8 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(21.f,-75.f,-367.f)); //y = -75 pr le canyon
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,0.f,0.f)); //y = -75 pr le canyon
 	m_pAnimated->Init();
-	m_pAnimated->SetRotation(0.f, -180.f, 0.f);
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");

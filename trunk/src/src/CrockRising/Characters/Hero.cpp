@@ -1,7 +1,8 @@
 #include "Hero.h"
+#include <iostream>
 
 #include	<Resources/Material.h>
-#include <../CrockRising/Characters/Perso.h>
+#include	<../CrockRising/Characters/Perso.h>
 
 #define MAX_LIFE   100
 #define LIFE_BONUS 10
@@ -28,9 +29,9 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f, 0.f, 0.f)); //robot_attack_anim
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(21.f,-75.f,-367.f)); //y = -75 pr le canyon
 	m_pAnimated->Init();
-	m_pAnimated->SetRotation(0.f, 180.f, 0.f);
+	m_pAnimated->SetRotation(0.f, -180.f, 0.f);
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
@@ -39,7 +40,7 @@ void Hero::Init()
 	//m_pAnimated->SetLoop(true);
 	//m_pAnimated->SetAnimFPS(50.f);
 
-	//m_pInputManager->HoldMouseAtCenter(true);
+	m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
@@ -156,11 +157,9 @@ void Hero::changeState( PersoState newState )
 		return;
 
 	m_currentState = newState;
-
+	
 	switch ( m_currentState )
 	{
-	case WALK :
-		break;
 	case RUN :
 		m_pAnimated->SetAnim("Anim_Robot_Run.DAE");
 		m_pAnimated->Play();
@@ -188,10 +187,11 @@ void Hero::update( Camera* pCamera )
 {
 	control( pCamera );
 
+	Vector3f pos = m_pAnimated->GetPosition();
+	//std::cout << "x = " << pos.x << "  y = " << pos.y << "  z = " << pos.z << std::endl;
 
-	if(m_currentState == RUN || m_currentState == WALK)
+	if(m_currentState == RUN)
 		m_pAnimated->SetTranslation(m_Translate.x, m_Translate.y, m_Translate.z);
-
 
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();

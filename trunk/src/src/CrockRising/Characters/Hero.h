@@ -11,7 +11,6 @@
 #include		<Physics/Physicalizer.h>
 #include		<Objects/SceneObjectAnimated.h>
 #include		<Objects/Camera.h>
-#include		<Resources/Material.h>
 #include		"../2D/HUDLife.h"
 #include		<../CrockRising/Characters/Perso.h>
 

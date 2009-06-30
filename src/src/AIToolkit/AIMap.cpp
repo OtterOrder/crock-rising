@@ -81,13 +81,13 @@ bool Bitmap::convert24(unsigned char* tempData)
 			color.B = (int)*(tempData+i+0);
 
 			// Test si l'image est bien en noir/blanc/rouge
-			if (	(color.R == 0 || color.R == 255 || color.R == 250) 
-				&&	(color.G == 0 || color.G == 255) 
+			if (	(color.R == 0 || color.R == 255 || color.R == 250)
+				&&	(color.G == 0 || color.G == 255)
 				&&	(color.B == 0 || color.B == 255) )
 			{
 				if ( color.R == 250 )
 				{
-					lastSpawnPoint.first = row;
+					lastSpawnPoint.first = 256-row;
 					lastSpawnPoint.second = col;
 					listSpawnPoint.push_back(lastSpawnPoint);
 				}

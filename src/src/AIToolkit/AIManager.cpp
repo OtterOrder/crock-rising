@@ -2,7 +2,7 @@
 
 
 AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precision ) 
-	:	nbGroup(0), spawnInfini(spawn), typeAI(comportementAI), cptGeneral(0), newPos(Vector3f(0,0,0)), 
+	:	nbGroup(0), spawnInfini(spawn), typeAI(comportementAI), newPos(Vector3f(0,0,0)), 
 		newAngle(0), fieldOfView(fovEnemy), attackRange(rangeAttack), nbEnemy(nbMaxEnemy), scaleCurrMap(scaleMap),
 		precCurrMap(precision)
 {
@@ -22,46 +22,49 @@ void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> li
 	aiEnemy->setElapsedTime(elapsedTime);
 
 	// Gère les états et transitions
-	cptGeneral = 0;
 	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); )
 	{
 		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
-		newPos = listEnemy[cptGeneral]->getSceneObjectAnimated()->GetPosition();
+		newPos = (*it)->getSceneObjectAnimated()->GetPosition();
 		distance = aiEnemy->calculDistance( posPlayer, newPos );
 		newPos = Vector3f(0,0,0);
 		newAngle = 0;
 
-		if ( distance <= attackRange )		//**** TODO **** Rajouter champ de vision ****
+		if ( distance <= attackRange )
 		{
-			if (listEnemy[cptGeneral]->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
-				aiEnemy->enemyAIAttack( posPlayer, listEnemy[cptGeneral]->getSceneObjectAnimated()->GetPosition(), newAngle );
+				aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
+				(*it)->changeState(PersoState::ATTACK);
 			}
 			else
 			{
 				aiEnemy->enemyAIEvade( posPlayer );
+				(*it)->changeState(PersoState::RUN);
 			}
 		}
 		else if ( distance <= fieldOfView )
 		{
-			if (listEnemy[cptGeneral]->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
-				aiEnemy->enemyAIMoveTo( posPlayer, listEnemy[cptGeneral]->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+				aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+				(*it)->changeState(PersoState::RUN);
 			}
 			else
 			{
 				aiEnemy->enemyAIEvade( posPlayer );
+				(*it)->changeState(PersoState::RUN);
 			}
 		}
 		else
 		{
 			aiEnemy->enemyAIPatrol(posPlayer);
+			(*it)->changeState(PersoState::RUN);
 		}
 
-		listEnemy[cptGeneral]->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
-		listEnemy[cptGeneral]->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
+		(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
+		(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
 
-		cptGeneral++;
 		it++;
 	}
 
@@ -85,7 +88,8 @@ void AIManager::updateSpawn()
 			float spawnX = floor(float((posSpawn.first*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
-			new Enemy( Vector3f(spawnX, 8.f, spawnZ) );
+			Enemy* enemy = new Enemy( Vector3f(spawnX, 8.f, spawnZ) );
+			enemy->Init();
 		}
 	}
 }

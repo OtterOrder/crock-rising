@@ -1,6 +1,7 @@
 #include "InputManager.h"
 
 #include "Renderer/Renderer.h"
+#include "Objects/2D/Sprite.h"
 
 using namespace std;
 
@@ -15,8 +16,17 @@ InputManager::InputManager( void )
 	m_MouseVector			= Vector2f( 0.f, 0.f );
 	m_IsMouseMoved			= false;
 	m_IsMouseHeldAtCenter	= false;
+	m_pCursor				= NULL;
 }
 
+/***********************************************************
+ * Destructeur.
+ **********************************************************/
+InputManager::~InputManager( void )
+{
+	if( m_pCursor )
+		delete m_pCursor;
+}
 
 /***********************************************************
  * Vérifie si la touche est appuyée.
@@ -117,6 +127,34 @@ void InputManager::HoldMouseAtCenter( bool isHeld )
 void InputManager::ShowOSCursor( bool isShown )
 {
 	ShowCursor( isShown );
+}
+
+//**********************************************************
+// Set le sprite à utiliser comme curseur.
+// @param[in]	pCursor : Pointeur sur le sprite
+//**********************************************************
+void InputManager::SetCursorSprite( Sprite *pCursor )
+{
+	if( m_pCursor )
+	{
+		delete m_pCursor;
+		m_pCursor = NULL;
+	}
+	m_pCursor = pCursor;
+
+	if( m_pCursor )
+	{
+		m_pCursor->SetPriority( 1 );
+	}
+}
+
+//**********************************************************
+// Donne le sprite du curseur.
+// @return	Pointeur sur le sprite
+//**********************************************************
+Sprite* const InputManager::GetCursorSprite( void ) const
+{
+	return m_pCursor;
 }
 
 /***********************************************************
@@ -228,6 +266,11 @@ LRESULT CALLBACK InputManager::EventsCallback( HWND hWnd, UINT uMsg, WPARAM wPar
 					m_MouseVector.x = (float)mouseAbsPosition.x - centerX;
 					m_MouseVector.y = (float)mouseAbsPosition.y - centerY;
 				}
+			}
+			if( m_pCursor )
+			{
+				// Position du curseur
+				m_pCursor->SetPosition( m_MousePosition );
 			}
 			break;
 		}

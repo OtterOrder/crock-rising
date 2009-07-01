@@ -1,6 +1,7 @@
 #include	"LevelMainMenu.h"
 
 #include	<Core/System.h>
+#include	<Core/Inputs/InputManager.h>
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
@@ -76,6 +77,9 @@ void LevelMainMenu::Init( void )
 	
 	// Fond noir
 	pRenderer->SetClearColor( Color4f( 0.f, 0.f, 0.f, 1.f ) );
+
+	// Curseur
+	InputManager::GetInstance()->ShowOSCursor( true );
 	
 	// Initialisation de la caméra
 	m_Camera = new Camera( Vector3f( 0.0f, 10.0f, -100.0f ) );

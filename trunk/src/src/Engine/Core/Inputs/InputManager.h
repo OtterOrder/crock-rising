@@ -43,6 +43,8 @@ enum MouseButton
 
 //******************************************************************
 
+class Sprite;
+
 class InputManager : public Singleton< InputManager >
 {
 	// Indispensable car Singleton doit pouvoir accéder aux
@@ -70,10 +72,12 @@ public:
 	
 	Point2f		GetMousePosition	( void ) const;			// Donne la position de la souris
 	Vector2f	GetMouseVector		( void ) const;			// Donne le vecteur de la souris
-	int			GetMouseWheelDelta( void );
+	int			GetMouseWheelDelta	( void );
 
-	void		HoldMouseAtCenter	( bool isHeld );
-	void		ShowOSCursor		( bool isShown );
+	void			HoldMouseAtCenter	( bool isHeld );
+	void			ShowOSCursor		( bool isShown );
+	void			SetCursorSprite		( Sprite *pCursor );
+	Sprite* const	GetCursorSprite		( void ) const;
 
 	void		Update				( void );				// Update
 	void		InitMouseWheelDelta( void );
@@ -120,12 +124,13 @@ protected:
 
 	int                 m_nMouseWheelDelta;
 
+	Sprite				*m_pCursor;
 	
 	// =========================================================
 	// Méthodes protégées
 
 	InputManager					( void );								// Constructeur
-	virtual ~InputManager			( void ){}								// Destructeur
+	virtual ~InputManager			( void );								// Destructeur
 
 	void		TriggerItem			( int code, ItemType type );			// Appuie l'item
 	void		ReleaseItem			( int code, ItemType type );			// Relache l'item

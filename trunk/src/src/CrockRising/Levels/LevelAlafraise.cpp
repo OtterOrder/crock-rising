@@ -12,8 +12,8 @@
 
 #define		LEVEL_quote				0x6b71cbf4
 
-#define		LOGO_APPEARANCE_TIME	1.f		// Temps d'apparition du logo en sec
-#define		NEXT_LEVEL_TIME			3.f		// Temps avant de passer au level suivant
+#define		LOGO_APPEARANCE_TIME	2.f		// Temps d'apparition du logo en sec
+#define		NEXT_LEVEL_TIME			4.f		// Temps avant de passer au level suivant
 
 /***********************************************************
  * Constructeur.
@@ -47,6 +47,9 @@ void LevelAlafraise::Init( void )
 	
 	// Fond blanc
 	pRenderer->SetClearColor( Color4f( 1.f, 1.f, 1.f, 1.f ) );
+
+	// Pas de curseur
+	InputManager::GetInstance()->ShowOSCursor( false );
 	
 	// Initialisation de la caméra
 	m_pCamera = new Camera( Vector3f( 0.0f, 10.0f, -100.0f ) );

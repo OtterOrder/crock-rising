@@ -2,7 +2,8 @@
 // Include                                                                   //
 //===========================================================================//
 #include "Shader.h"
-#include "../Renderer/Renderer.h"
+#include "Core/System.h"
+#include "Renderer/Renderer.h"
 
 //===========================================================================//
 // Constructeur Shader                                                       //
@@ -24,16 +25,12 @@ Shader::~Shader()
 //===========================================================================//
 ResourceResult Shader::Load( std::string resource, ResourceParam param )
 {
-	std::string str = "";
-
-	#ifndef	_FINALRELEASE
-	str = "../../";
-	#endif	//_FINALRELEASE
-
-	str += "data/shader/"+resource;
+	std::string shaderPath;
+	shaderPath = System::GetInstance()->GetDataPath();
+	shaderPath += "shader/" + resource;
 
 	ID3DXBuffer  * err=NULL;
-	if(FAILED(D3DXCreateEffectFromFile(Renderer::GetInstance()->m_pd3dDevice, str.c_str(), NULL, NULL, D3DXSHADER_NO_PRESHADER, NULL, &m_pEffect, &err )))
+	if(FAILED(D3DXCreateEffectFromFile(Renderer::GetInstance()->m_pd3dDevice, shaderPath.c_str(), NULL, NULL, D3DXSHADER_NO_PRESHADER, NULL, &m_pEffect, &err )))
 	{
 		char* pError = reinterpret_cast<char*>(err->GetBufferPointer());
 		OutputDebugString(pError);

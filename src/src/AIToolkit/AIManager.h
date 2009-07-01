@@ -3,11 +3,15 @@
 
 #include	"../CrockRising/Characters/Perso.h"   
 #include	"../CrockRising/Characters/Enemy.h"
+#include	"../CrockRising/Characters/Alien.h"
+#include	"../CrockRising/Characters/MmeGrise.h"
 #include	"AIEnemy.h"
 #include	"AIMap.h"
 #include	<iostream>
 #include	<math.h>
 #include	<vector>
+#include	<stdlib.h>
+#include	<time.h>
 #include	<map>
 
 using namespace std;

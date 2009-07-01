@@ -12,16 +12,17 @@ XPStyle on
 
 ;*******************************************************************
 
-; Choix dossier d'installation
+; Pages
 Page directory
+Page components
+Page instfiles
 
 ;*******************************************************************
 
-; Copie des fichiers..
-Page instfiles
-Section
+; Fichiers du jeu..
+Section "!Crock Rising"
 	
-	; Exe
+	; Exe + dll
 	SetOutPath $INSTDIR
 	File "..\src\finalrelease\CrockRising.exe"
 	File "redist\NxCharacter.dll"
@@ -62,14 +63,73 @@ Section
 	File "..\src\data\texture\*.jpg"
 	File "..\src\data\texture\*.dds"
 	
+	; Création du désinstalleur..
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
+	
+	; Raccourcis dans le menu Démarrer
+	SetOutPath $INSTDIR ; /!\ Contexte de lancement des raccourcis
+	CreateDirectory "$SMPROGRAMS\Crock Rising"
+	CreateShortCut "$SMPROGRAMS\Crock Rising\Crock Rising.lnk" "$INSTDIR\CrockRising.exe"
+	CreateShortCut "$SMPROGRAMS\Crock Rising\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 	
 SectionEnd
 
 ;*******************************************************************
 
+Section "DirectX"
+	
+	SetOutPath "$INSTDIR\Temp"
+	File "redist\directx_aug2008_redist.exe"
+	ExecWait '"$INSTDIR\Temp\directx_aug2008_redist.exe"'
+	
+SectionEnd
+
+;*******************************************************************
+
+Section "PhysX"
+	
+	SetOutPath "$INSTDIR\Temp"
+	File "redist\PhysX_9.09.0428_SystemSoftware.exe"
+	ExecWait '"$INSTDIR\Temp\PhysX_9.09.0428_SystemSoftware.exe"'
+	
+SectionEnd
+
+;*******************************************************************
+
+Section "OpenAL"
+	
+	SetOutPath "$INSTDIR\Temp"
+	File "redist\oalinst.exe"
+	ExecWait '"$INSTDIR\Temp\oalinst.exe"'
+	
+SectionEnd
+
+;*******************************************************************
+
+Section "-Finish Installation"
+	
+	; On termine proprement en supprimant les redistribuables
+	SetOutPath $INSTDIR ; /!\ Sinon on pourra pas supprimer Temp
+	Delete "$INSTDIR\Temp\*"
+	RMDir "$INSTDIR\Temp"
+	
+SectionEnd
+
+;*******************************************************************
+
+; Désinstallation
 Section "Uninstall"
 
+	; Menu Démarrer
+	Delete "$SMPROGRAMS\Crock Rising\*"
+	RMDir "$SMPROGRAMS\Crock Rising"
+	
+	; On vire les redistribuables au cas ou ça n'aurait
+	; pas marché à la fin de l'installation..
+	Delete "$INSTDIR\Temp\*"
+	RMDir "$INSTDIR\Temp"
+	
+	; Répertoire d'installation
 	Delete "$INSTDIR\data\anim\*"
 	RMDir "$INSTDIR\data\anim"
 	Delete "$INSTDIR\data\mapAI\*"
@@ -91,3 +151,4 @@ Section "Uninstall"
 	RMDir "$INSTDIR"
 	
 SectionEnd
+

@@ -141,6 +141,68 @@
 				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\release\&quot;"
 			/>
 		</Configuration>
+		<Configuration
+			Name="FinalRelease|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)src\CrockRising&quot;;&quot;$(SolutionDir)include&quot;"
+				PreprocessorDefinitions="WIN32;_FINALRELEASE;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\release\&quot;"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>

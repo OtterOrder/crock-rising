@@ -119,6 +119,6 @@ void Bitmap::convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] )
 	for (int i=0; i<MAX_TAB; i++)
 	for (int j=0; j<MAX_TAB; j++)
 	{
-		tabImg[MAX_TAB-i-1][j] = ceil((float)tabColor[i*tmpSize][j*tmpSize]/255.f);		// Tableau inversé
+		tabImg[MAX_TAB-i-1][j] = (int)ceil((float)tabColor[i*tmpSize][j*tmpSize]/255.f);		// Tableau inversé
 	}
 }

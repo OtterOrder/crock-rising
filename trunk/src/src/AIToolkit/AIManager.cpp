@@ -36,12 +36,12 @@ void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> li
 			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
 				aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
-				(*it)->changeState(PersoState::ATTACK);
+				(*it)->changeState(ATTACK);
 			}
 			else
 			{
 				aiEnemy->enemyAIEvade( posPlayer );
-				(*it)->changeState(PersoState::RUN);
+				(*it)->changeState(RUN);
 			}
 		}
 		else if ( distance <= fieldOfView )
@@ -49,18 +49,18 @@ void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> li
 			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 			{
 				aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
-				(*it)->changeState(PersoState::RUN);
+				(*it)->changeState(RUN);
 			}
 			else
 			{
 				aiEnemy->enemyAIEvade( posPlayer );
-				(*it)->changeState(PersoState::RUN);
+				(*it)->changeState(RUN);
 			}
 		}
 		else
 		{
 			aiEnemy->enemyAIPatrol(posPlayer);
-			(*it)->changeState(PersoState::RUN);
+			(*it)->changeState(RUN);
 		}
 
 		(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
@@ -80,7 +80,7 @@ void AIManager::updateSpawn()
 	if ( spawnInfini )
 	{
 		// Creer les ennemis manquants
-		while (listAIEnemy->listEnemy.size() < nbEnemy)
+		while ((int)listAIEnemy->listEnemy.size() < nbEnemy)
 		{
 			// Position aléatoire par rapport a la AIMap
 			pair<int,int> posSpawn = aiEnemy->getPtrAStar()->randomSpawn();

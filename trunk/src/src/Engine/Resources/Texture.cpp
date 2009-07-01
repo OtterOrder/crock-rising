@@ -44,7 +44,7 @@ int Texture::GetSrcHeight() const
 //===========================================================================//
 ResourceResult Texture::Load( std::string resource, ResourceParam param )
 {
-	std::string dir;
+	std::string dir = "";
 
 	#ifndef	_FINALRELEASE
 	dir = "../../";

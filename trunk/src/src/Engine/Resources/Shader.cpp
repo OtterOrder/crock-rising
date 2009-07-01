@@ -24,7 +24,13 @@ Shader::~Shader()
 //===========================================================================//
 ResourceResult Shader::Load( std::string resource, ResourceParam param )
 {
-	std::string str="..\\..\\data\\shader\\"+resource;
+	std::string str = "";
+
+	#ifndef	_FINALRELEASE
+	str = "../../";
+	#endif	//_FINALRELEASE
+
+	str += "data/shader/"+resource;
 
 	ID3DXBuffer  * err=NULL;
 	if(FAILED(D3DXCreateEffectFromFile(Renderer::GetInstance()->m_pd3dDevice, str.c_str(), NULL, NULL, D3DXSHADER_NO_PRESHADER, NULL, &m_pEffect, &err )))

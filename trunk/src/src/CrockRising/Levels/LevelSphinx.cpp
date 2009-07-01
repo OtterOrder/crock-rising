@@ -2,9 +2,11 @@
 
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
+#include	<Physics/Trigger/UserData.h>
 
-//******************************************************************
-//Gestion des triggers
+
+ContactReportCR*  gContactReportCR = new ContactReportCR;
+SceneObject* cube = NULL;
 
 /***********************************************************
  * Constructeur.
@@ -17,6 +19,7 @@ LevelSphinx::LevelSphinx( crc32 levelID )
 	m_pHero = new Hero();
 	m_EscMenu = new EscMenu();
 	
+	Physicalizer::GetInstance()->setControllerCallback( gContactReportCR );
 }
 
 /***********************************************************
@@ -63,70 +66,76 @@ void LevelSphinx::Init( void )
 */
 //
 ////DESERT
-	SceneObject* Desert = new SceneObject("desert.DAE", D3DXVECTOR3(0.f,0.f,0.f));
+	SceneObject* Desert = new SceneObject("Mesh_Desert.DAE", D3DXVECTOR3(0.f, 0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
-	Desert->SetObjectPhysical( "desert_physique.DAE");
-//	
+	Desert->SetObjectPhysical( "Physic_Desert.DAE" );
+	
 ////STATUES
-	SceneObject* statue = new SceneObject("statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
+	SceneObject* statue = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
 	statue->Init();
 	statue->SetRotation(0.f, 180.f, 0.f);
 	statue->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue->SetShader("default_normalmap.fx");
+	statue->SetObjectPhysical("Physic_Statue.DAE");
 	
-	SceneObject* statue2 = new SceneObject("statue.DAE", D3DXVECTOR3(452.4f, 0.f, 526.5f));
+	SceneObject* statue2 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(452.4f, 0.f, 526.5f));
 	statue2->Init();
 	statue2->SetRotation(0.f, 180.f, 0.f);
 	statue2->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue2->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue2->SetShader("default_normalmap.fx");
+	statue2->SetObjectPhysical("Physic_Statue.DAE");
 	
-	SceneObject* statue3 = new SceneObject("statue.DAE", D3DXVECTOR3(816.5f, 0.f, -984.f));
+	SceneObject* statue3 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(816.5f, 0.f, -984.f));
 	statue3->Init();
 	statue3->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue3->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue3->SetShader("default_normalmap.fx");
+	statue3->SetObjectPhysical("Physic_Statue.DAE");
 //	
 ////PALMIERS
-	SceneObject* palmier = new SceneObject("palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
+	SceneObject* palmier = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
 	palmier->Init();
 	palmier->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
+	palmier->SetObjectPhysical("Physic_Palmier.DAE");
 	
-	SceneObject* palmier2 = new SceneObject("palmier.DAE", D3DXVECTOR3(-684.5f, 0.f, 480.f));
+	SceneObject* palmier2 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-684.5f, 0.f, 480.f));
 	palmier2->Init();
 	palmier2->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
+	palmier2->SetObjectPhysical("Physic_Palmier.DAE");
 
-	SceneObject* palmier3 = new SceneObject("palmier.DAE", D3DXVECTOR3(747.5f, 0.f, -1045.5f));
+	SceneObject* palmier3 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(747.5f, 0.f, -1045.5f));
 	palmier3->Init();
 	palmier3->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
-//
+	palmier3->SetObjectPhysical("Physic_Palmier.DAE");
+
 ////PYRAMIDE
-	SceneObject* Pyramide = new SceneObject("pyramide.DAE", D3DXVECTOR3(806.8f, 0.f, -117.767f));
-	Pyramide->Init();
-	Pyramide->GetMaterial()->SetTexture("pyramide_diffuse.jpg", Texture::DIFFUSE);
-	Pyramide->GetMaterial()->SetTexture("pyramide_normal.jpg", Texture::NORMALMAP);
-	Pyramide->SetShader("default_normalmap.fx");
-	
-	SceneObject* Pyramide2 = new SceneObject("pyramide.DAE", D3DXVECTOR3(-519.8f, 0.f, -1181.3f));
+
+	SceneObject* Pyramide2 = new SceneObject("Mesh_Pyramide.DAE", D3DXVECTOR3(-519.8f, 0.f, -1181.3f));
 	Pyramide2->Init();
 	Pyramide2->GetMaterial()->SetTexture("pyramide_diffuse.jpg", Texture::DIFFUSE);
 	Pyramide2->GetMaterial()->SetTexture("pyramide_normal.jpg", Texture::NORMALMAP);
 	Pyramide2->SetShader("default_normalmap.fx");
-//
+	Pyramide2->SetObjectPhysical("Physic_Pyramide.DAE");
+
 ////SPHINX
-	SceneObject* sphinx = new SceneObject("sphinx.DAE", D3DXVECTOR3(-41.5f, 0.f, 921.5f));
-	sphinx->Init();
-	sphinx->GetMaterial()->SetTexture("sphinx_diffuse.jpg", Texture::DIFFUSE);
-	sphinx->GetMaterial()->SetTexture("sphinx_normal.jpg", Texture::NORMALMAP);
-	sphinx->SetShader("default_normalmap.fx");
+ 	SceneObject* sphinx = new SceneObject("Mesh_Sphinx.DAE", D3DXVECTOR3(-41.5f, 0.f, 921.5f));
+ 	sphinx->Init();
+ 	sphinx->GetMaterial()->SetTexture("sphinx_diffuse.jpg", Texture::DIFFUSE);
+ 	sphinx->GetMaterial()->SetTexture("sphinx_normal.jpg", Texture::NORMALMAP);
+ 	sphinx->SetShader("default_normalmap.fx");
+	sphinx->SetObjectPhysical("Physic_Sphinx.DAE");
+
 
 	//Initialisation du Héro
 	m_pHero->Init();
 
+	//physX::Link(m_pJanotLapin->getSceneObjectAnimated(), cube);
+
 	// Création de l'AI
-	//m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 100, 4000, 2, 3100, 256 );
+	//m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 4000, 2, 3100, 256, 100 );
 
 	// Création des ennemies
 	/*for (int i=0; i<30; i++)
@@ -153,6 +162,6 @@ void LevelSphinx::Update( void )
 
 	if( pInputManager->IsKeyTriggered(' ') )
 	{	
-		m_pHero->getSceneObjectAnimated()->SetRotation(0.f, 1.f, 0.f);
+		cube->SetTranslation(0.f, 0.f, 1.f);
 	}
 }

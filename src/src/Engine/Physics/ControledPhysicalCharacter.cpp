@@ -63,6 +63,8 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	empActor = physX::getPhysicScene()->getNbActors() -1;
 
 	NxActor* pActor = physX::getActor( empActor );
+	pActor->setGroup( GROUP_CONTROLLER );
+
 	pActor->userData = new ActorUserData;
 	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
 
@@ -92,10 +94,29 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 	return physXInstance->getControllerManager()->getNbControllers() - 1;
 }
 
+NxControllerManager* physX::getControllerManager()
+{
+	Physicalizer* physInstance = Physicalizer::GetInstance();
+	NxControllerManager* pControllerManager = physInstance->getControllerManager();
+	assert(pControllerManager);
+
+	return pControllerManager;
+}
+
+NxController* physX::getController( int emp )
+{
+	if(emp == -1) return NULL;
+	NxController* pController = getControllerManager()->getController( emp );
+	assert(pController);
+
+	return pController;
+}
 
 void physX::releaseController(int &empActor, int &empController)
 {
-	getControllerManager()->releaseController(*getController(empController));
+	NxControllerManager* pControllerManager = getControllerManager();
+	NxController* pController = pControllerManager->getController(empController);
+	pControllerManager->releaseController( *pController );
 	empController = -1;
 
 	releaseActor( empActor );

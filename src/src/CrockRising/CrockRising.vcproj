@@ -362,6 +362,14 @@
 			Name="Characters"
 			>
 			<File
+				RelativePath=".\Characters\Alien.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\Alien.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Characters\Enemy.cpp"
 				>
 			</File>
@@ -375,6 +383,14 @@
 			</File>
 			<File
 				RelativePath=".\Characters\Hero.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\MmeGrise.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Characters\MmeGrise.h"
 				>
 			</File>
 			<File

@@ -60,7 +60,6 @@ SceneObject::SceneObject(const std::string& mesh,
 
 SceneObject::~SceneObject()
 {
-	m_ListOfBoundingBox.ReleaseList(); // suppression dans la liste
 	SetObjectUnPhysical();
 	if(m_pMaterial)
 		delete m_pMaterial;
@@ -171,8 +170,9 @@ void SceneObject::SetObjectTrigger(const std::string& physic,
 ************************************************************************************/
 void SceneObject::SetControledCharacter( float radius, float height, void* Ref )
 {
-	//m_pMesh->m_ReglagePivot = Vector3f(0.f, height/2, 0.f);
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_pMesh->m_ReglagePivot.y -= height;	//Le controller a les pieds au dessus de la capsule
+												//si on ne le baisse pas.
 	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor);
 }
 
@@ -187,6 +187,8 @@ void SceneObject::SetControledCharacter( float radius, float height, void* Ref )
 void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
+	m_pMesh->m_ReglagePivot.y -= height;	//Le controller a les pieds au dessus de la capsule
+												//si on ne le baisse pas.
 	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor);
 }
 
@@ -197,19 +199,44 @@ void SceneObject::SetObjectUnPhysical()
 {
 	if(IsActor())
 		physX::releaseActor( m_iEmpActor );
-	else if(IsController())
-		physX::releaseController( m_iEmpActor, m_iEmpController );
+	//else if(IsController())
+	//{
+	//	physX::releaseController( m_iEmpActor, m_iEmpController );
+	//}
 
 	m_ListOfBoundingBox.ReleaseList();
 }
 
-void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ )
+void SceneObject::SetPhysicalPosition( float x, float y, float z )
+{
+	if(IsActor())
+	{
+		NxActor* pActor = physX::getActor( m_iEmpActor );
+		NxVec3 NewPos = NxVec3(x, y, z);
+		pActor->setGlobalPosition( NewPos );
+	}
+	else
+	{
+		NxController* pControler = physX::getController( m_iEmpController );
+		NxExtendedVec3 ExtCurrPos = pControler->getPosition();
+		NxVec3 CurrPos((NxReal)ExtCurrPos.x, (NxReal)ExtCurrPos.y, (NxReal)ExtCurrPos.z);
+		NxVec3 TargetPos(x, y, z);
+
+		NxU32 collisionFlags; 
+		NxF32 minDistance = 0.001f;
+		NxVec3 disp = TargetPos - CurrPos; 
+
+		pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
+	}
+}
+
+void SceneObject::SetPhysicalTranslation( float x, float y, float z )
 {
 	if(IsActor())
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
 		NxVec3 currentPos = pActor->getGlobalPosition();
-		NxVec3 NewPos = currentPos + NxVec3(dispX, dispY, dispZ);
+		NxVec3 NewPos = currentPos + NxVec3(x, y, z);
 		pActor->setGlobalPosition( NewPos );
 	}
 	else
@@ -218,7 +245,7 @@ void SceneObject::SetPhysicalTranslation( float dispX, float dispY, float dispZ 
 
 		NxU32 collisionFlags; 
 		NxF32 minDistance = 0.001f;
-		NxVec3 disp( dispX, dispY, dispZ ); 
+		NxVec3 disp( x, y, z ); 
 
 		pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
 	}
@@ -380,21 +407,31 @@ void SceneObject::Update()
 		NxExtendedVec3 NxPos = pController->getPosition();
 		Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
 		pos += m_pMesh->m_ReglagePivot;
-		D3DXMATRIX trans, rot, result;
-		D3DXMatrixTranslation( &trans, pos.x, pos.y, pos.z);
-		D3DXMatrixRotationY(&rot, D3DXToRadian( m_vAngleY ));
+		D3DXMATRIX rot_and_trans;
+		D3DXMatrixRotationY(&rot_and_trans, D3DXToRadian( m_vAngleY ));
 
-		rot._41 = pos.x;
-		rot._42 = pos.y;
-		rot._43 = pos.z;
+		rot_and_trans._41 = pos.x;
+		rot_and_trans._42 = pos.y;
+		rot_and_trans._43 = pos.z;
 
 		D3DXMatrixIdentity( &m_WorldMatrix );
 		m_WorldMatrix._22=0; m_WorldMatrix._23=1;
 		m_WorldMatrix._32=1; m_WorldMatrix._33=0;
 
-		D3DXMatrixMultiply( &m_WorldMatrix, &m_WorldMatrix, &rot);
+		D3DXMatrixMultiply( &m_WorldMatrix, &m_WorldMatrix, &rot_and_trans);
 		
 	}
+}
+void SceneObject::SetPosition( float x, float y, float z )
+{
+	// Si l'objet est affecté par la physique
+	if(IsPhysical())
+		// On affecte la transformation à la physique
+		SetPhysicalPosition( x, y, z );
+
+	// Sinon on transforme l'objet graphique
+	else
+		Object::SetPosition( x, y, z );
 }
 
 void SceneObject::SetTranslation( float x, float y, float z )

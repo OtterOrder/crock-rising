@@ -38,6 +38,7 @@ public:
 	virtual void ApplyTransform(const D3DXMATRIX* world) {}
 
 	Vector3f GetPosition();
+	void SetPosition( float x, float y, float z );
 	void SetTranslation( float x, float y, float z );
 	void SetRotation( float angleX, float angleY, float angleZ );
 	

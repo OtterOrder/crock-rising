@@ -23,27 +23,59 @@ Hero::Hero()
 	
 	m_pInputManager = InputManager::GetInstance();
 }
-
+void createStack()
+{
+	for(int i = 0; i < 10; i ++)
+	{
+		for(int j = 0; j < 10; j++)
+		{
+			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( i*0.5 - 2.5 + j/2, j*0.51, 50.f));
+			plop->Init();
+		}
+	}
+}
 /**********************************************************
 * Initialisation des données membres
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,10.f,0.f)); //y = -75 pr le canyon
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f, 10.f, 0.f)); //y = -75 pr le canyon
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	m_pAnimated->SetControledCharacter(4.f,10.f,this);
+	m_pAnimated->SetControledCharacter(3.f,10.f,this);
+	//m_pAnimated->SetAnim("X.DAE");
+	//m_pAnimated->Play();
 	//m_pAnimated->SetLoop(true);
-	//m_pAnimated->SetAnimFPS(50.f);
+	//m_pAnimated->SetAnimFPS(25.f);
 
-	//m_pInputManager->HoldMouseAtCenter(true);
+	m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
 	m_pLifeBar->SetLife(50);
+
+
+	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
+	m_pArme->Init();
+	m_pArme->SetObjectPhysical( "batte_P.dae" ); //pas le bon group!!
+
+	 NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+	if( a )
+	{
+		a->getShapes()[0]->setGroup( GROUP_CONTROLLER );
+		a->raiseBodyFlag( NX_BF_DISABLE_GRAVITY );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_X );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Z );
+	}		
+
+	createStack();
+
+	//SceneObject* test = new SceneObject( "PlanCheckZ.dae", Vector3f( 700.f, 0.001, -431.f)); //en fn de la pos de m_pAnimated
+	//test->Init();
 }
 
 /***********************************************************
@@ -91,6 +123,14 @@ ResourceResult Hero::control( Camera* pCamera )
 		//m_pAnimated->SetRotation( 0.f, diff, 0.f );
 		m_pAnimated->m_vAngleY -= D3DXToDegree( diff );
 
+		static NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+		if( a )
+			a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
+
+		m_pArme->SetRotation( 0, -D3DXToDegree( diff ), 0 );
+		
+		if( a )
+			a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
 	}
 
 
@@ -192,9 +232,21 @@ void Hero::update( Camera* pCamera )
 	if(m_currentState == RUN)
 		m_pAnimated->SetTranslation(m_Translate.x, m_Translate.y, m_Translate.z);
 
+	//Sync arme sur la main du Hero
+	int idBone = 21;
+	D3DXMATRIX* armeMatrix = m_pArme->GetWorldMatrix();
+	D3DXMATRIX animMatrix = m_pAnimated->GetMatrixTransformBone( idBone );
+	*armeMatrix = animMatrix; //modificiation obj visuel
+	m_pArme->SetPosition( animMatrix._41, animMatrix._42, animMatrix._43 );
+	
+
+
+	//m_pArme->GetWorldMatrix()->_41 = animMatrix._41;
+	//m_pArme->GetWorldMatrix()->_42 = animMatrix._42;
+	//m_pArme->GetWorldMatrix()->_43 = animMatrix._43;
+
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();
-
 }
 
 /******************************************************************************

@@ -6,6 +6,7 @@ AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEne
 		newAngle(0), fieldOfView(fovEnemy), attackRange(rangeAttack), nbEnemy(nbMaxEnemy), scaleCurrMap(scaleMap),
 		precCurrMap(precision)
 {
+	srand( (unsigned)time(NULL) );
 	aiEnemy = new AIEnemy(scaleMap, precision);
 }
 
@@ -88,8 +89,16 @@ void AIManager::updateSpawn()
 			float spawnX = floor(float((posSpawn.first*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
-			Enemy* enemy = new Enemy( Vector3f(spawnX, 8.f, spawnZ) );
-			enemy->Init();
+			if ( rand()%2)
+			{
+				Alien* enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
+				enemy->Init();
+			}
+			else
+			{
+				MmeGrise* enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
+				enemy->Init();
+			}
 		}
 	}
 }

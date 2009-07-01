@@ -45,13 +45,16 @@ int Texture::GetSrcHeight() const
 ResourceResult Texture::Load( std::string resource, ResourceParam param )
 {
 	std::string dir;
-	//m_Name = resource;
+
+	#ifndef	_FINALRELEASE
+	dir = "../../";
+	#endif	//_FINALRELEASE
 	
 	// Sélection du répertoire en fonction du type
 	switch( (Texture::Type)(int)param )
 	{
-		case SPRITE:	dir = "../../data/sprite/";	break;
-		default:		dir = "../../data/texture/";
+		case SPRITE:	dir += "data/sprite/";	break;
+		default:		dir += "data/texture/";
 	}
 	
 	// Chargement de la texture

@@ -166,6 +166,82 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="FinalRelease|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\Engine&quot;;&quot;$(SolutionDir)src\AIToolkit&quot;;&quot;$(SolutionDir)include&quot;"
+				PreprocessorDefinitions="_FINALRELEASE;_CRT_SECURE_NO_DEPRECATE;NOMINMAX"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalOptions="/NODEFAULTLIB:libcmt&#x0D;&#x0A;/NODEFAULTLIB:libcmtd"
+				AdditionalDependencies="Engine.lib d3dx9.lib d3d9.lib OpenAL32.lib ogg.lib vorbis.lib vorbisfile.lib Winmm.lib tinyxml.lib AIToolkit.lib PhysXLoader.lib NxCooking.lib NxCharacter.lib XInput.lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\release&quot;"
+				GenerateDebugInformation="true"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>

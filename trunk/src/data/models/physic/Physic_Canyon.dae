@@ -1,0 +1,2111 @@
+<?xml	version="1.0"	encoding="utf-8"?>
+<COLLADA version="1.4.0" xmlns="http://www.collada.org/2005/11/COLLADASchema">
+	<asset>
+		<contributor>
+			<author>NxuStream2 converter - http://www.ageia.com</author>
+			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
+			<comments>questions	to:	jratcliff@ageia.com</comments>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\physic\Physic_Canyon.dae</source_data>
+		</contributor>
+		<unit	meter="1"	name="meter"/>
+		<up_axis>Y_UP</up_axis>
+	</asset>
+	 <library_materials>
+			<material	id="Material"	name="Material">
+				 <instance_effect	url="#Material-fx"></instance_effect>
+			</material>
+	 </library_materials>
+	 <library_effects>
+			<effect	id="Material-fx" name="Material">
+				 <profile_COMMON>
+						<technique id="Material-fx-COMMON" sid="COMMON">
+							 <phong>
+									<ambient>
+										 <color>0.803922 0.588235	0.92549	1</color>
+									</ambient>
+									<diffuse>
+										 <color>0.803922 0.588235	0.92549	1</color>
+									</diffuse>
+									<specular>
+										 <color>0.631373 0.631373	0.631373 1</color>
+									</specular>
+									<shininess>
+										 <float>1</float>
+									</shininess>
+									<reflective>
+										 <color>0	0	0	1</color>
+									</reflective>
+									<transparent>
+										 <color>1	1	1	1</color>
+									</transparent>
+									<transparency>
+										 <float>0</float>
+									</transparency>
+							 </phong>
+						</technique>
+				 </profile_COMMON>
+			</effect>
+	 </library_effects>
+	<library_geometries>
+	</library_geometries>
+	<library_visual_scenes>
+		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
+			<node	id="Actor0-Node" name="Actor0" type="NODE">
+        <translate>0	0 0</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor1-Node" name="Actor1" type="NODE">
+        <translate>691.31817627	-542.189880371 54.599998474</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor2-Node" name="Actor2" type="NODE">
+        <translate>563.459289551	-527.929626465 63</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor3-Node" name="Actor3" type="NODE">
+        <translate>405.14630127	-405.14642334 15.952150345</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor4-Node" name="Actor4" type="NODE">
+        <translate>176.257080078	-556.933532715 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor5-Node" name="Actor5" type="NODE">
+        <translate>-305.449707031	-386.293884277 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor6-Node" name="Actor6" type="NODE">
+        <translate>-147.62008667	-365.266052246 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor7-Node" name="Actor7" type="NODE">
+        <translate>-102.905731201	-350.039001465 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor8-Node" name="Actor8" type="NODE">
+        <translate>-43.931121826	-423.757263184 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor9-Node" name="Actor9" type="NODE">
+        <translate>48.517417908	-480.161804199 70</translate>
+        <rotate>0 0	1.000000834	 23.88747406</rotate>
+			</node>
+			<node	id="Actor10-Node" name="Actor10" type="NODE">
+        <translate>23.466377258	-428.568817139 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor11-Node" name="Actor11" type="NODE">
+        <translate>-544.333862305	329.408752441 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor12-Node" name="Actor12" type="NODE">
+        <translate>767.682678223	-511.827270508 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor13-Node" name="Actor13" type="NODE">
+        <translate>635.231506348	-598.35559082 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor14-Node" name="Actor14" type="NODE">
+        <translate>499.321624756	-548.525939941 70</translate>
+        <rotate>0 0	0.999999642	 23.3814888</rotate>
+			</node>
+			<node	id="Actor15-Node" name="Actor15" type="NODE">
+        <translate>419.876098633	-496.015075684 70</translate>
+        <rotate>0 0	-1.000005841	 6.785266876</rotate>
+			</node>
+			<node	id="Actor16-Node" name="Actor16" type="NODE">
+        <translate>314.316162109	-553.014770508 70</translate>
+        <rotate>0 0	0.999999821	 55.000007629</rotate>
+			</node>
+			<node	id="Actor17-Node" name="Actor17" type="NODE">
+        <translate>156.908706665	-621.55871582 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor18-Node" name="Actor18" type="NODE">
+        <translate>25.468948364	-558.916748047 70</translate>
+        <rotate>0 0	1.000002861	 9.999970436</rotate>
+			</node>
+			<node	id="Actor19-Node" name="Actor19" type="NODE">
+        <translate>-208.207763672	-477.200195313 69.388313293</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor20-Node" name="Actor20" type="NODE">
+        <translate>-484.3097229	-447.807525635 70</translate>
+        <rotate>0 0	-0.999999225	 20.000015259</rotate>
+			</node>
+			<node	id="Actor21-Node" name="Actor21" type="NODE">
+        <translate>-584.808837891	-370.510681152 70</translate>
+        <rotate>0 0	-1.000000119	 49.999992371</rotate>
+			</node>
+			<node	id="Actor22-Node" name="Actor22" type="NODE">
+        <translate>-652.910339355	-250.017272949 70</translate>
+        <rotate>0 0	0.999999225	 20.000015259</rotate>
+			</node>
+			<node	id="Actor23-Node" name="Actor23" type="NODE">
+        <translate>-731.493347168	44.275535583 70</translate>
+        <rotate>0 0	0.999999225	 20.000015259</rotate>
+			</node>
+			<node	id="Actor24-Node" name="Actor24" type="NODE">
+        <translate>-755.176879883	196.424118042 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor25-Node" name="Actor25" type="NODE">
+        <translate>-737.723937988	369.231231689 70.576179504</translate>
+        <rotate>0 0	-1.000001311	 14.999978065</rotate>
+			</node>
+			<node	id="Actor26-Node" name="Actor26" type="NODE">
+        <translate>-658.936401367	511.780822754 70</translate>
+        <rotate>0 0	-1.000000119	 49.999992371</rotate>
+			</node>
+			<node	id="Actor27-Node" name="Actor27" type="NODE">
+        <translate>-513.657531738	597.823059082 70</translate>
+        <rotate>0 0	0.999999225	 20.000015259</rotate>
+			</node>
+			<node	id="Actor28-Node" name="Actor28" type="NODE">
+        <translate>-336.876464844	594.843017578 70</translate>
+        <rotate>0 0	-0.999999881	 25</rotate>
+			</node>
+			<node	id="Actor29-Node" name="Actor29" type="NODE">
+        <translate>-212.174865723	451.892700195 70</translate>
+        <rotate>0 0	0.999999881	 25</rotate>
+			</node>
+			<node	id="Actor30-Node" name="Actor30" type="NODE">
+        <translate>-208.466110229	252.820129395 70</translate>
+        <rotate>0 0	-0.999999881	 25</rotate>
+			</node>
+			<node	id="Actor31-Node" name="Actor31" type="NODE">
+        <translate>-428.96496582	69.227279663 70</translate>
+        <rotate>0 0	0.999999881	 25</rotate>
+			</node>
+			<node	id="Actor32-Node" name="Actor32" type="NODE">
+        <translate>-599.334594727	-78.454696655 32.387699127</translate>
+        <rotate>0 0	1.000001311	 14.999978065</rotate>
+			</node>
+			<node	id="Actor33-Node" name="Actor33" type="NODE">
+        <translate>-487.344543457	-216.277938843 22.236330032</translate>
+        <rotate>0 0	-1.000000358	 34.999984741</rotate>
+			</node>
+			<node	id="Actor34-Node" name="Actor34" type="NODE">
+        <translate>-156.431991577	-280.361907959 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor35-Node" name="Actor35" type="NODE">
+        <translate>86.075973511	-343.493225098 70</translate>
+        <rotate>0 0	0.999999225	 20.000015259</rotate>
+			</node>
+			<node	id="Actor36-Node" name="Actor36" type="NODE">
+        <translate>176.291549683	-439.096740723 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor37-Node" name="Actor37" type="NODE">
+        <translate>249.953063965	-372.654876709 70</translate>
+        <rotate>0 0	-1.000001311	 14.999978065</rotate>
+			</node>
+			<node	id="Actor38-Node" name="Actor38" type="NODE">
+        <translate>387.316650391	-299.908050537 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor39-Node" name="Actor39" type="NODE">
+        <translate>514.020385742	-371.928192139 70</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor40-Node" name="Actor40" type="NODE">
+        <translate>576.850158691	-421.478851318 70</translate>
+        <rotate>0 0	1.000002861	 9.999970436</rotate>
+			</node>
+			<node	id="Actor41-Node" name="Actor41" type="NODE">
+        <translate>659.561218262	-361.995056152 70</translate>
+        <rotate>0 0	-1.000000358	 34.999984741</rotate>
+			</node>
+			<node	id="Actor42-Node" name="Actor42" type="NODE">
+        <translate>720.856445313	-339.49041748 70</translate>
+        <rotate>0 0	-0.999999762	 30.000007629</rotate>
+			</node>
+			<node	id="Actor43-Node" name="Actor43" type="NODE">
+        <translate>759.153259277	-389.24230957 70</translate>
+        <rotate>0 0	1.000001311	 14.999978065</rotate>
+			</node>
+			<node	id="Actor44-Node" name="Actor44" type="NODE">
+        <translate>100.214897156	-426.338348389 63.315109253</translate>
+        <rotate>0 0	0.99999994	 40.000003815</rotate>
+			</node>
+			<node	id="Actor45-Node" name="Actor45" type="NODE">
+        <translate>-685.253173828	-100.255096436 70</translate>
+        <rotate>0 0	1.000002861	 9.999970436</rotate>
+			</node>
+			</visual_scene>
+	</library_visual_scenes>
+	<library_physics_materials>
+		<physics_material	id="pmat0_0-PhysicsMaterial"	name="pmat0_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat1_0-PhysicsMaterial"	name="pmat1_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat2_0-PhysicsMaterial"	name="pmat2_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat3_0-PhysicsMaterial"	name="pmat3_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat4_0-PhysicsMaterial"	name="pmat4_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat5_0-PhysicsMaterial"	name="pmat5_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat6_0-PhysicsMaterial"	name="pmat6_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat7_0-PhysicsMaterial"	name="pmat7_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat8_0-PhysicsMaterial"	name="pmat8_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat9_0-PhysicsMaterial"	name="pmat9_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat10_0-PhysicsMaterial"	name="pmat10_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat11_0-PhysicsMaterial"	name="pmat11_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat12_0-PhysicsMaterial"	name="pmat12_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat13_0-PhysicsMaterial"	name="pmat13_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat14_0-PhysicsMaterial"	name="pmat14_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat15_0-PhysicsMaterial"	name="pmat15_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat16_0-PhysicsMaterial"	name="pmat16_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat17_0-PhysicsMaterial"	name="pmat17_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat18_0-PhysicsMaterial"	name="pmat18_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat19_0-PhysicsMaterial"	name="pmat19_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat20_0-PhysicsMaterial"	name="pmat20_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat21_0-PhysicsMaterial"	name="pmat21_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat22_0-PhysicsMaterial"	name="pmat22_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat23_0-PhysicsMaterial"	name="pmat23_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat24_0-PhysicsMaterial"	name="pmat24_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat25_0-PhysicsMaterial"	name="pmat25_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat26_0-PhysicsMaterial"	name="pmat26_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat27_0-PhysicsMaterial"	name="pmat27_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat28_0-PhysicsMaterial"	name="pmat28_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat29_0-PhysicsMaterial"	name="pmat29_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat30_0-PhysicsMaterial"	name="pmat30_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat31_0-PhysicsMaterial"	name="pmat31_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat32_0-PhysicsMaterial"	name="pmat32_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat33_0-PhysicsMaterial"	name="pmat33_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat34_0-PhysicsMaterial"	name="pmat34_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat35_0-PhysicsMaterial"	name="pmat35_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat36_0-PhysicsMaterial"	name="pmat36_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat37_0-PhysicsMaterial"	name="pmat37_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat38_0-PhysicsMaterial"	name="pmat38_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat39_0-PhysicsMaterial"	name="pmat39_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat40_0-PhysicsMaterial"	name="pmat40_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat41_0-PhysicsMaterial"	name="pmat41_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat42_0-PhysicsMaterial"	name="pmat42_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat43_0-PhysicsMaterial"	name="pmat43_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat44_0-PhysicsMaterial"	name="pmat44_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat45_0-PhysicsMaterial"	name="pmat45_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat46_0-PhysicsMaterial"	name="pmat46_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+	</library_physics_materials>
+	<library_physics_models>
+		<physics_model id="Scene0-PhysicsModel">
+			<rigid_body	sid="Actor0-RigidBody" name="Boîte01">
+				<technique_common>
+					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>796.821899414 664.626037598	0.5</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor1-RigidBody" name="Boîte02">
+				<technique_common>
+					<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>28.037109375 26.828613281	54.599998474</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor2-RigidBody" name="Boîte03">
+				<technique_common>
+					<instance_physics_material url="#pmat3_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat3_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>15.227050781 15.952148438	63</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor3-RigidBody" name="Boîte04">
+				<technique_common>
+					<instance_physics_material url="#pmat4_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat4_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>37.221679688 27.0703125	15.952150345</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor4-RigidBody" name="Boîte05">
+				<technique_common>
+					<instance_physics_material url="#pmat5_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat5_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>60.666511536 17.40234375	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor5-RigidBody" name="Boîte06">
+				<technique_common>
+					<instance_physics_material url="#pmat6_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat6_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>17.402359009 62.841796875	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor6-RigidBody" name="Boîte07">
+				<technique_common>
+					<instance_physics_material url="#pmat7_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat7_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>28.762207031 18.610839844	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor7-RigidBody" name="Boîte08">
+				<technique_common>
+					<instance_physics_material url="#pmat8_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat8_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>14.985351563 33.354492188	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor8-RigidBody" name="Boîte09">
+				<technique_common>
+					<instance_physics_material url="#pmat9_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat9_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>55.590827942 20.544433594	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor9-RigidBody" name="Boîte10">
+				<technique_common>
+					<instance_physics_material url="#pmat10_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat10_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>20.061035156 45.137329102	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor10-RigidBody" name="Boîte11">
+				<technique_common>
+					<instance_physics_material url="#pmat11_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat11_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>8.942871094 7.976074219	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor11-RigidBody" name="Boîte12">
+				<technique_common>
+					<instance_physics_material url="#pmat12_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat12_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>54.348480225 48.879440308	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor12-RigidBody" name="Boîte13">
+				<technique_common>
+					<instance_physics_material url="#pmat13_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat13_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>12.568359375 87.495117188	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor13-RigidBody" name="Boîte14">
+				<technique_common>
+					<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat14_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>117.707519531 6.525878906	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor14-RigidBody" name="Boîte15">
+				<technique_common>
+					<instance_physics_material url="#pmat15_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat15_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>5.559082031 46.594772339	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor15-RigidBody" name="Boîte16">
+				<technique_common>
+					<instance_physics_material url="#pmat16_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat16_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>54.682029724 5.80078125	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor16-RigidBody" name="Boîte17">
+				<technique_common>
+					<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat17_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>76.064193726 3.425879478	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor17-RigidBody" name="Boîte18">
+				<technique_common>
+					<instance_physics_material url="#pmat18_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat18_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>112.631851196 3.625488281	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor18-RigidBody" name="Boîte19">
+				<technique_common>
+					<instance_physics_material url="#pmat19_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat19_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>3.0116992 70.576171875	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor19-RigidBody" name="Boîte20">
+				<technique_common>
+					<instance_physics_material url="#pmat20_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat20_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>223.888397217 8.723104477	69.388313293</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor20-RigidBody" name="Boîte21">
+				<technique_common>
+					<instance_physics_material url="#pmat21_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat21_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>51.935260773 4.354714394	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor21-RigidBody" name="Boîte22">
+				<technique_common>
+					<instance_physics_material url="#pmat22_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat22_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>75.540969849 9.912612915	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor22-RigidBody" name="Boîte23">
+				<technique_common>
+					<instance_physics_material url="#pmat23_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat23_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>6.152648926 62.210205078	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor23-RigidBody" name="Boîte24">
+				<technique_common>
+					<instance_physics_material url="#pmat24_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat24_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>3.383789063 58.007820129	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor24-RigidBody" name="Boîte25">
+				<technique_common>
+					<instance_physics_material url="#pmat25_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat25_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>2.900390625 84.111343384	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor25-RigidBody" name="Boîte26">
+				<technique_common>
+					<instance_physics_material url="#pmat26_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat26_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>6.496875763 86.794189453	70.576179504</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor26-RigidBody" name="Boîte27">
+				<technique_common>
+					<instance_physics_material url="#pmat27_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat27_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>8.217773438 77.34375	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor27-RigidBody" name="Boîte28">
+				<technique_common>
+					<instance_physics_material url="#pmat28_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat28_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>90.395507813 11.6015625	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor28-RigidBody" name="Boîte29">
+				<technique_common>
+					<instance_physics_material url="#pmat29_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat29_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>87.978530884 16.435546875	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor29-RigidBody" name="Boîte30">
+				<technique_common>
+					<instance_physics_material url="#pmat30_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat30_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>4.833984375 104.897460938	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor30-RigidBody" name="Boîte31">
+				<technique_common>
+					<instance_physics_material url="#pmat31_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat31_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>3.287109375 108.822654724	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor31-RigidBody" name="Boîte32">
+				<technique_common>
+					<instance_physics_material url="#pmat32_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat32_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>188.815429688 6.960939407	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor32-RigidBody" name="Boîte33">
+				<technique_common>
+					<instance_physics_material url="#pmat33_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat33_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>14.622802734 63.189849854	32.387699127</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor33-RigidBody" name="Boîte34">
+				<technique_common>
+					<instance_physics_material url="#pmat34_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat34_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>120.438720703 8.217773438	22.236330032</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor34-RigidBody" name="Boîte35">
+				<technique_common>
+					<instance_physics_material url="#pmat35_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat35_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>226.477020264 5.80078125	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor35-RigidBody" name="Boîte36">
+				<technique_common>
+					<instance_physics_material url="#pmat36_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat36_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>8.701171875 54.211994171	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor36-RigidBody" name="Boîte37">
+				<technique_common>
+					<instance_physics_material url="#pmat37_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat37_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>51.936328888 13.225780487	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor37-RigidBody" name="Boîte38">
+				<technique_common>
+					<instance_physics_material url="#pmat38_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat38_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>8.217773438 55.992042542	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor38-RigidBody" name="Boîte39">
+				<technique_common>
+					<instance_physics_material url="#pmat39_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat39_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>116.982421875 14.985351563	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor39-RigidBody" name="Boîte40">
+				<technique_common>
+					<instance_physics_material url="#pmat40_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat40_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>7.734375 65.07509613	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor40-RigidBody" name="Boîte41">
+				<technique_common>
+					<instance_physics_material url="#pmat41_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat41_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>54.386642456 10.151367188	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor41-RigidBody" name="Boîte42">
+				<technique_common>
+					<instance_physics_material url="#pmat42_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat42_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>5.447900295 50.267444611	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor42-RigidBody" name="Boîte43">
+				<technique_common>
+					<instance_physics_material url="#pmat43_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat43_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>29.79668045 5.186865807	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor43-RigidBody" name="Boîte44">
+				<technique_common>
+					<instance_physics_material url="#pmat44_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat44_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>11.118164063 32.564254761	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor44-RigidBody" name="Boîte45">
+				<technique_common>
+					<instance_physics_material url="#pmat45_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat45_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>46.496196747 15.812042236	63.315109253</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor45-RigidBody" name="Boîte46">
+				<technique_common>
+					<instance_physics_material url="#pmat46_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat46_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>28.128265381 91.472564697	70</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+		</physics_model>
+		<physics_model id="Scene0-PhysicsInstance">
+			<instance_physics_model	url="#Scene0-PhysicsModel">
+				<instance_rigid_body target="#Actor0-Node" body="Actor0-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor1-Node" body="Actor1-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor2-Node" body="Actor2-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor3-Node" body="Actor3-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor4-Node" body="Actor4-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor5-Node" body="Actor5-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor6-Node" body="Actor6-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor7-Node" body="Actor7-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor8-Node" body="Actor8-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor9-Node" body="Actor9-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor10-Node" body="Actor10-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor11-Node" body="Actor11-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor12-Node" body="Actor12-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor13-Node" body="Actor13-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor14-Node" body="Actor14-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor15-Node" body="Actor15-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor16-Node" body="Actor16-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor17-Node" body="Actor17-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor18-Node" body="Actor18-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor19-Node" body="Actor19-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor20-Node" body="Actor20-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor21-Node" body="Actor21-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor22-Node" body="Actor22-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor23-Node" body="Actor23-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor24-Node" body="Actor24-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor25-Node" body="Actor25-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor26-Node" body="Actor26-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor27-Node" body="Actor27-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor28-Node" body="Actor28-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor29-Node" body="Actor29-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor30-Node" body="Actor30-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor31-Node" body="Actor31-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor32-Node" body="Actor32-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor33-Node" body="Actor33-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor34-Node" body="Actor34-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor35-Node" body="Actor35-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor36-Node" body="Actor36-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor37-Node" body="Actor37-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor38-Node" body="Actor38-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor39-Node" body="Actor39-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor40-Node" body="Actor40-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor41-Node" body="Actor41-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor42-Node" body="Actor42-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor43-Node" body="Actor43-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor44-Node" body="Actor44-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor45-Node" body="Actor45-RigidBody">
+				</instance_rigid_body>
+			<extra>
+				<technique profile="PhysX">
+				</technique>
+			</extra>
+			</instance_physics_model>
+		</physics_model>
+	</library_physics_models>
+	<library_physics_scenes>
+		<physics_scene id="SceneInstances-Physics">
+			<instance_physics_model	url="#Scene0-PhysicsInstance"/>
+			<technique_common>
+				<gravity>0	0 -9.81000042</gravity>
+			</technique_common>
+		</physics_scene>
+	</library_physics_scenes>
+	<scene>
+		<instance_physics_scene	url="#SceneInstances-Physics"/>
+	</scene>
+</COLLADA>

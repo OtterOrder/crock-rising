@@ -29,7 +29,7 @@ void createStack()
 	{
 		for(int j = 0; j < 10; j++)
 		{
-			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( i*0.5 - 2.5 + j/2, j*0.51, 50.f));
+			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( i*0.5f - 2.5f + j/2, j*0.51f, 50.f));
 			plop->Init();
 		}
 	}

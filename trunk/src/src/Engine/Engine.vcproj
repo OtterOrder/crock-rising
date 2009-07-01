@@ -198,7 +198,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\release\&quot;"
+				CommandLine="copy &quot;$(OutDir)\$(ProjectName).lib&quot; &quot;$(SolutionDir)\lib\finalrelease\&quot;"
 			/>
 		</Configuration>
 	</Configurations>

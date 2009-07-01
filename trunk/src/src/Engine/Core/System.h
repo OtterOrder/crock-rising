@@ -7,6 +7,7 @@
 #define		NOMINMAX
 #endif
 
+#include	<string>
 #include	<windows.h>
 #include	"Core/Singleton.h"
 
@@ -36,7 +37,8 @@ public:
 	
 	void	SetFullScreen( bool fullScreen, int width = FULLS_DEFAULT_WIDTH, int height = FULLS_DEFAULT_HEIGHT );
 
-	Time* const GetTime() const;	// Donne le gestionnaire de temps
+	Time* const GetTime() const;		// Donne le gestionnaire de temps
+	std::string GetDataPath() const;	// Donne le chemin vers les data
 
 	static LRESULT CALLBACK	EventsCallback( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );// Fonction de rappel des événements
 

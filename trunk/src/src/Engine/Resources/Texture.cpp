@@ -2,7 +2,8 @@
 // Include                                                                   //
 //===========================================================================//
 #include "Texture.h"
-#include "../Renderer/Renderer.h"
+#include "Core/System.h"
+#include "Renderer/Renderer.h"
 
 //===========================================================================//
 // Constructeur Texture
@@ -44,21 +45,18 @@ int Texture::GetSrcHeight() const
 //===========================================================================//
 ResourceResult Texture::Load( std::string resource, ResourceParam param )
 {
-	std::string dir = "";
-
-	#ifndef	_FINALRELEASE
-	dir = "../../";
-	#endif	//_FINALRELEASE
+	std::string texDir;
+	texDir = System::GetInstance()->GetDataPath();
 	
 	// Sélection du répertoire en fonction du type
 	switch( (Texture::Type)(int)param )
 	{
-		case SPRITE:	dir += "data/sprite/";	break;
-		default:		dir += "data/texture/";
+		case SPRITE:	texDir += "sprite/";	break;
+		default:		texDir += "texture/";
 	}
 	
 	// Chargement de la texture
-	return DxLoad( dir + resource );
+	return DxLoad( texDir + resource );
 }
 
 //===========================================================================//

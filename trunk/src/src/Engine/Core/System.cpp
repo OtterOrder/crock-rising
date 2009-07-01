@@ -170,6 +170,19 @@ Time* const System::GetTime() const
 }
 
 /***********************************************************
+ * Donne le chemin vers les data (avec un / à la fin).
+ * @return	Chemin vers le répertoire data
+ **********************************************************/
+std::string System::GetDataPath() const
+{
+	#ifdef _FINALRELEASE
+	return "data/";
+	#else
+	return "../../data/";
+	#endif
+}
+
+/***********************************************************
  * Fonction de rappel des événements.
  * Voir MSDN > WindowProc pour plus d'infos.
  * @param[in]	hWnd	: handle de la fenêtre

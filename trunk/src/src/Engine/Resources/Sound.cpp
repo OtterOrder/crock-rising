@@ -3,6 +3,7 @@
 #include	<vector>
 #include	<assert.h>
 #include	"Vorbis/vorbisfile.h"
+#include	"Core/System.h"
 
 using namespace std;
 
@@ -51,9 +52,12 @@ ResourceResult Sound::Load( string resourceName, ResourceParam param )
 		return RES_FAILED;
 	}
 
+	std::string soundDir;
+	soundDir = System::GetInstance()->GetDataPath() + "sound/";
+
 	// Chargement des données sonores..
 	// TEMP: seulement du ogg pour le moment !
-	if( !LoadFromOgg( "../../data/sound/" + resourceName ) )
+	if( !LoadFromOgg( soundDir + resourceName ) )
 	{
 		//assert( false );
 		//return RES_FAILED;

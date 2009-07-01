@@ -1,5 +1,6 @@
 
 #include "Skybox.h"
+#include "Core/System.h"
 #include "Renderer/Renderer.h"
 
 #pragma comment( lib, "dxguid.lib" )
@@ -105,10 +106,12 @@ HRESULT Skybox::Init(float _size)
 	m_pSkyShader=new Shader();
 	m_pSkyShader->Load("skybox.fx", NULL);
 
-	// Texture Skybox 
-	std::string str="../../data/texture/"+m_StrTex;
+	// Texture Skybox
+	std::string texPath;
+	texPath = System::GetInstance()->GetDataPath();
+	texPath += "texture/" + m_StrTex;
 
-	if(FAILED((D3DXCreateCubeTextureFromFile( m_pDevice, str.c_str(), &m_pEnvTex ))))
+	if(FAILED((D3DXCreateCubeTextureFromFile( m_pDevice, texPath.c_str(), &m_pEnvTex ))))
 	{
 		return E_FAIL;
 

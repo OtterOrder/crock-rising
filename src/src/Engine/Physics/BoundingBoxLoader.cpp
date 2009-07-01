@@ -4,7 +4,7 @@
 ResourceResult BoundingBoxLoader::Load(const std::string resource)
 {
 
-	std::string physXFilePath = "..\\..\\data\\models\\"+resource;
+	std::string physXFilePath = "..\\..\\data\\models\\physic\\"+resource;
 	TiXmlDocument physXFile( physXFilePath.c_str());
 	NodeSaver NodeSave;
 

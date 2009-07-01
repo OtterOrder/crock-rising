@@ -109,27 +109,28 @@ void SceneObject::SetObjectPhysical( const std::string& physic )
 		m_ListOfBoundingBox.setInitialWorldPos( Pos - m_pMesh->m_ReglagePivot );
 		
 		m_iEmpActor = physX::CreateBoundingBox( m_ListOfBoundingBox );
-	}
-	if(!IsDynamic())
-	{			
-		NxActor* pac = physX::getActor(m_iEmpActor);
 
-		D3DXMATRIX mat_PhysX;
-		D3DXMatrixIdentity(&mat_PhysX);
+		if(!IsDynamic())
+		{			
+			NxActor* pac = physX::getActor(m_iEmpActor);
 
-		//Rotation pour redresser l'objet GRAPHIQUE
-		D3DXMATRIX rotX, rotY, trans;
-		D3DXMatrixIdentity( &rotX );
-		Vector3f reg =m_pMesh->m_ReglagePivot;
-		D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
-		NxVec3 v = pac->getGlobalPosition();
-		pac->getGlobalPose().getColumnMajor44( mat_PhysX );
+			D3DXMATRIX mat_PhysX;
+			D3DXMatrixIdentity(&mat_PhysX);
 
-		rotX._22=0; rotX._23=1;
-		rotX._32=1; rotX._33=0;
+			//Rotation pour redresser l'objet GRAPHIQUE
+			D3DXMATRIX rotX, rotY, trans;
+			D3DXMatrixIdentity( &rotX );
+			Vector3f reg =m_pMesh->m_ReglagePivot;
+			D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
+			NxVec3 v = pac->getGlobalPosition();
+			pac->getGlobalPose().getColumnMajor44( mat_PhysX );
 
-		mat_PhysX = rotX * mat_PhysX;
-		D3DXMatrixMultiply(&m_WorldMatrix, &trans, &mat_PhysX);
+			rotX._22=0; rotX._23=1;
+			rotX._32=1; rotX._33=0;
+
+			mat_PhysX = rotX * mat_PhysX;
+			D3DXMatrixMultiply(&m_WorldMatrix, &trans, &mat_PhysX);
+		}
 	}
 }
 

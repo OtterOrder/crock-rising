@@ -29,17 +29,17 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,0.f,0.f)); //y = -75 pr le canyon
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f,10.f,0.f)); //y = -75 pr le canyon
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	//m_pAnimated->SetControledCharacter(4.f,10.f,this);
+	m_pAnimated->SetControledCharacter(4.f,10.f,this);
 	//m_pAnimated->SetLoop(true);
 	//m_pAnimated->SetAnimFPS(50.f);
 
-	m_pInputManager->HoldMouseAtCenter(true);
+	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
@@ -82,7 +82,7 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		int offsetCursor = (int)point.x%sensibiliteSouris; 
 		float diff = pCamera->GetOrientationYRad();
-		pCamera->SetOrientationY( -offsetCursor );
+		pCamera->SetOrientationY( -(float)offsetCursor );
 		diff = pCamera->GetOrientationYRad() - diff;
 
 		D3DXMATRIX rot;
@@ -97,7 +97,7 @@ ResourceResult Hero::control( Camera* pCamera )
 	if( point.y != 0 ) 
 	{
 		int offsetCursor = (int)point.y%sensibiliteSouris; 
-		pCamera->SetOrientationX( offsetCursor );
+		pCamera->SetOrientationX( (float)offsetCursor );
 	}
 
 

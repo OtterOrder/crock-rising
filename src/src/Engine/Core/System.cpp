@@ -87,10 +87,10 @@ int System::MainLoop( void )
 	MSG				msg;
 
 	// On initialise les modules..
-	resourceManager	= ResourceManager::GetInstance();
-	inputManager	= InputManager::GetInstance();
 	renderer		= Renderer::GetInstance();
 	postRenderer	= PostRenderer::GetInstance();
+	resourceManager	= ResourceManager::GetInstance();
+	inputManager	= InputManager::GetInstance();
 	soundSystem		= SoundSystem::GetInstance();
 	physX			= Physicalizer::GetInstance();
 	game			= Game::GetInstance();
@@ -149,11 +149,11 @@ int System::MainLoop( void )
 	physX->Destroy();
 	soundSystem->Destroy();
 	inputManager->Destroy();
-
-	postRenderer->Destroy();
 	
 	renderer->Close();
 	renderer->Destroy();
+
+	postRenderer->Destroy();
 
 	resourceManager->Destroy(); // Normalement il est vide
 

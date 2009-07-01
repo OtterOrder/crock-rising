@@ -18,6 +18,7 @@
 #include "D3DEnumeration.h"
 #include "D3DSettings.h"
 #include "D3DApp.h"
+#include "Game/Game.h"
 
 //===========================================================================//
 // Accès global à l'application                                              //
@@ -57,7 +58,7 @@ CD3DApplication::CD3DApplication()
     m_strFrameStats[0]  = _T('\0');
 	m_pStatsFont		= NULL;
 
-    m_strWindowTitle    = _T("Engine");
+	m_WindowTitle       = Game::GetInstance()->GetGameName();
     m_dwCreationWidth   = 800;
     m_dwCreationHeight  = 600;
     m_bShowCursorWhenFullscreen = false;
@@ -148,7 +149,7 @@ HRESULT CD3DApplication::Create( HINSTANCE hInstance, WNDCLASS wndClass)
 #endif 
 
         // Création de la fenêtre de rendu
-        m_hWnd = CreateWindow( _T(wndClass.lpszClassName), m_strWindowTitle, WS_OVERLAPPEDWINDOW,
+        m_hWnd = CreateWindow( _T(wndClass.lpszClassName), m_WindowTitle.c_str(), WS_OVERLAPPEDWINDOW,
                                CW_USEDEFAULT, CW_USEDEFAULT,
                                (rc.right-rc.left), (rc.bottom-rc.top), 0L,
                                NULL , 
@@ -1466,7 +1467,7 @@ HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
     {
         s_bFatalErrorReported = true;
         _tcscat( strMsg, _T("\n\nThis game will now exit.") );
-        MessageBox( NULL, strMsg, m_strWindowTitle, MB_ICONERROR|MB_OK );
+        MessageBox( NULL, strMsg, m_WindowTitle.c_str(), MB_ICONERROR|MB_OK );
 
         // Ferme la fenêtre, qui arrêtera l'application
         if( m_hWnd )
@@ -1480,7 +1481,7 @@ HRESULT CD3DApplication::DisplayErrorMsg( HRESULT hr, DWORD dwType )
                              _T("Direct3D feature set, but runs very slowly.") 
                              _T("\n\nContinue?") 
 							 );
-        if ( IDYES != MessageBox( NULL, strMsg, m_strWindowTitle, MB_ICONWARNING|MB_YESNO ) ) 
+        if ( IDYES != MessageBox( NULL, strMsg, m_WindowTitle.c_str(), MB_ICONWARNING|MB_YESNO ) ) 
 			// Fermeture 
 	        if( m_hWnd )
 		        SendMessage( m_hWnd, WM_CLOSE, 0, 0 );

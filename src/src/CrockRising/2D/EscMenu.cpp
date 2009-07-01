@@ -80,11 +80,11 @@ void EscMenu::Init()
 
 		m_Menu[link]->Activate( false );
 		m_Menu[link]->SetAsPausable( false );
-		m_Menu[link]->SetPriority( 1 );
+		m_Menu[link]->SetPriority( 10 );
 	}
 
 	SetAsPausable( false );
-	SetPriority( 2 );
+	SetPriority( 11 );
 	SetAlpha( 0.f );
 }
 

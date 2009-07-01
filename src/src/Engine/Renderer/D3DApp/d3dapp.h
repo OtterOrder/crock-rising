@@ -3,6 +3,7 @@
 //===========================================================================//
 // Include                                                                   //
 //===========================================================================//
+#include <string>
 #include "D3DUtil.h"
 #include "D3DEnumeration.h"  
 #include "D3DSettings.h"  
@@ -94,7 +95,7 @@ protected:
     //===========================================================================//
     // Variables propre à l'application                                          //
 	//===========================================================================//
-    TCHAR*            m_strWindowTitle;    			// Titre de l'application Windows
+	std::string       m_WindowTitle;    			// Titre de l'application Windows
     DWORD             m_dwCreationWidth;   			// Hauteur pour créer la fenêtre
     DWORD             m_dwCreationHeight;  			// Largeur pour créer la fenêtre
     bool              m_bShowCursorWhenFullscreen;  // Pour savoir si l'on montre le curseur en fullscreen

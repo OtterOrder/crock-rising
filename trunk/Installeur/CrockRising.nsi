@@ -1,25 +1,25 @@
 
-;*******************************************************************
 
-; Nom de l'installeur
+; Nom et fichier
 Name "Crock Rising"
-
-; Installeur
 OutFile "CrockRising_Setup.exe"
 
 ; Dossier d'installation par défaut
 InstallDir "$PROGRAMFILES\Crock Rising"
 
+; Style
+XPStyle on
+
 ;*******************************************************************
 
-; Pages
+; Choix dossier d'installation
 Page directory
-Page instfiles
 
 ;*******************************************************************
 
-; Ce qu'il faut copier..
-Section ""
+; Copie des fichiers..
+Page instfiles
+Section
 	
 	; Exe
 	SetOutPath $INSTDIR
@@ -61,5 +61,33 @@ Section ""
 	File "..\src\data\texture\*.png"
 	File "..\src\data\texture\*.jpg"
 	File "..\src\data\texture\*.dds"
+	
+	WriteUninstaller "$INSTDIR\Uninstall.exe"
+	
+SectionEnd
+
+;*******************************************************************
+
+Section "Uninstall"
+
+	Delete "$INSTDIR\data\anim\*"
+	RMDir "$INSTDIR\data\anim"
+	Delete "$INSTDIR\data\mapAI\*"
+	RMDir "$INSTDIR\data\mapAI"
+	Delete "$INSTDIR\data\models\physic\*"
+	RMDir "$INSTDIR\data\models\physic"
+	Delete "$INSTDIR\data\models\*"
+	RMDir "$INSTDIR\data\models"
+	Delete "$INSTDIR\data\shader\*"
+	RMDir "$INSTDIR\data\shader"
+	Delete "$INSTDIR\data\sound\*"
+	RMDir "$INSTDIR\data\sound"
+	Delete "$INSTDIR\data\sprite\*"
+	RMDir "$INSTDIR\data\sprite"
+	Delete "$INSTDIR\data\texture\*"
+	RMDir "$INSTDIR\data\texture"
+	RMDir "$INSTDIR\data"
+	Delete "$INSTDIR\*"
+	RMDir "$INSTDIR"
 	
 SectionEnd

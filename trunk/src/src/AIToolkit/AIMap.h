@@ -57,7 +57,7 @@ public:
     Bitmap();
     ~Bitmap();
 
-    bool loadBMP(char *);
+    bool loadBMP(const char *);
 	void convertImgToMatrix( int tabImg[MAX_TAB][MAX_TAB] );
 
 	vector<pair<int,int>> getRandomSpawn()	{	 return listSpawnPoint;	}

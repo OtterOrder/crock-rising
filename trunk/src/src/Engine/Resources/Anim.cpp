@@ -2,6 +2,7 @@
 // Include                                                                   //
 //===========================================================================//
 #include "Anim.h"
+#include "Core/System.h"
 #include "AnimLoader.h"
 
 Bone::~Bone()
@@ -49,10 +50,12 @@ Anim::~Anim()
 
 ResourceResult Anim::Load(std::string resource , ResourceParam param)
 {
-	std::string str="..\\..\\data\\anim\\"+resource;
+	std::string animPath;
+	animPath = System::GetInstance()->GetDataPath();
+	animPath += "anim/" + resource;
 
 	AnimLoader animLoader; 
-	animLoader.Load(str.c_str(), m_Bones, m_BindShape, m_BoneArrayOrder, m_NbFrames);
+	animLoader.Load(animPath.c_str(), m_Bones, m_BindShape, m_BoneArrayOrder, m_NbFrames);
 
 	CalculateAbsoluteBoneMatrices();
 	return RES_SUCCEED;

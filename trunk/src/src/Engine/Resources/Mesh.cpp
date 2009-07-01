@@ -1,7 +1,6 @@
 #include "Mesh.h"
+#include "Core/System.h"
 #include "Renderer/Renderer.h"
-
-#include	"Renderer/Renderer.h"
 
 //******************************************************************
 
@@ -44,11 +43,13 @@ Mesh::~Mesh()
  **********************************************************/
 ResourceResult Mesh::Load( std::string resource, ResourceParam param )
 {
-	std::string str="..\\..\\data\\models\\"+resource;
+	std::string meshPath;
+	meshPath = System::GetInstance()->GetDataPath();
+	meshPath += "models/" + resource;
 
 	MeshLoader meshLoader;
 
-	if ( meshLoader.Load(str.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbIndex, m_decl) == RES_SUCCEED)
+	if ( meshLoader.Load(meshPath.c_str(), m_VertexBuffer, m_IndexBuffer, m_iNbIndex, m_decl) == RES_SUCCEED)
 	{
 		if ( FillD3DBuffers () == RES_SUCCEED)
 		{

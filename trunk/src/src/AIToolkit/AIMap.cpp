@@ -8,7 +8,7 @@ Bitmap::~Bitmap()
 {
 }
 
-bool Bitmap::loadBMP(char *file) 
+bool Bitmap::loadBMP(const char *file) 
 {
     FILE *in;
     unsigned char *tempData;

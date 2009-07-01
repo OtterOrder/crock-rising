@@ -1,15 +1,12 @@
 #include "BoundingBoxLoader.h"
-
+#include "Core/System.h"
 
 ResourceResult BoundingBoxLoader::Load(const std::string resource)
 {
-	std::string dir = "";
+	std::string bbDir;
+	bbDir = System::GetInstance()->GetDataPath() + "models/physic/";
 
-	#ifndef	_FINALRELEASE
-	dir = "../../";
-	#endif	//_FINALRELEASE
-
-	std::string physXFilePath = dir+"data/models/physic/"+resource;
+	std::string physXFilePath = bbDir + resource;
 	TiXmlDocument physXFile( physXFilePath.c_str());
 	NodeSaver NodeSave;
 

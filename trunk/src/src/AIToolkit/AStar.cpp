@@ -1,9 +1,16 @@
 #include "AStar.h"
 
+#include <Core/System.h>
+
 AStar::AStar()
 {
 	Bitmap loadBmp;
-	bool loadOk = loadBmp.loadBMP("../../data/mapAI/levelSphynx.bmp");
+	std::string mapPath;
+
+	mapPath = System::GetInstance()->GetDataPath();
+	mapPath += "mapAI/levelSphynx.bmp";
+	
+	bool loadOk = loadBmp.loadBMP( mapPath.c_str() );
 
 	if (loadOk)		loadBmp.convertImgToMatrix( tabChemin );
 	else			std::cout << "Erreur chargement AIMap" << std::endl;

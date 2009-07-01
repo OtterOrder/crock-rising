@@ -87,6 +87,13 @@ Vector3f Object::GetPosition()
 
 }
 
+void Object::SetPosition(float x, float y, float z)
+{ 
+	m_WorldMatrix._41 = x,
+	m_WorldMatrix._42 = y,
+	m_WorldMatrix._43 = z;
+}
+
 /***********************************************************
  * Update toute la 3D : appelle l'Update de tous les
  * objets, etc.

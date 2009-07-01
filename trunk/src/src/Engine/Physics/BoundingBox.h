@@ -144,12 +144,6 @@ namespace physX
 	* @param[in]	obj2 : Pointeur sur le deuxieme objet
 	************************************************************************************/
 	void Link( SceneObject* const obj1, SceneObject* const obj2 );
-	
-	//void UpdateObjectFromActor( int emp, D3DXMATRIX &WorldMat, Vector3f const reg, bool UpdateStatic = false );
-	//void UpdateObjectFromController( int emp, D3DXMATRIX &WorldMat, Vector3f regPivotMesh, Vector3f ObjectRot);
-	
-	void UpdateObjectFromActor( SceneObject* SceObj, bool UpdateStatic = false );
-	void UpdateObjectFromController( SceneObject* SceObj );
 }
 
 #endif

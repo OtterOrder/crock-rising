@@ -201,24 +201,6 @@ NxActor* physX::getActor( int emp )
 	return pactor; 
 }
 
-NxControllerManager* physX::getControllerManager()
-{
-	Physicalizer* physInstance = Physicalizer::GetInstance();
-	NxControllerManager* pControllerManager = physInstance->getControllerManager();
-	assert(pControllerManager);
-
-	return pControllerManager;
-}
-
-NxController* physX::getController( int emp )
-{
-	if(emp == -1) return NULL;
-	NxController* pController = getControllerManager()->getController( emp );
-	assert(pController);
-
-	return pController;
-}
-
 void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
 {
 	NxActor* pactor1  =  getActor(obj1->getEmpActor());
@@ -226,56 +208,8 @@ void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
 	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH );
 }
 
-
-void UpdateObjectFromActor( SceneObject* SceObj, bool UpdateStatic )
-{	
-	//NxActor* pac = getActor(emp);
-	//if( !pac->isSleeping() || UpdateStatic ) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
-	//{
-	//	D3DXMATRIX mat_PhysX;
-	//	D3DXMatrixIdentity(&mat_PhysX);
-
-	//	//Rotation pour redresser l'objet GRAPHIQUE
-	//	D3DXMATRIX rotX, rotY, trans;
-	//	D3DXMatrixIdentity( &rotX );
-	//	D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
-	//	NxVec3 v = pac->getGlobalPosition();
-	//	pac->getGlobalPose().getColumnMajor44( mat_PhysX );
-
-	//	rotX._22=0; rotX._23=1;
-	//	rotX._32=1; rotX._33=0;
-
-	//	mat_PhysX = rotX * mat_PhysX;
-	//	D3DXMatrixMultiply(&WorldMat, &trans, &mat_PhysX);
-	//}
-}
-
 void Update( NxActor* const pActor, D3DXMATRIX &WorldMat, Vector3f const reg )
 {
-}
-
-void UpdateObjectFromController( SceneObject* SceObj )
-{
-	//NxController* pController = getController(SceObj->getEmpController());
-
-	//NxExtendedVec3 NxPos = pController->getPosition();
-	//Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
-	//pos += SceObj->GetMesh()->;
-
-	//D3DXMATRIX trans, rotX, rotY, rotZ, rot, result;
-	//D3DXMatrixTranslation( &trans, pos.x, pos.y, pos.z);
-	//D3DXMatrixRotationX(&rotX,  D3DXToRadian(SceObj->m_vAngleX -90.f));
-	//D3DXMatrixRotationY(&rotY,  D3DXToRadian(SceObj->m_vAngleY ));
-	//D3DXMatrixRotationZ(&rotZ,  D3DXToRadian(SceObj->m_vAngleZ ));
-
-	//rot=rotX*rotY;
-
-	//rotX._41 = pos.x;
-	//rotX._42 = pos.y;
-	//rotX._43 = pos.z;
-
-	//SceObj->GetWorldMatrix() = rot;
-	//D3DXMatrixMultiply( &SceObj->GetWorldMatrix(), &rot, &trans);
 }
 
 void ListOfBoundingBox::ReleaseList()

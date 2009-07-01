@@ -19,15 +19,8 @@ public:
 	Enemy() {}
 	Enemy(Vector3f position);
 	~Enemy();
-	
-	virtual void			Init();
-	virtual void		    changeState( PersoState newState );
 
-	void					update( );
-
-	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
-	
-	
+	void					update( );	
 
 protected:
 	

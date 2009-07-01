@@ -91,6 +91,7 @@ public:
 	virtual void    Update(); // Méthode appelée chaque tour moteur
 	virtual void    SetTranslation( float x, float y, float z );
 	virtual void    SetRotation( float angleX, float angleY, float angleZ );
+	virtual void	SetPosition( float x, float y, float z );
 	
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
@@ -133,7 +134,8 @@ protected:
 	void			CommonInit( void ); // Initialisation commune à tous les constructeurs
 
 	//Fonctions de transformations spécifiques à physX, appelés par les fonctions publics
-	void	SetPhysicalTranslation( float dispX, float dispY, float dispZ );
+	void	SetPhysicalPosition( float x, float y, float z );
+	void	SetPhysicalTranslation( float x, float y, float z );
 	void	SetPhysicalRotation( float angleX, float angleY, float angleZ );
 	void	SetPhysicalTransform( const D3DXMATRIX* world );
 	

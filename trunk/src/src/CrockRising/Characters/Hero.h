@@ -42,6 +42,7 @@ protected:
 	static HUDLife*			 m_pLifeBar;
 	InputManager*			 m_pInputManager;
 	Vector3f				 m_Translate;
+	SceneObject*			 m_pArme;
 };
 
 //******************************************************************

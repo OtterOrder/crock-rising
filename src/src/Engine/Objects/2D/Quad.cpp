@@ -163,44 +163,6 @@ u32 Quad::GetHeight() const
 }
 
 //**********************************************************
-// Change la taille relative.
-// @param[in]	relWidth	: Largeur relative (0->1)
-// @param[in]	relHeight	: Hauteur relative (0->1)
-//**********************************************************
-/*void Quad::SetRelSize( float relWidth, float relHeight )
-{
-	SetSize(
-		(u32)( (RENDERER->GetWindowWidth()*relWidth)+0.5f ),
-		(u32)( (RENDERER->GetWindowHeight()*relHeight)+0.5f )
-	);
-}*/
-
-//**********************************************************
-// Change la taille relative.
-// @param[in]	relSize	: { largeur, hauteur } relatives (0->1)
-//**********************************************************
-/*void Quad::SetRelSize( const Vector2f &relSize )
-{
-	SetRelSize( relSize.x, relSize.y );
-}*/
-
-//**********************************************************
-// Donne la largeur relative de l'objet.
-//**********************************************************
-/*float Quad::GetRelWidth() const
-{
-	return (float)m_Width / RENDERER->GetWindowWidth();
-}*/
-
-//**********************************************************
-// Donne la hauteur relative de l'objet.
-//**********************************************************
-/*float Quad::GetRelHeight() const
-{
-	return (float)m_Height / RENDERER->GetWindowHeight();
-}*/
-
-//**********************************************************
 // Définie l'objet comme background, càd l'objet est de la
 // taille de la fenêtre et a la priorité minimum.
 // @param[in]	background : Vrai = background
@@ -226,15 +188,18 @@ void Quad::SetAsBackground( bool background )
 }
 
 //**********************************************************
-// Vérifie si le point est en collision avec l'objet.
+// Vérifie si le point est dans le quad. /!\ Maxi bidouille,
+// ne tient pas compte de la rotation et du scale.
 // @param[in]	posX : Coordonnée x (px)
 // @param[in]	posY : Coordonnée y (px)
 // @return	Vrai si le point est en collision
 //**********************************************************
 bool Quad::IsCollide( s32 posX, s32 posY )
 {
-	//TODO
-	return false;
+	return posX >= m_Position.x
+		&& posX <= m_Position.x + m_Width
+		&& posY >= m_Position.y
+		&& posY <= m_Position.y + m_Height;
 }
 
 //**********************************************************

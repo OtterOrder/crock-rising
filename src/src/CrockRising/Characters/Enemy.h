@@ -26,6 +26,8 @@ public:
 	virtual void			Hit();
 	virtual void			Die();
 
+	float timeSinceLastPath;
+
 protected:
 	
 	InputManager* m_pInputManager;

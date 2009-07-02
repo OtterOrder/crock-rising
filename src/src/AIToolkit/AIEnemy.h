@@ -10,9 +10,9 @@
 #include	<vector>
 #include	<map>
 
-#define M_2PI 6.28318530717958647692
-#define M_PI 3.14159265358979323846
-#define M_PI2 1.57079632679489661923
+#define M_2PI 6.28318530717958647692f
+#define M_PI 3.14159265358979323846f
+#define M_PI2 1.57079632679489661923f
 
 //////////////
 class AIEnemy
@@ -21,9 +21,9 @@ public:
 	AIEnemy( int scaleMap, int precision );
 	~AIEnemy(void);
 
-	void enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, int &angleRot );
-	void enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angleRot );
-	void enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, int &angleRot );
+	void enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, float &angleRot );
+	void enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, float &angleRot );
+	void enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, float &angleRot, float &time );
 	void enemyAIEvade( Vector3f newPos );
 
 	void setElapsedTime( float newElaTime )	{	elapsedTime = newElaTime;	}

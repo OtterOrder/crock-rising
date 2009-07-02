@@ -37,7 +37,7 @@ protected:
 
 	Enemy*		listAIEnemy;
 	Vector3f	newPos;
-	int			newAngle;
+	float		newAngle;
 
 	bool spawnInfini;
 	int nbEnemy;
@@ -49,6 +49,7 @@ protected:
 	int	hpsGroup;
 	int scaleCurrMap;
 	int precCurrMap;
+	float timeEnemy;
 
 	AIEnemy*	aiEnemy;
 	Bitmap		mapSpawn;

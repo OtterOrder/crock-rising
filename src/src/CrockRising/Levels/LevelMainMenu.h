@@ -24,7 +24,7 @@ public:
 	{
 		NONE = -1,
 		PLAY = 0,
-		HIGHSCORES,
+		//HIGHSCORES,
 		SETTINGS,
 		QUIT,
 

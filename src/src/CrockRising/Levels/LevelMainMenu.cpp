@@ -23,14 +23,14 @@
 static char *g_ButtonsText[LevelMainMenu::NB_LINKS] =
 {
 	"JOUER",
-	"MEILLEURS SCORES",
+	//"MEILLEURS SCORES",
 	"OPTIONS",
 	"QUITTER"
 };
 
 static u32 g_ButtonsWidth[LevelMainMenu::NB_LINKS] =
 {
-	50, 145, 65, 65
+	50, /*145,*/ 65, 65
 };
 
 //******************************************************************
@@ -134,10 +134,10 @@ void LevelMainMenu::MMButton::OnClic()
 			Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
 			return;
 		
-		case HIGHSCORES:
+		/*case HIGHSCORES:
 			// Highscores..
 			Game::GetInstance()->ChangeLevel( LEVEL_highscores );
-			return;
+			return;*/
 		
 		case SETTINGS:
 			// Menu d'options..

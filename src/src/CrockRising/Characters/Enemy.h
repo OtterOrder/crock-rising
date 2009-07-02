@@ -16,7 +16,7 @@ class Enemy : public Perso
 public:
 	static std::vector<Enemy*>  listEnemy;
 
-	Enemy() {}
+	Enemy():Perso() {}
 	Enemy(Vector3f position);
 	~Enemy();
 

@@ -27,51 +27,53 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); it++)
 	{
 		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
-		SceneObjectAnimated* pObj = (*it)->getSceneObjectAnimated();
-		if(pObj)
+		if((*it)->IsAlive())
 		{
-			newPos = (*it)->getSceneObjectAnimated()->GetPosition();
-			distance = aiEnemy->calculDistance( posPlayer, newPos );
-			newPos = Vector3f(0,0,0);
-			newAngle = 0;
-
-			if ( distance <= attackRange )
+			SceneObjectAnimated* pObj = (*it)->getSceneObjectAnimated();
+			if(pObj)
 			{
-				if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+				newPos = (*it)->getSceneObjectAnimated()->GetPosition();
+				distance = aiEnemy->calculDistance( posPlayer, newPos );
+				newPos = Vector3f(0,0,0);
+				newAngle = 0;
+
+				if ( distance <= attackRange )
 				{
-					aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
-					(*it)->changeState(ATTACK);
+					if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+					{
+						aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
+						(*it)->changeState(ATTACK);
+					}
+					else
+					{
+						aiEnemy->enemyAIEvade( posPlayer );
+						(*it)->changeState(RUN);
+					}
+				}
+				else if ( distance <= fieldOfView )
+				{
+					if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+					{
+						aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+						(*it)->changeState(RUN);
+					}
+					else
+					{
+						aiEnemy->enemyAIEvade( posPlayer );
+						(*it)->changeState(RUN);
+					}
 				}
 				else
 				{
-					aiEnemy->enemyAIEvade( posPlayer );
+					aiEnemy->enemyAIPatrol(posPlayer);
 					(*it)->changeState(RUN);
 				}
-			}
-			else if ( distance <= fieldOfView )
-			{
-				if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
-				{
-					aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
-					(*it)->changeState(RUN);
-				}
-				else
-				{
-					aiEnemy->enemyAIEvade( posPlayer );
-					(*it)->changeState(RUN);
-				}
-			}
-			else
-			{
-				aiEnemy->enemyAIPatrol(posPlayer);
-				(*it)->changeState(RUN);
-			}
 
-			(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
-			(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
+				(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
+				(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
 
-			(*it)->update( listAIEnemy );
-
+				(*it)->update( listAIEnemy );
+			}
 		}
 	}
 
@@ -96,16 +98,15 @@ void AIManager::updateSpawn( Hero* const pHero )
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
 			Enemy* enemy = NULL;
-//  			if ( rand()%2)
-//  				enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
-//   			else
+  			if ( rand()%2)
+  				enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
+   			else
  				enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
 			
 			enemy->Init();
 			enemy->getSceneObjectAnimated()->SetControledCharacter(3.f, 7.f, enemy );
 
 			physX::Link( pHero->getArme(), enemy->getSceneObjectAnimated() );
-			//L'enemi ne meurt pas car le state est écrasé dans l'update au dessus => freezer le state
 		}
 	}
 }

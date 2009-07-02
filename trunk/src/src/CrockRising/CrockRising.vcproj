@@ -406,6 +406,14 @@
 			Name="2D"
 			>
 			<File
+				RelativePath=".\2D\ButtonSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\2D\ButtonSprite.h"
+				>
+			</File>
+			<File
 				RelativePath=".\2D\ButtonText.cpp"
 				>
 			</File>

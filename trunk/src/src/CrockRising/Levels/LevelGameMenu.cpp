@@ -5,25 +5,26 @@
 #include	<Objects/Camera.h>
 #include	<Objects/2D/Sprite.h>
 #include	<Sound/SoundObject.h>
+#include	"../2D/ButtonText.h"
 
 //******************************************************************
 
-#define		LEVEL_mainmenu			0x56b55f63
+#define		LEVEL_sphinx			0xd992ae67
+#define		LEVEL_canyon			0x53466a72
+
+#define		BACKBUTTON_X			64
+#define		BACKBUTTON_Y			48
 
 #define		GAMEMENU_X				64
-#define		GAMEMENU_Y				48
-#define		GAMEMENU_MARGIN			24
+#define		GAMEMENU_Y				(BACKBUTTON_Y+24)
+#define		GAMEMENU_MARGIN			310
 
 //******************************************************************
 
-static char *g_ButtonsText[LevelGameMenu::NB_LINKS] =
+static char *g_ButtonsSprite[LevelGameMenu::NB_LINKS] =
 {
-	"RETOUR"
-};
-
-static u32 g_ButtonsWidth[LevelGameMenu::NB_LINKS] =
-{
-	60
+	"sphinx_preview.png",
+	"canyon_preview.png"
 };
 
 //******************************************************************
@@ -37,6 +38,7 @@ LevelGameMenu::LevelGameMenu( crc32 levelID )
 {
 	m_Camera		= NULL;
 	m_Background	= NULL;
+	m_BackButton	= NULL;
 	m_Sound			= NULL;
 
 	memset( m_Menu, NULL, NB_LINKS*sizeof(GMButton*) );
@@ -47,18 +49,15 @@ LevelGameMenu::LevelGameMenu( crc32 levelID )
  **********************************************************/
 LevelGameMenu::~LevelGameMenu( void )
 {
-	if( m_Camera )
-		delete m_Camera;
-
-	if( m_Background )
-		delete m_Background;
+	if( m_Camera )		delete m_Camera;
+	if( m_Background )	delete m_Background;
+	if( m_BackButton )	delete m_BackButton;
 
 	for( int link = 0; link < NB_LINKS; link++ )
 		if( m_Menu[link] )
 			delete m_Menu[link];
 
-	if( m_Sound )
-		delete m_Sound;
+	if( m_Sound )		delete m_Sound;
 }
 
 /***********************************************************
@@ -84,13 +83,18 @@ void LevelGameMenu::Init( void )
 	// Son
 	m_Sound = new SoundObject( "twt.ogg" );
 
+	// Bouton retour
+	m_BackButton = new BackButton;
+	m_BackButton->Init();
+	m_BackButton->SetPosition( BACKBUTTON_X, BACKBUTTON_Y );
+	m_BackButton->SetSound( m_Sound );
+
 	// Menu de jeu
 	for( int link = 0; link < NB_LINKS; link++ )
 	{
 		m_Menu[link] = new GMButton( (Link)link );
 		m_Menu[link]->Init();
-		m_Menu[link]->SetPosition( GAMEMENU_X, GAMEMENU_Y + link*GAMEMENU_MARGIN );
-		m_Menu[link]->SetBubbleWidth( g_ButtonsWidth[link] );
+		m_Menu[link]->SetPosition( GAMEMENU_X + link*GAMEMENU_MARGIN, GAMEMENU_Y );
 		m_Menu[link]->SetSound( m_Sound );
 	}
 }
@@ -107,7 +111,7 @@ void LevelGameMenu::Update( void )
  * Constructeur de GMButton.
  **********************************************************/
 LevelGameMenu::GMButton::GMButton( Link _linkID )
-: ButtonText( g_ButtonsText[_linkID] )
+: ButtonSprite( g_ButtonsSprite[_linkID] )
 {
 	linkID = _linkID;
 }
@@ -119,12 +123,14 @@ void LevelGameMenu::GMButton::OnClic()
 {
 	switch( linkID )
 	{
-		case BACK:
-			// Retour au menu principal..
-			Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
+		case SPHINX:
+			// Level Sphinx..
+			Game::GetInstance()->ChangeLevel( LEVEL_sphinx );
 			return;
 
-		//default:
-			// Rien..
+		case CANYON:
+			// Level Canyon..
+			Game::GetInstance()->ChangeLevel( LEVEL_canyon );
+			return;
 	}
 }

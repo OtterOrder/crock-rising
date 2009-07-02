@@ -4,7 +4,7 @@
 //******************************************************************
 
 #include	<Game/Level.h>
-#include	"../2D/ButtonText.h"
+#include	"../2D/ButtonSprite.h"
 
 //******************************************************************
 
@@ -15,6 +15,7 @@
 class Camera;
 class Sprite;
 class SoundObject;
+class BackButton;
 
 class LevelGameMenu : public Level
 {
@@ -23,7 +24,8 @@ public:
 	enum Link
 	{
 		NONE = -1,
-		BACK = 0,
+		SPHINX = 0,
+		CANYON,
 
 		NB_LINKS
 	};
@@ -38,7 +40,7 @@ public:
 protected:
 
 	// Boutons du menu de jeu
-	struct GMButton : public ButtonText
+	struct GMButton : public ButtonSprite
 	{
 		Link linkID;
 
@@ -48,8 +50,11 @@ protected:
 	
 	Camera			*m_Camera;
 	Sprite			*m_Background;
+	BackButton		*m_BackButton;
 	GMButton		*m_Menu[NB_LINKS];
 	SoundObject		*m_Sound;
+
+	//
 
 };
 

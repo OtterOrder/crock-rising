@@ -194,18 +194,22 @@ NxScene* physX::getPhysicScene()
 
 NxActor* physX::getActor( int emp )
 {
-	if(emp == -1) return NULL;
+	if( emp == -1 ) return NULL;
+
+	int nb = getPhysicScene()->getNbActors();
+	if( emp >= nb ) return NULL;
+
 	NxActor* pactor = getPhysicScene()->getActors()[ emp ];
 	assert(pactor);
 
 	return pactor; 
 }
 
-void physX::Link( SceneObject* const obj1, SceneObject* const obj2 )
+void physX::Link( SceneObject* obj1, SceneObject* obj2 )
 {
 	NxActor* pactor1  =  getActor(obj1->getEmpActor());
 	NxActor* pactor2  =  getActor(obj2->getEmpActor());
-	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH );
+	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH /*| NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH */);
 }
 
 void Update( NxActor* const pActor, D3DXMATRIX &WorldMat, Vector3f const reg )

@@ -76,19 +76,19 @@ void LevelSphinx::Init( void )
 ////STATUES
 	SceneObject* statue = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
 	statue->Init();
-	statue->SetRotation(0.f, 180.f, 0.f);
 	statue->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue->SetShader("default_normalmap.fx");
 	statue->SetObjectPhysical("Physic_Statue.DAE");
+	statue->SetRotation(0.f, 140.f, 0.f);
 	
 	SceneObject* statue2 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(452.4f, 0.f, 526.5f));
 	statue2->Init();
-	statue2->SetRotation(0.f, 180.f, 0.f);
+	statue2->SetRotation(0.f, -70.f, 0.f);
 	statue2->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue2->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue2->SetShader("default_normalmap.fx");
-	statue2->SetObjectPhysical("Physic_Statue.DAE");
+	//statue2->SetObjectPhysical("Physic_Statue.DAE");
 	
 	SceneObject* statue3 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(816.5f, 0.f, -984.f));
 	statue3->Init();
@@ -96,7 +96,7 @@ void LevelSphinx::Init( void )
 	statue3->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
 	statue3->SetShader("default_normalmap.fx");
 	statue3->SetObjectPhysical("Physic_Statue.DAE");
-//	
+	
 ////PALMIERS
 	SceneObject* palmier = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
 	palmier->Init();
@@ -135,7 +135,7 @@ void LevelSphinx::Init( void )
 
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 1, 4000, 2, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 5, 4000, 2, 3100, 256 );
 }
 
 /***********************************************************

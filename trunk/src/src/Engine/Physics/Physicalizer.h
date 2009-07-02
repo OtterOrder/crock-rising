@@ -15,7 +15,7 @@
 #include	"../Core/Types/Vector.h"
 #include	"../Objects/SceneObject.h"
 
-//#define CONNECT_VRD
+#define CONNECT_VRD
 
 enum PhysXResult
 {
@@ -71,6 +71,7 @@ public:
 	inline NxScene*				getScene()			{ return m_Scene;			}	
 	inline Vector3f				getGravity()		{ return m_Gravity;			}	
 	inline NxControllerManager* getControllerManager(){ return m_ControllerManager; }
+	inline NxPhysicsSDK*		getSDK()			{ return m_PhysicsSDK; }
 
 	///////////////////////////////////////////////////////////////////////////
 	// Modificateurs															 //

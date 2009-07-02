@@ -97,15 +97,23 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 NxControllerManager* physX::getControllerManager()
 {
 	Physicalizer* physInstance = Physicalizer::GetInstance();
-	NxControllerManager* pControllerManager = physInstance->getControllerManager();
-	assert(pControllerManager);
+	NxScene* scene = physInstance->getScene();
+	NxPhysicsSDK* sdk = physInstance->getSDK();
+	if(scene != NULL && sdk != NULL )
+	{
+		NxControllerManager* pControllerManager = physInstance->getControllerManager();
+		assert(pControllerManager);
 
-	return pControllerManager;
+		return pControllerManager;
+	}
+
+	return NULL;
 }
 
 NxController* physX::getController( int emp )
 {
-	if(emp == -1) return NULL;
+	int nbController = getControllerManager()->getNbControllers(); 
+	if(emp == -1 || emp >= nbController) return NULL;
 	NxController* pController = getControllerManager()->getController( emp );
 	assert(pController);
 
@@ -119,5 +127,5 @@ void physX::releaseController(int &empActor, int &empController)
 	pControllerManager->releaseController( *pController );
 	empController = -1;
 
-	releaseActor( empActor );
+	//releaseActor( empActor );
 }

@@ -42,9 +42,10 @@ void Perso::decLife( const int decreaseLife )
 
 void Perso::DestroyPerso()
 {
-	SceneObject::RefList.remove(m_pAnimated);
+	//SceneObject::RefList.remove(m_pAnimated);
 	m_pAnimated->SetObjectUnPhysical();
- 	delete m_pAnimated;
- 	m_pAnimated = NULL;
+ //	delete m_pAnimated;
+ //	m_pAnimated = NULL;
+	m_pAnimated->SetVisible(false);
 	IsAlive() = false;
 }

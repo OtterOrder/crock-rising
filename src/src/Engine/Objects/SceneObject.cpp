@@ -210,21 +210,27 @@ void SceneObject::SetPhysicalPosition( float x, float y, float z )
 	if(IsActor())
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
-		NxVec3 NewPos = NxVec3(x, y, z);
-		pActor->setGlobalPosition( NewPos );
+		if(pActor)
+		{
+			NxVec3 NewPos = NxVec3(x, y, z);
+			pActor->setGlobalPosition( NewPos );
+		}
 	}
 	else
 	{
 		NxController* pControler = physX::getController( m_iEmpController );
-		NxExtendedVec3 ExtCurrPos = pControler->getPosition();
-		NxVec3 CurrPos((NxReal)ExtCurrPos.x, (NxReal)ExtCurrPos.y, (NxReal)ExtCurrPos.z);
-		NxVec3 TargetPos(x, y, z);
+		if(pControler)
+		{
+			NxExtendedVec3 ExtCurrPos = pControler->getPosition();
+			NxVec3 CurrPos((NxReal)ExtCurrPos.x, (NxReal)ExtCurrPos.y, (NxReal)ExtCurrPos.z);
+			NxVec3 TargetPos(x, y, z);
 
-		NxU32 collisionFlags; 
-		NxF32 minDistance = 0.001f;
-		NxVec3 disp = TargetPos - CurrPos; 
+			NxU32 collisionFlags; 
+			NxF32 minDistance = 0.001f;
+			NxVec3 disp = TargetPos - CurrPos; 
 
-		pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
+			pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
+		}
 	}
 }
 
@@ -233,19 +239,24 @@ void SceneObject::SetPhysicalTranslation( float x, float y, float z )
 	if(IsActor())
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
-		NxVec3 currentPos = pActor->getGlobalPosition();
-		NxVec3 NewPos = currentPos + NxVec3(x, y, z);
-		pActor->setGlobalPosition( NewPos );
+		if(pActor)
+		{
+			NxVec3 currentPos = pActor->getGlobalPosition();
+			NxVec3 NewPos = currentPos + NxVec3(x, y, z);
+			pActor->setGlobalPosition( NewPos );
+		}
 	}
 	else
 	{
 		NxController* pControler = physX::getController( m_iEmpController );
+		if(pControler)
+		{
+			NxU32 collisionFlags; 
+			NxF32 minDistance = 0.001f;
+			NxVec3 disp( x, y, z ); 
 
-		NxU32 collisionFlags; 
-		NxF32 minDistance = 0.001f;
-		NxVec3 disp( x, y, z ); 
-
-		pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
+			pControler->move( disp, MASK_OTHER, minDistance, collisionFlags );
+		}
 	}
 }
 
@@ -254,14 +265,17 @@ void SceneObject::SetPhysicalRotation( float angleX, float angleY, float angleZ 
 	if(IsActor())
 	{
 		NxActor* pActor = physX::getActor( m_iEmpActor );
-		NxQuat quatCurr = pActor->getGlobalOrientationQuat();
-		NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
-		NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
-		NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
-		NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
+		if(pActor)
+		{
+			NxQuat quatCurr = pActor->getGlobalOrientationQuat();
+			NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
+			NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
+			NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
+			NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
 
-		pActor->setGlobalOrientationQuat(quatResult);
-		Physicalizer::GetInstance()->getControllerManager()->updateControllers();
+			pActor->setGlobalOrientationQuat(quatResult);
+			Physicalizer::GetInstance()->getControllerManager()->updateControllers();
+		}
 	}
 	if( IsController() )
 	{
@@ -389,47 +403,50 @@ void SceneObject::Update()
 	if (IsActor())
 	{
 		NxActor* pac = physX::getActor(m_iEmpActor);
-		if( !pac->isSleeping() ) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
-		{
-			D3DXMATRIX mat_PhysX;
-			D3DXMatrixIdentity(&mat_PhysX);
+		if(pac)
+			if( !pac->isSleeping() ) //On ne met à jour qu'à condition que l'objet bouge ou qu'il soit statique
+			{
+				D3DXMATRIX mat_PhysX;
+				D3DXMatrixIdentity(&mat_PhysX);
 
-			//Rotation pour redresser l'objet GRAPHIQUE
-			D3DXMATRIX rotX, rotY, trans;
-			D3DXMatrixIdentity( &rotX );
-			Vector3f reg = m_pMesh->m_ReglagePivot;
-			D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
-			NxVec3 v = pac->getGlobalPosition();
-			pac->getGlobalPose().getColumnMajor44( mat_PhysX );
+				//Rotation pour redresser l'objet GRAPHIQUE
+				D3DXMATRIX rotX, rotY, trans;
+				D3DXMatrixIdentity( &rotX );
+				Vector3f reg = m_pMesh->m_ReglagePivot;
+				D3DXMatrixTranslation(&trans, -reg.x, -reg.y, -reg.z);
+				NxVec3 v = pac->getGlobalPosition();
+				pac->getGlobalPose().getColumnMajor44( mat_PhysX );
 
-			rotX._22=0; rotX._23=1;
-			rotX._32=1; rotX._33=0;
+				rotX._22=0; rotX._23=1;
+				rotX._32=1; rotX._33=0;
 
-			mat_PhysX = rotX * mat_PhysX;
-			D3DXMatrixMultiply(&m_WorldMatrix, &trans, &mat_PhysX);
-		}
+				mat_PhysX = rotX * mat_PhysX;
+				D3DXMatrixMultiply(&m_WorldMatrix, &trans, &mat_PhysX);
+			}
 	}
 	else if (IsController())
 	{
 		SetPhysicalTranslation(0.f, -0.5f, 0.f);	
 
 		NxController* pController = physX::getController(m_iEmpController);
+		if(pController)
+		{
+			NxExtendedVec3 NxPos = pController->getPosition();
+			Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
+			pos += Vector3f(0.f, m_iHauteurController, 0.f);//m_pMesh->m_ReglagePivot;
+			D3DXMATRIX rot_and_trans;
+			D3DXMatrixRotationY(&rot_and_trans, D3DXToRadian( m_vAngleY ));
 
-		NxExtendedVec3 NxPos = pController->getPosition();
-		Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
-		pos += Vector3f(0.f, m_iHauteurController, 0.f);//m_pMesh->m_ReglagePivot;
-		D3DXMATRIX rot_and_trans;
-		D3DXMatrixRotationY(&rot_and_trans, D3DXToRadian( m_vAngleY ));
+			rot_and_trans._41 = pos.x;
+			rot_and_trans._42 = pos.y;
+			rot_and_trans._43 = pos.z;
 
-		rot_and_trans._41 = pos.x;
-		rot_and_trans._42 = pos.y;
-		rot_and_trans._43 = pos.z;
+			D3DXMatrixIdentity( &m_WorldMatrix );
+			m_WorldMatrix._22=0; m_WorldMatrix._23=1;
+			m_WorldMatrix._32=1; m_WorldMatrix._33=0;
 
-		D3DXMatrixIdentity( &m_WorldMatrix );
-		m_WorldMatrix._22=0; m_WorldMatrix._23=1;
-		m_WorldMatrix._32=1; m_WorldMatrix._33=0;
-
-		D3DXMatrixMultiply( &m_WorldMatrix, &m_WorldMatrix, &rot_and_trans);
+			D3DXMatrixMultiply( &m_WorldMatrix, &m_WorldMatrix, &rot_and_trans);
+		}
 		
 	}
 }

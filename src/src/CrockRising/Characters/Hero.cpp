@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include	<Resources/Material.h>
-#include	<../CrockRising/Characters/Perso.h>
+#include	<../CrockRising/Characters/Alien.h>
 
 #define MAX_LIFE   100
 #define LIFE_BONUS 10
@@ -23,17 +23,20 @@ Hero::Hero()
 	
 	m_pInputManager = InputManager::GetInstance();
 }
+
 void createStack()
 {
-	for(int i = 0; i < 10; i ++)
+	for(int i = 0; i < 15; i ++)
 	{
-		for(int j = 0; j < 10; j++)
+		for(int j = 0; j < 20 - i; j++)
 		{
-			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( i*0.5f - 2.5f + j/2, j*0.51f, 50.f));
+			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( j*1.001f - 2.5f + i/2.f, (i)*1.001f + 0.5f, 50.f));
 			plop->Init();
+			plop->SetObjectPhysical("CubeP.DAE");
 		}
 	}
 }
+
 /**********************************************************
 * Initialisation des données membres
 **********************************************************/
@@ -45,24 +48,23 @@ void Hero::Init()
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	m_pAnimated->SetControledCharacter(3.f,10.f,this);
+	m_pAnimated->SetControledCharacter(3.f,9.f,this);
 	//m_pAnimated->SetAnim("X.DAE");
 	//m_pAnimated->Play();
 	//m_pAnimated->SetLoop(true);
 	//m_pAnimated->SetAnimFPS(25.f);
 
-	m_pInputManager->HoldMouseAtCenter(true);
+	//m_pInputManager->HoldMouseAtCenter(true);
 
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
 	m_pLifeBar->SetLife(50);
 
-
 	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
 	m_pArme->Init();
 	m_pArme->SetObjectPhysical( "batte_P.dae" ); //pas le bon group!!
 
-	 NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+	NxActor* a = physX::getActor( m_pArme->getEmpActor() );
 	if( a )
 	{
 		a->getShapes()[0]->setGroup( GROUP_CONTROLLER );
@@ -70,11 +72,15 @@ void Hero::Init()
 		a->raiseBodyFlag( NX_BF_FROZEN_ROT_X );
 		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
 		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Z );
+		a->userData = new ActorUserData;
+		((ActorUserData*)a->userData)->type = WEAPON;
+		((ActorUserData*)a->userData)->PersoRef = this;
 	}		
 
-	createStack();
+	//createStack();
 
-	//SceneObject* test = new SceneObject( "PlanCheckZ.dae", Vector3f( 700.f, 0.001, -431.f)); //en fn de la pos de m_pAnimated
+
+	//SceneObject* test = new SceneObject( "PlanCheckZ.dae", Vector3f( 0.f, 6.f, 30.f)); //en fn de la pos de m_pAnimated
 	//test->Init();
 }
 
@@ -247,6 +253,8 @@ void Hero::update( Camera* pCamera )
 
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();
+
+	m_pLifeBar->SetLife( m_iLife );
 }
 
 /******************************************************************************

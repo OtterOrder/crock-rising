@@ -17,9 +17,9 @@ public:
 
 	Alien() : Enemy() {}
 	Alien(Vector3f position);
-	
+
 	virtual void			Init();
-	virtual void		    changeState( PersoState newState );
+	virtual void		    changeState( PersoState newState );	
 };
 
 //******************************************************************

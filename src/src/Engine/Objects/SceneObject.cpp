@@ -171,7 +171,7 @@ void SceneObject::SetObjectTrigger(const std::string& physic,
 void SceneObject::SetControledCharacter( float radius, float height, void* Ref )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_pMesh->m_ReglagePivot.y -= height;	//Le controller a les pieds au dessus de la capsule
+	m_iHauteurController = -height;	//Le controller a les pieds au dessus de la capsule
 												//si on ne le baisse pas.
 	m_iEmpController = physX::CreateControlledCapsule(Pos, radius, height, Ref, m_iEmpActor);
 }
@@ -187,7 +187,7 @@ void SceneObject::SetControledCharacter( float radius, float height, void* Ref )
 void SceneObject::SetControledCharacter(float width, float height, float depth, void* Ref )
 {
 	Vector3f Pos(m_WorldMatrix._41, m_WorldMatrix._42, m_WorldMatrix._43);
-	m_pMesh->m_ReglagePivot.y -= height;	//Le controller a les pieds au dessus de la capsule
+	m_iHauteurController = -height + 1.f;	//Le controller a les pieds au dessus de la capsule
 												//si on ne le baisse pas.
 	m_iEmpController = physX::CreateControlledBox(Pos, width, height, depth, Ref, m_iEmpActor);
 }
@@ -199,10 +199,10 @@ void SceneObject::SetObjectUnPhysical()
 {
 	if(IsActor())
 		physX::releaseActor( m_iEmpActor );
-	//else if(IsController())
-	//{
-	//	physX::releaseController( m_iEmpActor, m_iEmpController );
-	//}
+	else if(IsController())
+	{
+		physX::releaseController( m_iEmpActor, m_iEmpController );
+	}
 
 	m_ListOfBoundingBox.ReleaseList();
 }
@@ -406,7 +406,7 @@ void SceneObject::Update()
 
 		NxExtendedVec3 NxPos = pController->getPosition();
 		Vector3f pos ((float)NxPos.x, (float)NxPos.y, (float)NxPos.z);
-		pos += m_pMesh->m_ReglagePivot;
+		pos += Vector3f(0.f, m_iHauteurController, 0.f);//m_pMesh->m_ReglagePivot;
 		D3DXMATRIX rot_and_trans;
 		D3DXMatrixRotationY(&rot_and_trans, D3DXToRadian( m_vAngleY ));
 

@@ -25,21 +25,28 @@ enum SolidType
 class Perso
 {
 public:	
-	Perso(){ }
+	Perso(): m_iLife(50), m_StateFrozen(false){}
 	~Perso(){}
 
-	virtual void		    changeState( PersoState newState ){}
-	virtual void			Init(){}
+	virtual void		    changeState( PersoState newState )=0;
+	virtual void			Init()=0;
+	virtual void			Hit()=0;
+	virtual void			Die()=0;
 	
 	SceneObjectAnimated* 	getSceneObjectAnimated () const { return m_pAnimated; }
+	PersoState				getCurrentState(){ return m_currentState; }
 	
 	int						&Life() { return m_iLife; }
-	void					setLife ( const int decreaseLife ); 
+	void					decLife ( const int decreaseLife );
+	void					DestroyPerso();
+	void					FreezeState(){ m_StateFrozen = true; }
+	void					UnFreezeState(){ m_StateFrozen = false; }
 	
 protected:
 	SceneObjectAnimated*	m_pAnimated;
 	int					    m_iLife;
 	PersoState				m_currentState;
+	bool					m_StateFrozen;
 };
 
 

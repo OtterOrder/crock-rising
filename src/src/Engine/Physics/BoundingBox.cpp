@@ -95,7 +95,6 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 			bodyDesc.angularDamping = 0.5f;
 			bodyDesc.linearVelocity = VecToNxVec( Pb->linearVelocity );
 			bodyDesc.angularVelocity = VecToNxVec( Pb->angularVelocity );
-			//if( Pb->physObjType == PHYS_WEAPON) bodyDesc.flags |= NX_BF_FROZEN;
 			assert(bodyDesc.isValid());
 			ActorDesc.body = &bodyDesc;
 		}
@@ -209,7 +208,7 @@ void physX::Link( SceneObject* obj1, SceneObject* obj2 )
 {
 	NxActor* pactor1  =  getActor(obj1->getEmpActor());
 	NxActor* pactor2  =  getActor(obj2->getEmpActor());
-	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH /*| NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH */);
+	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH /*| NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH*/ );
 }
 
 void Update( NxActor* const pActor, D3DXMATRIX &WorldMat, Vector3f const reg )

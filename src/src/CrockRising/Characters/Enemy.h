@@ -20,7 +20,11 @@ public:
 	Enemy(Vector3f position);
 	~Enemy();
 
-	void					update( );	
+	virtual void			update( Enemy* list );	
+	virtual void		    changeState( PersoState newState ){}
+	virtual void			Init(){}
+	virtual void			Hit();
+	virtual void			Die();
 
 protected:
 	

@@ -2,6 +2,7 @@
 #define _crockAI_H_
 
 #include	"../CrockRising/Characters/Perso.h"   
+#include	"../CrockRising/Characters/Hero.h"   
 #include	"../CrockRising/Characters/Enemy.h"
 #include	"../CrockRising/Characters/Alien.h"
 #include	"../CrockRising/Characters/MmeGrise.h"
@@ -27,9 +28,9 @@ public:
 	AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precise );
 	~AIManager();
 
-	void	update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> listEnemy );
-	void	updateSpawn();
-
+	void	update( Hero* const pHero, float elapsedTime, vector<Enemy*> listEnemy );
+	void	updateSpawn( Hero* const pHero );
+	Enemy*	getlistAIEnemy(){ return listAIEnemy; }
 
 protected:
 	static const int NB_GROUP_MAX = 1;

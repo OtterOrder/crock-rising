@@ -63,7 +63,7 @@ public:
 	void GetPhysicsResults();	//Doit être avant chaque rendu pour la mise à jour des matrices.
 	PhysXResult RunPhysics(float DeltaTime);	//Permet de récupérer le résultat de la physique, en appelant les fonctions dans le bon ordre
 	void connectToVRD();		//Fonction d'aide au debug, lancer le remote debuger de physX et exécuter CR. 
-	void Link( SceneObject* const obj1, SceneObject* const obj2 );
+	//void Link( SceneObject* const obj1, SceneObject* const obj2 );
 
 	///////////////////////////////////////////////////////////////////////////
 	// Accesseurs														 //

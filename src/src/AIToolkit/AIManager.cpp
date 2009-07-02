@@ -17,64 +17,70 @@ AIManager::~AIManager()
 }
 
 
-void AIManager::update( Vector3f posPlayer, float elapsedTime, vector<Enemy*> listEnemy )
+void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> listEnemy )
 {
 	// Pour calcul la distance que doit effectuer les ennemies en fct du temps
 	aiEnemy->setElapsedTime(elapsedTime);
+	Vector3f posPlayer = pHero->getSceneObjectAnimated()->GetPosition();
 
 	// Gère les états et transitions
-	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); )
+	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); it++)
 	{
 		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
-		newPos = (*it)->getSceneObjectAnimated()->GetPosition();
-		distance = aiEnemy->calculDistance( posPlayer, newPos );
-		newPos = Vector3f(0,0,0);
-		newAngle = 0;
-
-		if ( distance <= attackRange )
+		SceneObjectAnimated* pObj = (*it)->getSceneObjectAnimated();
+		if(pObj)
 		{
-			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+			newPos = (*it)->getSceneObjectAnimated()->GetPosition();
+			distance = aiEnemy->calculDistance( posPlayer, newPos );
+			newPos = Vector3f(0,0,0);
+			newAngle = 0;
+
+			if ( distance <= attackRange )
 			{
-				aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
-				(*it)->changeState(ATTACK);
+				if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+				{
+					aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
+					(*it)->changeState(ATTACK);
+				}
+				else
+				{
+					aiEnemy->enemyAIEvade( posPlayer );
+					(*it)->changeState(RUN);
+				}
+			}
+			else if ( distance <= fieldOfView )
+			{
+				if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+				{
+					aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+					(*it)->changeState(RUN);
+				}
+				else
+				{
+					aiEnemy->enemyAIEvade( posPlayer );
+					(*it)->changeState(RUN);
+				}
 			}
 			else
 			{
-				aiEnemy->enemyAIEvade( posPlayer );
+				aiEnemy->enemyAIPatrol(posPlayer);
 				(*it)->changeState(RUN);
 			}
-		}
-		else if ( distance <= fieldOfView )
-		{
-			if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
-			{
-				aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
-				(*it)->changeState(RUN);
-			}
-			else
-			{
-				aiEnemy->enemyAIEvade( posPlayer );
-				(*it)->changeState(RUN);
-			}
-		}
-		else
-		{
-			aiEnemy->enemyAIPatrol(posPlayer);
-			(*it)->changeState(RUN);
-		}
 
-		(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
-		(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
+			(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
+			(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
 
-		it++;
+			(*it)->update( listAIEnemy );
+
+		}
 	}
 
 	// Gère les respawn
-	updateSpawn();
+	updateSpawn(pHero);
 }
 
 
-void AIManager::updateSpawn()
+void AIManager::updateSpawn( Hero* const pHero )
 {
 	// Recrée les enemies si le spawn est infini et qu'on a pas atteind le nombre maximal d'ennemies
 	if ( spawnInfini )
@@ -89,16 +95,17 @@ void AIManager::updateSpawn()
 			float spawnX = floor(float((posSpawn.first*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
-			if ( rand()%2)
-			{
-				Alien* enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
-				enemy->Init();
-			}
-			else
-			{
-				MmeGrise* enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
-				enemy->Init();
-			}
+			Enemy* enemy = NULL;
+//  			if ( rand()%2)
+//  				enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
+//   			else
+ 				enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
+			
+			enemy->Init();
+			enemy->getSceneObjectAnimated()->SetControledCharacter(3.f, 7.f, enemy );
+
+			physX::Link( pHero->getArme(), enemy->getSceneObjectAnimated() );
+			//L'enemi ne meurt pas car le state est écrasé dans l'update au dessus => freezer le state
 		}
 	}
 }

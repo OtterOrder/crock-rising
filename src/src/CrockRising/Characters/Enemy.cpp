@@ -33,19 +33,20 @@ Enemy::~Enemy()
 
 
 /***********************************************************************/
-void Enemy::update()
+void Enemy::update( Enemy* list )
 {
+	if(m_currentState == DIE && m_pAnimated->IsAtEnd())
+		DestroyPerso();
+}
 
-	if ( m_pInputManager->IsKeyPressed('C'))
-	{
-		changeState(ATTACK);
-	}
-	if ( m_pInputManager->IsKeyPressed('V'))
-	{
-		changeState(DIE);
-	}
-	if ( m_pInputManager->IsKeyPressed('B'))
-	{
-		changeState(RUN);
-	}
+void Enemy::Hit()
+{
+	changeState(HIT);
+	decLife( 50 );
+}
+
+void Enemy::Die()
+{
+	changeState(DIE);	
+	FreezeState();
 }

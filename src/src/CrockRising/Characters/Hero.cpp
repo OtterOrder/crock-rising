@@ -1,5 +1,6 @@
 #include "Hero.h"
 #include <iostream>
+#include "XInput.h"
 
 #include	<Resources/Material.h>
 #include	<../CrockRising/Characters/Alien.h>
@@ -103,6 +104,85 @@ ResourceResult Hero::control( Camera* pCamera )
 {
 	changeState(STATIC);
 
+	bool inverseAxeY = true;
+
+//emp manette
+	bool manettePresente = true;
+
+	XINPUT_STATE gamepadState;
+	DWORD result = XInputGetState( 0, &gamepadState );
+	if( result==ERROR_DEVICE_NOT_CONNECTED )
+		manettePresente = false;
+	
+
+	const float sensibiliteJoystickGauche = 15.0f;
+	const float sensibiliteJoystickDroit = 1.f;
+	const float coefMulJoystickDroit = 1.0f;
+
+	float X = 0.f, Y = 0.f, 
+		  rX = 0.f, rY = 0.f;
+
+	if( manettePresente )
+	{
+		int x = 0, y = 0,
+			rx = 0, ry = 0;
+
+		//Joystick gauche
+		if( abs(gamepadState.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE )
+		{
+			if( gamepadState.Gamepad.sThumbLX > 0 )
+				x = gamepadState.Gamepad.sThumbLX - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			else
+				if( gamepadState.Gamepad.sThumbLX < 0 )
+					x = gamepadState.Gamepad.sThumbLX + XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+			X = (float)x / (sensibiliteJoystickGauche*(32768-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE));
+		}
+
+		if( abs(gamepadState.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE )
+		{
+			if( gamepadState.Gamepad.sThumbLY > 0 )
+				y = gamepadState.Gamepad.sThumbLY - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			else
+				if( gamepadState.Gamepad.sThumbLY < 0 )
+					y = gamepadState.Gamepad.sThumbLY + XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+			Y = (float)y / (sensibiliteJoystickGauche*(32768-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE));
+		}
+
+		//Joystick droit
+		if( abs(gamepadState.Gamepad.sThumbRX) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE )
+		{
+			if( gamepadState.Gamepad.sThumbRX > 0 )
+				rx = gamepadState.Gamepad.sThumbRX - XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+			else
+				if( gamepadState.Gamepad.sThumbRX < 0 )
+					rx = gamepadState.Gamepad.sThumbRX + XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+
+			rX = (float)rx / (sensibiliteJoystickDroit*(32768-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE));
+		}
+
+		if( abs(gamepadState.Gamepad.sThumbRY) > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE )
+		{
+			if( gamepadState.Gamepad.sThumbRY > 0 )
+				ry = gamepadState.Gamepad.sThumbRY - XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+			else
+				if( gamepadState.Gamepad.sThumbRY < 0 )
+					ry = gamepadState.Gamepad.sThumbRY + XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+
+			rY = (float)ry / (sensibiliteJoystickDroit*(32768-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE));
+		}
+
+		//if(gamepadState.Gamepad.wButtons== XINPUT_GAMEPAD_Y)
+		//...
+		if( gamepadState.Gamepad.wButtons== XINPUT_GAMEPAD_A )
+		{
+			changeState(ATTACK);
+			return RES_SUCCEED;
+		} 
+
+	}
+
 	//-- On vérifie tout d'abord suivant la touche tapée si l'on doit
 	//   changer l'état du Héros  
 	if (m_pInputManager->IsMouseTriggered(MOUSE_LEFT))
@@ -116,7 +196,36 @@ ResourceResult Hero::control( Camera* pCamera )
 	Point2f point = m_pInputManager->GetMouseVector();
 	const int sensibiliteSouris = 10;
 
+	//Joystick droit = mouvement camera
+	if( rX != 0.f )
+	{
+		float offsetCursor = rX * coefMulJoystickDroit;
+		float diff = pCamera->GetOrientationYRad();
+		pCamera->SetOrientationY( -offsetCursor );
+		diff = pCamera->GetOrientationYRad() - diff;
+		
+		D3DXMATRIX rot;
+		D3DXMatrixRotationZ( &rot, diff );
+		m_pAnimated->ApplyTransform( &rot );
+		m_pAnimated->m_vAngleY -= D3DXToDegree( diff );
+		
+		static NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+		if( a )
+			a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
+
+		m_pArme->SetRotation( 0, -D3DXToDegree( diff ), 0 );
+		
+		if( a )
+			a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
+	}
+	if( rY != 0.f )
+	{
+		float offsetCursor = rY * (coefMulJoystickDroit/2);
+		if( inverseAxeY ) offsetCursor = -offsetCursor;
+		pCamera->SetOrientationX( offsetCursor );
+	}
 	
+	//souris
 	if( point.x != 0 ) 
 	{
 		int offsetCursor = (int)point.x%sensibiliteSouris; 
@@ -144,6 +253,7 @@ ResourceResult Hero::control( Camera* pCamera )
 	if( point.y != 0 ) 
 	{
 		int offsetCursor = (int)point.y%sensibiliteSouris; 
+		if( inverseAxeY ) offsetCursor = -offsetCursor;
 		pCamera->SetOrientationX( (float)offsetCursor );
 	}
 
@@ -155,19 +265,36 @@ ResourceResult Hero::control( Camera* pCamera )
 
 	m_Translate = Vector3f (0.f, 0.f, 0.f);
 
-	if ( m_pInputManager->IsKeyPressed('Z'))
+	if ( m_pInputManager->IsKeyPressed('Z') || Y != 0.f )
 	{
 		float xStep, zStep;
-		xStep = -(std::sin(pCamera->GetOrientationYRad()))*sensibilityTranslation;
-		zStep = std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+		if( Y == 0.f )
+		{
+			xStep = -std::sin(pCamera->GetOrientationYRad())*sensibilityTranslation;
+			zStep =  std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+		}
+		else
+		{
+			xStep = -std::sin( pCamera->GetOrientationYRad() )*Y*timeF;
+			zStep =  std::cos( pCamera->GetOrientationYRad() )*Y*timeF;
+		}
+
 		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
-	if ( m_pInputManager->IsKeyPressed('Q'))
+	if ( m_pInputManager->IsKeyPressed('Q')  || X != 0.f )
 	{
 		float xStep, zStep;
-		xStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		if( X == 0.f )
+		{
+			xStep = -std::cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+			zStep = -std::sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		}
+		else
+		{
+			xStep = std::cos( pCamera->GetOrientationYRad() )*X*timeF;
+			zStep = std::sin( pCamera->GetOrientationYRad() )*X*timeF;
+		}
 		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}

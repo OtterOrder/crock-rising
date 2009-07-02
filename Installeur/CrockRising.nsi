@@ -10,6 +10,9 @@ InstallDir "$PROGRAMFILES\Crock Rising"
 ; Style
 XPStyle on
 
+; Droit d'accès pour Vista
+RequestExecutionLevel admin
+
 ;*******************************************************************
 
 ; Pages

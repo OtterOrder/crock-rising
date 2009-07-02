@@ -42,6 +42,7 @@ public:
 	void					FreezeState(){ m_StateFrozen = true; }
 	void					UnFreezeState(){ m_StateFrozen = false; }
 	bool					&IsAlive(){ return m_IsAlive; }
+	SceneObject*			getArme(){ return m_pArme; }
 	
 protected:
 	SceneObjectAnimated*	m_pAnimated;
@@ -49,6 +50,7 @@ protected:
 	PersoState				m_currentState;
 	bool					m_StateFrozen;
 	bool					m_IsAlive;
+	SceneObject*  m_pArme;
 };
 
 

@@ -2,6 +2,7 @@
 #define		_AIEnemy_H
 
 #include	<Core/Types/Vector.h>
+#include	<Physics/Boundingbox.h>
 #include	<d3dx9.h>
 #include	"AStar.h"
 #include	"iostream"

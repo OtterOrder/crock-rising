@@ -28,6 +28,15 @@ void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, float &ang
 
 	float dotAngle2 = D3DXVec3Dot( &dirVEnnemy, &axeZ );
 	if( dotAngle2 > 0.f ) angleRot = M_PI - angleRot;
+
+	/*static NxActor* a = physX::getActor( pEnemy->getArme()->getEmpActor() );
+	if( a )
+		a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
+
+	pEnemy->getArme()->SetRotation( 0, -D3DXToDegree( angleRot ), 0 );
+	
+	if( a )
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );*/
 }
 
 void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, float &angleRot )

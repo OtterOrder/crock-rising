@@ -16,7 +16,7 @@ class Enemy : public Perso
 public:
 	static std::vector<Enemy*>  listEnemy;
 
-	Enemy():Perso() {}
+	Enemy():Perso(),  m_idBone(0){}
 	Enemy(Vector3f position);
 	~Enemy();
 
@@ -27,11 +27,11 @@ public:
 	virtual void			Die();
 
 	float timeSinceLastPath;
-
 protected:
 	
 	InputManager* m_pInputManager;
 	Vector3f      m_position;
+	int			  m_idBone;
 };
 
 //******************************************************************

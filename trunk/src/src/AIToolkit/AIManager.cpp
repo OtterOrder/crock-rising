@@ -80,6 +80,16 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 				pEnemy->getSceneObjectAnimated()->SetPosition( oldPos.x+newPos.x, 0, oldPos.z+newPos.z );
 				pEnemy->getSceneObjectAnimated()->SetRotation( 0, newAngle, 0 );
 
+				NxActor* a = physX::getActor( pEnemy->getArme()->getEmpActor() );
+				if( a )
+					a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
+
+				pEnemy->getArme()->SetRotation( 0.f, -newAngle, 0.f );
+				
+				if( a )
+					a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
+				a=NULL;
+
 				pEnemy->update( listAIEnemy );
 			}
 		}
@@ -113,6 +123,7 @@ void AIManager::updateSpawn( Hero* const pHero )
 			enemy->getSceneObjectAnimated()->SetControledCharacter(3.f, 7.f, enemy );
 
 			physX::Link( pHero->getArme(), enemy->getSceneObjectAnimated() );
+			physX::Link( enemy->getArme(), pHero->getSceneObjectAnimated() );
 		}
 	}
 }

@@ -5,25 +5,33 @@
 
 void ContactReportCR::onContactNotify( NxContactPair& pair, NxU32 events )
 {
-	ActorUserData *UserDataA, *UserDataV;
+	ActorUserData *ud1, *ud2;
  	NxActor* Arme = pair.actors[1], *Victime = pair.actors[0];
 
 	//Vérification de la présence des acteurs
 	if(Arme && Victime)
 	{
-		UserDataA = (ActorUserData*)(Arme->userData);
-		UserDataV = (ActorUserData*)(Victime->userData);
-		Hero* pHero = (Hero*)UserDataA->PersoRef;
-		if( pHero->getCurrentState() == ATTACK )
+		ud1 = (ActorUserData*)(Arme->userData);
+		ud2 = (ActorUserData*)(Victime->userData);
+		//Si l'objet a bien un userdata
+		if(ud1 && ud2)
 		{
-			//Si l'objet a bien un userdata
-			if(UserDataA && UserDataV)
+			Perso* perso1 = (Perso*)ud1->PersoRef;
+			Perso* perso2 = (Perso*)ud2->PersoRef;
+			if( perso1->getCurrentState() == ATTACK )
 			{
 				//Si l'objet qui frappe est une arme
-				if( UserDataA->type == WEAPON )
+				if( ud1->type == WEAPON )
 				{
-					Perso* perso = (Perso*)UserDataV->PersoRef;
-					perso->Hit();
+					perso2->Hit();
+				}
+			}
+			else if( perso2->getCurrentState() == ATTACK )
+			{
+				//Si l'objet qui frappe est une arme
+				if( ud2->type == WEAPON )
+				{
+					perso1->Hit();
 				}
 			}
 		}

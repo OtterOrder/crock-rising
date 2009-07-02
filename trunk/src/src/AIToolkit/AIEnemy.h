@@ -5,6 +5,8 @@
 #include	<d3dx9.h>
 #include	"AStar.h"
 #include	"iostream"
+#include	<stdlib.h>
+#include	<time.h>
 #include	<vector>
 #include	<map>
 
@@ -21,7 +23,7 @@ public:
 
 	void enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, int &angleRot );
 	void enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angleRot );
-	void enemyAIPatrol( Vector3f newPos );
+	void enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, int &angleRot );
 	void enemyAIEvade( Vector3f newPos );
 
 	void setElapsedTime( float newElaTime )	{	elapsedTime = newElaTime;	}
@@ -38,6 +40,8 @@ public:
 	int				posPlayer2D_Y;
 	int				posEnemy2D_X;
 	int				posEnemy2D_Y;
+	int				posPatrol2D_X;
+	int				posPatrol2D_Y;
 	bool			existPath;
 
 	float			timeBetFindPath;

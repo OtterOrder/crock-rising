@@ -27,6 +27,7 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); it++)
 	{
 		Enemy* pEnemy = (*it);
+
 		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
 		if(pEnemy->IsAlive())
 		{
@@ -66,7 +67,7 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 				}
 				else
 				{
-					aiEnemy->enemyAIPatrol(posPlayer);
+					aiEnemy->enemyAIPatrol(posPlayer, newPos, newAngle);
 					pEnemy->changeState(RUN);
 				}
 
@@ -103,10 +104,8 @@ void AIManager::updateSpawn( Hero* const pHero )
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
 			Enemy* enemy = NULL;
-  			if ( rand()%2)
-  				enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
-   			else
- 				enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
+  			if ( rand()%2)		enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
+   			else				enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
 			
 			enemy->Init();
 			enemy->getSceneObjectAnimated()->SetControledCharacter(3.f, 7.f, enemy );

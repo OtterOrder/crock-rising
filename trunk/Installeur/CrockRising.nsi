@@ -82,8 +82,8 @@ SectionEnd
 Section "DirectX"
 	
 	SetOutPath "$INSTDIR\Temp"
-	File "redist\directx_aug2008_redist.exe"
-	ExecWait '"$INSTDIR\Temp\directx_aug2008_redist.exe"'
+	File "redist\directx_mar2008_redist.exe"
+	ExecWait '"$INSTDIR\Temp\directx_mar2008_redist.exe"'
 	
 SectionEnd
 

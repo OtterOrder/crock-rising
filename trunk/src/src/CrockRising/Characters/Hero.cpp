@@ -3,6 +3,7 @@
 
 #include	<Resources/Material.h>
 #include	<../CrockRising/Characters/Alien.h>
+#include	<../CrockRising/Characters/Alien.h>
 
 #define MAX_LIFE   100
 #define LIFE_BONUS 10

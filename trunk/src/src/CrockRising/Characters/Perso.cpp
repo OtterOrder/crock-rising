@@ -46,4 +46,5 @@ void Perso::DestroyPerso()
 	m_pAnimated->SetObjectUnPhysical();
  	delete m_pAnimated;
  	m_pAnimated = NULL;
+	IsAlive() = false;
 }

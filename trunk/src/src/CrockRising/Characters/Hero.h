@@ -41,6 +41,8 @@ public:
 	
 	//static HUDLife*		&Life() { return m_pLifeBar; }
 	SceneObject*		getArme(){ return m_pArme; }
+	
+	static HUDLife*	  &Life() { return m_pLifeBar; }
 
 protected:
 	static HUDLife*		m_pLifeBar;

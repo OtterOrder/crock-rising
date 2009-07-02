@@ -52,7 +52,7 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 		// Rotation
 		Vector3f posEnnemy = Vector3f( posEnemy2D_X, 0, posEnemy2D_Y );
 		Vector3f posPlayer2 = Vector3f( posPlayer2D_X, 0, posPlayer2D_Y );
-		Vector3f dirVEnnemy = posPlayer - posEnnemy;
+		Vector3f dirVEnnemy = posPlayer2 - posEnnemy;
 
 		D3DXVec3Normalize(&dirVEnnemy, &dirVEnnemy);
 		D3DXVECTOR3 axeX( 1, 0, 0 ), axeZ( 0, 0, 1 );

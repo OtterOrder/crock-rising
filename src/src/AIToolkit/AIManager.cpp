@@ -26,53 +26,58 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 	// Gère les états et transitions
 	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); it++)
 	{
+		Enemy* pEnemy = (*it);
 		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
-		if((*it)->IsAlive())
+		if(pEnemy->IsAlive())
 		{
-			SceneObjectAnimated* pObj = (*it)->getSceneObjectAnimated();
+			SceneObjectAnimated* pObj = pEnemy->getSceneObjectAnimated();
 			if(pObj)
 			{
-				newPos = (*it)->getSceneObjectAnimated()->GetPosition();
+				newPos = pEnemy->getSceneObjectAnimated()->GetPosition();
 				distance = aiEnemy->calculDistance( posPlayer, newPos );
 				newPos = Vector3f(0,0,0);
 				newAngle = 0;
 
 				if ( distance <= attackRange )
 				{
-					if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+					if (pEnemy->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 					{
-						aiEnemy->enemyAIAttack( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newAngle );
-						(*it)->changeState(ATTACK);
+						aiEnemy->enemyAIAttack( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newAngle );
+						pEnemy->changeState(ATTACK);
 					}
 					else
 					{
 						aiEnemy->enemyAIEvade( posPlayer );
-						(*it)->changeState(RUN);
+						pEnemy->changeState(RUN);
 					}
 				}
 				else if ( distance <= fieldOfView )
 				{
-					if ((*it)->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+					if (pEnemy->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 					{
-						aiEnemy->enemyAIMoveTo( posPlayer, (*it)->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
-						(*it)->changeState(RUN);
+						aiEnemy->enemyAIMoveTo( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+						pEnemy->changeState(RUN);
 					}
 					else
 					{
 						aiEnemy->enemyAIEvade( posPlayer );
-						(*it)->changeState(RUN);
+						pEnemy->changeState(RUN);
 					}
 				}
 				else
 				{
 					aiEnemy->enemyAIPatrol(posPlayer);
-					(*it)->changeState(RUN);
+					pEnemy->changeState(RUN);
 				}
 
-				(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
-				(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
+				//(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
+				//(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
 
-				(*it)->update( listAIEnemy );
+				Vector3f oldPos = pEnemy->getSceneObjectAnimated()->GetPosition();
+				pEnemy->getSceneObjectAnimated()->SetPosition( oldPos.x+newPos.x, 0, oldPos.z+newPos.z );
+				pEnemy->getSceneObjectAnimated()->SetRotation( 0, newAngle, 0 );
+
+				pEnemy->update( listAIEnemy );
 			}
 		}
 	}

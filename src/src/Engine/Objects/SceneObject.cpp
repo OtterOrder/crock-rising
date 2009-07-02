@@ -200,9 +200,7 @@ void SceneObject::SetObjectUnPhysical()
 	if(IsActor())
 		physX::releaseActor( m_iEmpActor );
 	else if(IsController())
-	{
 		physX::releaseController( m_iEmpActor, m_iEmpController );
-	}
 
 	m_ListOfBoundingBox.ReleaseList();
 }
@@ -253,15 +251,28 @@ void SceneObject::SetPhysicalTranslation( float x, float y, float z )
 
 void SceneObject::SetPhysicalRotation( float angleX, float angleY, float angleZ )
 {
-	NxActor* pActor = physX::getActor( m_iEmpActor );
-	NxQuat quatCurr = pActor->getGlobalOrientationQuat();
-	NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
-	NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
-	NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
-	NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
+	if(IsActor())
+	{
+		NxActor* pActor = physX::getActor( m_iEmpActor );
+		NxQuat quatCurr = pActor->getGlobalOrientationQuat();
+		NxQuat quatX(angleX, NxVec3( 1.f, 0.0f, 0.f));
+		NxQuat quatY(angleY, NxVec3( 0.f, 1.0f, 0.f));
+		NxQuat quatZ(angleZ, NxVec3( 0.f, 0.0f, 1.f));
+		NxQuat quatResult = quatCurr * quatX * quatY * quatZ;
 
-	pActor->setGlobalOrientationQuat(quatResult);
-	Physicalizer::GetInstance()->getControllerManager()->updateControllers();
+		pActor->setGlobalOrientationQuat(quatResult);
+		Physicalizer::GetInstance()->getControllerManager()->updateControllers();
+	}
+	if( IsController() )
+	{
+		D3DXMATRIX rotX, rotY, rotZ;
+		D3DXMatrixRotationX(&rotX, angleX );
+		D3DXMatrixRotationY(&rotY, angleZ );
+		D3DXMatrixRotationZ(&rotZ, angleY );
+
+		D3DXMATRIX result=rotX*rotY*rotZ;
+		ApplyTransform(&result);
+	}
 }
 
 void SceneObject::SetPhysicalTransform( const D3DXMATRIX* world )
@@ -449,7 +460,7 @@ void SceneObject::SetTranslation( float x, float y, float z )
 void SceneObject::SetRotation( float angleX, float angleY, float angleZ )
 {
 	// Si l'objet est affecté par la physique
-	if(IsActor())
+	if(IsPhysical())
 		// On transmet la transformation à la physique
 		SetPhysicalRotation(angleX, angleY, angleZ);
 

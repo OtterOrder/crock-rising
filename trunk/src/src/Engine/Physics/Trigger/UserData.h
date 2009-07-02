@@ -10,11 +10,6 @@
 
 #include "NxPhysics.h"
 
-
-class Hero;
-class Enemy;
-enum PhysicalObjectType;
-
 // structure qui permet de passer des informations dans le userdata d'un nxActor
 
 void SetPersoRef(NxActor* pActor, void* Ref);

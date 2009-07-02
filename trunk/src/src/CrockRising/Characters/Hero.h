@@ -23,26 +23,30 @@ public:
 	Hero();
 	~Hero();
 
-	virtual void			  Init();
+	virtual void		Init();
+	virtual void		changeState( PersoState newState );
+	virtual void		Hit(){}
+	virtual void		Die(){}
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
 
 	//Méthodes pour gérer l'état courant du Héros
-	void			  update( Camera* pCamera ); 
-	void		      changeState( PersoState newState );
-	ResourceResult	  control ( Camera* pCamera ); 
+	void				update( Camera* pCamera ); 
+	ResourceResult		control ( Camera* pCamera ); 
 
 	//Méthodes liées aux triggers (essentiellement bonus de vie pour l'instant...)
-	static void		  contactWithTrigger(void* param);
-	static void		  intoTrigger(){}
-	static void		  outOfTrigger(){} 
-
+	static void			contactWithTrigger(void* param);
+	static void			intoTrigger(){}
+	static void			outOfTrigger(){} 
+	
+	//static HUDLife*		&Life() { return m_pLifeBar; }
+	SceneObject*		getArme(){ return m_pArme; }
 
 protected:
-	static HUDLife*			 m_pLifeBar;
-	InputManager*			 m_pInputManager;
-	Vector3f				 m_Translate;
-	SceneObject*			 m_pArme;
+	static HUDLife*		m_pLifeBar;
+	InputManager*		m_pInputManager;
+	Vector3f			m_Translate;
+	SceneObject*		m_pArme;
 };
 
 //******************************************************************

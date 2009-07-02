@@ -118,6 +118,7 @@ protected:
 	ListOfBoundingBox				m_ListOfBoundingBox;
 	int								m_iEmpActor;
 	int								m_iEmpController;
+	float							m_iHauteurController; //Sert à descendre le sceobj lorsque c'est un controller
 	
 
 	
@@ -137,8 +138,7 @@ protected:
 	void	SetPhysicalPosition( float x, float y, float z );
 	void	SetPhysicalTranslation( float x, float y, float z );
 	void	SetPhysicalRotation( float angleX, float angleY, float angleZ );
-	void	SetPhysicalTransform( const D3DXMATRIX* world );
-	
+	void	SetPhysicalTransform( const D3DXMATRIX* world );	
 };
 
 #endif

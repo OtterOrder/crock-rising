@@ -1,5 +1,7 @@
 #include "Perso.h"
+#include "Hero.h"
 #include <iostream>
+
 
 void ContactReportCR::onContactNotify( NxContactPair& pair, NxU32 events )
 {
@@ -11,26 +13,37 @@ void ContactReportCR::onContactNotify( NxContactPair& pair, NxU32 events )
 	{
 		UserDataA = (ActorUserData*)(Arme->userData);
 		UserDataV = (ActorUserData*)(Victime->userData);
-		//Si l'objet a bien un userdata
-		if(UserDataA && UserDataV)
+		Hero* pHero = (Hero*)UserDataA->PersoRef;
+		if( pHero->getCurrentState() == ATTACK )
 		{
-			//Si l'objet qui frappe est une arme
-			if( UserDataA->type == WEAPON )
+			//Si l'objet a bien un userdata
+			if(UserDataA && UserDataV)
 			{
-				Perso* perso = (Perso*)UserDataV->PersoRef;
-				perso->Life() += 10;	
-			}//endif weapon
-		}//endif userdata		
-	}//endif actors
+				//Si l'objet qui frappe est une arme
+				if( UserDataA->type == WEAPON )
+				{
+					Perso* perso = (Perso*)UserDataV->PersoRef;
+					perso->Hit();
+				}
+			}
+		}
+	}
 }
 
 
-void Perso::setLife( const int decreaseLife ) 
-{
-	 
+void Perso::decLife( const int decreaseLife ) 
+{	 
 	std::cout << "vie = " << m_iLife << std::endl;
 	if ( (m_iLife - decreaseLife) <= 0 )
-		changeState(DIE);
+		Die();
 	else 
 		m_iLife -= decreaseLife;
+}
+
+void Perso::DestroyPerso()
+{
+	SceneObject::RefList.remove(m_pAnimated);
+	m_pAnimated->SetObjectUnPhysical();
+ 	delete m_pAnimated;
+ 	m_pAnimated = NULL;
 }

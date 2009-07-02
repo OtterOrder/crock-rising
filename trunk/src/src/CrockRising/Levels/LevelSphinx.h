@@ -9,6 +9,7 @@
 #include	<Objects/Skybox.h>
 #include	"../Characters/Hero.h"
 #include	"../Characters/Enemy.h"
+#include	"../Characters/Perso.h"
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Physics/BoundingBoxLoader.h>

@@ -3,6 +3,8 @@
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Physics/Trigger/UserData.h>
+#include	<../CrockRising/Characters/Alien.h>
+#include	<../CrockRising/Characters/MmeGrise.h>
 
 
 ContactReportCR*  gContactReportCR = new ContactReportCR;
@@ -65,7 +67,7 @@ void LevelSphinx::Init( void )
 	m_pCanyon_part1->GetMaterial()->SetTexture("levelSphynx.bmp", Texture::DIFFUSE );
 */
 //
-////DESERT
+////DESERT Mesh_CanyonFinal Physic_Canyon
 	SceneObject* Desert = new SceneObject("Mesh_Desert.DAE", D3DXVECTOR3(0.f, 0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
@@ -128,20 +130,12 @@ void LevelSphinx::Init( void )
  	sphinx->SetShader("default_normalmap.fx");
 	sphinx->SetObjectPhysical("Physic_Sphinx.DAE");
 
-
 	//Initialisation du Héro
 	m_pHero->Init();
 
-	//physX::Link(m_pJanotLapin->getSceneObjectAnimated(), cube);
 
 	// Création de l'AI
-	//m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 4000, 2, 3100, 256, 100 );
-
-	// Création des ennemies
-	/*for (int i=0; i<30; i++)
-	{
-		m_pEnemy[i] = new Enemy( Vector3f(0.f,8.f,0.f) );
-	}*/
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 1, 4000, 2, 3100, 256 );
 }
 
 /***********************************************************
@@ -152,16 +146,7 @@ void LevelSphinx::Update( void )
 	// Mise a jour de l'AI avec les ennemies en paramètre
 	deltaTime = System::GetInstance()->GetTime()->GetDeltaTimeMs();
 	Vector3f posHero = m_pHero->getSceneObjectAnimated()->GetPosition();
-	//m_pManagerAI->update( posHero, deltaTime, m_pEnemy[0]->listEnemy );
-
-	//std::cout << "X: " << posHero.x << "Y: " << posHero.y << "Z: " << posHero.z << std::endl;
+	m_pManagerAI->update( m_pHero, deltaTime, m_pEnemy[0]->listEnemy );
 
 	m_pHero->update(m_pCamera);
-		
-	InputManager* pInputManager = InputManager::GetInstance();
-
-	if( pInputManager->IsKeyTriggered(' ') )
-	{	
-		cube->SetTranslation(0.f, 0.f, 1.f);
-	}
 }

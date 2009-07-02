@@ -17,7 +17,7 @@ public:
 
 	MmeGrise() : Enemy() {}
 	MmeGrise(Vector3f position);
-	
+
 	virtual void			Init();
 	virtual void		    changeState( PersoState newState );	
 };

@@ -4,7 +4,7 @@
 AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precision ) 
 	:	nbGroup(0), spawnInfini(spawn), typeAI(comportementAI), newPos(Vector3f(0,0,0)), 
 		newAngle(0), fieldOfView(fovEnemy), attackRange(rangeAttack), nbEnemy(nbMaxEnemy), scaleCurrMap(scaleMap),
-		precCurrMap(precision)
+		precCurrMap(precision), timeEnemy(0.f)
 {
 	srand( (unsigned)time(NULL) );
 	aiEnemy = new AIEnemy(scaleMap, precision);
@@ -67,8 +67,10 @@ void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> lis
 				}
 				else
 				{
-					aiEnemy->enemyAIPatrol(posPlayer, newPos, newAngle);
+					timeEnemy = pEnemy->timeSinceLastPath;
+					aiEnemy->enemyAIPatrol( posPlayer, newPos, newAngle, timeEnemy);
 					pEnemy->changeState(RUN);
+					pEnemy->timeSinceLastPath = timeEnemy;
 				}
 
 				//(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);

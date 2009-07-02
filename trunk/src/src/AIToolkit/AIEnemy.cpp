@@ -14,7 +14,7 @@ AIEnemy::~AIEnemy(void)
 	if(aPath)	delete aPath;
 }
 
-void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angleRot )
+void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, float &angleRot )
 {
 	//Rotation
 	Vector3f posEnnemy = Vector3f( positEnemy.x, 0, positEnemy.z );
@@ -30,12 +30,12 @@ void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, int &angle
 	if( dotAngle2 > 0.f ) angleRot = M_PI - angleRot;
 }
 
-void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, int &angleRot )
+void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, float &angleRot )
 {
-	posPlayer2D_X = (int)floor((posPlayer.x*preci/scale)+preci/2);
-	posPlayer2D_Y = (int)floor((posPlayer.z*preci/scale)+preci/2);
-	posEnemy2D_X = (int)floor((positEnemy.x*preci/scale)+preci/2);
-	posEnemy2D_Y = (int)floor((positEnemy.z*preci/scale)+preci/2);
+	posPlayer2D_X = floor((posPlayer.x*preci/scale)+preci/2);
+	posPlayer2D_Y = floor((posPlayer.z*preci/scale)+preci/2);
+	posEnemy2D_X = floor((positEnemy.x*preci/scale)+preci/2);
+	posEnemy2D_Y = floor((positEnemy.z*preci/scale)+preci/2);
 
 	nextWayPoint = aPath->findWay( posEnemy2D_X, posEnemy2D_Y, posPlayer2D_X, posPlayer2D_Y );
 
@@ -74,9 +74,9 @@ void AIEnemy::enemyAIEvade( Vector3f newPos )
 {
 }
 
-void AIEnemy::enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, int &angleRot )
+void AIEnemy::enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, float &angleRot, float &time )
 {
-	if (timeBetFindPath > 3000.0f)
+	if (time > 3000.0f)
 	{
 		posEnemy2D_X = (int)floor((positEnemy.x*preci/scale)+preci/2);
 		posEnemy2D_Y = (int)floor((positEnemy.z*preci/scale)+preci/2);
@@ -92,11 +92,11 @@ void AIEnemy::enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, int &angleRo
 		}
 
 		nextWayPoint = aPath->findWay( posEnemy2D_X, posEnemy2D_Y, posPatrol2D_X, posPatrol2D_Y );
-		timeBetFindPath = 0.0f;
+		time = 0.0f;
 	}
 	else
 	{
-		timeBetFindPath += elapsedTime;
+		time += elapsedTime;
 	}
 
 	// Si il a trouvé un chemin
@@ -112,7 +112,7 @@ void AIEnemy::enemyAIPatrol( Vector3f positEnemy, Vector3f &newPos, int &angleRo
 		// Calcul le déplacement de l'ennemi
 		newPos = tmpDir - tmpPla;
 		D3DXVec3Normalize(&newPos, &newPos);
-		newPos *= elapsedTime/30.0f;
+		newPos *= elapsedTime/100.0f;
 		positEnemy += newPos;
 	}
 }

@@ -13,6 +13,7 @@ Enemy::Enemy(Vector3f position)
 	m_position = position;
 	m_currentState = RUN;
 	m_pInputManager = InputManager::GetInstance();
+	timeSinceLastPath = 0.f;
 
 	Enemy::listEnemy.push_back(this);
 }

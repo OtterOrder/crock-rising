@@ -146,7 +146,6 @@ int System::MainLoop( void )
 
 	// Destruction des singletons
 	game->Destroy(); // Game à détruire en premier !
-	physX->Destroy();
 	soundSystem->Destroy();
 	inputManager->Destroy();
 	
@@ -155,6 +154,7 @@ int System::MainLoop( void )
 
 	postRenderer->Destroy();
 
+	physX->Destroy();
 	resourceManager->Destroy(); // Normalement il est vide
 
 	return (int)msg.wParam;

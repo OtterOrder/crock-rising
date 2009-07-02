@@ -130,7 +130,7 @@ void LevelGameMenu::GMButton::OnClic()
 
 		case CANYON:
 			// Level Canyon..
-			Game::GetInstance()->ChangeLevel( LEVEL_canyon );
+			//Game::GetInstance()->ChangeLevel( LEVEL_canyon );
 			return;
 	}
 }

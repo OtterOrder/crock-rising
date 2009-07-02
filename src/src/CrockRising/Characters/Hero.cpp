@@ -21,7 +21,7 @@ Hero::Hero()
 	
 	m_currentState = STATIC;
 	
-	m_pLifeBar = new HUDLife();
+	//m_pLifeBar = new HUDLife();
 	
 	m_pInputManager = InputManager::GetInstance();
 }
@@ -58,9 +58,9 @@ void Hero::Init()
 
 	//m_pInputManager->HoldMouseAtCenter(true);
 
-	m_pLifeBar->Init();
-	m_pLifeBar->SetMaxLife(MAX_LIFE);
-	m_pLifeBar->SetLife(50);
+	//m_pLifeBar->Init();
+	//m_pLifeBar->SetMaxLife(MAX_LIFE);
+	//m_pLifeBar->SetLife(50);
 
 	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
 	m_pArme->Init();
@@ -382,7 +382,7 @@ void Hero::update( Camera* pCamera )
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();
 
-	m_pLifeBar->SetLife( m_iLife );
+	//m_pLifeBar->SetLife( m_iLife );
 }
 
 /******************************************************************************
@@ -391,11 +391,11 @@ void Hero::update( Camera* pCamera )
 *******************************************************************************/
 void Hero::contactWithTrigger(void* param)
 {
-	int life = m_pLifeBar->GetLife();
+	int life = MAX_LIFE;//m_pLifeBar->GetLife();
 	if (life < MAX_LIFE)
 	{
 	  life += LIFE_BONUS;
-	  m_pLifeBar->SetLife(life);
+	  //m_pLifeBar->SetLife(life);
 	  SceneObjectAnimated* capsule = (SceneObjectAnimated*)param;
 	  SceneObjectAnimated::RefList.remove(capsule);
 	  delete capsule;

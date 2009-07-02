@@ -52,6 +52,9 @@ void LevelSphinx::Init( void )
 
 	m_EscMenu->Init();
 
+	InputManager::GetInstance()->HoldMouseAtCenter( true );
+	InputManager::GetInstance()->ShowOSCursor( false );
+
 	//Lumière
 	DirectionalLight* spot = new SpotLight();
 	spot->SetLightPosition(D3DXVECTOR3(0.f, 2000.f, 20.f));

@@ -4,6 +4,7 @@
 //******************************************************************
 
 #include	<Game/Level.h>
+#include    "../2D/EscMenu.h"
 
 //******************************************************************
 
@@ -26,7 +27,8 @@ public:
 
 protected:
 	
-	Camera	*m_Camera;
+	Camera		*m_Camera;
+	EscMenu*	m_EscMenu;
 
 };
 

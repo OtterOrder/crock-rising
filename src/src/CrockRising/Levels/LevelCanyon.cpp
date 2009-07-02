@@ -1,5 +1,6 @@
 #include	"LevelCanyon.h"
 
+#include	<Core/Inputs/InputManager.h>
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 
@@ -13,6 +14,7 @@ LevelCanyon::LevelCanyon( crc32 levelID )
 : Level( levelID )
 {
 	m_Camera = NULL;
+	m_EscMenu = new EscMenu();
 }
 
 /***********************************************************
@@ -22,6 +24,9 @@ LevelCanyon::~LevelCanyon( void )
 {
 	if( m_Camera )
 		delete m_Camera;
+
+	if( m_EscMenu )
+		delete m_EscMenu;
 }
 
 /***********************************************************
@@ -39,7 +44,10 @@ void LevelCanyon::Init( void )
 	m_Camera->SetTarget( Vector3f( 10.0f, 10.0f, 0.0f ) );
 	pRenderer->SetCamera( m_Camera );
 
-	//TODO
+	m_EscMenu->Init();
+
+	InputManager::GetInstance()->HoldMouseAtCenter( true );
+	InputManager::GetInstance()->ShowOSCursor( false );
 }
 
 /***********************************************************

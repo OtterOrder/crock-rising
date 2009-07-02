@@ -39,7 +39,6 @@ public:
 	static void			intoTrigger(){}
 	static void			outOfTrigger(){} 
 	
-	//static HUDLife*		&Life() { return m_pLifeBar; }
 	SceneObject*		getArme(){ return m_pArme; }
 	
 	static HUDLife*	  &Life() { return m_pLifeBar; }

@@ -7,6 +7,7 @@
 MmeGrise::MmeGrise(Vector3f position)
 : Enemy( position )
 {
+	m_idBone = 14;
 }
 
 /**********************************************************
@@ -20,6 +21,23 @@ void MmeGrise::Init()
 
 	m_pAnimated->SetLoop(true);
 	m_pAnimated->SetAnimFPS(50.f);
+
+	m_pArme = new SceneObject( "dummy.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
+	m_pArme->Init();
+	m_pArme->SetObjectPhysical( "arme_mmegrise.DAE" ); //pas le bon group!!
+
+	NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+	if( a )
+	{
+		a->getShapes()[0]->setGroup( GROUP_CONTROLLER );
+		a->raiseBodyFlag( NX_BF_DISABLE_GRAVITY );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_X );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
+		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Z );
+		a->userData = new ActorUserData;
+		((ActorUserData*)a->userData)->type = WEAPON;
+		((ActorUserData*)a->userData)->PersoRef = this;
+	}
 }
 
 
@@ -65,6 +83,5 @@ void MmeGrise::changeState( PersoState newState )
 		case STATIC : 
 			m_pAnimated->Stop();
 		}
-	}
-	
+	}	
 }

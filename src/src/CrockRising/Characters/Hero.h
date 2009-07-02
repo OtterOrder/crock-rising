@@ -25,8 +25,8 @@ public:
 
 	virtual void		Init();
 	virtual void		changeState( PersoState newState );
-	virtual void		Hit(){}
-	virtual void		Die(){}
+	virtual void		Hit();
+	virtual void		Die();
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
 
@@ -40,14 +40,11 @@ public:
 	static void			outOfTrigger(){} 
 	
 	SceneObject*		getArme(){ return m_pArme; }
-	
-	static HUDLife*	  &Life() { return m_pLifeBar; }
 
 protected:
 	static HUDLife*		m_pLifeBar;
 	InputManager*		m_pInputManager;
 	Vector3f			m_Translate;
-	SceneObject*		m_pArme;
 };
 
 //******************************************************************

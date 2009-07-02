@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\physic\batte_P.dae</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\CrockRisingFinal\src\data\models\physic\batte_P.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -51,7 +51,7 @@
 	<library_visual_scenes>
 		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
 			<node	id="Actor0-Node" name="Actor0" type="NODE">
-        <translate>0	0.000000394 -0.00485301</translate>
+        <translate>-0.000000002	-0.042963743 -0.004853012</translate>
         <rotate>0.577350378 0.577350199	-0.577350259	 120.000007629</rotate>
 			</node>
 			</visual_scene>
@@ -78,7 +78,7 @@
 				<technique_common>
 					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0.000000156 -3.569676876</translate>
+            <translate>-0.00000014	0.000000156 -5.098183632</translate>
             <rotate>1 0	0	 0</rotate>
 						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					 <mass>1</mass>
@@ -90,16 +90,16 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>0.419445187 0.423872083	5.400000095</half_extents>
+							<half_extents>0.419445187 0.423872083	7.074000359</half_extents>
 						</box>
 					 </shape>
 					 <dynamic>true</dynamic>
 					 <mass>1</mass>
 					 <mass_frame>
-            <translate>0	0.000000156 -3.569676876</translate>
+            <translate>-0.00000014	0.000000156 -5.098183632</translate>
             <rotate>1 0	0	 0</rotate>
 					</mass_frame>
-					<inertia>9.779889107	9.778643608 0.118533939</inertia>
+					<inertia>16.740385056	16.739141464 0.118533954</inertia>
 					</technique_common>
 			<extra>
 				<technique profile="PhysX">

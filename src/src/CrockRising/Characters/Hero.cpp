@@ -26,19 +26,6 @@ Hero::Hero()
 	m_pInputManager = InputManager::GetInstance();
 }
 
-void createStack()
-{
-	for(int i = 0; i < 15; i ++)
-	{
-		for(int j = 0; j < 20 - i; j++)
-		{
-			SceneObject* plop = new SceneObject( "CubeM.DAE", Vector3f( j*1.001f - 2.5f + i/2.f, (i)*1.001f + 0.5f, 50.f));
-			plop->Init();
-			plop->SetObjectPhysical("CubeP.DAE");
-		}
-	}
-}
-
 /**********************************************************
 * Initialisation des données membres
 **********************************************************/
@@ -58,9 +45,10 @@ void Hero::Init()
 
 	//m_pInputManager->HoldMouseAtCenter(true);
 
-	//m_pLifeBar->Init();
-	//m_pLifeBar->SetMaxLife(MAX_LIFE);
-	//m_pLifeBar->SetLife(50);
+	m_pLifeBar = new HUDLife;
+	m_pLifeBar->Init();
+	m_pLifeBar->SetMaxLife(MAX_LIFE);
+	m_pLifeBar->SetLife(50);
 
 	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
 	m_pArme->Init();
@@ -78,12 +66,6 @@ void Hero::Init()
 		((ActorUserData*)a->userData)->type = WEAPON;
 		((ActorUserData*)a->userData)->PersoRef = this;
 	}		
-
-	//createStack();
-
-
-	//SceneObject* test = new SceneObject( "PlanCheckZ.dae", Vector3f( 0.f, 6.f, 30.f)); //en fn de la pos de m_pAnimated
-	//test->Init();
 }
 
 /***********************************************************
@@ -345,6 +327,18 @@ void Hero::changeState( PersoState newState )
 		m_pAnimated->SetLoop(true);
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
+	case HIT : 
+		m_pAnimated->SetAnim("Anim_Robot_Hit.DAE");
+		m_pAnimated->Play();
+		m_pAnimated->SetLoop(true);
+		m_pAnimated->SetAnimFPS(50.f);
+		break;
+	case DIE: 
+		m_pAnimated->SetAnim("Anim_Robot_Die.DAE");
+		m_pAnimated->Play();
+		m_pAnimated->SetLoop(true);
+		m_pAnimated->SetAnimFPS(50.f);
+		break;
 	case STATIC :
 		m_pAnimated->Stop();
 		break;
@@ -374,15 +368,23 @@ void Hero::update( Camera* pCamera )
 	m_pArme->SetPosition( animMatrix._41, animMatrix._42, animMatrix._43 );
 	
 
-
-	//m_pArme->GetWorldMatrix()->_41 = animMatrix._41;
-	//m_pArme->GetWorldMatrix()->_42 = animMatrix._42;
-	//m_pArme->GetWorldMatrix()->_43 = animMatrix._43;
-
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();
 
 	//m_pLifeBar->SetLife( m_iLife );
+}
+
+void Hero::Hit()
+{
+	changeState(HIT);
+	decLife( 5 );
+	m_pLifeBar->SetLife( Life() );
+}
+
+void Hero::Die()
+{
+	changeState(DIE);	
+	FreezeState();
 }
 
 /******************************************************************************

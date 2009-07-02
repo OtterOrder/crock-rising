@@ -10,6 +10,18 @@
 ContactReportCR*  gContactReportCR = new ContactReportCR;
 SceneObject* cube = NULL;
 
+void createStack(Vector3f pos)
+{
+	for(int i = 0; i < 15; i ++)
+	{
+		for(int j = 0; j < 20 - i; j++)
+		{
+			SceneObject* plop = new SceneObject( "CubeM.DAE", pos + Vector3f( j*1.001f - 2.5f + i/2.f, (i)*1.001f + 0.5f, 50.f));
+			plop->Init();
+			plop->SetObjectPhysical("CubeP.DAE");
+		}
+	}
+}
 /***********************************************************
  * Constructeur.
  * @param[in]	levelID	: ID du niveau
@@ -35,6 +47,7 @@ LevelSphinx::~LevelSphinx( void )
 	if(m_EscMenu)
 		delete m_EscMenu;
 }
+
 
 /***********************************************************
 * Initialisation du niveau.
@@ -136,9 +149,15 @@ void LevelSphinx::Init( void )
 	//Initialisation du Héro
 	m_pHero->Init();
 
+	createStack( Vector3f(0.f, 0.f, -200.f) );
+	createStack( Vector3f(245.f, 0.f, 200.f) );
+	createStack( Vector3f(-100.f, 0.f, -400.f) );
+	createStack( Vector3f(400.f, 0.f, -200.f) );
+	createStack( Vector3f(-500.f, 0.f, -700.f) );
+
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 5, 4000, 2, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 5, 400, 30, 3100, 256 );
 }
 
 /***********************************************************

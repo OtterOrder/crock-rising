@@ -15,6 +15,8 @@ SceneObject* palmier2 = NULL;
 SceneObject* palmier3 = NULL;
 SceneObject* Pyramide2 = NULL;
 SceneObject* sphinx = NULL;
+std::vector<Vector3f> triggersPos;
+std::vector<SceneObjectAnimated*> triggers;
 
 ContactReportCR*  gContactReportCR = new ContactReportCR;
 
@@ -38,7 +40,7 @@ LevelSphinx::LevelSphinx( crc32 levelID )
 : Level( levelID )
 {
 	m_pCamera = NULL;
-	m_pHero = new Hero();
+	m_pHero = new Hero(Vector3f( 0.f, 8.f, 0.f) );
 	m_EscMenu = new EscMenu();
 	
 	Physicalizer::GetInstance()->setControllerCallback( gContactReportCR );
@@ -125,6 +127,16 @@ LevelSphinx::~LevelSphinx( void )
 	if(m_pHero)
 		delete m_pHero;
 	m_pHero = NULL;
+
+	for (size_t i = 0 ; i < triggers.size() ; ++i)
+	{		
+		if(triggers[i]) 
+		{
+			SceneObject::RefList.remove( triggers[i] );
+			delete triggers[i];
+			triggers[i] = NULL;
+		}
+	}
 }
 
 
@@ -227,15 +239,27 @@ void LevelSphinx::Init( void )
 	//Initialisation du Héro
 	m_pHero->Init();
 
-	//createStack( Vector3f(0.f, 0.f, -200.f) );
-	//createStack( Vector3f(245.f, 0.f, 200.f) );
-	//createStack( Vector3f(-100.f, 0.f, -400.f) );
-	//createStack( Vector3f(400.f, 0.f, -200.f) );
-	//createStack( Vector3f(-500.f, 0.f, -700.f) );
+	triggersPos.reserve(7);
+	triggers.reserve(7);
 
+	triggersPos.push_back(Vector3f(-769.f, 0.f, 442.f));
+	triggersPos.push_back(Vector3f(0.f, 0.f, 435.f));
+	triggersPos.push_back(Vector3f(668.f, 0.f, -1129.f));
+	triggersPos.push_back(Vector3f(-234.f, 0.f, -497.f));
+	triggersPos.push_back(Vector3f(0.f, 0.f, -1337.f));
+
+	for (size_t i = 0 ; i < triggers.size() ; ++i)
+	{
+		triggers[i] = new SceneObjectAnimated("Life_Mesh.DAE","Life_Anim.DAE",triggersPos[i]);
+		triggers[i]->Init();
+		triggers[i]->GetMaterial()->SetTexture("crock-rising.png",Texture::DIFFUSE);
+		triggers[i]->SetObjectTrigger("Life_MeshP.DAE", Hero::contactWithTrigger, NULL,NULL, triggers[i],NULL,NULL);
+		triggers[i]->SetLoop( true );
+		triggers[i]->SetAnimFPS(30.f);
+	}
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 5, 400, 30, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 15, 400, 30, 3100, 256 );
 }
 
 /***********************************************************

@@ -20,7 +20,7 @@
 class Hero : public Perso
 {
 public:
-	Hero();
+	Hero(Vector3f _pos);
 	~Hero();
 
 	virtual void		Init();
@@ -41,6 +41,7 @@ public:
 	static void			outOfTrigger(){} 
 	
 	SceneObject*		getArme(){ return m_pArme; }
+	Vector3f			pos;
 
 protected:
 	static HUDLife*		m_pLifeBar;

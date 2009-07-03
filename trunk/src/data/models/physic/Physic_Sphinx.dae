@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\physic\Physic_Sphinx.dae</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\CrockRisingFinal\src\data\models\physic\Physic_Sphinx.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -66,6 +66,10 @@
         <translate>34.4609375	-650.45703125 38.20728302</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
+			<node	id="Actor4-Node" name="Actor4" type="NODE">
+        <translate>34.490726471	-424.367858887 69.04775238</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
 			</visual_scene>
 	</library_visual_scenes>
 	<library_physics_materials>
@@ -98,6 +102,13 @@
 			</technique_common>
 		</physics_material>
 		<physics_material	id="pmat4_0-PhysicsMaterial"	name="pmat4_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat5_0-PhysicsMaterial"	name="pmat5_0-PhysicsMaterial">
 			<technique_common>
 				<dynamic_friction>0.300000012</dynamic_friction>
 				<restitution>0</restitution>
@@ -231,6 +242,37 @@
 				</technique>
 			</extra>
 			 </rigid_body>
+			<rigid_body	sid="Actor4-RigidBody" name="Boîte05">
+				<technique_common>
+					<instance_physics_material url="#pmat5_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat5_0-PhysicsMaterial"/>
+					 <mass>1</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>0.025</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<box>
+							<half_extents>54.71024704 10.627182007	69.04775238</half_extents>
+						</box>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
 		</physics_model>
 		<physics_model id="Scene0-PhysicsInstance">
 			<instance_physics_model	url="#Scene0-PhysicsModel">
@@ -241,6 +283,8 @@
 				<instance_rigid_body target="#Actor2-Node" body="Actor2-RigidBody">
 				</instance_rigid_body>
 				<instance_rigid_body target="#Actor3-Node" body="Actor3-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor4-Node" body="Actor4-RigidBody">
 				</instance_rigid_body>
 			<extra>
 				<technique profile="PhysX">

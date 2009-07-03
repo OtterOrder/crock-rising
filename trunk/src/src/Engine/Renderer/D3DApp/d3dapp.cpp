@@ -1365,8 +1365,8 @@ void CD3DApplication::Cleanup3DEnvironment()
             OnDestroyDevice();
         }
 
-        if( m_pd3dDevice->Release() > 0 )
-            DisplayErrorMsg( D3DAPPERR_NONZEROREFCOUNT, MSGERR_APPMUSTEXIT );
+      //  if( m_pd3dDevice->Release() > 0 )
+            //DisplayErrorMsg( D3DAPPERR_NONZEROREFCOUNT, MSGERR_APPMUSTEXIT );
         m_pd3dDevice = NULL;
     }
 }

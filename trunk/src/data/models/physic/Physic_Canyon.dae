@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\physic\Physic_Canyon.dae</source_data>
+			<source_data>C:\Documents and Settings\bemantoue\Bureau\CrockRisingFinal\src\data\models\physic\Physic_Canyon.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -87,8 +87,8 @@
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor9-Node" name="Actor9" type="NODE">
-        <translate>48.517417908	-480.161804199 70</translate>
-        <rotate>0 0	1.000000834	 23.88747406</rotate>
+        <translate>43.816776276	-473.714355469 70</translate>
+        <rotate>0 0	0.999999642	 28.887506485</rotate>
 			</node>
 			<node	id="Actor10-Node" name="Actor10" type="NODE">
         <translate>23.466377258	-428.568817139 70</translate>
@@ -108,11 +108,11 @@
 			</node>
 			<node	id="Actor14-Node" name="Actor14" type="NODE">
         <translate>499.321624756	-548.525939941 70</translate>
-        <rotate>0 0	0.999999642	 23.3814888</rotate>
+        <rotate>0 0	0.999999702	 23.3814888</rotate>
 			</node>
 			<node	id="Actor15-Node" name="Actor15" type="NODE">
         <translate>419.876098633	-496.015075684 70</translate>
-        <rotate>0 0	-1.000005841	 6.785266876</rotate>
+        <rotate>0 0	-1.000005007	 6.785266876</rotate>
 			</node>
 			<node	id="Actor16-Node" name="Actor16" type="NODE">
         <translate>314.316162109	-553.014770508 70</translate>
@@ -123,28 +123,28 @@
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor18-Node" name="Actor18" type="NODE">
-        <translate>25.468948364	-558.916748047 70</translate>
+        <translate>20.007045746	-558.916748047 70</translate>
         <rotate>0 0	1.000002861	 9.999970436</rotate>
 			</node>
 			<node	id="Actor19-Node" name="Actor19" type="NODE">
-        <translate>-208.207763672	-477.200195313 69.388313293</translate>
+        <translate>-208.207763672	-481.446044922 69.388313293</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
 			<node	id="Actor20-Node" name="Actor20" type="NODE">
         <translate>-484.3097229	-447.807525635 70</translate>
-        <rotate>0 0	-0.999999225	 20.000015259</rotate>
+        <rotate>0 0	-0.999998987	 20.000015259</rotate>
 			</node>
 			<node	id="Actor21-Node" name="Actor21" type="NODE">
         <translate>-584.808837891	-370.510681152 70</translate>
-        <rotate>0 0	-1.000000119	 49.999992371</rotate>
+        <rotate>0 0	-1	 49.999992371</rotate>
 			</node>
 			<node	id="Actor22-Node" name="Actor22" type="NODE">
         <translate>-652.910339355	-250.017272949 70</translate>
-        <rotate>0 0	0.999999225	 20.000015259</rotate>
+        <rotate>0 0	0.999999166	 20.000015259</rotate>
 			</node>
 			<node	id="Actor23-Node" name="Actor23" type="NODE">
         <translate>-731.493347168	44.275535583 70</translate>
-        <rotate>0 0	0.999999225	 20.000015259</rotate>
+        <rotate>0 0	0.999999166	 20.000015259</rotate>
 			</node>
 			<node	id="Actor24-Node" name="Actor24" type="NODE">
         <translate>-755.176879883	196.424118042 70</translate>
@@ -152,19 +152,19 @@
 			</node>
 			<node	id="Actor25-Node" name="Actor25" type="NODE">
         <translate>-737.723937988	369.231231689 70.576179504</translate>
-        <rotate>0 0	-1.000001311	 14.999978065</rotate>
+        <rotate>0 0	-0.999997497	 15.000031471</rotate>
 			</node>
 			<node	id="Actor26-Node" name="Actor26" type="NODE">
         <translate>-658.936401367	511.780822754 70</translate>
-        <rotate>0 0	-1.000000119	 49.999992371</rotate>
+        <rotate>0 0	-1	 49.999992371</rotate>
 			</node>
 			<node	id="Actor27-Node" name="Actor27" type="NODE">
         <translate>-513.657531738	597.823059082 70</translate>
-        <rotate>0 0	0.999999225	 20.000015259</rotate>
+        <rotate>0 0	0.999999166	 20.000015259</rotate>
 			</node>
 			<node	id="Actor28-Node" name="Actor28" type="NODE">
         <translate>-336.876464844	594.843017578 70</translate>
-        <rotate>0 0	-0.999999881	 25</rotate>
+        <rotate>0 0	-0.999999702	 25</rotate>
 			</node>
 			<node	id="Actor29-Node" name="Actor29" type="NODE">
         <translate>-212.174865723	451.892700195 70</translate>
@@ -172,7 +172,7 @@
 			</node>
 			<node	id="Actor30-Node" name="Actor30" type="NODE">
         <translate>-208.466110229	252.820129395 70</translate>
-        <rotate>0 0	-0.999999881	 25</rotate>
+        <rotate>0 0	-0.999999702	 25</rotate>
 			</node>
 			<node	id="Actor31-Node" name="Actor31" type="NODE">
         <translate>-428.96496582	69.227279663 70</translate>
@@ -180,11 +180,11 @@
 			</node>
 			<node	id="Actor32-Node" name="Actor32" type="NODE">
         <translate>-599.334594727	-78.454696655 32.387699127</translate>
-        <rotate>0 0	1.000001311	 14.999978065</rotate>
+        <rotate>0 0	0.999997735	 15.000031471</rotate>
 			</node>
 			<node	id="Actor33-Node" name="Actor33" type="NODE">
         <translate>-487.344543457	-216.277938843 22.236330032</translate>
-        <rotate>0 0	-1.000000358	 34.999984741</rotate>
+        <rotate>0 0	-1.000000238	 34.999984741</rotate>
 			</node>
 			<node	id="Actor34-Node" name="Actor34" type="NODE">
         <translate>-156.431991577	-280.361907959 70</translate>
@@ -192,7 +192,7 @@
 			</node>
 			<node	id="Actor35-Node" name="Actor35" type="NODE">
         <translate>86.075973511	-343.493225098 70</translate>
-        <rotate>0 0	0.999999225	 20.000015259</rotate>
+        <rotate>0 0	0.999999166	 20.000015259</rotate>
 			</node>
 			<node	id="Actor36-Node" name="Actor36" type="NODE">
         <translate>176.291549683	-439.096740723 70</translate>
@@ -200,7 +200,7 @@
 			</node>
 			<node	id="Actor37-Node" name="Actor37" type="NODE">
         <translate>249.953063965	-372.654876709 70</translate>
-        <rotate>0 0	-1.000001311	 14.999978065</rotate>
+        <rotate>0 0	-0.999997497	 15.000031471</rotate>
 			</node>
 			<node	id="Actor38-Node" name="Actor38" type="NODE">
         <translate>387.316650391	-299.908050537 70</translate>
@@ -216,15 +216,15 @@
 			</node>
 			<node	id="Actor41-Node" name="Actor41" type="NODE">
         <translate>659.561218262	-361.995056152 70</translate>
-        <rotate>0 0	-1.000000358	 34.999984741</rotate>
+        <rotate>0 0	-1.000000238	 34.999984741</rotate>
 			</node>
 			<node	id="Actor42-Node" name="Actor42" type="NODE">
         <translate>720.856445313	-339.49041748 70</translate>
-        <rotate>0 0	-0.999999762	 30.000007629</rotate>
+        <rotate>0 0	-0.999999523	 30.000007629</rotate>
 			</node>
 			<node	id="Actor43-Node" name="Actor43" type="NODE">
         <translate>759.153259277	-389.24230957 70</translate>
-        <rotate>0 0	1.000001311	 14.999978065</rotate>
+        <rotate>0 0	0.999997735	 15.000031471</rotate>
 			</node>
 			<node	id="Actor44-Node" name="Actor44" type="NODE">
         <translate>100.214897156	-426.338348389 63.315109253</translate>
@@ -864,7 +864,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>20.061035156 45.137329102	70</half_extents>
+							<half_extents>11.23418045 39.720848083	70</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>
@@ -1132,7 +1132,7 @@
 					<instance_physics_material url="#pmat19_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000006263	 0.03956468</rotate>
 						<instance_physics_material url="#pmat19_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1174,7 +1174,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>223.888397217 8.723104477	69.388313293</half_extents>
+							<half_extents>215.0443573 3.489242077	69.388313293</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>
@@ -1194,7 +1194,7 @@
 					<instance_physics_material url="#pmat21_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.0000996	 0.03956468</rotate>
 						<instance_physics_material url="#pmat21_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1225,7 +1225,7 @@
 					<instance_physics_material url="#pmat22_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000220789	 0.03956468</rotate>
 						<instance_physics_material url="#pmat22_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1256,7 +1256,7 @@
 					<instance_physics_material url="#pmat23_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	-0.000029522	 0.03956468</rotate>
 						<instance_physics_material url="#pmat23_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1287,7 +1287,7 @@
 					<instance_physics_material url="#pmat24_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	-0.000029522	 0.03956468</rotate>
 						<instance_physics_material url="#pmat24_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1380,7 +1380,7 @@
 					<instance_physics_material url="#pmat27_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000220789	 0.03956468</rotate>
 						<instance_physics_material url="#pmat27_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1411,7 +1411,7 @@
 					<instance_physics_material url="#pmat28_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	-0.000029522	 0.03956468</rotate>
 						<instance_physics_material url="#pmat28_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1566,7 +1566,7 @@
 					<instance_physics_material url="#pmat33_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000019347	 0.03956468</rotate>
 						<instance_physics_material url="#pmat33_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1659,7 +1659,7 @@
 					<instance_physics_material url="#pmat36_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	-0.000029522	 0.03956468</rotate>
 						<instance_physics_material url="#pmat36_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1814,7 +1814,7 @@
 					<instance_physics_material url="#pmat41_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000006263	 0.03956468</rotate>
 						<instance_physics_material url="#pmat41_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1907,7 +1907,7 @@
 					<instance_physics_material url="#pmat44_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000019347	 0.03956468</rotate>
 						<instance_physics_material url="#pmat44_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>
@@ -1969,7 +1969,7 @@
 					<instance_physics_material url="#pmat46_0-PhysicsMaterial"/>
 					<shape>
             <translate>0	0 0</translate>
-            <rotate>1 0	0	 0</rotate>
+            <rotate>0 0	0.000006263	 0.03956468</rotate>
 						<instance_physics_material url="#pmat46_0-PhysicsMaterial"/>
 					 <mass>1</mass>
 					 <extra>

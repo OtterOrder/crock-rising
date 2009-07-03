@@ -8,6 +8,7 @@ AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEne
 {
 	srand( (unsigned)time(NULL) );
 	aiEnemy = new AIEnemy(scaleMap, precision);
+
 }
 
 

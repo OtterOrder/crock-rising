@@ -15,6 +15,7 @@ class Enemy : public Perso
 {
 public:
 	static std::vector<Enemy*>  listEnemy;
+	static int nbEnemy;
 
 	Enemy():Perso(),  m_idBone(0){}
 	Enemy(Vector3f position);

@@ -9,15 +9,15 @@
 
 #define		MAX_LIFE				100
 #define		LIFE_BONUS				10
-#define		LEVEL_gamemenu			0x2b3430ac
+#define		LEVEL_mainmenu			0x56b55f63
 
 HUDLife* Hero::m_pLifeBar = NULL;
 
 /***********************************************************
 * Constructeur
 **********************************************************/
-Hero::Hero()
-	:Perso()
+Hero::Hero(Vector3f _pos)
+	:Perso(), pos( _pos )
 {
 	m_pAnimated = NULL;	
 	
@@ -33,7 +33,7 @@ Hero::Hero()
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE",D3DXVECTOR3(0.f, 10.f, 0.f)); //y = -75 pr le canyon
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE", pos); //y = -75 pr le canyon
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
@@ -243,7 +243,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		//m_pAnimated->SetRotation( 0.f, diff, 0.f );
 		m_pAnimated->m_vAngleY -= D3DXToDegree( diff );
 
-		static NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+		NxActor* a = physX::getActor( m_pArme->getEmpActor() );
 		if( a )
 			a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
 
@@ -329,44 +329,47 @@ ResourceResult Hero::control( Camera* pCamera )
 *********************************************************************/
 void Hero::changeState( PersoState newState )
 {
-	if ( (m_currentState != STATIC && !m_pAnimated->IsAtEnd())
-		 || newState == m_currentState )
+	if ( ((m_currentState != STATIC && !m_pAnimated->IsAtEnd())
+		 || newState == m_currentState ) && newState != DIE)
 		return;
 
-	m_currentState = newState;
-	
-	switch ( m_currentState )
+	if( !m_StateFrozen )
 	{
-	case RUN :
-		m_pAnimated->SetAnim("Anim_Robot_Run.DAE");
-		m_pAnimated->Play();
-		m_pAnimated->SetLoop(true);
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case ATTACK : 
-		m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
-		m_pAnimated->Play();
-		m_pAnimated->SetLoop(true);
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case HIT : 
-		m_pAnimated->SetAnim("Anim_Robot_Hit.DAE");
-		m_pAnimated->Play();
-		m_pAnimated->SetLoop(true);
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case DIE: 
-		m_pAnimated->SetAnim("Anim_Robot_Die.DAE");
-		m_pAnimated->Play();
-		m_pAnimated->SetLoop(true);
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
-	case STATIC :
-		m_pAnimated->SetAnim("Anim_Robot_Wait.DAE");
-		m_pAnimated->Play();
-		m_pAnimated->SetLoop(true);
-		m_pAnimated->SetAnimFPS(50.f);
-		break;
+		m_currentState = newState;
+		
+		switch ( m_currentState )
+		{
+		case RUN :
+			m_pAnimated->SetAnim("Anim_Robot_Run.DAE");
+			m_pAnimated->Play();
+			m_pAnimated->SetLoop(true);
+			m_pAnimated->SetAnimFPS(50.f);
+			break;
+		case ATTACK : 
+			m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
+			m_pAnimated->Play();
+			m_pAnimated->SetLoop(true);
+			m_pAnimated->SetAnimFPS(50.f);
+			break;
+		case HIT : 
+			m_pAnimated->SetAnim("Anim_Robot_Hit.DAE");
+			m_pAnimated->Play();
+			m_pAnimated->SetLoop(true);
+			m_pAnimated->SetAnimFPS(50.f);
+			break;
+		case DIE: 
+			m_pAnimated->SetAnim("Anim_Robot_Die.DAE");
+			m_pAnimated->Play();
+			m_pAnimated->SetLoop(false);
+			m_pAnimated->SetAnimFPS(50.f);
+			break;
+		case STATIC :
+			m_pAnimated->SetAnim("Anim_Robot_Wait.DAE");
+			m_pAnimated->Play();
+			m_pAnimated->SetLoop(true);
+			m_pAnimated->SetAnimFPS(50.f);
+			break;
+		}
 	}
 }
 
@@ -398,14 +401,20 @@ void Hero::update( Camera* pCamera )
 
 	
 	if(m_currentState == DIE && m_pAnimated->IsAtEnd())
+	{
+		Enemy::nbEnemy = 0;
 		DestroyPerso();
+	}
 }
 
 void Hero::Hit()
 {
-	changeState(HIT);
-	decLife( 5 );
-	m_pLifeBar->SetLife( Life() );
+	if(m_currentState != DIE)
+	{
+		changeState(HIT);
+		decLife( 5 );
+		m_pLifeBar->SetLife( Life() );
+	}
 }
 
 void Hero::Die()
@@ -416,9 +425,8 @@ void Hero::Die()
 
 void Hero::DestroyPerso()
 {
-	m_pAnimated->SetObjectUnPhysical();
-	m_pAnimated->SetVisible(false);
-	Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
+	InputManager::GetInstance()->HoldMouseAtCenter(false);
+	Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 }
 
 /******************************************************************************
@@ -427,13 +435,13 @@ void Hero::DestroyPerso()
 *******************************************************************************/
 void Hero::contactWithTrigger(void* param)
 {
-	int life = MAX_LIFE;//m_pLifeBar->GetLife();
+	int life = m_pLifeBar->GetLife();
 	if (life < MAX_LIFE)
 	{
-	  life += LIFE_BONUS;
-	  //m_pLifeBar->SetLife(life);
-	  SceneObjectAnimated* capsule = (SceneObjectAnimated*)param;
-	  SceneObjectAnimated::RefList.remove(capsule);
-	  delete capsule;
+		life += LIFE_BONUS;
+		m_pLifeBar->SetLife(life);
+		SceneObjectAnimated* capsule = (SceneObjectAnimated*)param;
+		SceneObjectAnimated::RefList.remove(capsule);
+		delete capsule;
 	}
 }

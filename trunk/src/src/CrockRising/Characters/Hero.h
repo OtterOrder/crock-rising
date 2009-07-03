@@ -27,6 +27,7 @@ public:
 	virtual void		changeState( PersoState newState );
 	virtual void		Hit();
 	virtual void		Die();
+	virtual void		DestroyPerso();
 
 	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
 

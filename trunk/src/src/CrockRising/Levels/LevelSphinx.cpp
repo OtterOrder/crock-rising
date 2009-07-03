@@ -6,9 +6,17 @@
 #include	<../CrockRising/Characters/Alien.h>
 #include	<../CrockRising/Characters/MmeGrise.h>
 
+SceneObject* Desert = NULL;	
+SceneObject* statue = NULL;	
+SceneObject* statue2 = NULL;	
+SceneObject* statue3 = NULL;	
+SceneObject* palmier = NULL;	
+SceneObject* palmier2 = NULL;
+SceneObject* palmier3 = NULL;
+SceneObject* Pyramide2 = NULL;
+SceneObject* sphinx = NULL;
 
 ContactReportCR*  gContactReportCR = new ContactReportCR;
-SceneObject* cube = NULL;
 
 void createStack(Vector3f pos)
 {
@@ -46,6 +54,77 @@ LevelSphinx::~LevelSphinx( void )
 
 	if(m_EscMenu)
 		delete m_EscMenu;
+	
+	if(Desert) 
+	{
+		SceneObject::RefList.remove( Desert );
+		delete Desert;
+		Desert= NULL;
+	}
+	
+	if(statue) 
+	{
+		SceneObject::RefList.remove( statue );
+		delete statue;
+		statue= NULL;
+	}
+	
+	if(statue2) 
+	{
+		SceneObject::RefList.remove( statue2 );
+		delete statue2;
+		statue2 = NULL;
+	}
+	
+	if(statue3) 
+	{
+		SceneObject::RefList.remove( statue3 );
+		delete statue3;
+		statue3 = NULL;
+	}
+	
+	if(palmier) 
+	{
+		SceneObject::RefList.remove( palmier );
+		delete palmier;
+		palmier = NULL;
+	}
+	
+	if(palmier2) 
+	{
+		SceneObject::RefList.remove( palmier2 );
+		delete palmier2;
+		palmier2 = NULL;
+	}
+	
+	if(palmier3) 
+	{
+		SceneObject::RefList.remove( palmier3 );
+		delete palmier3;
+		palmier3 = NULL;
+	}
+	
+	if(Pyramide2) 
+	{
+		SceneObject::RefList.remove( Pyramide2 );
+		delete Pyramide2;
+		Pyramide2 = NULL;
+	}
+ 	
+	if(sphinx) 
+	{
+		SceneObject::RefList.remove( sphinx );
+		delete sphinx;
+		sphinx = NULL;
+	}
+
+	if(m_pManagerAI) 
+		delete m_pManagerAI;
+	m_pManagerAI = NULL;
+
+	if(m_pHero)
+		delete m_pHero;
+	m_pHero = NULL;
 }
 
 
@@ -77,20 +156,15 @@ void LevelSphinx::Init( void )
 	m_pSkybox=new Skybox("redday.dds");
 	m_pSkybox->Init(35);
 	pRenderer->SetSkybox(m_pSkybox);
-/*
-	SceneObject* m_pCanyon_part1 = new SceneObject("planAI.DAE", D3DXVECTOR3(0.f, 1.0f, 0.f) );
-	m_pCanyon_part1->Init();
-	m_pCanyon_part1->GetMaterial()->SetTexture("levelSphynx.bmp", Texture::DIFFUSE );
-*/
-//
+
 ////DESERT Mesh_CanyonFinal Physic_Canyon
-	SceneObject* Desert = new SceneObject("Mesh_Desert.DAE", D3DXVECTOR3(0.f, 0.f,0.f));
+	Desert = new SceneObject("Mesh_Desert.DAE", D3DXVECTOR3(0.f, 0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
 	Desert->SetObjectPhysical( "Physic_Desert.DAE" );
 	
 ////STATUES
-	SceneObject* statue = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
+	statue = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(-452.4f, 0.f, 526.5f));
 	statue->Init();
 	statue->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
@@ -98,7 +172,7 @@ void LevelSphinx::Init( void )
 	statue->SetObjectPhysical("Physic_Statue.DAE");
 	statue->SetRotation(0.f, 140.f, 0.f);
 	
-	SceneObject* statue2 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(452.4f, 0.f, 526.5f));
+	statue2 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(452.4f, 0.f, 526.5f));
 	statue2->Init();
 	statue2->SetRotation(0.f, -70.f, 0.f);
 	statue2->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
@@ -106,7 +180,7 @@ void LevelSphinx::Init( void )
 	statue2->SetShader("default_normalmap.fx");
 	//statue2->SetObjectPhysical("Physic_Statue.DAE");
 	
-	SceneObject* statue3 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(816.5f, 0.f, -984.f));
+	statue3 = new SceneObject("Mesh_Statue.DAE", D3DXVECTOR3(816.5f, 0.f, -984.f));
 	statue3->Init();
 	statue3->GetMaterial()->SetTexture("statue_diffuse.jpg", Texture::DIFFUSE);
 	statue3->GetMaterial()->SetTexture("statue_normal.jpg", Texture::NORMALMAP);
@@ -114,24 +188,24 @@ void LevelSphinx::Init( void )
 	statue3->SetObjectPhysical("Physic_Statue.DAE");
 	
 ////PALMIERS
-	SceneObject* palmier = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
+	palmier = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
 	palmier->Init();
 	palmier->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
 	palmier->SetObjectPhysical("Physic_Palmier.DAE");
 	
-	SceneObject* palmier2 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-684.5f, 0.f, 480.f));
+	palmier2 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-684.5f, 0.f, 480.f));
 	palmier2->Init();
 	palmier2->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
 	palmier2->SetObjectPhysical("Physic_Palmier.DAE");
 
-	SceneObject* palmier3 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(747.5f, 0.f, -1045.5f));
+	palmier3 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(747.5f, 0.f, -1045.5f));
 	palmier3->Init();
 	palmier3->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
 	palmier3->SetObjectPhysical("Physic_Palmier.DAE");
 
 ////PYRAMIDE
 
-	SceneObject* Pyramide2 = new SceneObject("Mesh_Pyramide.DAE", D3DXVECTOR3(-519.8f, 0.f, -1181.3f));
+	Pyramide2 = new SceneObject("Mesh_Pyramide.DAE", D3DXVECTOR3(-519.8f, 0.f, -1181.3f));
 	Pyramide2->Init();
 	Pyramide2->GetMaterial()->SetTexture("pyramide_diffuse.jpg", Texture::DIFFUSE);
 	Pyramide2->GetMaterial()->SetTexture("pyramide_normal.jpg", Texture::NORMALMAP);
@@ -139,7 +213,7 @@ void LevelSphinx::Init( void )
 	Pyramide2->SetObjectPhysical("Physic_Pyramide.DAE");
 
 ////SPHINX
- 	SceneObject* sphinx = new SceneObject("Mesh_Sphinx.DAE", D3DXVECTOR3(-41.5f, 0.f, 921.5f));
+ 	sphinx = new SceneObject("Mesh_Sphinx.DAE", D3DXVECTOR3(-41.5f, 0.f, 921.5f));
  	sphinx->Init();
  	sphinx->GetMaterial()->SetTexture("sphinx_diffuse.jpg", Texture::DIFFUSE);
  	sphinx->GetMaterial()->SetTexture("sphinx_normal.jpg", Texture::NORMALMAP);
@@ -149,11 +223,11 @@ void LevelSphinx::Init( void )
 	//Initialisation du Héro
 	m_pHero->Init();
 
-	createStack( Vector3f(0.f, 0.f, -200.f) );
-	createStack( Vector3f(245.f, 0.f, 200.f) );
-	createStack( Vector3f(-100.f, 0.f, -400.f) );
-	createStack( Vector3f(400.f, 0.f, -200.f) );
-	createStack( Vector3f(-500.f, 0.f, -700.f) );
+	//createStack( Vector3f(0.f, 0.f, -200.f) );
+	//createStack( Vector3f(245.f, 0.f, 200.f) );
+	//createStack( Vector3f(-100.f, 0.f, -400.f) );
+	//createStack( Vector3f(400.f, 0.f, -200.f) );
+	//createStack( Vector3f(-500.f, 0.f, -700.f) );
 
 
 	// Création de l'AI

@@ -5,9 +5,11 @@
 #include	<Resources/Material.h>
 #include	<../CrockRising/Characters/Alien.h>
 #include	<../CrockRising/Characters/Alien.h>
+#include	<Game/Game.h>
 
-#define MAX_LIFE   100
-#define LIFE_BONUS 10
+#define		MAX_LIFE				100
+#define		LIFE_BONUS				10
+#define		LEVEL_gamemenu			0x2b3430ac
 
 HUDLife* Hero::m_pLifeBar = NULL;
 
@@ -73,7 +75,26 @@ void Hero::Init()
 **********************************************************/
 Hero::~Hero()
 {
+	SceneObject::RefList.remove( m_pAnimated );
+	if(m_pAnimated) 
+	{
+		SceneObject::RefList.remove( m_pAnimated );
+		delete m_pAnimated;
+		m_pAnimated = NULL;
+	}
 
+	if(m_pArme) 
+	{
+		SceneObject::RefList.remove( m_pArme );
+		delete m_pArme;
+		m_pArme = NULL;
+	}
+	
+	if(m_pLifeBar) 
+	{
+		delete m_pLifeBar;
+		m_pLifeBar = NULL;
+	}
 }
 
 
@@ -371,7 +392,9 @@ void Hero::update( Camera* pCamera )
 	pCamera->SetTarget(m_pAnimated->GetPosition());
 	pCamera->Update();
 
-	//m_pLifeBar->SetLife( m_iLife );
+	
+	if(m_currentState == DIE && m_pAnimated->IsAtEnd())
+		DestroyPerso();
 }
 
 void Hero::Hit()
@@ -385,6 +408,13 @@ void Hero::Die()
 {
 	changeState(DIE);	
 	FreezeState();
+}
+
+void Hero::DestroyPerso()
+{
+	m_pAnimated->SetObjectUnPhysical();
+	m_pAnimated->SetVisible(false);
+	Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
 }
 
 /******************************************************************************

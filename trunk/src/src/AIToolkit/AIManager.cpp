@@ -14,6 +14,31 @@ AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEne
 AIManager::~AIManager()
 {
 	if (aiEnemy)	delete aiEnemy;
+	//if (listAIEnemy)delete listAIEnemy;	
+	std::vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin();
+	int pouet = 0;
+	while ( pouet != listAIEnemy->listEnemy.size() )
+	{	
+		Enemy* plop = listAIEnemy->listEnemy.at(pouet);
+		//listAIEnemy->listEnemy.erase(it);
+		
+		if(plop->getSceneObjectAnimated()) 
+		{
+			SceneObject::RefList.remove( plop->getSceneObjectAnimated() );
+			delete plop->getSceneObjectAnimated();
+		}
+
+		if(plop->getArme()) 
+		{
+			SceneObject::RefList.remove( plop->getArme() );
+			delete plop->getArme();
+		}
+
+		pouet++;
+	}
+	listAIEnemy->listEnemy.clear();
+	listAIEnemy = NULL;
+
 }
 
 

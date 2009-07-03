@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>K%E9vin</author>
+      <authoring_tool>3dsMax 11 - Feeling ColladaMax v3.05B.</authoring_tool>
+      <comments>ColladaMax Export Options: ExportNormals=1;ExportEPolyAsTriangles=1;ExportXRefs=1;ExportSelected=0;ExportTangents=0;ExportAnimations=1;SampleAnim=1;ExportAnimClip=0;BakeMatrices=1;ExportRelativePaths=1;AnimStart=0;AnimEnd=1;</comments>
+      <source_data>file:///C:/Users/K%E9vin/Desktop/capsule%20vie.max</source_data>
+    </contributor>
+    <created>2009-06-21T15:37:45Z</created>
+    <modified>2009-06-21T15:37:48Z</modified>
+    <unit meter="0.0254" name="inch"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_animations>
+    <animation id="Bone01-node-transform">
+      <source id="Bone01-node-transform_Bone01-node_transform-input">
+        <float_array id="Bone01-node-transform_Bone01-node_transform-input-array" count="31">0 0.033333 0.066666 0.1 0.133333 0.166667 0.2 0.233333 0.266667 0.3 0.333333 0.366667 0.4 0.433333 0.466667 0.5 0.533333 0.566667 0.6 0.633333 0.666667 0.7 0.733333 0.766667 0.8 0.833333 0.866667 0.9 0.933333 0.966667 1</float_array>
+        <technique_common>
+          <accessor source="#Bone01-node-transform_Bone01-node_transform-input-array" count="31" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+        <technique profile="MAYA">
+          <pre_infinity>CONSTANT</pre_infinity>
+          <post_infinity>CONSTANT</post_infinity>
+        </technique>
+      </source>
+      <source id="Bone01-node-transform_Bone01-node_transform-output">
+        <float_array id="Bone01-node-transform_Bone01-node_transform-output-array" count="496">-0.000000 -1 0 0.005385 0 0 -1 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.99979 0.020477 0.005385 0 -0.020477 -0.99979 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.996798 0.079967 0.005385 0 -0.079967 -0.996798 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.984564 0.175023 0.005385 0 -0.175023 -0.984564 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.953752 0.300595 0.005385 0 -0.300595 -0.953752 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.893633 0.448799 0.005385 0 -0.448799 -0.893633 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.79399 0.60793 0.005385 0 -0.60793 -0.79399 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.647411 0.762141 0.005385 0 -0.762141 -0.647411 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.451708 0.892166 0.005385 0 -0.892166 -0.451708 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.212007 0.977268 0.005385 0 -0.977268 -0.212007 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.058145 0.998308 0.005385 0 -0.998308 0.058145 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.337205 0.941431 0.005385 0 -0.941431 0.337205 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.597905 0.801567 0.005385 0 -0.801567 0.597905 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.8112 0.584769 0.005385 0 -0.584769 0.8112 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.9512 0.308574 0.005385 0 -0.308574 0.9512 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 1 0 0.005385 0 0 1 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.9512 -0.308574 0.005385 0 0.308574 0.9512 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.8112 -0.584769 0.005385 0 0.584769 0.8112 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.597905 -0.801567 0.005385 0 0.801567 0.597905 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.337205 -0.941431 0.005385 0 0.941431 0.337205 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 0.058145 -0.998308 0.005385 0 0.998308 0.058145 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.212007 -0.977268 0.005385 0 0.977268 -0.212007 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.451708 -0.892166 0.005385 0 0.892166 -0.451708 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.647411 -0.762141 0.005385 0 0.762141 -0.647411 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.79399 -0.60793 0.005385 0 0.60793 -0.79399 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.893633 -0.448799 0.005385 0 0.448799 -0.893633 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.953752 -0.300595 0.005385 0 0.300595 -0.953752 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.984564 -0.175023 0.005385 0 0.175023 -0.984564 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.996798 -0.079967 0.005385 0 0.079967 -0.996798 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -0.99979 -0.020477 0.005385 0 0.020477 -0.99979 0 1 -0.000000 0 -0.029554 0 0 0 1 -0.000000 -1 -0.000000 0.005385 0 0.000000 -1 0 1 -0.000000 0 -0.029554 0 0 0 1</float_array>
+        <technique_common>
+          <accessor source="#Bone01-node-transform_Bone01-node_transform-output-array" count="31" stride="16">
+            <param name="TRANSFORM" type="float4x4"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="Bone01-node-transform_Bone01-node_transform-interpolations">
+        <Name_array id="Bone01-node-transform_Bone01-node_transform-interpolations-array" count="31">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#Bone01-node-transform_Bone01-node_transform-interpolations-array" count="31" stride="1">
+            <param name="INTERPOLATION" type="Name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="Bone01-node-transform_Bone01-node_transform-sampler">
+        <input semantic="INPUT" source="#Bone01-node-transform_Bone01-node_transform-input"/>
+        <input semantic="OUTPUT" source="#Bone01-node-transform_Bone01-node_transform-output"/>
+        <input semantic="INTERPOLATION" source="#Bone01-node-transform_Bone01-node_transform-interpolations"/>
+      </sampler>
+      <channel source="#Bone01-node-transform_Bone01-node_transform-sampler" target="Bone01-node/transform"/>
+    </animation>
+  </library_animations>
+  <library_images>
+    <image id="crock-rising.png" name="crock-rising_png">
+      <init_from>../texture/crock-rising.png</init_from>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="_1_-_Default" name="_1_-_Default">
+      <instance_effect url="#_1_-_Default-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="_1_-_Default-fx" name="_1_-_Default">
+      <profile_COMMON>
+        <newparam sid="crock-rising_png-surface">
+          <surface type="2D">
+            <init_from>crock-rising.png</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="crock-rising_png-sampler">
+          <sampler2D>
+            <source>crock-rising_png-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <ambient>
+              <color>0.588235 0.588235 0.588235 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="crock-rising_png-sampler" texcoord="CHANNEL1">
+                <extra>
+                  <technique profile="MAYA">
+                    <mirrorU>0</mirrorU>
+                    <mirrorV>0</mirrorV>
+                    <wrapU>1</wrapU>
+                    <wrapV>1</wrapV>
+                    <repeatU>1</repeatU>
+                    <repeatV>1</repeatV>
+                    <offsetU>0</offsetU>
+                    <offsetV>0</offsetV>
+                    <rotateUV>0</rotateUV>
+                  </technique>
+                  <technique profile="MAX3D">
+                    <amount>1</amount>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <specular>
+              <color>0.9 0.9 0.9 1</color>
+            </specular>
+            <shininess>
+              <float>0.415939</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <reflectivity>
+              <float>1</float>
+            </reflectivity>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+          <extra>
+            <technique profile="FCOLLADA">
+              <spec_level>
+                <float>0</float>
+              </spec_level>
+              <emission_level>
+                <float>0</float>
+              </emission_level>
+            </technique>
+          </extra>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="MAX3D">
+          <faceted>0</faceted>
+          <double_sided>0</double_sided>
+          <wireframe>0</wireframe>
+          <face_map>0</face_map>
+        </technique>
+      </extra>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="ChamferCyl01-mesh" name="ChamferCyl01">
+      <mesh>
+        <source id="ChamferCyl01-mesh-positions">
+          <float_array id="ChamferCyl01-mesh-positions-array" count="150">0 0 5 0.740221 0 5 0.641051 0.370111 5 0.370111 0.641051 5 0 0.740221 5 -0.370111 0.641051 5 -0.641051 0.370111 5 -0.740221 0 5 -0.641051 -0.370111 5 -0.370111 -0.64105 5 -0.000000 -0.740221 5 0.37011 -0.641051 5 0.64105 -0.370111 5 1.2 0 4.54022 1.03923 0.6 4.54022 0.6 1.03923 4.54022 0 1.2 4.54022 -0.6 1.03923 4.54022 -1.03923 0.6 4.54022 -1.2 0.000000 4.54022 -1.03923 -0.6 4.54022 -0.6 -1.03923 4.54022 -0.000000 -1.2 4.54022 0.599999 -1.03923 4.54022 1.03923 -0.600001 4.54022 1.2 0 0.459779 1.03923 0.6 0.459779 0.6 1.03923 0.459779 0 1.2 0.459779 -0.6 1.03923 0.459779 -1.03923 0.6 0.459779 -1.2 0.000000 0.459779 -1.03923 -0.6 0.459779 -0.6 -1.03923 0.459779 -0.000000 -1.2 0.459779 0.599999 -1.03923 0.459779 1.03923 -0.600001 0.459779 0.740221 0 0 0.641051 0.370111 0 0.370111 0.641051 0 0 0.740221 0 -0.370111 0.641051 0 -0.641051 0.370111 0 -0.740221 0 0 -0.641051 -0.370111 0 -0.370111 -0.64105 0 -0.000000 -0.740221 0 0.37011 -0.641051 0 0.64105 -0.370111 0 0 0 0</float_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-positions-array" count="50" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ChamferCyl01-mesh-normals">
+          <float_array id="ChamferCyl01-mesh-normals-array" count="294">0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0.707107 0 0.707107 0.707107 0 0.707107 0.612373 0.353553 0.707107 0.612373 0.353553 0.707107 0.353553 0.612373 0.707107 0.353553 0.612373 0.707107 0 0.707107 0.707107 0 0.707107 0.707107 -0.353554 0.612373 0.707107 -0.353553 0.612373 0.707107 -0.612373 0.353553 0.707107 -0.612373 0.353553 0.707107 -0.707107 0.000000 0.707107 -0.707107 0 0.707107 -0.612373 -0.353553 0.707107 -0.612372 -0.353553 0.707107 -0.353554 -0.612372 0.707107 -0.353554 -0.612372 0.707107 -0.000000 -0.707107 0.707107 -0.000000 -0.707107 0.707107 0.353553 -0.612373 0.707107 0.353553 -0.612373 0.707107 0.612372 -0.353554 0.707107 0.612372 -0.353554 0.707107 1 0 0 1 -0.000000 0 0.866025 0.5 0 0.866025 0.5 0 0.5 0.866025 0 0.5 0.866025 0 0 1 0 -0.000000 1 0 -0.5 0.866025 0 -0.5 0.866025 0 -0.866025 0.5 0 -0.866025 0.5 0 -1 0.000000 0 -1 0.000000 0 -0.866026 -0.5 0 -0.866026 -0.5 0 -0.5 -0.866025 0 -0.5 -0.866025 0 -0.000000 -1 0 -0.000000 -1 0 0.5 -0.866026 0 0.499999 -0.866026 0 0.866025 -0.5 0 0.866025 -0.5 0 0.707107 0 -0.707107 0.707107 -0.000000 -0.707107 0.612373 0.353553 -0.707107 0.612373 0.353553 -0.707107 0.353553 0.612373 -0.707107 0.353553 0.612373 -0.707107 0 0.707107 -0.707107 0 0.707107 -0.707107 -0.353553 0.612372 -0.707107 -0.353553 0.612373 -0.707107 -0.612373 0.353553 -0.707107 -0.612373 0.353554 -0.707107 -0.707107 0 -0.707107 -0.707107 0 -0.707107 -0.612373 -0.353553 -0.707107 -0.612373 -0.353553 -0.707107 -0.353554 -0.612372 -0.707107 -0.353554 -0.612372 -0.707107 -0.000000 -0.707107 -0.707107 -0.000000 -0.707107 -0.707107 0.353553 -0.612373 -0.707107 0.353553 -0.612373 -0.707107 0.612372 -0.353554 -0.707107 0.612372 -0.353554 -0.707107 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1</float_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-normals-array" count="98" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ChamferCyl01-mesh-map-channel1">
+          <float_array id="ChamferCyl01-mesh-map-channel1-array" count="228">0.985495 0.77255 0 1.11454 0.77255 0 1.09725 0.837074 0 1.05002 0.884309 0 0.985495 0.901598 0 0.92097 0.884309 0 0.873735 0.837074 0 0.856446 0.77255 0 0.873735 0.708026 0 0.92097 0.660791 0 0.985495 0.643501 0 1.05002 0.660791 0 1.09725 0.708025 0 1.1947 0.77255 0 1.16667 0.877152 0 1.0901 0.953727 0 0.985495 0.981755 0 0.880892 0.953727 0 0.804318 0.877152 0 0.77629 0.77255 0 0.804318 0.667947 0 0.880892 0.591373 0 0.985494 0.563345 0 1.0901 0.591373 0 1.16667 0.667947 0 0.040076 1.01849 0 0.199951 1.01849 0 0.359826 1.01849 0 0.519701 1.01849 0 0.679576 1.01849 0 0.83945 1.01849 0 0.999325 1.01849 0 1.1592 1.01849 0 1.31907 1.01849 0 1.47895 1.01849 0 1.63882 1.01849 0 1.7987 1.01849 0 1.95857 1.01849 0 0.040076 0.018493 0 0.199951 0.018493 0 0.359826 0.018493 0 0.519701 0.018493 0 0.679576 0.018493 0 0.83945 0.018493 0 0.999325 0.018493 0 1.1592 0.018493 0 1.31907 0.018493 0 1.47895 0.018493 0 1.63882 0.018493 0 1.7987 0.018493 0 1.95857 0.018493 0 1.18045 0.775248 0 1.15416 0.873368 0 1.08233 0.945197 0 0.984211 0.971488 0 0.886091 0.945197 0 0.814262 0.873368 0 0.787971 0.775248 0 0.814262 0.677128 0 0.886091 0.605299 0 0.984211 0.579008 0 1.08233 0.605299 0 1.15416 0.677128 0 1.10526 0.775248 0 1.08904 0.835774 0 1.04474 0.880081 0 0.984211 0.896299 0 0.923686 0.880081 0 0.879378 0.835774 0 0.86316 0.775248 0 0.879378 0.714723 0 0.923686 0.670415 0 0.984211 0.654197 0 1.04474 0.670415 0 1.08904 0.714723 0 0.984211 0.775248 0</float_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-map-channel1-array" count="76" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="ChamferCyl01-mesh-vertices">
+          <input semantic="POSITION" source="#ChamferCyl01-mesh-positions"/>
+        </vertices>
+        <triangles material="_1_-_Default" count="96">
+          <input semantic="VERTEX" source="#ChamferCyl01-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#ChamferCyl01-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#ChamferCyl01-mesh-map-channel1" offset="2" set="1"/>
+          <p>0 0 0 1 1 1 2 2 2 0 0 0 2 2 2 3 3 3 0 0 0 3 3 3 4 4 4 0 0 0 4 4 4 5 5 5 0 0 0 5 5 5 6 6 6 0 0 0 6 6 6 7 7 7 0 0 0 7 7 7 8 8 8 0 0 0 8 8 8 9 9 9 0 0 0 9 9 9 10 10 10 0 0 0 10 10 10 11 11 11 0 0 0 11 11 11 12 12 12 0 0 0 12 12 12 1 1 1 1 13 1 13 14 13 14 15 14 1 13 1 14 15 14 2 16 2 2 16 2 14 15 14 15 17 15 2 16 2 15 17 15 3 18 3 3 18 3 15 17 15 16 19 16 3 18 3 16 19 16 4 20 4 4 20 4 16 19 16 17 21 17 4 20 4 17 21 17 5 22 5 5 22 5 17 21 17 18 23 18 5 22 5 18 23 18 6 24 6 6 24 6 18 23 18 19 25 19 6 24 6 19 25 19 7 26 7 7 26 7 19 25 19 20 27 20 7 26 7 20 27 20 8 28 8 8 28 8 20 27 20 21 29 21 8 28 8 21 29 21 9 30 9 9 30 9 21 29 21 22 31 22 9 30 9 22 31 22 10 32 10 10 32 10 22 31 22 23 33 23 10 32 10 23 33 23 11 34 11 11 34 11 23 33 23 24 35 24 11 34 11 24 35 24 12 36 12 12 36 12 24 35 24 13 14 13 12 36 12 13 14 13 1 13 1 13 37 25 25 38 38 26 39 39 13 37 25 26 39 39 14 40 26 14 40 26 26 39 39 27 41 40 14 40 26 27 41 40 15 42 27 15 42 27 27 41 40 28 43 41 15 42 27 28 43 41 16 44 28 16 44 28 28 43 41 29 45 42 16 44 28 29 45 42 17 46 29 17 46 29 29 45 42 30 47 43 17 46 29 30 47 43 18 48 30 18 48 30 30 47 43 31 49 44 18 48 30 31 49 44 19 50 31 19 50 31 31 49 44 32 51 45 19 50 31 32 51 45 20 52 32 20 52 32 32 51 45 33 53 46 20 52 32 33 53 46 21 54 33 21 54 33 33 53 46 34 55 47 21 54 33 34 55 47 22 56 34 22 56 34 34 55 47 35 57 48 22 56 34 35 57 48 23 58 35 23 58 35 35 57 48 36 59 49 23 58 35 36 59 49 24 60 36 24 60 36 36 59 49 25 38 50 24 60 36 25 38 50 13 37 37 25 61 51 37 62 63 38 63 64 25 61 51 38 63 64 26 64 52 26 64 52 38 63 64 39 65 65 26 64 52 39 65 65 27 66 53 27 66 53 39 65 65 40 67 66 27 66 53 40 67 66 28 68 54 28 68 54 40 67 66 41 69 67 28 68 54 41 69 67 29 70 55 29 70 55 41 69 67 42 71 68 29 70 55 42 71 68 30 72 56 30 72 56 42 71 68 43 73 69 30 72 56 43 73 69 31 74 57 31 74 57 43 73 69 44 75 70 31 74 57 44 75 70 32 76 58 32 76 58 44 75 70 45 77 71 32 76 58 45 77 71 33 78 59 33 78 59 45 77 71 46 79 72 33 78 59 46 79 72 34 80 60 34 80 60 46 79 72 47 81 73 34 80 60 47 81 73 35 82 61 35 82 61 47 81 73 48 83 74 35 82 61 48 83 74 36 84 62 36 84 62 48 83 74 37 62 63 36 84 62 37 62 63 25 61 51 37 85 63 49 86 75 38 87 64 38 87 64 49 86 75 39 88 65 39 88 65 49 86 75 40 89 66 40 89 66 49 86 75 41 90 67 41 90 67 49 86 75 42 91 68 42 91 68 49 86 75 43 92 69 43 92 69 49 86 75 44 93 70 44 93 70 49 86 75 45 94 71 45 94 71 49 86 75 46 95 72 46 95 72 49 86 75 47 96 73 47 96 73 49 86 75 48 97 74 48 97 74 49 86 75 37 85 63</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="ChamferCyl01-mesh-skin">
+      <skin source="#ChamferCyl01-mesh">
+        <bind_shape_matrix>0.999973 0.007401 0 0 -0.007401 0.999973 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="ChamferCyl01-mesh-skin-joints">
+          <Name_array id="ChamferCyl01-mesh-skin-joints-array" count="2">Bone1 Bone2</Name_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-skin-joints-array" count="2" stride="1">
+              <param name="JOINT" type="Name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ChamferCyl01-mesh-skin-bind_poses">
+          <float_array id="ChamferCyl01-mesh-skin-bind_poses-array" count="32">-0.000000 0 1 0.029554 -1 0 -0.000000 0.005385 0 -1 0 0 0 0 0 1 -0.000000 0 1 -4.98451 -1 0 -0.000000 0.005386 0 -1 0 -0.000000 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-skin-bind_poses-array" count="2" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ChamferCyl01-mesh-skin-weights">
+          <float_array id="ChamferCyl01-mesh-skin-weights-array" count="1">1</float_array>
+          <technique_common>
+            <accessor source="#ChamferCyl01-mesh-skin-weights-array" count="1" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#ChamferCyl01-mesh-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#ChamferCyl01-mesh-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="50">
+          <input semantic="JOINT" source="#ChamferCyl01-mesh-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#ChamferCyl01-mesh-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="capsule_vie.max" name="capsule_vie_max">
+      <node id="Bone01-node" name="Bone01" sid="Bone1" type="JOINT">
+        <matrix sid="transform">-0.000000 -1 0 0.005385 0 0 -1 0 1 -0.000000 0 -0.029554 0 0 0 1</matrix>
+        <node id="Bone02-node" name="Bone02" sid="Bone2" type="JOINT">
+          <matrix>1 0 0 5.01406 0 1 0 -0.000000 0 0 1 0.000000 0 0 0 1</matrix>
+        </node>
+      </node>
+      <node id="ChamferCyl01-node" name="ChamferCyl01" type="NODE">
+        <instance_controller url="#ChamferCyl01-mesh-skin">
+          <skeleton>#Bone01-node</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="_1_-_Default" target="#_1_-_Default">
+                <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="1"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+      <extra>
+        <technique profile="FCOLLADA">
+          <start_time>0</start_time>
+          <end_time>1</end_time>
+        </technique>
+      </extra>
+      <extra>
+        <technique profile="MAX3D">
+          <frame_rate>30</frame_rate>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#capsule_vie.max"/>
+  </scene>
+</COLLADA>

@@ -4,7 +4,22 @@
 //******************************************************************
 
 #include	<Game/Level.h>
+#include	<Objects/SceneObject.h>
+#include	<Resources/Material.h>
+#include	<Objects/Skybox.h>
+#include	"../Characters/Hero.h"
+#include	"../Characters/Enemy.h"
+#include	"../Characters/Perso.h"
+#include	<Renderer/Renderer.h>
+#include	<Objects/Camera.h>
+#include	<Physics/BoundingBoxLoader.h>
+#include	<Physics/Physicalizer.h>
+#include	<Objects/Light.h>
+#include	<PostProcesses/PostRenderer.h>
 #include    "../2D/EscMenu.h"
+#include	<AIManager.h>
+
+#include	<iostream>
 
 //******************************************************************
 
@@ -27,9 +42,13 @@ public:
 
 protected:
 	
-	Camera		*m_Camera;
+	Camera*		m_pCamera;
+	Hero*		m_pHero;
+	Skybox *    m_pSkybox;
+
 	EscMenu*	m_EscMenu;
 
+	float		deltaTime;
 };
 
 //******************************************************************

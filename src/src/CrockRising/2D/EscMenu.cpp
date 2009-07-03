@@ -5,6 +5,7 @@
 #include	<Core/Inputs/InputManager.h>
 #include	<Game/Game.h>
 #include	<Renderer/Renderer.h>
+#include	<../CrockRising/Characters/Enemy.h>
 
 //******************************************************************
 
@@ -241,6 +242,7 @@ void EscMenu::EscButton::OnClic()
 
 		case MAINMENU:
 			// Menu principal (sans oublier de désactiver la pause)..
+			Enemy::nbEnemy = 0;
 			Game::GetInstance()->Resume();
 			Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 			return;

@@ -1,7 +1,11 @@
 #include "Enemy.h"
 
+#include	<Game/Game.h>
+
+#define		LEVEL_victory			0x70bb005a
 /***********************************************************/
 std::vector< Enemy* > Enemy::listEnemy;
+int Enemy::nbEnemy = 0;
 
 /***********************************************************
 * Constructeur
@@ -16,6 +20,7 @@ Enemy::Enemy(Vector3f position)
 	timeSinceLastPath = 0.f;
 
 	Enemy::listEnemy.push_back(this);
+	nbEnemy++;
 }
 
 /***********************************************************
@@ -38,7 +43,15 @@ Enemy::~Enemy()
 void Enemy::update( Enemy* list )
 {
 	if(m_currentState == DIE && m_pAnimated->IsAtEnd())
+	{
 		DestroyPerso();
+		if( nbEnemy <= 0 )
+		{
+			nbEnemy = 0;
+			Game::GetInstance()->ChangeLevel( LEVEL_victory );
+		}
+
+	}
 	
 
 	//Sync arme sur la main du Hero
@@ -58,4 +71,5 @@ void Enemy::Die()
 {
 	changeState(DIE);	
 	FreezeState();
+	nbEnemy--;
 }

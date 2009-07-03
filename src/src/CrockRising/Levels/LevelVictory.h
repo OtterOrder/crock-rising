@@ -4,6 +4,7 @@
 //******************************************************************
 
 #include	<Game/Level.h>
+#include	<Core/Math.h>
 
 //******************************************************************
 
@@ -12,6 +13,7 @@
 //******************************************************************
 
 class Camera;
+class Sprite;
 
 class LevelVictory : public Level
 {
@@ -26,6 +28,8 @@ public:
 
 protected:
 	
+	Sprite	*m_pLogo;		// Logo à la fraise
+	float	m_LogoTimer;
 	Camera	*m_pCamera;
 
 };

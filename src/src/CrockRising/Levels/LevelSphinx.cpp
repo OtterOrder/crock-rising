@@ -161,6 +161,7 @@ void LevelSphinx::Init( void )
 	Desert = new SceneObject("Mesh_Desert.DAE", D3DXVECTOR3(0.f, 0.f,0.f));
 	Desert->Init();
 	Desert->GetMaterial()->SetTexture("desert_diffuse.jpg", Texture::DIFFUSE);
+	Desert->GetMaterial()->m_SpecularColor=D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.f);
 	Desert->SetObjectPhysical( "Physic_Desert.DAE" );
 	
 ////STATUES
@@ -191,16 +192,19 @@ void LevelSphinx::Init( void )
 	palmier = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-808.8f, 0.f,401.7f));
 	palmier->Init();
 	palmier->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
+	palmier->GetMaterial()->m_SpecularColor=D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.f);
 	palmier->SetObjectPhysical("Physic_Palmier.DAE");
 	
 	palmier2 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(-684.5f, 0.f, 480.f));
 	palmier2->Init();
 	palmier2->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
+	palmier2->GetMaterial()->m_SpecularColor=D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.f);
 	palmier2->SetObjectPhysical("Physic_Palmier.DAE");
 
 	palmier3 = new SceneObject("Mesh_Palmier.DAE", D3DXVECTOR3(747.5f, 0.f, -1045.5f));
 	palmier3->Init();
 	palmier3->GetMaterial()->SetTexture("palmier_diffuse.jpg", Texture::DIFFUSE);
+	palmier3->GetMaterial()->m_SpecularColor=D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.f);
 	palmier3->SetObjectPhysical("Physic_Palmier.DAE");
 
 ////PYRAMIDE

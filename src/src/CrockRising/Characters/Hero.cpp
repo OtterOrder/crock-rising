@@ -40,6 +40,7 @@ void Hero::Init()
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
 	m_pAnimated->SetControledCharacter(3.f,9.f,this);
+	m_pAnimated->GetMaterial()->m_Glossiness=10.f;
 	//m_pAnimated->SetAnim("X.DAE");
 	//m_pAnimated->Play();
 	//m_pAnimated->SetLoop(true);
@@ -67,7 +68,7 @@ void Hero::Init()
 		a->userData = new ActorUserData;
 		((ActorUserData*)a->userData)->type = WEAPON;
 		((ActorUserData*)a->userData)->PersoRef = this;
-	}		
+	}
 }
 
 /***********************************************************
@@ -361,7 +362,10 @@ void Hero::changeState( PersoState newState )
 		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	case STATIC :
-		m_pAnimated->Stop();
+		m_pAnimated->SetAnim("Anim_Robot_Wait.DAE");
+		m_pAnimated->Play();
+		m_pAnimated->SetLoop(true);
+		m_pAnimated->SetAnimFPS(50.f);
 		break;
 	}
 }

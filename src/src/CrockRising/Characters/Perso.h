@@ -32,13 +32,13 @@ public:
 	virtual void			Init()=0;
 	virtual void			Hit()=0;
 	virtual void			Die()=0;
+	virtual void			DestroyPerso();
 	
 	SceneObjectAnimated* 	getSceneObjectAnimated () const { return m_pAnimated; }
 	PersoState				getCurrentState(){ return m_currentState; }
 	
 	int						&Life() { return m_iLife; }
 	void					decLife ( const int decreaseLife );
-	void					DestroyPerso();
 	void					FreezeState(){ m_StateFrozen = true; }
 	void					UnFreezeState(){ m_StateFrozen = false; }
 	bool					&IsAlive(){ return m_IsAlive; }

@@ -26,7 +26,8 @@ Enemy::~Enemy()
 	std::vector<Enemy*>::iterator it;
 	it = listEnemy.begin();
 	while ( it != listEnemy.end() )
-	{
+	{	
+		delete (*it)->getSceneObjectAnimated();
 		listEnemy.erase(it);
 		++it;
 	}

@@ -133,8 +133,6 @@ LevelSphinx::~LevelSphinx( void )
 		if(triggers[i]) 
 		{
 			SceneObject::RefList.remove( triggers[i] );
-			delete triggers[i];
-			triggers[i] = NULL;
 		}
 	}
 }
@@ -248,9 +246,9 @@ void LevelSphinx::Init( void )
 	triggersPos.push_back(Vector3f(-234.f, 0.f, -497.f));
 	triggersPos.push_back(Vector3f(0.f, 0.f, -1337.f));
 
-	for (size_t i = 0 ; i < triggers.size() ; ++i)
+	for (size_t i = 0 ; i < triggersPos.size() ; ++i)
 	{
-		triggers[i] = new SceneObjectAnimated("Life_Mesh.DAE","Life_Anim.DAE",triggersPos[i]);
+		triggers.push_back(new SceneObjectAnimated("Life_Mesh.DAE","Life_Anim.DAE",triggersPos[i]));
 		triggers[i]->Init();
 		triggers[i]->GetMaterial()->SetTexture("crock-rising.png",Texture::DIFFUSE);
 		triggers[i]->SetObjectTrigger("Life_MeshP.DAE", Hero::contactWithTrigger, NULL,NULL, triggers[i],NULL,NULL);
@@ -259,7 +257,7 @@ void LevelSphinx::Init( void )
 	}
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 15, 400, 30, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 30, 400, 30, 3100, 256 );
 }
 
 /***********************************************************

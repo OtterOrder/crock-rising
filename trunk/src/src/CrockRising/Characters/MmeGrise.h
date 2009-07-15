@@ -15,11 +15,13 @@ class MmeGrise : public Enemy
 {
 public:
 
-	MmeGrise() : Enemy() {}
-	MmeGrise(Vector3f position);
+	MmeGrise(Vector3f pos = Vector3f( 0.f, 0.f, 0.f ));
 
-	virtual void			Init();
-	virtual void		    changeState( PersoState newState );	
+	virtual void	Init();
+	virtual void	Hit();
+	virtual void	Die();
+	virtual void	InitSound();
+	virtual void	InitAnim();
 };
 
 //******************************************************************

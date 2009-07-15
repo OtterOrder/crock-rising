@@ -128,7 +128,7 @@ void Physicalizer::connectToVRD()
 #endif
 }
 
-void Physicalizer::setControllerCallback( ContactReport* callback )
+void Physicalizer::setControllerCallback( NxUserContactReport* callback )
 {
 	m_Scene->setUserContactReport( callback );
 }

@@ -41,10 +41,10 @@ void AIEnemy::enemyAIAttack( Vector3f posPlayer, Vector3f positEnemy, float &ang
 
 void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &newPos, float &angleRot )
 {
-	posPlayer2D_X = floor((posPlayer.x*preci/scale)+preci/2);
-	posPlayer2D_Y = floor((posPlayer.z*preci/scale)+preci/2);
-	posEnemy2D_X = floor((positEnemy.x*preci/scale)+preci/2);
-	posEnemy2D_Y = floor((positEnemy.z*preci/scale)+preci/2);
+	posPlayer2D_X = (int)floor((posPlayer.x*preci/scale)+preci/2);
+	posPlayer2D_Y = (int)floor((posPlayer.z*preci/scale)+preci/2);
+	posEnemy2D_X = (int)floor((positEnemy.x*preci/scale)+preci/2);
+	posEnemy2D_Y =(int) floor((positEnemy.z*preci/scale)+preci/2);
 
 	nextWayPoint = aPath->findWay( posEnemy2D_X, posEnemy2D_Y, posPlayer2D_X, posPlayer2D_Y );
 
@@ -59,8 +59,8 @@ void AIEnemy::enemyAIMoveTo( Vector3f posPlayer, Vector3f positEnemy, Vector3f &
 		Vector3f tmpDir = Vector3f( tmpPosEXScale, 0, tmpPosEZScale );
 
 		// Rotation
-		Vector3f posEnnemy = Vector3f( posEnemy2D_X, 0, posEnemy2D_Y );
-		Vector3f posPlayer2 = Vector3f( posPlayer2D_X, 0, posPlayer2D_Y );
+		Vector3f posEnnemy = Vector3f( (float)posEnemy2D_X, 0, (float)posEnemy2D_Y );
+		Vector3f posPlayer2 = Vector3f( (float)posPlayer2D_X, 0, (float)posPlayer2D_Y );
 		Vector3f dirVEnnemy = posPlayer2 - posEnnemy;
 
 		D3DXVec3Normalize(&dirVEnnemy, &dirVEnnemy);

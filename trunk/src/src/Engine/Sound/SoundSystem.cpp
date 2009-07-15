@@ -305,7 +305,7 @@ void SoundSystem::SetMusic( const std::string &musicName )
 	// On conserve les propriétés..
 	m_pMusic->SetGain( m_MusicProperties.gain );
 	m_pMusic->SetPitch( m_MusicProperties.pitch );
-	m_pMusic->SetLooping( true ); // La musique est forcément bouclante
+	m_pMusic->SetLoop( true ); // La musique est forcément bouclante
 }
 
 //**********************************************************

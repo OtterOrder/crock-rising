@@ -15,11 +15,13 @@ class Alien : public Enemy
 {
 public:
 
-	Alien() : Enemy() {}
-	Alien(Vector3f position);
+	Alien(Vector3f pos = Vector3f( 0.f, 0.f, 0.f ));
 
-	virtual void			Init();
-	virtual void		    changeState( PersoState newState );	
+	virtual void	Init();
+	virtual void	Hit();
+	virtual void	Die();
+	virtual void	InitSound();
+	virtual void	InitAnim();
 };
 
 //******************************************************************

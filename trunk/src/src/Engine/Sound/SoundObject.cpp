@@ -112,9 +112,9 @@ void SoundObject::SetPitch( float pitch )
 // Fait boucler ou non le son.
 // @param[in]	looping : vrai ou faux
 //**********************************************************
-void SoundObject::SetLooping( bool looping )
+void SoundObject::SetLoop( bool looping )
 {
-	m_Properties.looping = looping;
+	m_Properties.loop = looping;
 	alSourcei( m_SourceID, AL_LOOPING, ((looping)?AL_TRUE:AL_FALSE) );
 }
 
@@ -158,6 +158,11 @@ void SoundObject::SetVelocity( const Vector3f &velocity )
 		(ALfloat)velocity.y,
 		(ALfloat)(-velocity.z)	// Passage en système OpenAL (=OpenGL)
 	);
+}
+
+void SoundObject::SetDistance( float dist )
+{
+	alSourcef( m_SourceID, AL_REFERENCE_DISTANCE, dist );
 }
 
 //**********************************************************
@@ -206,7 +211,7 @@ void SoundObject::SetPropertiesFromAPI()
 {
 	alGetSourcef( m_SourceID, AL_GAIN, (ALfloat*)&m_Properties.gain );
 	alGetSourcef( m_SourceID, AL_PITCH, (ALfloat*)&m_Properties.pitch );
-	alGetSourcei( m_SourceID, AL_LOOPING, (ALint*)&m_Properties.looping );
+	alGetSourcei( m_SourceID, AL_LOOPING, (ALint*)&m_Properties.loop );
 	alGetSourcei( m_SourceID, AL_SOURCE_RELATIVE, (ALint*)&m_Properties.relative );
 	
 	// Position

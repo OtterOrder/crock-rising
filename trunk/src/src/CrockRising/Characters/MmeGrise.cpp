@@ -4,8 +4,8 @@
 /***********************************************************
 * Constructeur
 ***********************************************************/
-MmeGrise::MmeGrise(Vector3f position)
-: Enemy( position )
+MmeGrise::MmeGrise(Vector3f pos)
+: Enemy( pos )
 {
 	m_idBone = 14;
 }
@@ -15,10 +15,11 @@ MmeGrise::MmeGrise(Vector3f position)
 **********************************************************/
 void MmeGrise::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Mmegrise.DAE","Anim_Mmegrise_Walk.DAE",m_position);
+	Enemy::Init();
+
+	m_pAnimated = new SceneObjectAnimated("Mesh_Mmegrise.DAE","Anim_Mmegrise_Walk.DAE",m_Position);
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("mmegrise_diffuse.jpg",Texture::DIFFUSE);
-
 	m_pAnimated->SetLoop(true);
 	m_pAnimated->SetAnimFPS(50.f);
 
@@ -26,62 +27,40 @@ void MmeGrise::Init()
 	m_pArme->Init();
 	m_pArme->SetObjectPhysical( "arme_mmegrise.DAE" ); //pas le bon group!!
 
-	NxActor* a = physX::getActor( m_pArme->getEmpActor() );
-	if( a )
-	{
-		a->getShapes()[0]->setGroup( GROUP_CONTROLLER );
-		a->raiseBodyFlag( NX_BF_DISABLE_GRAVITY );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_X );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Z );
-		a->userData = new ActorUserData;
-		((ActorUserData*)a->userData)->type = WEAPON;
-		((ActorUserData*)a->userData)->PersoRef = this;
-	}
+	InitWeapon();
 }
 
-
-/********************************************************************
-* En fonction du nouvel état, cette méthode configure les nouvelles 
-* animations à lancer 
-*********************************************************************/
-void MmeGrise::changeState( PersoState newState )
+void MmeGrise::Hit()
 {
-	if ( !m_pAnimated->IsAtEnd() && newState != HIT && newState != DIE)
-		return;
+	Enemy::Hit();
+	//playsound TODO
+}
 
-	if( !m_StateFrozen )
-	{
-		m_currentState = newState;
+void MmeGrise::Die()
+{
+	Enemy::Die();
+	//playsound TODO
+}
 
-		switch ( m_currentState )
-		{
-		case RUN :
-			m_pAnimated->SetAnim("Anim_Mmegrise_Walk.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(true);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case ATTACK : 
-			m_pAnimated->SetAnim("Anim_Mmegrise_Attack.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(false);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case DIE :
-			m_pAnimated->SetAnim("Anim_Mmegrise_Die.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(false);
-			m_pAnimated->SetAnimFPS(30.f);
-			break;
-		case HIT :
-			m_pAnimated->SetAnim("Anim_Mmegrise_Hit.DAE");
-			m_pAnimated->SetAnimFPS(30);
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(false);
-			break;
-		case STATIC : 
-			m_pAnimated->Stop();
-		}
-	}	
+void MmeGrise::InitSound()
+{
+	AddSound(Perso::RUN,	"BTFM_High.ogg");
+	AddSound(Perso::ATTACK, "Attack1.ogg");
+	AddSound(Perso::ATTACK, "Attack2.ogg");
+	AddSound(Perso::ATTACK, "Attack3.ogg");
+	AddSound(Perso::HIT,	"Hit1.ogg");
+	AddSound(Perso::HIT,	"Hit2.ogg");
+	AddSound(Perso::HIT,	"Hit3.ogg");
+	AddSound(Perso::DIE,	"Die1.ogg");
+	AddSound(Perso::DIE,	"Die2.ogg");
+	AddSound(Perso::DIE,	"Die3.ogg");
+}
+
+void MmeGrise::InitAnim()
+{
+	AddAnim(Perso::RUN,		"Anim_Mmegrise_Walk.DAE"	, 30.f, true);
+	AddAnim(Perso::ATTACK,	"Anim_Mmegrise_Attack.DAE"	, 30.f, false);
+	AddAnim(Perso::HIT,		"Anim_Mmegrise_Hit.DAE"		, 30.f, false);
+	AddAnim(Perso::DIE,		"Anim_Mmegrise_Die.DAE"		, 30.f, false);
+	AddAnim(Perso::STATIC,	"Anim_Mmegrise_Wait.DAE"	, 30.f, true);
 }

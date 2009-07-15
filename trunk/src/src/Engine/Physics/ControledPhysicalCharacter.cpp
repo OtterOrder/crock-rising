@@ -37,8 +37,8 @@ void ContactReport::onContactNotify( NxContactPair& pair, NxU32 events )
 {
 }
 
-int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
-								   void* Ref, int &empActor )
+void physX::CreateControlledCapsule( Vector3f pos, float radius, float height, void* Ref,
+									NxActor* &pActor, NxController* &pController )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxCapsuleControllerDesc desc;
@@ -59,20 +59,19 @@ int physX::CreateControlledCapsule( Vector3f pos, float radius, float height,
 	desc.callback		= gCharacterControllerCallback;
 
 
-	physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
-	empActor = physX::getPhysicScene()->getNbActors() -1;
+	NxController* NewController = physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
+	NxActor* _pActor = physX::getPhysicScene()->getActors()[ physX::getPhysicScene()->getNbActors()-1 ];
+	_pActor->setGroup( GROUP_CONTROLLER );
 
-	NxActor* pActor = physX::getActor( empActor );
-	pActor->setGroup( GROUP_CONTROLLER );
+	_pActor->userData = new ActorUserData;
+	((ActorUserData*)(_pActor->userData))->PersoRef = Ref ;
 
-	pActor->userData = new ActorUserData;
-	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
-
-	return physXInstance->getControllerManager()->getNbControllers() - 1;
+	pController = NewController;
+	pActor = _pActor;
 }
 
-int physX::CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							   void* Ref, int &empActor )
+void physX::CreateControlledBox( Vector3f const pos, float width, float height, float depth, void* Ref,
+								NxActor* &pActor, NxController* &pController  )
 {
 	Physicalizer* physXInstance = Physicalizer::GetInstance();
 	NxBoxControllerDesc desc;
@@ -84,14 +83,15 @@ int physX::CreateControlledBox( Vector3f const pos, float width, float height, f
 	desc.skinWidth		= 0.2f;
 	desc.stepOffset		= 1.0f;
 
-	physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
-	empActor = physX::getPhysicScene()->getNbActors() -1;
+	NxController* NewController = physXInstance->getControllerManager()->createController( physXInstance->getScene(), desc );
+	NxActor* _pActor = physX::getPhysicScene()->getActors()[ physX::getPhysicScene()->getNbActors()-1 ];
+	_pActor->setGroup( GROUP_CONTROLLER );
 
-	NxActor* pActor = physX::getActor( empActor );
-	pActor->userData = new ActorUserData;
-	((ActorUserData*)(pActor->userData))->PersoRef = Ref ;
+	_pActor->userData = new ActorUserData;
+	((ActorUserData*)(_pActor->userData))->PersoRef = Ref ;
 
-	return physXInstance->getControllerManager()->getNbControllers() - 1;
+	pController = NewController;
+	pActor = _pActor;
 }
 
 NxControllerManager* physX::getControllerManager()
@@ -110,22 +110,9 @@ NxControllerManager* physX::getControllerManager()
 	return NULL;
 }
 
-NxController* physX::getController( int emp )
-{
-	int nbController = getControllerManager()->getNbControllers(); 
-	if(emp == -1 || emp >= nbController) return NULL;
-	NxController* pController = getControllerManager()->getController( emp );
-	assert(pController);
-
-	return pController;
-}
-
-void physX::releaseController(int &empActor, int &empController)
+void physX::releaseController(NxController* &pCont)
 {
 	NxControllerManager* pControllerManager = getControllerManager();
-	NxController* pController = pControllerManager->getController(empController);
-	pControllerManager->releaseController( *pController );
-	empController = -1;
-
-	//releaseActor( empActor );
+	if( pControllerManager && pCont )
+		pControllerManager->releaseController( *pCont );
 }

@@ -40,6 +40,7 @@ public:
 	Vector3f GetPosition();
 	void SetPosition( float x, float y, float z );
 	void SetTranslation( float x, float y, float z );
+	void SetOrientation( float angleX, float angleY, float angleZ );
 	void SetRotation( float angleX, float angleY, float angleZ );
 	
 	D3DXMATRIX* GetWorldMatrix ()	{ return &m_WorldMatrix; };

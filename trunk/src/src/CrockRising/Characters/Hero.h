@@ -20,33 +20,32 @@
 class Hero : public Perso
 {
 public:
-	Hero(Vector3f _pos);
+	Hero(Vector3f _pos = Vector3f( 0.f, 0.f, 0.f));
 	~Hero();
 
 	virtual void		Init();
-	virtual void		changeState( PersoState newState );
 	virtual void		Hit();
 	virtual void		Die();
 	virtual void		DestroyPerso();
-
-	SceneObjectAnimated* getSceneObjectAnimated () const { return m_pAnimated; }
+	void				decLife( const int decreaseLife );
+	virtual void		InitSound();
+	virtual void		InitAnim();
 
 	//Méthodes pour gérer l'état courant du Héros
-	void				update( Camera* pCamera ); 
-	ResourceResult		control ( Camera* pCamera ); 
+	void				update(); 
+	ResourceResult		control(); 
 
 	//Méthodes liées aux triggers (essentiellement bonus de vie pour l'instant...)
 	static void			contactWithTrigger(void* param);
 	static void			intoTrigger(){}
-	static void			outOfTrigger(){} 
-	
-	SceneObject*		getArme(){ return m_pArme; }
-	Vector3f			pos;
+	static void			outOfTrigger(){} 	
+
+	void				setCamera(Camera* pCamera ){ m_pCamera = pCamera; }
 
 protected:
 	static HUDLife*		m_pLifeBar;
 	InputManager*		m_pInputManager;
-	Vector3f			m_Translate;
+	Camera*				m_pCamera;
 };
 
 //******************************************************************

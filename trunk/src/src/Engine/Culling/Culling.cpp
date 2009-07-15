@@ -9,7 +9,7 @@ void Culling3D::Process (list<SceneObject*> _SceneObjectList, Camera* _Camera, l
 	while (scnObjPhysics != _SceneObjectList.end())
 	{
 		ShapeType type = (*(*scnObjPhysics)->getPhysicBodyList().begin())->shapeType;
-		NxActor* pActor = physX::getActor( (*scnObjPhysics)->getEmpActor() );
+		NxActor* pActor = (*scnObjPhysics)->getActor();
 
 		if ( ActorInsideFrustrum(pActor) )
 		{

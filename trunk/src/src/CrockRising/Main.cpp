@@ -38,7 +38,7 @@ int WINAPI WinMain(
 	Game::GetInstance()->SetStartLevel( LEVEL_alafraise );
 
 	// Création et initialisation du System
-	System::GetInstance()->SetFullScreen( true, pBackup->GetResolution().x, pBackup->GetResolution().y );
+	System::GetInstance()->SetFullScreen( false, pBackup->GetResolution().x, pBackup->GetResolution().y );
 	System::GetInstance()->Init();
 
 	// On lance la boucle principale..

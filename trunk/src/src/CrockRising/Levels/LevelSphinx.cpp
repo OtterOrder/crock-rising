@@ -3,6 +3,7 @@
 #include	<Renderer/Renderer.h>
 #include	<Objects/Camera.h>
 #include	<Physics/Trigger/UserData.h>
+#include	<Core/Macros.h>
 #include	<../CrockRising/Characters/Alien.h>
 #include	<../CrockRising/Characters/MmeGrise.h>
 
@@ -13,6 +14,7 @@ SceneObject* statue3 = NULL;
 SceneObject* palmier = NULL;	
 SceneObject* palmier2 = NULL;
 SceneObject* palmier3 = NULL;
+SceneObject* Pyramide = NULL;
 SceneObject* Pyramide2 = NULL;
 SceneObject* sphinx = NULL;
 std::vector<Vector3f> triggersPos;
@@ -42,7 +44,7 @@ LevelSphinx::LevelSphinx( crc32 levelID )
 	m_pCamera = NULL;
 	m_pHero = new Hero(Vector3f( 0.f, 8.f, 0.f) );
 	m_EscMenu = new EscMenu();
-	
+
 	Physicalizer::GetInstance()->setControllerCallback( gContactReportCR );
 }
 
@@ -51,89 +53,28 @@ LevelSphinx::LevelSphinx( crc32 levelID )
  **********************************************************/
 LevelSphinx::~LevelSphinx( void )
 {
-	if( m_pCamera )
-		delete m_pCamera;
+	release(m_pCamera);
+	release(m_EscMenu);
+	releaseFromList( SceneObject::RefList, Desert );
+	releaseFromList( SceneObject::RefList, statue );
+	releaseFromList( SceneObject::RefList, statue2 );
+	releaseFromList( SceneObject::RefList, statue3 );
+	releaseFromList( SceneObject::RefList, palmier );
+	releaseFromList( SceneObject::RefList, palmier2 );
+	releaseFromList( SceneObject::RefList, palmier3 );
+	releaseFromList( SceneObject::RefList, Pyramide2 );
+	releaseFromList( SceneObject::RefList, sphinx );
+	release(m_pManagerAI);
+	release(m_pHero);
 
-	if(m_EscMenu)
-		delete m_EscMenu;
-	
-	if(Desert) 
-	{
-		SceneObject::RefList.remove( Desert );
-		delete Desert;
-		Desert= NULL;
-	}
-	
-	if(statue) 
-	{
-		SceneObject::RefList.remove( statue );
-		delete statue;
-		statue= NULL;
-	}
-	
-	if(statue2) 
-	{
-		SceneObject::RefList.remove( statue2 );
-		delete statue2;
-		statue2 = NULL;
-	}
-	
-	if(statue3) 
-	{
-		SceneObject::RefList.remove( statue3 );
-		delete statue3;
-		statue3 = NULL;
-	}
-	
-	if(palmier) 
-	{
-		SceneObject::RefList.remove( palmier );
-		delete palmier;
-		palmier = NULL;
-	}
-	
-	if(palmier2) 
-	{
-		SceneObject::RefList.remove( palmier2 );
-		delete palmier2;
-		palmier2 = NULL;
-	}
-	
-	if(palmier3) 
-	{
-		SceneObject::RefList.remove( palmier3 );
-		delete palmier3;
-		palmier3 = NULL;
-	}
-	
-	if(Pyramide2) 
-	{
-		SceneObject::RefList.remove( Pyramide2 );
-		delete Pyramide2;
-		Pyramide2 = NULL;
-	}
- 	
-	if(sphinx) 
-	{
-		SceneObject::RefList.remove( sphinx );
-		delete sphinx;
-		sphinx = NULL;
-	}
+	delete Renderer::GetInstance()->GetSkybox();
+	Renderer::GetInstance()->SetSkybox(NULL);
 
-	if(m_pManagerAI) 
-		delete m_pManagerAI;
-	m_pManagerAI = NULL;
-
-	if(m_pHero)
-		delete m_pHero;
-	m_pHero = NULL;
-
-	for (size_t i = 0 ; i < triggers.size() ; ++i)
-	{		
-		if(triggers[i]) 
-		{
-			SceneObject::RefList.remove( triggers[i] );
-		}
+	while( !triggers.empty() )
+	{
+		SceneObjectAnimated* trigger = triggers[ triggers.size()-1 ];
+		releaseFromList( SceneObject::RefList, trigger );
+		triggers.pop_back();
 	}
 }
 
@@ -219,6 +160,13 @@ void LevelSphinx::Init( void )
 
 ////PYRAMIDE
 
+	Pyramide = new SceneObject("Mesh_Pyramide.DAE", D3DXVECTOR3(400.f, 0.f, -481.3f));
+	Pyramide->Init();
+	Pyramide->GetMaterial()->SetTexture("pyramide_diffuse.jpg", Texture::DIFFUSE);
+	Pyramide->GetMaterial()->SetTexture("pyramide_normal.jpg", Texture::NORMALMAP);
+	Pyramide->SetShader("default_normalmap.fx");
+	Pyramide->SetObjectPhysical("Physic_Pyramide.DAE");
+
 	Pyramide2 = new SceneObject("Mesh_Pyramide.DAE", D3DXVECTOR3(-519.8f, 0.f, -1181.3f));
 	Pyramide2->Init();
 	Pyramide2->GetMaterial()->SetTexture("pyramide_diffuse.jpg", Texture::DIFFUSE);
@@ -236,6 +184,7 @@ void LevelSphinx::Init( void )
 
 	//Initialisation du Héro
 	m_pHero->Init();
+	m_pHero->setCamera( m_pCamera );
 
 	triggersPos.reserve(7);
 	triggers.reserve(7);
@@ -257,7 +206,7 @@ void LevelSphinx::Init( void )
 	}
 
 	// Création de l'AI
-	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 30, 400, 30, 3100, 256 );
+	m_pManagerAI = new AIManager( true, AIManager::AI_NORMAL, 1, 400, 30, 3100, 256 );
 }
 
 /***********************************************************
@@ -268,7 +217,7 @@ void LevelSphinx::Update( void )
 	// Mise a jour de l'AI avec les ennemies en paramètre
 	deltaTime = System::GetInstance()->GetTime()->GetDeltaTimeMs();
 	Vector3f posHero = m_pHero->getSceneObjectAnimated()->GetPosition();
-	m_pManagerAI->update( m_pHero, deltaTime, m_pEnemy[0]->listEnemy );
+	m_pManagerAI->update( m_pHero, deltaTime );
 
-	m_pHero->update(m_pCamera);
+	m_pHero->update();
 }

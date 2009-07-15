@@ -209,6 +209,10 @@
 			Name="Core"
 			>
 			<File
+				RelativePath=".\Core\Macros.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\Math.h"
 				>
 			</File>

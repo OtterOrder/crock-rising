@@ -35,7 +35,7 @@ public:
 
 protected:
 
-	crc32		m_LevelID;		// ID du niveau
+	crc32					m_LevelID;		// ID du niveau
 
 };
 

@@ -1,4 +1,5 @@
 #include "AIManager.h"
+#include "../Engine/Core/Macros.h"
 
 
 AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precision ) 
@@ -6,7 +7,7 @@ AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEne
 		newAngle(0), fieldOfView(fovEnemy), attackRange(rangeAttack), nbEnemy(nbMaxEnemy), scaleCurrMap(scaleMap),
 		precCurrMap(precision), timeEnemy(0.f)
 {
-	srand( (unsigned)time(NULL) );
+	initRandom();
 	aiEnemy = new AIEnemy(scaleMap, precision);
 
 }
@@ -15,109 +16,87 @@ AIManager::AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEne
 AIManager::~AIManager()
 {
 	if (aiEnemy)	delete aiEnemy;
-	//if (listAIEnemy)delete listAIEnemy;	
-	std::vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin();
-	int pouet = 0;
-	while ( pouet != listAIEnemy->listEnemy.size() )
-	{	
-		Enemy* plop = listAIEnemy->listEnemy.at(pouet);
-		//listAIEnemy->listEnemy.erase(it);
-		
-		if(plop->getSceneObjectAnimated()) 
-		{
-			SceneObject::RefList.remove( plop->getSceneObjectAnimated() );
-			delete plop->getSceneObjectAnimated();
-		}
-
-		if(plop->getArme()) 
-		{
-			SceneObject::RefList.remove( plop->getArme() );
-			delete plop->getArme();
-		}
-
-		pouet++;
+	std::list<Enemy*>::iterator it = Enemy::RefList.begin();
+	while( !Enemy::RefList.empty() )
+	{
+		Enemy* enemy = Enemy::RefList.back() ;
+		releaseFromList( Enemy::RefList, enemy);
 	}
-	listAIEnemy->listEnemy.clear();
-	listAIEnemy = NULL;
-
 }
 
 
-void AIManager::update( Hero* const pHero, float elapsedTime, vector<Enemy*> listEnemy )
+void AIManager::update( Hero* const pHero, float elapsedTime )
 {
 	// Pour calcul la distance que doit effectuer les ennemies en fct du temps
 	aiEnemy->setElapsedTime(elapsedTime);
 	Vector3f posPlayer = pHero->getSceneObjectAnimated()->GetPosition();
 
 	// Gère les états et transitions
-	for ( vector<Enemy*>::iterator it = listAIEnemy->listEnemy.begin(); it != listAIEnemy->listEnemy.end(); it++)
+	list<Enemy*>::iterator it = Enemy::RefList.begin();
+	while( it != Enemy::RefList.end() )
 	{
 		Enemy* pEnemy = (*it);
-
-		// Calcul la distance entre le joueur et l'ennemi pour en déduire son état
-		if(pEnemy->IsAlive())
+		SceneObjectAnimated* pObj = pEnemy->getSceneObjectAnimated();
+		if(pObj)
 		{
-			SceneObjectAnimated* pObj = pEnemy->getSceneObjectAnimated();
-			if(pObj)
-			{
-				newPos = pEnemy->getSceneObjectAnimated()->GetPosition();
-				distance = aiEnemy->calculDistance( posPlayer, newPos );
-				newPos = Vector3f(0,0,0);
-				newAngle = 0;
+			newPos = pEnemy->getSceneObjectAnimated()->GetPosition();
+			distance = aiEnemy->calculDistance( posPlayer, newPos );
+			newPos = Vector3f(0,0,0);
+			newAngle = 0;
 
-				if ( distance <= attackRange )
+			if ( distance <= attackRange )
+			{
+				if (pEnemy->getLife() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
 				{
-					if (pEnemy->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
-					{
-						aiEnemy->enemyAIAttack( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newAngle );
-						pEnemy->changeState(ATTACK);
-					}
-					else
-					{
-						aiEnemy->enemyAIEvade( posPlayer );
-						pEnemy->changeState(RUN);
-					}
-				}
-				else if ( distance <= fieldOfView )
-				{
-					if (pEnemy->Life() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
-					{
-						aiEnemy->enemyAIMoveTo( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
-						pEnemy->changeState(RUN);
-					}
-					else
-					{
-						aiEnemy->enemyAIEvade( posPlayer );
-						pEnemy->changeState(RUN);
-					}
+					aiEnemy->enemyAIAttack( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newAngle );
+					pEnemy->changeState(Perso::ATTACK);
 				}
 				else
 				{
-					timeEnemy = pEnemy->timeSinceLastPath;
-					aiEnemy->enemyAIPatrol( posPlayer, newPos, newAngle, timeEnemy);
-					pEnemy->changeState(RUN);
-					pEnemy->timeSinceLastPath = timeEnemy;
+					aiEnemy->enemyAIEvade( posPlayer );
+					pEnemy->changeState(Perso::RUN);
 				}
-
-				//(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
-				//(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
-
-				Vector3f oldPos = pEnemy->getSceneObjectAnimated()->GetPosition();
-				pEnemy->getSceneObjectAnimated()->SetPosition( oldPos.x+newPos.x, 0, oldPos.z+newPos.z );
-				pEnemy->getSceneObjectAnimated()->SetRotation( 0, newAngle, 0 );
-
-				NxActor* a = physX::getActor( pEnemy->getArme()->getEmpActor() );
-				if( a )
-					a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
-
-				pEnemy->getArme()->SetRotation( 0.f, -newAngle, 0.f );
-				
-				if( a )
-					a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
-				a=NULL;
-
-				pEnemy->update( listAIEnemy );
 			}
+			else if ( distance <= fieldOfView )
+			{
+				if (pEnemy->getLife() >= 30 || AI_ONLY_ATTACK && !AI_ONLY_EVADE)
+				{
+					aiEnemy->enemyAIMoveTo( posPlayer, pEnemy->getSceneObjectAnimated()->GetPosition(), newPos, newAngle);
+					pEnemy->changeState(Perso::RUN);
+				}
+				else
+				{
+					aiEnemy->enemyAIEvade( posPlayer );
+					pEnemy->changeState(Perso::RUN);
+				}
+			}
+			else
+			{
+				timeEnemy = pEnemy->timeSinceLastPath;
+				aiEnemy->enemyAIPatrol( posPlayer, newPos, newAngle, timeEnemy);
+				pEnemy->changeState(Perso::RUN);
+				pEnemy->timeSinceLastPath = timeEnemy;
+			}
+
+			//(*it)->getSceneObjectAnimated()->SetTranslation(newPos.x, 0, newPos.z);
+			//(*it)->getSceneObjectAnimated()->SetRotation(0, (float)newAngle, 0);
+
+			Vector3f oldPos = pEnemy->getSceneObjectAnimated()->GetPosition();
+			pEnemy->getSceneObjectAnimated()->SetPosition( oldPos.x+newPos.x, 0, oldPos.z+newPos.z );
+			pEnemy->getSceneObjectAnimated()->SetRotation( 0, newAngle, 0 );
+
+			NxActor* a = pEnemy->getArme()->getActor();
+			if( a )
+				a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
+
+			pEnemy->getArme()->SetRotation( 0.f, -newAngle, 0.f );
+			
+			if( a )
+				a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
+			a=NULL;
+
+			it++;
+			pEnemy->update( );
 		}
 	}
 
@@ -132,7 +111,7 @@ void AIManager::updateSpawn( Hero* const pHero )
 	if ( spawnInfini )
 	{
 		// Creer les ennemis manquants
-		while ((int)listAIEnemy->listEnemy.size() < nbEnemy)
+		while ((int)Enemy::RefList.size() < nbEnemy)
 		{
 			// Position aléatoire par rapport a la AIMap
 			pair<int,int> posSpawn = aiEnemy->getPtrAStar()->randomSpawn();
@@ -142,8 +121,8 @@ void AIManager::updateSpawn( Hero* const pHero )
 			float spawnZ = floor(float((posSpawn.second*scaleCurrMap)/precCurrMap)-scaleCurrMap/2);
 		
 			Enemy* enemy = NULL;
-  			if ( rand()%2)		enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
-   			else				enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
+  			/*if ( random( 0, 1 ))		enemy = new Alien( Vector3f(spawnX, 8.f, spawnZ) );
+   			else				*/enemy = new MmeGrise( Vector3f(spawnX, 8.f, spawnZ) );
 			
 			enemy->Init();
 			enemy->getSceneObjectAnimated()->SetControledCharacter(3.f, 7.f, enemy );

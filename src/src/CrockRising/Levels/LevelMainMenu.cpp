@@ -7,12 +7,14 @@
 #include	<Objects/Camera.h>
 #include	<Objects/2D/Sprite.h>
 #include	<Sound/SoundObject.h>
+#include	<Core/Macros.h>
 
 //******************************************************************
 
 #define		LEVEL_gamemenu			0x2b3430ac
 #define		LEVEL_highscores		0x59f26d0
 #define		LEVEL_settings			0xe545a0c5
+#define		LEVEL_test				0x4d915a92
 
 #define		MAINMENU_X				64
 #define		MAINMENU_Y				48
@@ -129,9 +131,9 @@ void LevelMainMenu::MMButton::OnClic()
 {
 	switch( linkID )
 	{
-		case PLAY:
-			// Menu de jeu..
-			Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
+	case PLAY:
+		// Menu de jeu..
+		Game::GetInstance()->ChangeLevel( LEVEL_gamemenu );
 			return;
 		
 		/*case HIGHSCORES:

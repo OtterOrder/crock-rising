@@ -63,12 +63,29 @@ void Object::SetTranslation( float x, float y, float z )
 
 void Object::SetRotation( float angleX, float angleY, float angleZ )
 {
-	m_vAngleX+=angleX;
-	m_vAngleY+=angleY;
-	m_vAngleZ+=angleZ;
-	if(m_vAngleX > 360.f) m_vAngleX=0.f;
-	if(m_vAngleY > 360.f) m_vAngleY=0.f;
-	if(m_vAngleZ > 360.f) m_vAngleZ=0.f;
+	m_vAngleX += angleX;
+	m_vAngleY += angleY;
+	m_vAngleZ += angleZ;
+	if(m_vAngleX > 360.f) m_vAngleX = 0.f;
+	if(m_vAngleY > 360.f) m_vAngleY = 0.f;
+	if(m_vAngleZ > 360.f) m_vAngleZ = 0.f;
+	D3DXMATRIX rotX, rotY, rotZ;
+	D3DXMatrixRotationX(&rotX,  D3DXToRadian(angleX));
+	D3DXMatrixRotationY(&rotY,  D3DXToRadian(angleZ));
+	D3DXMatrixRotationZ(&rotZ,  D3DXToRadian(angleY));
+
+	D3DXMATRIX result=rotX*rotY*rotZ;
+	ApplyTransform(&result);
+}
+
+void Object::SetOrientation( float angleX, float angleY, float angleZ )
+{	
+	m_vAngleX = angleX;
+	m_vAngleY = angleY;
+	m_vAngleZ = angleZ;
+	if(m_vAngleX > 360.f) m_vAngleX = 0.f;
+	if(m_vAngleY > 360.f) m_vAngleY = 0.f;
+	if(m_vAngleZ > 360.f) m_vAngleZ = 0.f;
 	D3DXMATRIX rotX, rotY, rotZ;
 	D3DXMatrixRotationX(&rotX,  D3DXToRadian(angleX));
 	D3DXMatrixRotationY(&rotY,  D3DXToRadian(angleZ));

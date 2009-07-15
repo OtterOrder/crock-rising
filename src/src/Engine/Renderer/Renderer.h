@@ -45,6 +45,7 @@ public:
 	// Infos sur la fenêtre
 	u32	GetWindowWidth() const;
 	u32	GetWindowHeight() const;
+	Skybox* GetSkybox(){ return m_Skybox; }
 
 	// Accès/modif de la couleur de fond
 	void SetClearColor( const Color4f &color );

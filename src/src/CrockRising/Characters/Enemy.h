@@ -7,32 +7,28 @@
 #include		<Objects/SceneObjectAnimated.h>
 #include		<Core/Types/Vector.h>
 #include		<../CrockRising/Characters/Perso.h>
-#include		<Core/Inputs/InputManager.h>
 
 //******************************************************************
 
 class Enemy : public Perso
 {
 public:
-	static std::vector<Enemy*>  listEnemy;
+	static std::list<Enemy*>  RefList;
 	static int nbEnemy;
 
-	Enemy():Perso(),  m_idBone(0){}
-	Enemy(Vector3f position);
-	~Enemy();
+	Enemy(Vector3f pos = Vector3f( 0.f, 0.f, 0.f ));
 
-	virtual void			update( Enemy* list );	
-	virtual void		    changeState( PersoState newState ){}
-	virtual void			Init(){}
+	virtual void			update();	
+	virtual void			Init(){ InitSound(); InitAnim(); }
 	virtual void			Hit();
 	virtual void			Die();
+	virtual void			DestroyPerso();
+	virtual void			InitSound(){}
+	virtual void			InitAnim(){}
 
 	float timeSinceLastPath;
 protected:
-	
-	InputManager* m_pInputManager;
-	Vector3f      m_position;
-	int			  m_idBone;
+
 };
 
 //******************************************************************

@@ -289,16 +289,20 @@ void SceneObjectAnimated::SetAnimFPS(float fps)
 
 D3DXMATRIX SceneObjectAnimated::GetMatrixTransformBone(int indBone)
 {
-	D3DXMATRIX BoneTransform=m_pAnim->m_Bones[indBone]->FinalMatrix*m_WorldMatrix;
-	return BoneTransform;
+	D3DXMATRIX BoneTransform = m_pAnim->m_Bones[indBone]->FinalMatrix;
+	return BoneTransform * m_WorldMatrix;
 }
 
 void SceneObjectAnimated::SetAnim(const std::string& anim)
 {
-	m_pAnim = ResourceManager::GetInstance()->Load<Anim>(anim);
-	m_AnimPlayer.Init();
+	if(!anim.empty())
+	{
+		m_pAnim = ResourceManager::GetInstance()->Load<Anim>(anim);
+		m_AnimPlayer.Init();
 
-	m_AnimPlayer.SetNbFrames(m_pAnim->m_NbFrames);
+		m_AnimPlayer.SetNbFrames(m_pAnim->m_NbFrames);
+	}
+
 }
 
 

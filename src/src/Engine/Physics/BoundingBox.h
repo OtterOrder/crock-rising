@@ -90,25 +90,26 @@ inline NxVec3 VecToNxVec(Vector3f V){ return NxVec3(V.x, V.y, V.z); }
 
 namespace physX
 {
-	int CreateBoundingBox(ListOfBoundingBox &BBList);
-	int CreateTrigger(ListOfBoundingBox &BBList,
+	void CreateBoundingBox(ListOfBoundingBox &BBList, NxActor* &pActor);
+	void CreateTrigger(ListOfBoundingBox &BBList,
 						void (*OnEnterFunc)(void* param),
 						void (*OnLeaveFunc)(void* param), 
-						void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay);
-	int CreateControlledCapsule( Vector3f pos, float radius, float height,
-								 void* Ref, int &empActor );
-	int CreateControlledBox( Vector3f const pos, float width, float height, float depth,
-							 void* Ref, int &empActor ); 
+						void (*OnStayFunc)(void* param), void* paramEnter, void* paramLeave, void* paramStay,
+						NxActor* &pActor);
+	void CreateControlledCapsule( Vector3f pos, float radius, float height, void* Ref,
+											NxActor* &pActor, NxController* &pController );
+	void CreateControlledBox( Vector3f const pos, float width, float height, float depth, 
+										void* Ref, NxActor* &pActor, NxController* &pController ); 
 
 	/************************************************************************************
 	* Détruit un acteur ainsi que son userdata
 	************************************************************************************/
-	void releaseActor(int &empActor);
+	void releaseActor(NxActor* &pAct);
 	
 	/************************************************************************************
 	* Détruit un controller ainsi que son userdata
 	************************************************************************************/
-	void releaseController(int &empActor, int &empController);
+	void releaseController(NxController* &pCont);
 
 	/************************************************************************************
 	* Fonction de récupération de la scène physique
@@ -117,26 +118,10 @@ namespace physX
 	NxScene* getPhysicScene();
 
 	/************************************************************************************
-	* Fonction de récupération d'un acteur
-	* @param[in]	emp	: emplacement de l'acteur dans la liste des acteurs de physX
-	* @return		NxActor* : acteur
-	* Précondition	emp doit être strictement positif et inférieur au nombre d'acteur.
-	************************************************************************************/
-	NxActor* getActor(int emp);
-
-	/************************************************************************************
 	* Fonction de récupération du manager des controlleur
 	* @return	NxControllerManager* : manager des controlleur
 	************************************************************************************/
 	NxControllerManager* getControllerManager();
-
-	/************************************************************************************
-	* Fonction de récupération d'un controleur
-	* @param[in]	emp	: emplacement du controleur dans la liste des controleur de physX
-	* @return		NxController* : controleur
-	* Précondition	emp doit être strictement positif et inférieur au nombre de controller.
-	************************************************************************************/
-	NxController* getController(int emp);
 	
 	/************************************************************************************
 	* Fonction qui permet de lier deux objets de sorte à pouvoir récupérer leurs collisions

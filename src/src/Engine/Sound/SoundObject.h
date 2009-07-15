@@ -29,9 +29,9 @@ public:
 	
 	struct Properties
 	{
-		float		gain;			// 0->1
-		float		pitch;			// 0.1->..
-		bool		looping;		// Bouclant
+		float		gain;			// 0->1								[ VOLUME ]
+		float		pitch;			// 0.1->..							[ VITESSE DE LECTURE DU SON ? ]
+		bool		loop;		// Bouclant								[ LOOP ]
 		bool		relative;		// Position relative au listener
 		Vector3f	position;		// Position
 		Vector3f	velocity;		// Vecteur vitesse
@@ -49,13 +49,15 @@ public:
 	void Pause( u32 flag = 0 );
 	void Stop();
 	bool IsPlaying() const;
-	
+
 	void SetGain( float gain );
 	void SetPitch( float pitch );
-	void SetLooping( bool looping );
+	void SetDistance( float dist );
+	void SetLoop( bool loop );
 	void SetRelative( bool relative );
 	void SetPosition( const Vector3f &position );
-	void SetVelocity( const Vector3f &velocity );
+	void SetPosition( float x, float y, float z ){ SetPosition(Vector3f( x, y, z )); }
+	void SetVelocity( const Vector3f &velocity ); 
 	//void SetSound( const std::string &soundName );
 
 	// Donne toutes les propriétés de l'objet

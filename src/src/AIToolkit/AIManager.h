@@ -28,14 +28,12 @@ public:
 	AIManager( bool spawn, int comportementAI, int nbMaxEnemy, int fovEnemy, int rangeAttack, int scaleMap, int precise );
 	~AIManager();
 
-	void	update( Hero* const pHero, float elapsedTime, vector<Enemy*> listEnemy );
+	void	update( Hero* const pHero, float elapsedTime );
 	void	updateSpawn( Hero* const pHero );
-	Enemy*	getlistAIEnemy(){ return listAIEnemy; }
 
 protected:
 	static const int NB_GROUP_MAX = 1;
 
-	Enemy*		listAIEnemy;
 	Vector3f	newPos;
 	float		newAngle;
 

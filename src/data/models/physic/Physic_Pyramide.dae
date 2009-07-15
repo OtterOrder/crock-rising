@@ -5,7 +5,7 @@
 			<author>NxuStream2 converter - http://www.ageia.com</author>
 			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
 			<comments>questions	to:	jratcliff@ageia.com</comments>
-			<source_data>C:\Documents and Settings\bemantoue\Bureau\Crock Rising2\src\data\models\physic\Physic_Pyramide.dae</source_data>
+			<source_data>H:\Documents and Settings\Bérenger\Bureau\Crock Rising\src\data\models\physic\Physic_Pyramide.dae</source_data>
 		</contributor>
 		<unit	meter="1"	name="meter"/>
 		<up_axis>Y_UP</up_axis>
@@ -51,7 +51,7 @@
 	<library_visual_scenes>
 		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
 			<node	id="Actor0-Node" name="Actor0" type="NODE">
-        <translate>0.000003065	70.124069214 0.000003065</translate>
+        <translate>0.16709137	10.961471558 227.625</translate>
         <rotate>1 0	0	 0</rotate>
 			</node>
 			</visual_scene>
@@ -74,11 +74,11 @@
 	</library_physics_materials>
 	<library_physics_models>
 		<physics_model id="Scene0-PhysicsModel">
-			<rigid_body	sid="Actor0-RigidBody" name="Boîte01">
+			<rigid_body	sid="Actor0-RigidBody" name="Box01">
 				<technique_common>
 					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					<shape>
-            <translate>0	0 288.700439453</translate>
+            <translate>0	0 0</translate>
             <rotate>1 0	0	 0</rotate>
 						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
 					 <mass>1</mass>
@@ -90,7 +90,7 @@
 						 </technique>
 					 </extra>
 						<box>
-							<half_extents>411.919372559 354.736297607	288.700439453</half_extents>
+							<half_extents>226.313720703 194.546310425	227.625</half_extents>
 						</box>
 					 </shape>
 					<dynamic>false</dynamic>

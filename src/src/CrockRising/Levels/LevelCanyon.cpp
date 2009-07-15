@@ -83,6 +83,7 @@ void LevelCanyon::Init( void )
 
 	//Initialisation du Héro
 	m_pHero->Init();
+	m_pHero->setCamera( m_pCamera );
 
 	//std::vector<Vector3f> triggers;
 	//triggers.reserve(7);
@@ -108,5 +109,5 @@ void LevelCanyon::Init( void )
  **********************************************************/
 void LevelCanyon::Update( void )
 {
-	m_pHero->update(m_pCamera);
+	m_pHero->update();
 }

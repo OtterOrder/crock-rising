@@ -6,6 +6,8 @@
 #include	<../CrockRising/Characters/Alien.h>
 #include	<../CrockRising/Characters/Alien.h>
 #include	<Game/Game.h>
+#include	<Core/Macros.h>
+#include	<Sound/SoundSystem.h>
 
 #define		MAX_LIFE				100
 #define		LIFE_BONUS				10
@@ -16,16 +18,13 @@ HUDLife* Hero::m_pLifeBar = NULL;
 /***********************************************************
 * Constructeur
 **********************************************************/
-Hero::Hero(Vector3f _pos)
-	:Perso(), pos( _pos )
-{
-	m_pAnimated = NULL;	
-	
-	m_currentState = STATIC;
-	
-	//m_pLifeBar = new HUDLife();
-	
+Hero::Hero(Vector3f pos)
+	:Perso(pos)
+{		
 	m_pInputManager = InputManager::GetInstance();
+	m_pCamera = NULL;
+	m_pLifeBar = NULL;
+	m_idBone = 21;
 }
 
 /**********************************************************
@@ -33,69 +32,37 @@ Hero::Hero(Vector3f _pos)
 **********************************************************/
 void Hero::Init()
 {
-	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE", pos); //y = -75 pr le canyon
+	m_pAnimated = new SceneObjectAnimated("Mesh_Robot.DAE","Anim_Robot_Run.DAE", m_Position); //y = -75 pr le canyon
 	m_pAnimated->Init();
 	m_pAnimated->GetMaterial()->SetTexture("robot.png", Texture::DIFFUSE);
 	m_pAnimated->GetMaterial()->SetTexture("robot_normal.dds", Texture::NORMALMAP);
 	m_pAnimated->SetShader("default_skinnormalmap.fx");
-	m_pAnimated->SetRotation(0.f, 180.f,0.f);
-	m_pAnimated->SetControledCharacter(3.f,9.f,this);
+ 	m_pAnimated->SetRotation(0.f, 180.f,0.f);
+	m_pAnimated->SetControledCharacter(1.f,1.f,this);
 	m_pAnimated->GetMaterial()->m_Glossiness=10.f;
-	//m_pAnimated->SetAnim("X.DAE");
-	//m_pAnimated->Play();
-	//m_pAnimated->SetLoop(true);
-	//m_pAnimated->SetAnimFPS(25.f);
 
-	//m_pInputManager->HoldMouseAtCenter(true);
+	InitAnim();
+	InitSound();
+
+	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
+	m_pArme->Init();
+	m_pArme->SetRotation(0.f, 90.f, 90.f);
+	m_pArme->SetObjectPhysical( "batte_P.dae" ); //pas le bon group!!
 
 	m_pLifeBar = new HUDLife;
 	m_pLifeBar->Init();
 	m_pLifeBar->SetMaxLife(MAX_LIFE);
 	m_pLifeBar->SetLife(50);
 
-	m_pArme = new SceneObject( "batte_M.dae", Vector3f( 5, 18, 0)); //en fn de la pos de m_pAnimated
-	m_pArme->Init();
-	m_pArme->SetObjectPhysical( "batte_P.dae" ); //pas le bon group!!
-
-	NxActor* a = physX::getActor( m_pArme->getEmpActor() );
-	if( a )
-	{
-		a->getShapes()[0]->setGroup( GROUP_CONTROLLER );
-		a->raiseBodyFlag( NX_BF_DISABLE_GRAVITY );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_X );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Y );
-		a->raiseBodyFlag( NX_BF_FROZEN_ROT_Z );
-		a->userData = new ActorUserData;
-		((ActorUserData*)a->userData)->type = WEAPON;
-		((ActorUserData*)a->userData)->PersoRef = this;
-	}
+	InitWeapon();
 }
 
 /***********************************************************
 * Destructeur
 **********************************************************/
 Hero::~Hero()
-{
-	SceneObject::RefList.remove( m_pAnimated );
-	if(m_pAnimated) 
-	{
-		SceneObject::RefList.remove( m_pAnimated );
-		delete m_pAnimated;
-		m_pAnimated = NULL;
-	}
-
-	if(m_pArme) 
-	{
-		SceneObject::RefList.remove( m_pArme );
-		delete m_pArme;
-		m_pArme = NULL;
-	}
-	
-	if(m_pLifeBar) 
-	{
-		delete m_pLifeBar;
-		m_pLifeBar = NULL;
-	}
+{	
+	release(m_pLifeBar);
 }
 
 
@@ -104,7 +71,7 @@ Hero::~Hero()
 * gère son déplacement. Cette méthode sert également à la mise à jour 
 * de l'orientation de la caméra
 ******************************************************************/
-ResourceResult Hero::control( Camera* pCamera )
+ResourceResult Hero::control()
 {
 	changeState(STATIC);
 
@@ -204,16 +171,16 @@ ResourceResult Hero::control( Camera* pCamera )
 	if( rX != 0.f )
 	{
 		float offsetCursor = rX * coefMulJoystickDroit;
-		float diff = pCamera->GetOrientationYRad();
-		pCamera->SetOrientationY( -offsetCursor );
-		diff = pCamera->GetOrientationYRad() - diff;
+		float diff = m_pCamera->GetOrientationYRad();
+		m_pCamera->SetOrientationY( -offsetCursor );
+		diff = m_pCamera->GetOrientationYRad() - diff;
 		
 		D3DXMATRIX rot;
 		D3DXMatrixRotationZ( &rot, diff );
 		m_pAnimated->ApplyTransform( &rot );
 		m_pAnimated->m_vAngleY -= D3DXToDegree( diff );
-		
-		static NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+
+		static NxActor* a = m_pArme->getActor() ;
 		if( a )
 			a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
 
@@ -226,16 +193,16 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		float offsetCursor = rY * (coefMulJoystickDroit/2);
 		if( inverseAxeY ) offsetCursor = -offsetCursor;
-		pCamera->SetOrientationX( offsetCursor );
+		m_pCamera->SetOrientationX( offsetCursor );
 	}
 	
 	//souris
 	if( point.x != 0 ) 
 	{
 		int offsetCursor = (int)point.x%sensibiliteSouris; 
-		float diff = pCamera->GetOrientationYRad();
-		pCamera->SetOrientationY( -(float)offsetCursor );
-		diff = pCamera->GetOrientationYRad() - diff;
+		float diff = m_pCamera->GetOrientationYRad();
+		m_pCamera->SetOrientationY( -(float)offsetCursor );
+		diff = m_pCamera->GetOrientationYRad() - diff;
 
 		D3DXMATRIX rot;
 		D3DXMatrixRotationZ( &rot, diff );
@@ -243,7 +210,7 @@ ResourceResult Hero::control( Camera* pCamera )
 		//m_pAnimated->SetRotation( 0.f, diff, 0.f );
 		m_pAnimated->m_vAngleY -= D3DXToDegree( diff );
 
-		NxActor* a = physX::getActor( m_pArme->getEmpActor() );
+		NxActor* a = m_pArme->getActor() ;
 		if( a )
 			a->clearBodyFlag( NX_BF_FROZEN_ROT_Y );
 
@@ -258,7 +225,7 @@ ResourceResult Hero::control( Camera* pCamera )
 	{
 		int offsetCursor = (int)point.y%sensibiliteSouris; 
 		if( inverseAxeY ) offsetCursor = -offsetCursor;
-		pCamera->SetOrientationX( (float)offsetCursor );
+		m_pCamera->SetOrientationX( (float)offsetCursor );
 	}
 
 
@@ -274,13 +241,13 @@ ResourceResult Hero::control( Camera* pCamera )
 		float xStep, zStep;
 		if( Y == 0.f )
 		{
-			xStep = -std::sin(pCamera->GetOrientationYRad())*sensibilityTranslation;
-			zStep =  std::cos(pCamera->GetOrientationYRad())*sensibilityTranslation;
+			xStep = -std::sin(m_pCamera->GetOrientationYRad())*sensibilityTranslation;
+			zStep =  std::cos(m_pCamera->GetOrientationYRad())*sensibilityTranslation;
 		}
 		else
 		{
-			xStep = -std::sin( pCamera->GetOrientationYRad() )*Y*timeF;
-			zStep =  std::cos( pCamera->GetOrientationYRad() )*Y*timeF;
+			xStep = -std::sin( m_pCamera->GetOrientationYRad() )*Y*timeF;
+			zStep =  std::cos( m_pCamera->GetOrientationYRad() )*Y*timeF;
 		}
 
 		m_Translate += Vector3f(xStep,0.f,zStep);
@@ -291,13 +258,13 @@ ResourceResult Hero::control( Camera* pCamera )
 		float xStep, zStep;
 		if( X == 0.f )
 		{
-			xStep = -std::cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-			zStep = -std::sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+			xStep = -std::cos( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
+			zStep = -std::sin( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		}
 		else
 		{
-			xStep = std::cos( pCamera->GetOrientationYRad() )*X*timeF;
-			zStep = std::sin( pCamera->GetOrientationYRad() )*X*timeF;
+			xStep = std::cos( m_pCamera->GetOrientationYRad() )*X*timeF;
+			zStep = std::sin( m_pCamera->GetOrientationYRad() )*X*timeF;
 		}
 		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
@@ -305,16 +272,16 @@ ResourceResult Hero::control( Camera* pCamera )
 	if ( m_pInputManager->IsKeyPressed('S'))
 	{
 		float xStep, zStep;
-		xStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = -cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		xStep = sin( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = -cos( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
 	if ( m_pInputManager->IsKeyPressed('D'))
 	{
 		float xStep, zStep;
-		xStep = cos( pCamera->GetOrientationYRad() )*sensibilityTranslation;
-		zStep = sin( pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		xStep = cos( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
+		zStep = sin( m_pCamera->GetOrientationYRad() )*sensibilityTranslation;
 		m_Translate += Vector3f(xStep,0.f,zStep);
 		changeState(RUN);
 	}
@@ -323,88 +290,35 @@ ResourceResult Hero::control( Camera* pCamera )
 	return RES_SUCCEED;
 }
 
-/********************************************************************
-* En fonction du nouvel état, cette méthode configure les nouvelles 
-* animations à lancer 
-*********************************************************************/
-void Hero::changeState( PersoState newState )
-{
-	if ( ((m_currentState != STATIC && !m_pAnimated->IsAtEnd())
-		 || newState == m_currentState ) && newState != DIE)
-		return;
-
-	if( !m_StateFrozen )
-	{
-		m_currentState = newState;
-		
-		switch ( m_currentState )
-		{
-		case RUN :
-			m_pAnimated->SetAnim("Anim_Robot_Run.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(true);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case ATTACK : 
-			m_pAnimated->SetAnim("Anim_Robot_Attack.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(true);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case HIT : 
-			m_pAnimated->SetAnim("Anim_Robot_Hit.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(true);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case DIE: 
-			m_pAnimated->SetAnim("Anim_Robot_Die.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(false);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		case STATIC :
-			m_pAnimated->SetAnim("Anim_Robot_Wait.DAE");
-			m_pAnimated->Play();
-			m_pAnimated->SetLoop(true);
-			m_pAnimated->SetAnimFPS(50.f);
-			break;
-		}
-	}
-}
 
 /*********************************************************************
 * Mise à jour du Héros
 * Une fois les contrôles éventuels vérifiés plus les changements d'état,
 * la position du Héros est modifiée
 *********************************************************************/
-void Hero::update( Camera* pCamera )
+void Hero::update()
 {
-	control( pCamera );
-
-	Vector3f pos = m_pAnimated->GetPosition();
-	//std::cout << "x = " << pos.x << "  y = " << pos.y << "  z = " << pos.z << std::endl;
+	if( m_pCamera ) control();
 
 	if(m_currentState == RUN)
 		m_pAnimated->SetTranslation(m_Translate.x, m_Translate.y, m_Translate.z);
 
-	//Sync arme sur la main du Hero
-	int idBone = 21;
-	D3DXMATRIX* armeMatrix = m_pArme->GetWorldMatrix();
-	D3DXMATRIX animMatrix = m_pAnimated->GetMatrixTransformBone( idBone );
-	*armeMatrix = animMatrix; //modificiation obj visuel
-	m_pArme->SetPosition( animMatrix._41, animMatrix._42, animMatrix._43 );
-	
+	m_Position.x += m_Translate.x;
+	m_Position.y += m_Translate.y;
+	m_Position.z += m_Translate.z;
 
-	pCamera->SetTarget(m_pAnimated->GetPosition());
-	pCamera->Update();
+	SoundSystem::GetInstance()->SetListenerPosition( m_Position );
 
+	Perso::update();	
+
+	if( m_pCamera )
+	{
+		m_pCamera->SetTarget(m_pAnimated->GetPosition());
+		m_pCamera->Update();
+	}
 	
 	if(m_currentState == DIE && m_pAnimated->IsAtEnd())
-	{
-		Enemy::nbEnemy = 0;
 		DestroyPerso();
-	}
 }
 
 void Hero::Hit()
@@ -413,21 +327,51 @@ void Hero::Hit()
 	{
 		changeState(HIT);
 		decLife( 5 );
-		m_pLifeBar->SetLife( Life() );
+		m_pLifeBar->SetLife( getLife() );
 	}
 }
 
 void Hero::Die()
 {
 	changeState(DIE);	
-	FreezeState();
 }
 
 void Hero::DestroyPerso()
 {
-	InputManager::GetInstance()->HoldMouseAtCenter(false);
+	m_pInputManager->HoldMouseAtCenter(false);
 	Game::GetInstance()->ChangeLevel( LEVEL_mainmenu );
 }
+
+void Hero::decLife( const int decreaseLife )
+{
+	Perso::decLife( decreaseLife );
+	if( m_pLifeBar ) m_pLifeBar->SetLife( getLife() );
+}
+
+
+void Hero::InitSound()
+{
+// 	AddSound(Perso::RUN,	"Hit1.ogg");
+// 	AddSound(Perso::ATTACK, "Attack1.ogg");
+// 	AddSound(Perso::ATTACK, "Attack2.ogg");
+// 	AddSound(Perso::ATTACK, "Attack3.ogg");
+// 	AddSound(Perso::HIT,	"Hit1.ogg");
+// 	AddSound(Perso::HIT,	"Hit2.ogg");
+// 	AddSound(Perso::HIT,	"Hit3.ogg");
+// 	AddSound(Perso::DIE,	"Die1.ogg");
+// 	AddSound(Perso::DIE,	"Die2.ogg");
+// 	AddSound(Perso::DIE,	"Die3.ogg");
+}
+
+void Hero::InitAnim()
+{
+	AddAnim(Perso::RUN,		"Anim_Robot_Run.DAE"	, 50.f, true);
+	AddAnim(Perso::ATTACK,	"Anim_Robot_Attack.DAE"	, 50.f, false);
+	AddAnim(Perso::HIT,		"Anim_Robot_Hit.DAE"	, 30.f, false);
+	AddAnim(Perso::DIE,		"Anim_Robot_Die.DAE"	, 50.f, false);
+	AddAnim(Perso::STATIC,	"Anim_Robot_Wait.DAE"	, 30.f, true);
+}
+
 
 /******************************************************************************
 *Si on entre en contact avec un trigger (ici une capsule donnant de la vie)
@@ -441,7 +385,7 @@ void Hero::contactWithTrigger(void* param)
 		life += LIFE_BONUS;
 		m_pLifeBar->SetLife(life);
 		SceneObjectAnimated* capsule = (SceneObjectAnimated*)param;
-		SceneObjectAnimated::RefList.remove(capsule);
-		delete capsule;
+		capsule->SetObjectUnPhysical();
+		capsule->SetVisible(false);
 	}
 }

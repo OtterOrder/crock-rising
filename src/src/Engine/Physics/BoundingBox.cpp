@@ -5,7 +5,7 @@
 NxShapeDesc* CreateBox( NxActorDesc& ActorDesc, const PhysicBody* Pb, bool bTrigger, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
 NxShapeDesc* CreateSphere( NxActorDesc& ActorDesc, const PhysicBody* Pb, bool bTrigger, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
 NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb, bool bTrigger, void* paramE = NULL, void* paramL = NULL, void* paramS = NULL );
-void FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, bool bTrigger);
+NxActor* FinalizeActor(const NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, bool bTrigger);
 NxMaterialIndex GenMaterial( const float restitution, const float staticFriction, const float dynamiqueFriction );
 
 
@@ -80,7 +80,7 @@ NxShapeDesc* CreateCapsule( NxActorDesc& ActorDesc, const PhysicBody* Pb, bool b
 	return capsuleDesc;
 }
 
-void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, bool bTrigger)
+NxActor* FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody* Pb, bool bTrigger)
 {
 	ActorDesc.density		= 1.0f;
 	ActorDesc.globalPose.t	= VecToNxVec(Pos);
@@ -105,6 +105,7 @@ void FinalizeActor( NxActorDesc ActorDesc, const Vector3f Pos, const PhysicBody*
 	NxScene* scene = physX::getPhysicScene();
 	NxActor* pActor = scene->createActor( ActorDesc );
 	assert(pActor);
+	return pActor;
 }
 
 
@@ -120,7 +121,7 @@ NxMaterialIndex GenMaterial( const float restitution, const float staticFriction
 }
 
 //////////////////////////////////////////////////////////////////////////
-int physX::CreateBoundingBox( ListOfBoundingBox &BBList)
+void physX::CreateBoundingBox( ListOfBoundingBox &BBList, NxActor* &pActor)
 {
 	NxActorDesc actorDesc;
 	PhysicBody* Pb;
@@ -138,17 +139,16 @@ int physX::CreateBoundingBox( ListOfBoundingBox &BBList)
 			case CAPSULE : BBList.pushShapeRef( CreateCapsule(actorDesc, Pb, false) ); break;
 		}
 	}
-
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, false);
-	return physX::getPhysicScene()->getNbActors() - 1;
+	
+	pActor = FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, false);
 }
 
 
-int physX::CreateTrigger(ListOfBoundingBox &BBList,
+void physX::CreateTrigger(ListOfBoundingBox &BBList,
 	void (*OnEnterFunc)(void* param),
 	void (*OnLeaveFunc)(void* param), 
 	void (*OnStayFunc)(void* param),
-	void* paramEnter, void* paramLeave, void* paramStay )
+	void* paramEnter, void* paramLeave, void* paramStay, NxActor* &pActor )
 {
 	NxActorDesc actorDesc;
 	PhysicBody* Pb;
@@ -169,17 +169,15 @@ int physX::CreateTrigger(ListOfBoundingBox &BBList,
 			case CAPSULE : BBList.pushShapeRef( CreateCapsule(actorDesc, Pb, true, paramEnter, paramLeave, paramStay) ); break;
 		}
 	}
-
-	FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, true);
-	return physX::getPhysicScene()->getNbActors() - 1;
+	
+	pActor = FinalizeActor(actorDesc, BBList.getInitialWorldPos(), Pb, true);
 }
 
-void physX::releaseActor(int &empActor)
+void physX::releaseActor(NxActor* &pAct)
 {
-	NxActor* pActor = getActor( empActor );
-	getPhysicScene()->releaseActor(*pActor);
-
-	empActor = -1;
+	if(pAct)
+		getPhysicScene()->releaseActor(*pAct);
+	pAct = NULL;
 }
 
 NxScene* physX::getPhysicScene()
@@ -191,23 +189,11 @@ NxScene* physX::getPhysicScene()
 	return pscene;
 }
 
-NxActor* physX::getActor( int emp )
-{
-	if( emp == -1 ) return NULL;
-
-	int nb = getPhysicScene()->getNbActors();
-	if( emp >= nb ) return NULL;
-
-	NxActor* pactor = getPhysicScene()->getActors()[ emp ];
-	assert(pactor);
-
-	return pactor; 
-}
 
 void physX::Link( SceneObject* obj1, SceneObject* obj2 )
 {
-	NxActor* pactor1  =  getActor(obj1->getEmpActor());
-	NxActor* pactor2  =  getActor(obj2->getEmpActor());
+	NxActor* pactor1  =  obj1->getActor();
+	NxActor* pactor2  =  obj2->getActor();
 	getPhysicScene()->setActorPairFlags( *pactor1, *pactor2, NX_NOTIFY_ON_START_TOUCH /*| NX_NOTIFY_ON_TOUCH | NX_NOTIFY_ON_END_TOUCH*/ );
 }
 

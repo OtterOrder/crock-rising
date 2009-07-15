@@ -69,13 +69,13 @@ public:
 							void* paramEnter, void* paramLeave, void* paramStay); 
 	void SetObjectUnPhysical();												// Retire la physique à un objet si besoin
 	
-	int  getEmpActor()				{ return m_iEmpActor; }
-	int  getEmpController()			{ return m_iEmpController; }
 	std::vector<PhysicBody*> getPhysicBodyList();
+	NxActor* getActor()				{ return m_pActor; }
+	NxController* getController()	{ return m_pController; }
 
-	bool IsController()	{ return m_iEmpController != -1; }			//Le controleur est un acteur ET un controleur
-	bool IsActor()		{ return m_iEmpActor != -1 && !IsController(); }	//L'acteur n'est qu'un acteur.
-	bool IsPhysical()	{ return IsActor() ||IsController(); }
+	bool IsController()	{ return m_pController != NULL; }			//Le controleur est un acteur ET un controleur
+	bool IsActor()		{ return m_pActor != NULL && !IsController(); }	//L'acteur n'est qu'un acteur.
+	bool IsPhysical()	{ return IsActor() || IsController(); }
 	bool IsDynamic()	{ return (*getPhysicBodyList().begin())->IsDynamic; }
 public:
 
@@ -89,9 +89,10 @@ public:
 	virtual void	SetTransform(const D3DXMATRIX* world);
 	virtual void	ApplyTransform(const D3DXMATRIX* world);
 	virtual void    Update(); // Méthode appelée chaque tour moteur
-	virtual void    SetTranslation( float x, float y, float z );
-	virtual void    SetRotation( float angleX, float angleY, float angleZ );
 	virtual void	SetPosition( float x, float y, float z );
+	virtual void    SetTranslation( float x, float y, float z );
+	virtual void	SetOrientation( float angleX, float angleY, float angleZ );
+	virtual void    SetRotation( float angleX, float angleY, float angleZ );
 	
 
 	std::string getStringMesh () const { return m_strMesh; }   //Nécessaire pour les méthodes addWeapon et removeWeapon de la classe Hero
@@ -116,9 +117,9 @@ protected:
 	bool							m_bReceiveShadow;
 	LPD3DXMATRIXSTACK				m_matrixStack;  // Stack de matrice de l'objet
 	ListOfBoundingBox				m_ListOfBoundingBox;
-	int								m_iEmpActor;
-	int								m_iEmpController;
 	float							m_iHauteurController; //Sert à descendre le sceobj lorsque c'est un controller
+	NxActor*						m_pActor;
+	NxController*					m_pController;
 	
 
 	
@@ -134,9 +135,11 @@ protected:
 	virtual void	DrawShadow();
 	void			CommonInit( void ); // Initialisation commune à tous les constructeurs
 
+private:
 	//Fonctions de transformations spécifiques à physX, appelés par les fonctions publics
 	void	SetPhysicalPosition( float x, float y, float z );
 	void	SetPhysicalTranslation( float x, float y, float z );
+	void	SetPhysicalOrientation( float angleX, float angleY, float angleZ );
 	void	SetPhysicalRotation( float angleX, float angleY, float angleZ );
 	void	SetPhysicalTransform( const D3DXMATRIX* world );	
 };

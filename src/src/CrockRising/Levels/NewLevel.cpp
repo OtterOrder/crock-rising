@@ -15,6 +15,7 @@
 // Jeux
 #include	"LevelCanyon.h"
 #include	"LevelSphinx.h"
+#include	"LevelTest.h"
 
 
 //******************************************************************
@@ -45,6 +46,7 @@ Level* Level::NewLevel( crc32 levelID )
 		// Jeux
 		case LEVEL_canyon:		pLevel = new LevelCanyon( levelID );		break;
 		case LEVEL_sphinx:		pLevel = new LevelSphinx( levelID );		break;
+		case LEVEL_test:		pLevel = new LevelTest( levelID );		break;
 		
 		default:				pLevel = new Level( LEVEL_level );
 	}
